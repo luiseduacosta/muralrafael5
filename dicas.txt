@@ -1,0 +1,54 @@
+Dica
+====
+$log = $this->Model->getDataSource()->getLog(false, false);
+debug($log);
+
+pr($this->Model->validationErrors);
+
+Identar (vcode)
+ctr + shift + i
+
+# Sincronizar diretorios
+rsync -avzhr /home/luis/html/mural_ess/ /home/luis/html/mural/
+
+# Aumentar memoria
+ini_set('memory_limit', '2048M')
+
+Paginação
+=========
+
+No controller são três métodos:
+1) Criar a matriz ou array a partir da(s) tabela(s) utilizando um foreach. 
+Para poder ordernar a matriz precisa de um campo ($criterio) com a variavel com qual vai ser realizada a ordenação.
+Depois é só utilizar a função array_multisort($criterio, [SORT_ASC|SORT_DESC], $array).
+2) Fazer uma função para alterar a ordem da classificação ascendente ou descendente.
+Para isto na primeira linhea do index da view tem que colocar uma variavel (p. ex. $mudaclassificacao) enviada como parámetro.
+3) A matriz pode ser paginada utilizando a função array_slice($array, $inicio, $qunatidade_de_registros).
+4) Fazer o menú de navegação no index da view. São dois menus: um para avançar e retroceder e outro com algumas páginas.
+5) As variaveis entre o controller e o view tem que ser enviadas ($this->set()) e recebidas como parâmetros.
+As variavés são: 
+
+$ordem com a variavel que vai server como critério de ordenação. Esta variavel é passada como link na primeria linhea da tabela na view ('index/ordem:variavel') e é capturada como parámentro no controller. No mesmo link outras variaveis são passada (ex. $pagina, $mudadirecao [esta última para especificar que tem que alter a ordem ASC para DESC e viceversa].
+$direcao com o valor ASC ou DESC para ordenar as colunas
+$array paginado (p. ex. $p_array)
+$pagina com o valor de cada página do array_slice
+$q_paginas com o valor do total das páginas calculado pela divisão sizeof($array) entre a quantidade de registros por página.
+A quantidade de registros por página também poderia ser enviada e recebida ($q_registros). Na view poderia haver um formulário para que o usuário selecione a quantidade registros que quer visualizar em cada página.
+
+*Javascript*
+var base_url = "<?= $this->Html->url(array('controller' => 'Professors', 'action' => 'pauta')); ?>";
+Se for index tem que colocar index/
+/* alert(base_url); */
+window.location=url; 
+$(location).attr('href', link);
+$("#EstagiarioIdSupervisor").load(base_url+id_instituicao);
+
+<?= $this->Html->script("jquery.maskedinput"); ?>
+O input tem que ser definido como -> "type=>text"
+
+/* Autocomplete precisa da folha de estilo */
+<?= $this->Html->script("jquery.autocomplete"); ?>
+<?= $this->Html->css("jquery.autocomplete"); ?>
+
+Ex. de DRE
+107379689
