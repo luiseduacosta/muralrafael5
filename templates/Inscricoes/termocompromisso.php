@@ -15,12 +15,10 @@
     $(document).ready(function () {
 
         var base_url = "<?= $this->Html->Url->build(array('controller' => 'Instituicaos', 'action' => 'seleciona_supervisor')); ?>";
-        /* alert(base_url); */
 
         $("#EstagiarioIdInstituicao").change(function () {
             var id_instituicao = $(this).val();
             $("#EstagiarioIdSupervisor").load(base_url + "/" + id_instituicao);
-            /* alert(id_instituicao); */
         })
     });
 
@@ -70,8 +68,6 @@ if ($inserir == 0) {
 echo $this->Form->create(null, [
     'url' => 'termocadastra?registro=' . $registro,
     'inputDefaults' => [
-       // 'format' => ['before', 'label', 'between', 'input', 'after', 'error'],
-       // 'div' => ['class' => 'form-group row'],
         'label' => true,//['class' => 'col-3'],
         'between' => "<div class = 'col-9'>",
        // 'class' => ['form-control'],
@@ -89,7 +85,6 @@ echo $this->Form->input('tc', array('type' => 'hidden', 'value' => 1));
 echo $this->Form->input('tc_solicitacao', array('type' => 'hidden', 'value' => date('Y-m-d')));
 echo $this->Form->input('professor_id', array('type' => 'hidden', 'label' => 'Professor', 'value' => $professor_atual));
 echo $this->Form->input('periodo', array('type' => 'hidden', 'value' => $periodo));
-// echo $this->Form->input('id_area', array('type' => 'hidden', 'value' => $id_area));
 echo $this->Form->input('complemento_id', array('type' => 'hidden', 'value' => $complemento_id));
 
 if (strlen($ingresso) == 6) {
@@ -142,8 +137,7 @@ echo $this->Form->input('tipo_de_estagio', ['type' => 'select', 'options' => [1 
 
 <div class='row justify-content-left'>
     <div class='col-auto'>
-        <?php echo $this->Form->submit('Confirma', ['type' => 'Submit', 'class' => 'btn btn-primary']);
-        ?>
+        <?php echo $this->Form->submit('Confirma', ['type' => 'Submit', 'class' => 'btn btn-primary']); ?>
         <?php echo $this->Form->end(); ?>
     </div>
 </div>

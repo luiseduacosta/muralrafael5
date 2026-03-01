@@ -4,7 +4,6 @@
  * @var \App\Model\Entity\Muralestagio $muralestagio
  */
 
-
 declare(strict_types=1);
 
 $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
@@ -138,10 +137,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </blockquote>
             </div>
 
-			<!--
-            Para o administrador as inscrições sempre estão abertas
-            //-->
-            <?php if ($user_data['administrador_id']): ?>
+			<?php if ($user_data['administrador_id']): ?>
 
                 <tr>
                     <td colspan = '2' class="text-center">
@@ -150,10 +146,6 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
 
             <?php else: ?>
-                <!--
-                Para os outros usuários as inscrições dependem da data de encerramento
-							date('Y-m-d', strtotime())
-                //-->
                 <?php if (date('d-m-Y') <= $muralestagio['data_inscricao']): ?>
                     <!--
                     Se a inscricao e na instituição também tem que fazer inscrição no mural

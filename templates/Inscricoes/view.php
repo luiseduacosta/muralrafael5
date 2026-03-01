@@ -15,8 +15,8 @@
                     <?= $this->Html->link(__('Nova Inscricao'), ['action' => 'add'], ['class' => 'button']) ?>
                 </div>
             </aside>
-            <h3>inscricao_<?= h($inscricao->id) ?></h3>
-            <table>
+            <h3>Inscricao_<?= h($inscricao->id) ?></h3>
+            <table class="table table-hover table-striped table-responsive">
                 <tr>
                     <th><?= __('Id') ?></th>
                     <td><?= h($inscricao->id) ?></td>

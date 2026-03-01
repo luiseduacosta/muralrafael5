@@ -3,8 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Instituicao $instituicao
  */
-//pr($instituicao);
-//die();
 ?>
 <div>
     <div class="column-responsive column-80">

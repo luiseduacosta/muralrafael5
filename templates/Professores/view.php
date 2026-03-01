@@ -3,7 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Professor $professor
  */
-
 ?>
 <div>
     <div class="column-responsive column-80">
@@ -240,7 +239,6 @@
                     </table>
                 </div>
                 <div class="paginator">
-                    
                     <?= $this->element('paginator'); ?>
                     <?= $this->element('paginator_count'); ?>
                 </div>

@@ -4,7 +4,6 @@
  * @var \App\Model\Entity\Professor $professor
  */
 
-
 declare(strict_types=1);
 
 $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
