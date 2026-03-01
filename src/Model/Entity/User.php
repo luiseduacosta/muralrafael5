@@ -24,6 +24,11 @@ use Cake\ORM\TableRegistry;
 class User extends Entity implements AuthorizationIdentity, AuthenticationIdentity
 {
     /**
+     * Authorization service instance
+     */
+    protected ?AuthorizationService $authorization = null;
+
+    /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
      * Note that when '*' is set to true, this allows all unspecified fields to

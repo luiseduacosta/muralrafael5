@@ -58,7 +58,7 @@ class Avaliacao extends Entity
         'avaliacao9' => true,
         'avaliacao9_1' => true,
         'avaliacao10' => true,
-        'avaliacao10-1' => true,
+        'avaliacao10_1' => true,
         'avaliacao11' => true,
         'avaliacao11_1' => true,
         'avaliacao12' => true,
