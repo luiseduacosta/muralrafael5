@@ -1,12 +1,12 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Policy;
 
+use Authorization\IdentityInterface;
 use Authorization\Policy\RequestPolicyInterface;
-use Cake\Http\ServerRequest;
 use Authorization\Policy\ResultInterface;
+use Cake\Http\ServerRequest;
 
 class RequestPolicy implements RequestPolicyInterface
 {
@@ -17,18 +17,17 @@ class RequestPolicy implements RequestPolicyInterface
      * @param \Cake\Http\ServerRequest $request Server Request
      * @return \Authorization\Policy\ResultInterface|bool
      */
-    public function canAccess($identity, ServerRequest $request): bool|ResultInterface
+    public function canAccess(?IdentityInterface $identity, ServerRequest $request): bool|ResultInterface
     {
         $pages = ($request->getParam('controller') === 'Pages');
         $display = ($request->getParam('action') === 'display');
         $home = in_array('home', $request->getParam('pass'), true);
 
         // only home page is allowed
-        if ($pages and $display and !$home) {
+        if ($pages && $display && !$home) {
             return false;
         }
 
         return true;
-      
     }
 }

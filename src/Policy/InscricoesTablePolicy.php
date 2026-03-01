@@ -1,54 +1,82 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Policy;
 
 use App\Model\Table\InscricoesTable;
 use Authorization\IdentityInterface;
-use Authorization\Policy\Result;
 use Authorization\Policy\BeforePolicyInterface;
+use Authorization\Policy\Result;
 use Authorization\Policy\ResultInterface;
+use Cake\ORM\Query;
 
-class InscricoesTablePolicy implements BeforePolicyInterface
+final class InscricoesTablePolicy implements BeforePolicyInterface
 {
-  
-  public function before(?IdentityInterface $identity, mixed $resource, string $action): ResultInterface|bool|null
-  {
-    if ($identity) {
-      $user_data = $identity->getOriginalData();
-      if ($user_data and ( $user_data['administrador_id'] || $user_data['professor_id'] || $user_data['supervisor_id'])) {
-        return true;
-      }
+    /**
+     * @param \Authorization\IdentityInterface|null $identity
+     * @param mixed $resource
+     * @param string $action
+     * @return \Authorization\Policy\ResultInterface|bool|null
+     */
+    public function before(?IdentityInterface $identity, mixed $resource, string $action): ResultInterface|bool|null
+    {
+        if ($identity) {
+            $user_data = $identity->getOriginalData();
+
+            if (
+                $user_data
+                && (
+                    $user_data['administrador_id']
+                    || $user_data['professor_id']
+                    || $user_data['supervisor_id']
+                )
+            ) {
+                return true;
+            }
+        }
+
+        return null;
     }
-    return null;
-  }
 
-  public function canIndex(IdentityInterface $userSession, InscricoesTable $alunosTable)
-  {
-    return new Result(false, 'Erro: inscricoes busca policy not authorized');
-  }
-  
-  public function scopeIndex($user, $query)
-  {
-    return $query->where(['Inscricoes.user_id' => $user->getIdentifier()]);
-  }
-
-  public function canAdd(IdentityInterface $userSession, InscricoesTable $inscricoesTable)
-  {
-    $alunocadastrado = $this->fetchTable("Alunos")->find()->where(['user_id' => $userSession->id]);
-
-    if ($alunocadastrado->count() > 0) {
-        return new Result(false, 'Erro: inscricoes canAdd policy not authorized');
-    } else {
-      return new Result(true);
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Table\InscricoesTable $alunosTable
+     * @return \Authorization\Policy\Result
+     */
+    public function canIndex(IdentityInterface $userSession, InscricoesTable $alunosTable): Result
+    {
+        return new Result(false, 'Erro: inscricoes busca policy not authorized');
     }
-    
-  }
-  
-  public function canBusca()
-  {
-    return new Result(false, 'Erro: inscricoes busca policy not authorized');
-  }
 
+    /**
+     * @param \Authorization\IdentityInterface $user
+     * @param \Cake\ORM\Query $query
+     * @return \Cake\ORM\Query
+     */
+    public function scopeIndex(IdentityInterface $user, Query $query): Query
+    {
+        return $query->where(['Inscricoes.user_id' => $user->getIdentifier()]);
+    }
+
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Table\InscricoesTable $inscricoesTable
+     * @return \Authorization\Policy\Result
+     */
+    public function canAdd(IdentityInterface $userSession, InscricoesTable $inscricoesTable): Result
+    {
+        $alunocadastrado = $this->fetchTable('Alunos')->find()->where(['user_id' => $userSession->id]);
+
+        return $alunocadastrado->count() > 0
+            ? new Result(false, 'Erro: inscricoes canAdd policy not authorized')
+            : new Result(true);
+    }
+
+    /**
+     * @return \Authorization\Policy\Result
+     */
+    public function canBusca(): Result
+    {
+        return new Result(false, 'Erro: inscricoes busca policy not authorized');
+    }
 }

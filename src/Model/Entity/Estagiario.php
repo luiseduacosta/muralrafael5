@@ -58,6 +58,6 @@ class Estagiario extends Entity
         'nota' => true,
         'ch' => true,
         'observacoes' => true,
-        'complemento_id' => true
+        'complemento_id' => true,
     ];
 }

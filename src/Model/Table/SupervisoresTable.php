@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -14,7 +12,6 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\EstagiariosTable&\Cake\ORM\Association\HasMany $Estagiarios
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  * @property \App\Model\Table\InstituicoesTable&\Cake\ORM\Association\BelongsToMany $Instituicoes
- *
  * @method \App\Model\Entity\Supervisor newEmptyEntity()
  * @method \App\Model\Entity\Supervisor newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Supervisor[] newEntities(array $data, array $options = [])
@@ -49,14 +46,14 @@ class SupervisoresTable extends Table
         $this->hasMany('Estagiarios', [
             'foreignKey' => 'supervisor_id',
         ]);
-        
+
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
         ]);
         /*
         $this->hasOne('Users', [
             'foreignKey' => 'supervisor_id',
-        ]);  */   
+        ]);  */
         $this->belongsToMany('Instituicoes', [
             'foreignKey' => 'supervisor_id',
             'targetForeignKey' => 'instituicao_id',

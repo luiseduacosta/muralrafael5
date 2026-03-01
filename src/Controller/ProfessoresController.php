@@ -5,7 +5,7 @@ namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
 use Cake\Event\EventInterface;
-
+use Cake\ORM\Query;
 
 /**
  * Professores Controller
@@ -18,11 +18,11 @@ class ProfessoresController extends AppController
     /**
      * beforeFilter method
      */
-    public function beforeFilter(\Cake\Event\EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
     }
-    
+
     /**
      * Index method
      *
@@ -43,7 +43,7 @@ class ProfessoresController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $this->paginate = [
             'Estagiarios' => ['limit' => 5, 'scope' => 'estagiario'],
@@ -51,15 +51,15 @@ class ProfessoresController extends AppController
         ];
         $professor = $this->Professores->get($id, [
             'contain' => [ 'Users', 'Muralestagios' => ['Instituicoes'] ],
-            
+
         ]);
-        
+
         $estagiarios = $this->paginate($this->Professores->Estagiarios->find('all', [
             'contain' => ['Alunos', 'Instituicoes', 'Supervisores', 'Turmas'],
-        ])->innerJoinWith('Professores', function (\Cake\ORM\Query $query) use ($professor) {
+        ])->innerJoinWith('Professores', function (Query $query) use ($professor) {
             return $query->where([
                 'professor_id' => $professor->id,
-            
+
             ]);
         }));
         /*
@@ -68,7 +68,7 @@ class ProfessoresController extends AppController
         ])->innerJoinWith('Professores', function (\Cake\ORM\Query $query) use ($professor) {
             return $query->where([
                 'professor_id' => $professor->id,
-            
+
             ]);
         }));
         */
@@ -86,11 +86,11 @@ class ProfessoresController extends AppController
         if ($this->request->is('post')) {
             $professor = $this->Professores->patchEntity($professor, $this->request->getData());
 
-            if (!$professor->user_id) { 
+            if (!$professor->user_id) {
                 $user = $this->Authentication->getIdentity();
-                $professor->user_id = $user->get('id'); 
+                $professor->user_id = $user->get('id');
             }
-            
+
             if ($this->Professores->save($professor)) {
                 $this->Flash->success(__('The professor has been saved.'));
 
@@ -108,17 +108,18 @@ class ProfessoresController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
         $professor = $this->Professores->get($id);
-        
+
         try {
             $this->Authorization->authorize($professor);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
+
             return $this->redirect('/');
         }
-        
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $professor = $this->Professores->patchEntity($professor, $this->request->getData());
             if ($this->Professores->save($professor)) {
@@ -138,7 +139,7 @@ class ProfessoresController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $professor = $this->Professores->get($id);
@@ -151,7 +152,7 @@ class ProfessoresController extends AppController
                 $this->Flash->error(__('The professor could not be deleted. Please, try again.'));
             }
         } catch (ForbiddenException $error) {
-            $this->Flash->error(__( 'Authorization error: ' . $error->getMessage() ));
+            $this->Flash->error(__('Authorization error: ' . $error->getMessage()));
         }
 
         return $this->redirect(['action' => 'index']);

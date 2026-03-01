@@ -10,7 +10,6 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $turno
- *
  */
 class Turno extends Entity
 {
@@ -24,6 +23,6 @@ class Turno extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
-        'turno' => true
+        'turno' => true,
     ];
 }

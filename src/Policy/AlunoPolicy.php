@@ -1,56 +1,83 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Policy;
 
 use App\Model\Entity\Aluno;
 use Authorization\IdentityInterface;
-use Authorization\Policy\Result;
 use Authorization\Policy\BeforePolicyInterface;
+use Authorization\Policy\Result;
 use Authorization\Policy\ResultInterface;
 
-class AlunoPolicy implements BeforePolicyInterface
+final class AlunoPolicy implements BeforePolicyInterface
 {
-  
-  public function before(?IdentityInterface $identity, mixed $resource, string $action): ResultInterface|bool|null
-  {
-    if ($identity) {
-      $user_data = $identity->getOriginalData();
-      if ($user_data and ( $user_data['administrador_id'] || $user_data['professor_id'] || $user_data['supervisor_id'])) {
-        return true;
-      }
-    }
-    return null;
-  }
-  
-  public function canView(IdentityInterface $userSession, Aluno $alunoData)
-  {
-    if ($this->sameUser($userSession, $alunoData)) {
-      return new Result(true);
-    } else {
-      return new Result(false, 'Erro: aluno view policy not authorized');
-    }
-  }
-  
-  public function canEdit(IdentityInterface $userSession, Aluno $alunoData)
-  {
-    if ($this->sameUser($userSession, $alunoData)) {
-      return new Result(true);
-    } else {
-      return new Result(false, 'Erro: aluno edit policy not authorized');
-    }
-  }
-  
-  public function canDelete(IdentityInterface $userSession, Aluno $alunoData)
-  {
-    return new Result(false, 'Erro: aluno delete policy not allowed');
-  }
+    /**
+     * @param \Authorization\IdentityInterface|null $identity
+     * @param mixed $resource
+     * @param string $action
+     * @return \Authorization\Policy\ResultInterface|bool|null
+     */
+    public function before(?IdentityInterface $identity, mixed $resource, string $action): ResultInterface|bool|null
+    {
+        if ($identity) {
+            $user_data = $identity->getOriginalData();
 
-  
-  protected function sameUser(IdentityInterface $userSession, Aluno $alunoData)
-  {
-    return ($userSession->id == $alunoData->user_id);
-  }
-  
+            if (
+                $user_data
+                && (
+                    $user_data['administrador_id']
+                    || $user_data['professor_id']
+                    || $user_data['supervisor_id']
+                )
+            ) {
+                return true;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Entity\Aluno $alunoData
+     * @return \Authorization\Policy\Result
+     */
+    public function canView(IdentityInterface $userSession, Aluno $alunoData): Result
+    {
+        return $this->sameUser($userSession, $alunoData)
+            ? new Result(true)
+            : new Result(false, 'Erro: aluno view policy not authorized');
+    }
+
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Entity\Aluno $alunoData
+     * @return \Authorization\Policy\Result
+     */
+    public function canEdit(IdentityInterface $userSession, Aluno $alunoData): Result
+    {
+        return $this->sameUser($userSession, $alunoData)
+            ? new Result(true)
+            : new Result(false, 'Erro: aluno edit policy not authorized');
+    }
+
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Entity\Aluno $alunoData
+     * @return \Authorization\Policy\Result
+     */
+    public function canDelete(IdentityInterface $userSession, Aluno $alunoData): Result
+    {
+        return new Result(false, 'Erro: aluno delete policy not allowed');
+    }
+
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Entity\Aluno $alunoData
+     * @return bool
+     */
+    protected function sameUser(IdentityInterface $userSession, Aluno $alunoData): bool
+    {
+        return $userSession->id === $alunoData->user_id;
+    }
 }

@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use ArrayAccess;
-use Cake\ORM\Entity;
-use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Authentication\IdentityInterface as AuthenticationIdentity;
+use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Authorization\AuthorizationService;
 use Authorization\IdentityInterface as AuthorizationIdentity;
 use Authorization\Policy\ResultInterface;
+use Cake\ORM\Entity;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -46,12 +46,14 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
     protected array $_hidden = ['password'];
 
     // Automatically hash passwords when they are changed.
+
     protected function _setPassword(string $password)
     {
         $hasher = new DefaultPasswordHasher();
+
         return $hasher->hash($password);
     }
-    
+
     /**
      * Authentication\IdentityInterface method
      */
@@ -68,23 +70,31 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
         $alunos = TableRegistry::getTableLocator()->get('Alunos');
         $aluno = $alunos->find('all', ['conditions' => ['Alunos.user_id' => $this->id] ])->first();
         $this->aluno_id = false;
-        if (!empty($aluno)) $this->aluno_id = $aluno->id;
+        if (!empty($aluno)) {
+            $this->aluno_id = $aluno->id;
+        }
 
         $professores = TableRegistry::getTableLocator()->get('Professores');
         $professor = $professores->find('all', ['conditions' => ['Professores.user_id' => $this->id] ])->first();
         $this->professor_id = false;
-        if (!empty($professor)) $this->professor_id = $professor->id;
+        if (!empty($professor)) {
+            $this->professor_id = $professor->id;
+        }
 
         $supervisores = TableRegistry::getTableLocator()->get('Supervisores');
         $supervisor = $supervisores->find('all', ['conditions' => ['Supervisores.user_id' => $this->id] ])->first();
         $this->supervisor_id = false;
-        if (!empty($supervisor)) $this->supervisor_id = $supervisor->id;
+        if (!empty($supervisor)) {
+            $this->supervisor_id = $supervisor->id;
+        }
 
         $administradores = TableRegistry::getTableLocator()->get('Administradores');
         $administrador = $administradores->find('all', ['conditions' => ['Administradores.user_id' => $this->id] ])->first();
         $this->administrador_id = false;
-        if (!empty($administrador)) $this->administrador_id = $administrador->id;
-        
+        if (!empty($administrador)) {
+            $this->administrador_id = $administrador->id;
+        }
+
         return $this;
     }
 
@@ -96,14 +106,14 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
         return $this->authorization->can($this, $action, $resource);
     }
 
-     /**
+    /**
      * Authorization\IdentityInterface method
-     */   
+     */
     public function canResult(string $action, mixed $resource): ResultInterface
     {
         return $this->authorization->canResult($this, $action, $resource);
     }
-    
+
     /**
      * Authorization\IdentityInterface method
      */
@@ -121,5 +131,4 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
 
         return $this;
     }
-
 }

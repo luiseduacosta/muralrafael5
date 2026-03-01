@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Authorization\Exception\ForbiddenException;
 use Cake\Event\EventInterface;
 
 /**
@@ -17,10 +16,11 @@ class SupervisoresController extends AppController
     /**
      * beforeFilter method
      */
-    public function beforeFilter(\Cake\Event\EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
     }
+
     /**
      * Index method
      *
@@ -41,19 +41,19 @@ class SupervisoresController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $contained = [
-            'Instituicoes' => ['Areas'], 
-            'Estagiarios' => ['Alunos', 'Instituicoes', 'Supervisores', 'Professores', 'Turmas'], 
-            'Users'
+            'Instituicoes' => ['Areas'],
+            'Estagiarios' => ['Alunos', 'Instituicoes', 'Supervisores', 'Professores', 'Turmas'],
+            'Users',
         ];
         $this->paginate = [
-            'contain' => $contained
+            'contain' => $contained,
         ];
-        
+
         $supervisor = $this->Supervisores->get($id, [
-            'contain' => $contained
+            'contain' => $contained,
         ]);
 
         $this->set(compact('supervisor'));
@@ -69,12 +69,12 @@ class SupervisoresController extends AppController
         $supervisor = $this->Supervisores->newEmptyEntity();
         if ($this->request->is('post')) {
             $supervisor = $this->Supervisores->patchEntity($supervisor, $this->request->getData());
-            
-            if (!$supervisor->user_id) { 
+
+            if (!$supervisor->user_id) {
                 $user = $this->Authentication->getIdentity();
-                $supervisor->user_id = $user->get('id'); 
+                $supervisor->user_id = $user->get('id');
             }
-            
+
             if ($this->Supervisores->save($supervisor)) {
                 $this->Flash->success(__('The supervisor has been saved.'));
 
@@ -93,7 +93,7 @@ class SupervisoresController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
         $supervisor = $this->Supervisores->get($id, [
             'contain' => ['Instituicoes'],
@@ -118,7 +118,7 @@ class SupervisoresController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $supervisor = $this->Supervisores->get($id);

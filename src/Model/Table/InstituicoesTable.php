@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -16,7 +15,6 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\MuralestagiosTable&\Cake\ORM\Association\HasMany $Muralestagios
  * @property \App\Model\Table\VisitasTable&\Cake\ORM\Association\HasMany $Visitas
  * @property \App\Model\Table\SupervisoresTable&\Cake\ORM\Association\BelongsToMany $Supervisores
- *
  * @method \App\Model\Entity\Instituicao newEmptyEntity()
  * @method \App\Model\Entity\Instituicao newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Instituicao[] newEntities(array $data, array $options = [])
@@ -51,7 +49,7 @@ class InstituicoesTable extends Table
         $this->belongsTo('Areas', [
             'foreignKey' => 'area_id',
         ]);
-        
+
         $this->hasMany('Inscricoes', [
             'foreignKey' => 'instituicao_id',
         ]);
@@ -69,7 +67,6 @@ class InstituicoesTable extends Table
         $this->hasMany('Visitas', [
             'foreignKey' => 'instituicao_id',
         ]);
-        
     }
 
     /**

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 /**
@@ -27,10 +26,8 @@ use Cake\Controller\Controller;
  * will inherit them.
  *
  * @link https://book.cakephp.org/5/en/controllers.html#the-app-controller
- *
  * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
  * @property \Authorization\Controller\Component\AuthorizationComponent $Authorization
- *
  */
 class AppController extends Controller
 {
@@ -43,24 +40,23 @@ class AppController extends Controller
      *
      * @return void
      */
- 
+
     public function initialize(): void
     {
         parent::initialize();
-     
+
         $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Authorization.Authorization');
-     
+
         $this->loadComponent('Flash');
-     
+
         /*
          * Enable the following component for recommended CakePHP form protection settings.
          * see https://book.cakephp.org/5/en/controllers/components/form-protection.html
          */
         //$this->loadComponent('FormProtection');
-     
-        $configuracao = $this->fetchTable("Configuracoes")->find()->first();
+
+        $configuracao = $this->fetchTable('Configuracoes')->find()->first();
         $this->set('configuracao', $configuracao);
-     
     }
 }

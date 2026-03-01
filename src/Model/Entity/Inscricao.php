@@ -37,6 +37,6 @@ class Inscricao extends Entity
         'mural_estagio_id' => true,
         'data' => true,
         'periodo' => true,
-        'timestamp' => true
+        'timestamp' => true,
     ];
 }

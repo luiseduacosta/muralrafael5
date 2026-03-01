@@ -69,6 +69,6 @@ class Supervisor extends Entity
         'num_inscricao' => true,
         'curso_turma' => true,
         'observacoes' => true,
-        'user_id' => true
+        'user_id' => true,
     ];
 }

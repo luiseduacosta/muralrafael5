@@ -129,7 +129,7 @@ class Installer
                 '<info>Set Folder Permissions ? (Default to Y)</info> [<comment>Y,n</comment>]? ',
                 $validator,
                 10,
-                'Y'
+                'Y',
             );
 
             if (in_array($setFolderPermissions, ['n', 'N'])) {
@@ -200,7 +200,7 @@ class Installer
         $config = $dir . '/config/' . $file;
         $content = file_get_contents($config);
 
-		/** @phpstan-ignore-next-line */
+        /** @phpstan-ignore-next-line */
         $content = str_replace('__SALT__', $newKey, $content, $count);
 
         if ($count == 0) {
@@ -231,7 +231,7 @@ class Installer
     {
         $config = $dir . '/config/' . $file;
         $content = file_get_contents($config);
-		/** @phpstan-ignore-next-line */
+        /** @phpstan-ignore-next-line */
         $content = str_replace('__APP_NAME__', $appName, $content, $count);
 
         if ($count == 0) {

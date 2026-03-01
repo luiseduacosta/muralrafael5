@@ -26,6 +26,6 @@ class Complemento extends Entity
      */
     protected array $_accessible = [
         'nome' => true,
-        'periodo_especial' => true
+        'periodo_especial' => true,
     ];
 }

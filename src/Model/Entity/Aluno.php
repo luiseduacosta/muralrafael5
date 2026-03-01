@@ -55,7 +55,7 @@ class Aluno extends Entity
         'municipio' => true,
         'bairro' => true,
         'observacoes' => true,
-        'user_id' => true
- 
+        'user_id' => true,
+
     ];
 }

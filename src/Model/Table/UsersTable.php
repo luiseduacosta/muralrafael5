@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -15,7 +14,6 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\SupervisoresTable&\Cake\ORM\Association\BelongsTo $Supervisores
  * @property \App\Model\Table\ProfessoresTable&\Cake\ORM\Association\BelongsTo $Professores
  * @property \App\Model\Table\AdministradoresTable&\Cake\ORM\Association\BelongsTo $Administradores
- *
  * @method \App\Model\Entity\User newEmptyEntity()
  * @method \App\Model\Entity\User newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\User[] newEntities(array $data, array $options = [])
@@ -48,7 +46,7 @@ class UsersTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
-        
+
         $this->hasOne('Administradores', [
             'foreignKey' => 'user_id',
         ]);
@@ -61,7 +59,6 @@ class UsersTable extends Table
         $this->hasOne('Supervisores', [
             'foreignKey' => 'user_id',
         ]);
-        
     }
 
     /**
@@ -89,11 +86,11 @@ class UsersTable extends Table
         $validator
             ->dateTime('created')
             ->notEmptyDateTime('created');
-        
+
         $validator
             ->dateTime('modified')
             ->notEmptyDateTime('modified');
-        
+
         return $validator;
     }
 

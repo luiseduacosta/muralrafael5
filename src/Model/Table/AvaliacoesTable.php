@@ -1,10 +1,8 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -13,7 +11,6 @@ use Cake\Validation\Validator;
  * Avaliacoes Model
  *
  * @property \App\Model\Table\EstagiariosTable&\Cake\ORM\Association\BelongsTo $Estagiarios
- *
  * @method \App\Model\Entity\Avaliacao newEmptyEntity()
  * @method \App\Model\Entity\Avaliacao newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Avaliacao[] newEntities(array $data, array $options = [])
@@ -28,15 +25,16 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Avaliacao[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Avaliacao[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  */
-class AvaliacoesTable extends Table {
-
+class AvaliacoesTable extends Table
+{
     /**
      * Initialize method
      *
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config): void {
+    public function initialize(array $config): void
+    {
         parent::initialize($config);
 
         $this->setTable('avaliacoes');
@@ -45,7 +43,7 @@ class AvaliacoesTable extends Table {
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Estagiarios', [
-            'foreignKey' => 'estagiario_id'
+            'foreignKey' => 'estagiario_id',
         ]);
     }
 
@@ -55,7 +53,8 @@ class AvaliacoesTable extends Table {
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator): Validator {
+    public function validationDefault(Validator $validator): Validator
+    {
         $validator
                 ->integer('id')
                 ->allowEmptyString('id', null, 'create');
@@ -142,8 +141,8 @@ class AvaliacoesTable extends Table {
                 ->scalar('avaliacao11_1')
                 ->maxLength('avaliacao11_1', 256)
                 ->requirePresence('avaliacao11_1', 'create')
-                ->notEmptyString('avaliacao11_1');       
-        
+                ->notEmptyString('avaliacao11_1');
+
         $validator
                 ->scalar('avaliacao12')
                 ->maxLength('avaliacao12', 1)
@@ -154,8 +153,8 @@ class AvaliacoesTable extends Table {
                 ->scalar('avaliacao12_1')
                 ->maxLength('avaliacao12_1', 256)
                 ->requirePresence('avaliacao12_1', 'create')
-                ->notEmptyString('avaliacao12_1');        
-        
+                ->notEmptyString('avaliacao12_1');
+
         $validator
                 ->scalar('avaliacao13')
                 ->maxLength('avaliacao13', 1)
@@ -166,8 +165,8 @@ class AvaliacoesTable extends Table {
                 ->scalar('avaliacao13_1')
                 ->maxLength('avaliacao13_1', 256)
                 ->requirePresence('avaliacao13_1', 'create')
-                ->notEmptyString('avaliacao13_1');        
-        
+                ->notEmptyString('avaliacao13_1');
+
         $validator
                 ->scalar('avaliacao14')
                 ->maxLength('avaliacao13', 1)
@@ -194,7 +193,8 @@ class AvaliacoesTable extends Table {
      * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
      * @return \Cake\ORM\RulesChecker
      */
-    public function buildRules(RulesChecker $rules): RulesChecker {
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
 
         $rules->add($rules->existsIn(['estagiario_id'], 'Estagiarios'), ['errorField' => 'estagiario_id']);
 

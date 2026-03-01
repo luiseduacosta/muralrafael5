@@ -1,10 +1,8 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -17,7 +15,6 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\ProfessoresTable&\Cake\ORM\Association\BelongsTo $Professores
  * @property \App\Model\Table\TurmasTable&\Cake\ORM\Association\BelongsTo $Turmas
  * @property \App\Model\Table\TurnosTable&\Cake\ORM\Association\BelongsTo $Turnos
- *
  * @method \App\Model\Entity\Muralestagio newEmptyEntity()
  * @method \App\Model\Entity\Muralestagio newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Muralestagio[] newEntities(array $data, array $options = [])
@@ -32,44 +29,47 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Muralestagio[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Muralestagio[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  */
- 
-class MuralestagiosTable extends Table {
 
+class MuralestagiosTable extends Table
+{
     /**
      * Initialize method
      *
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config): void {
+    public function initialize(array $config): void
+    {
         parent::initialize($config);
 
         $this->setTable('mural_estagios');
         $this->setAlias('Muralestagios');
         $this->setDisplayField('instituicao_id');
         $this->setPrimaryKey('id');
-            
+
         $this->hasMany('Inscricoes', [
             'foreignKey' => ['mural_estagio_id'],
         ]);
-            
+
         $this->belongsTo('Instituicoes', [
             'foreignKey' => ['instituicao_id'],
         ]);
         $this->belongsTo('Turmas', [
-            'foreignKey' => ['turma_id']
+            'foreignKey' => ['turma_id'],
         ]);
         $this->belongsTo('Turnos', [
-            'foreignKey' => ['turno_id']
+            'foreignKey' => ['turno_id'],
         ]);
         $this->belongsTo('Professores', [
             'foreignKey' => ['professor_id'],
         ]);
     }
 
-    public function beforeFind($event, $query, $options, $primary) {
+    public function beforeFind($event, $query, $options, $primary)
+    {
 
         $query->order(['Muralestagios.id' => 'ASC']);
+
         return $query;
     }
 
@@ -79,7 +79,8 @@ class MuralestagiosTable extends Table {
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator): Validator {
+    public function validationDefault(Validator $validator): Validator
+    {
         $validator
                 ->integer('id')
                 ->allowEmptyString('id', null, 'create');
@@ -168,7 +169,8 @@ class MuralestagiosTable extends Table {
      * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
      * @return \Cake\ORM\RulesChecker
      */
-    public function buildRules(RulesChecker $rules): RulesChecker {
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
         $rules->add($rules->existsIn(['instituicao_id'], 'Instituicoes'), ['errorField' => 'instituicao_id']);
         $rules->add($rules->existsIn(['professor_id'], 'Professores'), ['errorField' => 'professor_id']);
         $rules->add($rules->existsIn(['turma_id'], 'Turmas'), ['errorField' => 'turma_id']);
@@ -176,5 +178,4 @@ class MuralestagiosTable extends Table {
 
         return $rules;
     }
-
 }

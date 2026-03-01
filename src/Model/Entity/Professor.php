@@ -91,6 +91,6 @@ class Professor extends Entity
         'observacoes' => true,
         'estagiarios' => true,
         'muralestagios' => true,
-        'user_id' => true
+        'user_id' => true,
     ];
 }

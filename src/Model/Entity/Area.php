@@ -10,7 +10,6 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $area
- *
  */
 class Area extends Entity
 {
@@ -24,6 +23,6 @@ class Area extends Entity
      * @var array
      */
     protected array $_accessible = [
-        'area' => true
+        'area' => true,
     ];
 }

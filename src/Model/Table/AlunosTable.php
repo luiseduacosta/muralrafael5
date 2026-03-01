@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -14,7 +13,6 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\EstagiariosTable&\Cake\ORM\Association\HasMany $Estagiarios
  * @property \App\Model\Table\InscricoesTable&\Cake\ORM\Association\HasMany $Inscricoes
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
- *
  * @method \App\Model\Entity\Aluno newEmptyEntity()
  * @method \App\Model\Entity\Aluno newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Aluno[] newEntities(array $data, array $options = [])
@@ -45,14 +43,14 @@ class AlunosTable extends Table
         $this->setAlias('Alunos');
         $this->setDisplayField('nome');
         $this->setPrimaryKey('id');
-        
+
         $this->hasMany('Inscricoes', [
             'foreignKey' => 'aluno_id',
         ]);
         $this->hasMany('Estagiarios', [
             'foreignKey' => 'aluno_id',
         ]);
-        
+
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
         ]);

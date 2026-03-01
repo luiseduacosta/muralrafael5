@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -17,7 +16,6 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\ProfessoresTable&\Cake\ORM\Association\BelongsTo $Professores
  * @property \App\Model\Table\TurmasTable&\Cake\ORM\Association\BelongsTo $Turmas
  * @property \App\Model\Table\TurnosTable&\Cake\ORM\Association\BelongsTo $Turnos
- *
  * @method \App\Model\Entity\Estagiario newEmptyEntity()
  * @method \App\Model\Entity\Estagiario newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Estagiario[] newEntities(array $data, array $options = [])
@@ -52,7 +50,7 @@ class EstagiariosTable extends Table
         $this->hasMany('Avaliacoes', [
             'foreignKey' => 'estagiario_id',
         ]);
-        
+
         $this->belongsTo('Alunos', [
             'foreignKey' => 'aluno_id',
         ]);

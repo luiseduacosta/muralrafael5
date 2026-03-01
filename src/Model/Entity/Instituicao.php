@@ -61,6 +61,6 @@ class Instituicao extends Entity
         'expira' => true,
         'seguro' => true,
         'avaliacao' => true,
-        'observacoes' => true
+        'observacoes' => true,
     ];
 }

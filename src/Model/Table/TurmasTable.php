@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -13,7 +11,6 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\EstagiariosTable&\Cake\ORM\Association\HasMany $Estagiarios
  * @property \App\Model\Table\MuralestagiosTable&\Cake\ORM\Association\HasMany $Muralestagios
- *
  * @method \App\Model\Entity\Turma newEmptyEntity()
  * @method \App\Model\Entity\Turma newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Turma[] newEntities(array $data, array $options = [])
@@ -44,7 +41,7 @@ class TurmasTable extends Table
         $this->setAlias('Turmas');
         $this->setDisplayField('turma');
         $this->setPrimaryKey('id');
-        
+
         $this->hasMany('Estagiarios', [
             'foreignKey' => 'turma_id',
         ]);
