@@ -169,7 +169,7 @@ class AvaliacoesTable extends Table
 
         $validator
                 ->scalar('avaliacao14')
-                ->maxLength('avaliacao13', 1)
+                ->maxLength('avaliacao14', 1)
                 ->requirePresence('avaliacao14', 'create')
                 ->notEmptyString('avaliacao14');
 
