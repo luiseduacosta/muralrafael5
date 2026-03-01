@@ -51,7 +51,7 @@ final class SupervisorPolicy implements BeforePolicyInterface
      * @param \App\Model\Entity\Supervisor $userData
      * @return \Authorization\Policy\Result
      */
-    public function canEdit(IdentityInterface $userSession, Supervisor $userData): Result
+    public function canEdit(IdentityInterface $userSession, Supervisor $supervisorData): Result
     {
         return $this->sameUser($userSession, $supervisorData)
             ? new Result(true)

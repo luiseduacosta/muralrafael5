@@ -40,12 +40,12 @@ final class InscricoesTablePolicy implements BeforePolicyInterface
 
     /**
      * @param \Authorization\IdentityInterface $userSession
-     * @param \App\Model\Table\InscricoesTable $alunosTable
+     * @param \App\Model\Table\InscricoesTable $inscricoesTable
      * @return \Authorization\Policy\Result
      */
-    public function canIndex(IdentityInterface $userSession, InscricoesTable $alunosTable): Result
+    public function canIndex(IdentityInterface $userSession, InscricoesTable $inscricoesTable): Result
     {
-        return new Result(false, 'Erro: inscricoes busca policy not authorized');
+        return new Result(false, 'Erro: inscricoes index policy not authorized');
     }
 
     /**
