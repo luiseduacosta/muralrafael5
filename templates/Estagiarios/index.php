@@ -13,7 +13,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var url = "<?= $this->Html->Url->build(['controller' => 'estagiarios']); ?>";
+        var url = "<?= $this->Url->build(['controller' => 'Estagiarios']); ?>";
         var select= $("#estagiarioperiodo");
 		var pathname = location.pathname.split('/').filter(Boolean);
 		if (pathname[pathname.length - 2] == 'index') select.val(pathname[pathname.length - 1]);

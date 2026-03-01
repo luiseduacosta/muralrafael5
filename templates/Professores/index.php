@@ -4,6 +4,7 @@
  * @var \App\Model\Entity\Professor[]|\Cake\Collection\CollectionInterface $professores
  */
 ?>
+
 <div class="professores index content">
 	<aside>
 		<div class="nav">

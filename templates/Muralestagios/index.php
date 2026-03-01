@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
@@ -13,7 +12,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
 <script type="text/javascript">
 	$(document).ready(function () {
-        var base_url = "<?= $this->Html->Url->build(['controller' => 'muralestagios']); ?>";
+        var base_url = "<?= $this->Url->build(['controller' => 'Muralestagios']); ?>";
         var select = $("#periodo");
 		var pathname = location.pathname.split('/').filter(Boolean);
 		if (pathname[pathname.length - 2] == 'index') select.val(pathname[pathname.length - 1]);
