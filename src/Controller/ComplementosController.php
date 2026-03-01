@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
-use Cake\Event\EventInterface;
 
 /**
  * Complementos Controller
@@ -15,29 +14,15 @@ use Cake\Event\EventInterface;
 class ComplementosController extends AppController
 {
     /**
-     * beforeFilter method
-     */
-    public function beforeFilter(\Cake\Event\EventInterface $event)
-    {
-        parent::beforeFilter($event);
-        try {
-            $this->Authorization->authorize($this->Complementos);
-        } catch (ForbiddenException $error) {
-            $this->Flash->error('Authorization error: ' . $error->getMessage());
-            return $this->redirect('/');
-        }
-    }
-    
-    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
-    
     public function index()
     {
+        $this->Authorization->authorize($this->Complementos);
         $complementos = $this->paginate($this->Complementos);
-        
+
         $this->set(compact('complementos'));
     }
 
@@ -51,7 +36,8 @@ class ComplementosController extends AppController
     public function view($id = null)
     {
         $complemento = $this->Complementos->get($id);
-        
+        $this->Authorization->authorize($complemento);
+
         $this->set(compact('complemento'));
     }
 
@@ -62,15 +48,16 @@ class ComplementosController extends AppController
      */
     public function add()
     {
+        $this->Authorization->authorize($this->Complementos);
         $complemento = $this->Complementos->newEmptyEntity();
         if ($this->request->is('post')) {
             $complemento = $this->Complementos->patchEntity($complemento, $this->request->getData());
 
-            if (!$Complemento->user_id) { 
+            if (!$complemento->user_id) {
                 $user = $this->Authentication->getIdentity();
-                $Complemento->user_id = $user->get('id'); 
+                $complemento->user_id = $user->get('id');
             }
-            
+
             if ($this->Complementos->save($complemento)) {
                 $this->Flash->success(__('The Complemento has been saved.'));
 
@@ -91,6 +78,7 @@ class ComplementosController extends AppController
     public function edit($id = null)
     {
         $complemento = $this->Complementos->get($id);
+        $this->Authorization->authorize($complemento);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $complemento = $this->Complementos->patchEntity($complemento, $this->request->getData());
             if ($this->Complementos->save($complemento)) {
@@ -114,6 +102,7 @@ class ComplementosController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $complemento = $this->Complementos->get($id);
+        $this->Authorization->authorize($complemento);
         if ($this->Complementos->delete($complemento)) {
             $this->Flash->success(__('The Complemento has been deleted.'));
         } else {

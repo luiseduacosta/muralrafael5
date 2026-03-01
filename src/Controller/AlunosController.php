@@ -17,7 +17,7 @@ class AlunosController extends AppController
     /**
      * beforeFilter method
      */
-    public function beforeFilter(\Cake\Event\EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
     }

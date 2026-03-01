@@ -13,15 +13,15 @@ use Cake\Event\EventInterface;
  * @property \App\Model\Table\UsersTable $Users
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class UsersController extends AppController {
+class UsersController extends AppController
+{
     /**
      * beforeFilter method
      */
-    public function beforeFilter(\Cake\Event\EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
-        // allow all visitors to access login and add
         $this->Authentication->allowUnauthenticated(['login', 'add']);
     }
 

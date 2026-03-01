@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
-use Cake\Event\EventInterface;
 
 /**
  * Instituicoes Controller
@@ -15,26 +14,13 @@ use Cake\Event\EventInterface;
 class InstituicoesController extends AppController
 {
     /**
-     * beforeFilter method
-     */
-    public function beforeFilter(\Cake\Event\EventInterface $event)
-    {
-        parent::beforeFilter($event);
-        try {
-            $this->Authorization->authorize($this->Instituicoes);
-        } catch (ForbiddenException $error) {
-            $this->Flash->error('Authorization error: ' . $error->getMessage());
-            return $this->redirect('/');
-        }
-    }
-    
-    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
+        $this->Authorization->authorize($this->Instituicoes);
         $instituicoes = $this->paginate($this->Instituicoes->find()->contain(['Areas']));
 
         $this->set(compact('instituicoes'));
@@ -56,9 +42,10 @@ class InstituicoesController extends AppController
                 'Supervisores'=> ['Users'],
                 'Estagiarios' => ['Alunos', 'Professores', 'Supervisores', 'Instituicoes', 'Turmas'],
                 'Muralestagios' => ['Instituicoes', 'Professores'],
-                'Visitas' 
+                'Visitas'
             ],
         ]);
+        $this->Authorization->authorize($instituicao);
 
         $this->set(compact('instituicao'));
     }
@@ -70,6 +57,7 @@ class InstituicoesController extends AppController
      */
     public function add()
     {
+        $this->Authorization->authorize($this->Instituicoes);
         $instituicao = $this->Instituicoes->newEmptyEntity();
         if ($this->request->is('post')) {
             $instituicao = $this->Instituicoes->patchEntity($instituicao, $this->request->getData());
@@ -97,6 +85,7 @@ class InstituicoesController extends AppController
         $instituicao = $this->Instituicoes->get($id, [
             'contain' => ['Supervisores'],
         ]);
+        $this->Authorization->authorize($instituicao);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $instituicao = $this->Instituicoes->patchEntity($instituicao, $this->request->getData());
             if ($this->Instituicoes->save($instituicao)) {
@@ -122,6 +111,7 @@ class InstituicoesController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $instituicao = $this->Instituicoes->get($id);
+        $this->Authorization->authorize($instituicao);
         if ($this->Instituicoes->delete($instituicao)) {
             $this->Flash->success(__('The instituicao has been deleted.'));
         } else {

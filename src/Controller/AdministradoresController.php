@@ -17,7 +17,7 @@ class AdministradoresController extends AppController
     /**
      * beforeFilter method
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         try {

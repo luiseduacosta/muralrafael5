@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Authorization\Exception\ForbiddenException;
 use Cake\Event\EventInterface;
 
 /**
@@ -28,6 +29,14 @@ class SupervisoresController extends AppController
      */
     public function index()
     {
+        try {
+            $this->Authorization->authorize($this->Supervisores);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
+
         $supervisores = $this->paginate($this->Supervisores->find('all', [
             'contain' => ['Users'],
         ]));
@@ -56,6 +65,14 @@ class SupervisoresController extends AppController
             'contain' => $contained,
         ]);
 
+        try {
+            $this->Authorization->authorize($supervisor);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
+
         $this->set(compact('supervisor'));
     }
 
@@ -66,6 +83,14 @@ class SupervisoresController extends AppController
      */
     public function add()
     {
+        try {
+            $this->Authorization->authorize($this->Supervisores);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
+
         $supervisor = $this->Supervisores->newEmptyEntity();
         if ($this->request->is('post')) {
             $supervisor = $this->Supervisores->patchEntity($supervisor, $this->request->getData());
@@ -98,6 +123,15 @@ class SupervisoresController extends AppController
         $supervisor = $this->Supervisores->get($id, [
             'contain' => ['Instituicoes'],
         ]);
+
+        try {
+            $this->Authorization->authorize($supervisor);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $supervisor = $this->Supervisores->patchEntity($supervisor, $this->request->getData());
             if ($this->Supervisores->save($supervisor)) {
@@ -122,10 +156,16 @@ class SupervisoresController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $supervisor = $this->Supervisores->get($id);
-        if ($this->Supervisores->delete($supervisor)) {
-            $this->Flash->success(__('The supervisor has been deleted.'));
-        } else {
-            $this->Flash->error(__('The supervisor could not be deleted. Please, try again.'));
+
+        try {
+            $this->Authorization->authorize($supervisor);
+            if ($this->Supervisores->delete($supervisor)) {
+                $this->Flash->success(__('The supervisor has been deleted.'));
+            } else {
+                $this->Flash->error(__('The supervisor could not be deleted. Please, try again.'));
+            }
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
         }
 
         return $this->redirect(['action' => 'index']);

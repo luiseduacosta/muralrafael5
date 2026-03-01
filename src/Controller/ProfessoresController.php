@@ -30,6 +30,14 @@ class ProfessoresController extends AppController
      */
     public function index()
     {
+        try {
+            $this->Authorization->authorize($this->Professores);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
+
         $professores = $this->paginate($this->Professores->find('all', [
             'contain' => ['Users'],
         ]));
@@ -45,14 +53,22 @@ class ProfessoresController extends AppController
      */
     public function view(?string $id = null)
     {
+        $professor = $this->Professores->get($id, [
+            'contain' => [ 'Users', 'Muralestagios' => ['Instituicoes'] ],
+        ]);
+
+        try {
+            $this->Authorization->authorize($professor);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
+
         $this->paginate = [
             'Estagiarios' => ['limit' => 5, 'scope' => 'estagiario'],
             /*'Muralestagios' => ['limit' => 5, 'scope' => 'muralestagio']*/
         ];
-        $professor = $this->Professores->get($id, [
-            'contain' => [ 'Users', 'Muralestagios' => ['Instituicoes'] ],
-
-        ]);
 
         $estagiarios = $this->paginate($this->Professores->Estagiarios->find('all', [
             'contain' => ['Alunos', 'Instituicoes', 'Supervisores', 'Turmas'],
@@ -82,6 +98,14 @@ class ProfessoresController extends AppController
      */
     public function add()
     {
+        try {
+            $this->Authorization->authorize($this->Professores);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
+
         $professor = $this->Professores->newEmptyEntity();
         if ($this->request->is('post')) {
             $professor = $this->Professores->patchEntity($professor, $this->request->getData());

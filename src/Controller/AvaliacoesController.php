@@ -33,6 +33,14 @@ class AvaliacoesController extends AppController
      */
     public function index($id = NULL)
     {
+        try {
+            $this->Authorization->authorize($this->Avaliacoes);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
+
         $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
         $user_session = $this->request->getAttribute('identity');
         if ($user_session) { $user_data = $user_session->getOriginalData(); }
@@ -101,7 +109,7 @@ class AvaliacoesController extends AppController
     public function view($id = null)
     {
         $contained = ['Estagiarios' => ['Alunos', 'Instituicoes', 'Professores', 'Supervisores']];
-        
+
         if ($id) {
             $avaliacao = $this->Avaliacoes->find()->contain($contained)
                 ->where(['Avaliacoes.id' => $id])
@@ -112,13 +120,20 @@ class AvaliacoesController extends AppController
                 ->where(['Avaliacoes.estagiario_id' => $estagiario_id])
                 ->first();
         }
-        // pr($avaliacao);
-        // die();
+
         if ($avaliacao) {
+            try {
+                $this->Authorization->authorize($avaliacao);
+            } catch (ForbiddenException $error) {
+                $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+                return $this->redirect('/');
+            }
             $this->set(compact('avaliacao'));
         } else {
-            /** Somente supervisor e administrador (?) podem avaliar. Portanto, redireciona para ver o estágio do estágiario */
             $this->Flash->error(__('Aluno sem avaliaçao'));
+            $estagiario_id = $this->getRequest()->getQuery('estagiario_id');
+
             return $this->redirect(['controller' => 'Estagiarios', 'action' => 'view', $estagiario_id]);
         }
     }
@@ -130,6 +145,13 @@ class AvaliacoesController extends AppController
      */
     public function add($id = NULL)
     {
+        try {
+            $this->Authorization->authorize($this->Avaliacoes);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
 
         $estagiario_id = $this->getRequest()->getQuery('estagiario_id');
         $avaliacaoexiste = null;
@@ -190,10 +212,17 @@ class AvaliacoesController extends AppController
      */
     public function edit($id = null)
     {
-
         $avaliacao = $this->Avaliacoes->get($id, [
             'contain' => ['Estagiarios' => 'Alunos'],
         ]);
+
+        try {
+            $this->Authorization->authorize($avaliacao);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
         // pr($avaliacao->estagiario);
         $estagiario = $avaliacao->estagiario;
         // die();
@@ -222,10 +251,16 @@ class AvaliacoesController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $avaliacao = $this->Avaliacoes->get($id);
-        if ($this->Avaliacoes->delete($avaliacao)) {
-            $this->Flash->success(__('Avaliacao excluida.'));
-        } else {
-            $this->Flash->error(__('Avaliacao nao foi excluida. Tente novamente.'));
+
+        try {
+            $this->Authorization->authorize($avaliacao);
+            if ($this->Avaliacoes->delete($avaliacao)) {
+                $this->Flash->success(__('Avaliacao excluida.'));
+            } else {
+                $this->Flash->error(__('Avaliacao nao foi excluida. Tente novamente.'));
+            }
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
         }
 
         return $this->redirect(['action' => 'index']);

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
-use Cake\Event\EventInterface;
 
 /**
  * Visitas Controller
@@ -15,27 +14,13 @@ use Cake\Event\EventInterface;
 class VisitasController extends AppController
 {
     /**
-     * beforeFilter method
-     */
-    public function beforeFilter(EventInterface $event)
-    {
-        parent::beforeFilter($event);
-        try {
-            $this->Authorization->authorize($this->Visitas);
-        } catch (ForbiddenException $error) {
-            $this->Flash->error('Authorization error: ' . $error->getMessage());
-
-            return $this->redirect('/');
-        }
-    }
-
-    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
+        $this->Authorization->authorize($this->Visitas);
         //$this->paginate = [
         //    'contain' => ['Instituicoes'],
         //];
@@ -56,6 +41,7 @@ class VisitasController extends AppController
         $visita = $this->Visitas->get($id, [
             'contain' => ['Instituicoes', 'Professores'],
         ]);
+        $this->Authorization->authorize($visita);
 
         $this->set(compact('visita'));
     }
@@ -67,6 +53,7 @@ class VisitasController extends AppController
      */
     public function add()
     {
+        $this->Authorization->authorize($this->Visitas);
         $visita = $this->Visitas->newEmptyEntity();
         if ($this->request->is('post')) {
             $visita = $this->Visitas->patchEntity($visita, $this->request->getData());
@@ -93,6 +80,7 @@ class VisitasController extends AppController
         $visita = $this->Visitas->get($id, [
             'contain' => [],
         ]);
+        $this->Authorization->authorize($visita);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $visita = $this->Visitas->patchEntity($visita, $this->request->getData());
             if ($this->Visitas->save($visita)) {
@@ -117,6 +105,7 @@ class VisitasController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $visita = $this->Visitas->get($id);
+        $this->Authorization->authorize($visita);
         if ($this->Visitas->delete($visita)) {
             $this->Flash->success(__('The visita has been deleted.'));
         } else {

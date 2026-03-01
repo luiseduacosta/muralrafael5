@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
-use Cake\Event\EventInterface;
 
 /**
  * Configuracoes Controller
@@ -15,27 +14,13 @@ use Cake\Event\EventInterface;
 class ConfiguracoesController extends AppController
 {
     /**
-     * beforeFilter method
-     */
-    public function beforeFilter(EventInterface $event)
-    {
-        parent::beforeFilter($event);
-        try {
-            $this->Authorization->authorize($this->Configuracoes);
-        } catch (ForbiddenException $error) {
-            $this->Flash->error('Authorization error: ' . $error->getMessage());
-
-            return $this->redirect('/');
-        }
-    }
-
-    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
+        $this->Authorization->authorize($this->Configuracoes);
         $this->redirect('/configuracoes/view/1');
     }
 
@@ -48,8 +33,8 @@ class ConfiguracoesController extends AppController
      */
     public function view(?string $id = null)
     {
-
         $configuracao = $this->Configuracoes->find()->first();
+        $this->Authorization->authorize($configuracao);
         $this->set('configuracao', $configuracao);
     }
 
@@ -63,6 +48,7 @@ class ConfiguracoesController extends AppController
     public function edit(?string $id = null)
     {
         $configuracao = $this->Configuracoes->get($id);
+        $this->Authorization->authorize($configuracao);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $configuracao = $this->Configuracoes->patchEntity($configuracao, $this->request->getData());
             if ($this->Configuracoes->save($configuracao)) {

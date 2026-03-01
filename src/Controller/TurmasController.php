@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
-use Cake\Event\EventInterface;
 
 /**
  * Turmas Controller
@@ -15,27 +14,13 @@ use Cake\Event\EventInterface;
 class TurmasController extends AppController
 {
     /**
-     * beforeFilter method
-     */
-    public function beforeFilter(EventInterface $event)
-    {
-        parent::beforeFilter($event);
-        try {
-            $this->Authorization->authorize($this->Turmas);
-        } catch (ForbiddenException $error) {
-            $this->Flash->error('Authorization error: ' . $error->getMessage());
-
-            return $this->redirect('/');
-        }
-    }
-
-    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
+        $this->Authorization->authorize($this->Turmas);
         $turmas = $this->paginate($this->Turmas);
 
         $this->set(compact('turmas'));
@@ -57,6 +42,7 @@ class TurmasController extends AppController
                'Muralestagios' => ['Instituicoes', 'Professores'],
             ],
         ]);
+        $this->Authorization->authorize($turma);
 
         $this->set(compact('turma'));
     }
@@ -68,6 +54,7 @@ class TurmasController extends AppController
      */
     public function add()
     {
+        $this->Authorization->authorize($this->Turmas);
         $turma = $this->Turmas->newEmptyEntity();
         if ($this->request->is('post')) {
             $turma = $this->Turmas->patchEntity($turma, $this->request->getData());
@@ -93,6 +80,7 @@ class TurmasController extends AppController
         $turma = $this->Turmas->get($id, [
             'contain' => [],
         ]);
+        $this->Authorization->authorize($turma);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $turma = $this->Turmas->patchEntity($turma, $this->request->getData());
             if ($this->Turmas->save($turma)) {
@@ -116,6 +104,7 @@ class TurmasController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $turma = $this->Turmas->get($id);
+        $this->Authorization->authorize($turma);
         if ($this->Turmas->delete($turma)) {
             $this->Flash->success(__('The turma has been deleted.'));
         } else {

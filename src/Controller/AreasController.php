@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
-use Cake\Event\EventInterface;
 
 /**
  * Areas Controller
@@ -15,21 +14,6 @@ use Cake\Event\EventInterface;
 class AreasController extends AppController
 {
     /**
-     * beforeFilter method
-     */
-    public function beforeFilter(EventInterface $event)
-    {
-        parent::beforeFilter($event);
-        try {
-            $this->Authorization->authorize($this->Areas);
-        } catch (ForbiddenException $error) {
-            $this->Flash->error('Authorization error: ' . $error->getMessage());
-
-            return $this->redirect('/');
-        }
-    }
-
-    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
@@ -37,6 +21,7 @@ class AreasController extends AppController
 
     public function index()
     {
+        $this->Authorization->authorize($this->Areas);
         $areas = $this->paginate($this->Areas);
 
         $this->set(compact('areas'));
@@ -54,6 +39,7 @@ class AreasController extends AppController
         $area = $this->Areas->get($id, [
             'contain' => ['Instituicoes'],
         ]);
+        $this->Authorization->authorize($area);
 
         $this->set(compact('area'));
     }
@@ -65,6 +51,7 @@ class AreasController extends AppController
      */
     public function add()
     {
+        $this->Authorization->authorize($this->Areas);
         $area = $this->Areas->newEmptyEntity();
         if ($this->request->is('post')) {
             $area = $this->Areas->patchEntity($area, $this->request->getData());
@@ -88,6 +75,7 @@ class AreasController extends AppController
     public function edit(?string $id = null)
     {
         $area = $this->Areas->get($id);
+        $this->Authorization->authorize($area);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $area = $this->Areas->patchEntity($area, $this->request->getData());
             if ($this->Areas->save($area)) {
@@ -111,6 +99,7 @@ class AreasController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $area = $this->Areas->get($id);
+        $this->Authorization->authorize($area);
         if ($this->Areas->delete($area)) {
             $this->Flash->success(__('The area has been deleted.'));
         } else {

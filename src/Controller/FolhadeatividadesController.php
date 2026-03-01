@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+
 use App\Model\Entity\Folhadeatividade;
+use Authorization\Exception\ForbiddenException;
 
 /**
  * Folhadeatividades Controller
@@ -22,6 +24,14 @@ class FolhadeatividadesController extends AppController
      */
     public function index($id = null)
     {
+        try {
+            $this->Authorization->authorize($this->Folhadeatividades);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error("Authorization error: " . $error->getMessage());
+
+            return $this->redirect("/");
+        }
+
         $estagiario_id = $this->getRequest()->getQuery("estagiario_id");
         $estagiariotabela = $this->fetchTable("Estagiarios");
         if ($estagiario_id) {
@@ -70,6 +80,14 @@ class FolhadeatividadesController extends AppController
      */
     public function add($id = null)
     {
+        try {
+            $this->Authorization->authorize($this->Folhadeatividades);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error("Authorization error: " . $error->getMessage());
+
+            return $this->redirect("/");
+        }
+
         $estagiario_id = $this->getRequest()->getQuery("estagiario_id");
 
         if ($estagiario_id) {
@@ -151,6 +169,16 @@ class FolhadeatividadesController extends AppController
             ]);
         }
 
+        if ($folhadeatividade) {
+            try {
+                $this->Authorization->authorize($folhadeatividade);
+            } catch (ForbiddenException $error) {
+                $this->Flash->error("Authorization error: " . $error->getMessage());
+
+                return $this->redirect("/");
+            }
+        }
+
         if (!isset($folhadeatividade)) {
             $this->Flash->error(__("Sem atividades cadastradas"));
             return $this->redirect([
@@ -174,6 +202,15 @@ class FolhadeatividadesController extends AppController
         $folhadeatividade = $this->Folhadeatividades->get($id, [
             "contain" => [],
         ]);
+
+        try {
+            $this->Authorization->authorize($folhadeatividade);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error("Authorization error: " . $error->getMessage());
+
+            return $this->redirect("/");
+        }
+
         if ($this->request->is(["patch", "post", "put"])) {
             $folhadeatividade = $this->Folhadeatividades->patchEntity(
                 $folhadeatividade,
@@ -211,28 +248,38 @@ class FolhadeatividadesController extends AppController
     {
         $this->request->allowMethod(["post", "delete"]);
         $folhadeatividade = $this->Folhadeatividades->get($id);
-        $estagiariotabela = $this->fetchTable("Estagiarios");
-        $estagiario = $estagiariotabela
-            ->find()
-            ->where(["id" => $folhadeatividade->estagiario_id])
-            ->first();
 
-        if ($this->Folhadeatividades->delete($folhadeatividade)) {
-            $this->Flash->success(__("Registro de atividade excluido."));
-            return $this->redirect([
-                "controller" => "estagiarios",
-                "action" => "view",
-                $estagiario->id,
-            ]);
-        } else {
-            $this->Flash->error(
-                __("Registro de atividade nao foi excluido. Tente novamente."),
-            );
-            return $this->redirect([
-                "controller" => "folhadeatividades",
-                "action" => "view",
-                $id,
-            ]);
+        try {
+            $this->Authorization->authorize($folhadeatividade);
+            $estagiariotabela = $this->fetchTable("Estagiarios");
+            $estagiario = $estagiariotabela
+                ->find()
+                ->where(["id" => $folhadeatividade->estagiario_id])
+                ->first();
+
+            if ($this->Folhadeatividades->delete($folhadeatividade)) {
+                $this->Flash->success(__("Registro de atividade excluido."));
+
+                return $this->redirect([
+                    "controller" => "estagiarios",
+                    "action" => "view",
+                    $estagiario->id,
+                ]);
+            } else {
+                $this->Flash->error(
+                    __("Registro de atividade nao foi excluido. Tente novamente."),
+                );
+
+                return $this->redirect([
+                    "controller" => "folhadeatividades",
+                    "action" => "view",
+                    $id,
+                ]);
+            }
+        } catch (ForbiddenException $error) {
+            $this->Flash->error("Authorization error: " . $error->getMessage());
+
+            return $this->redirect("/");
         }
     }
 

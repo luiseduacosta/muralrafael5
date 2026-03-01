@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Authorization\Exception\ForbiddenException;
+
 /**
  * Inscricoes Controller
  *
@@ -18,6 +20,13 @@ class InscricoesController extends AppController
      */
     public function index()
     {
+        try {
+            $this->Authorization->authorize($this->Inscricoes);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
         $periodo = $this->getRequest()->getQuery('periodo');
 
         if (empty($periodo)) {
@@ -56,6 +65,14 @@ class InscricoesController extends AppController
             'contain' => ['Alunos', 'Muralestagios' => ['Instituicoes']],
         ]);
 
+        try {
+            $this->Authorization->authorize($inscricao);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
+
         $this->set(compact('inscricao'));
     }
 
@@ -66,6 +83,13 @@ class InscricoesController extends AppController
      */
     public function add($id = null)
     {
+        try {
+            $this->Authorization->authorize($this->Inscricoes);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
         $dados = $this->request->getData();
         
         $periodo = $this->fetchTable("Configuracoes")->find()->first()['mural_periodo_atual'];
@@ -143,6 +167,15 @@ class InscricoesController extends AppController
         $inscricao = $this->Inscricoes->get($id, [
             'contain' => ['Alunos'],
         ]);
+
+        try {
+            $this->Authorization->authorize($inscricao);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $inscricao = $this->Inscricoes->patchEntity($inscricao, $this->request->getData());
             if ($this->Inscricoes->save($inscricao)) {
@@ -166,10 +199,16 @@ class InscricoesController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $inscricao = $this->Inscricoes->get($id);
-        if ($this->Inscricoes->delete($inscricao)) {
-            $this->Flash->success(__('The inscricao has been deleted.'));
-        } else {
-            $this->Flash->error(__('The inscricao could not be deleted. Please, try again.'));
+
+        try {
+            $this->Authorization->authorize($inscricao);
+            if ($this->Inscricoes->delete($inscricao)) {
+                $this->Flash->success(__('The inscricao has been deleted.'));
+            } else {
+                $this->Flash->error(__('The inscricao could not be deleted. Please, try again.'));
+            }
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
         }
 
         return $this->redirect(['action' => 'index']);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
-use Cake\Event\EventInterface;
+
 /**
  * Turnos Controller
  *
@@ -14,37 +14,13 @@ use Cake\Event\EventInterface;
 class TurnosController extends AppController
 {
     /**
-     * beforeFilter method
-     */
-    public function beforeFilter(EventInterface $event)
-    {
-        parent::beforeFilter($event);
-        try {
-            $this->Authorization->authorize($this->Turnos);
-        } catch (ForbiddenException $error) {
-            $this->Flash->error('Authorization error: ' . $error->getMessage());
-            return $this->redirect('/');
-        }
-    }
-    /**
-     * Initialize controller
-     *
-     * @return void
-     */
-    public function initialize(): void
-    {
-        parent::initialize();
-
-        $this->loadComponent('Authorization.Authorization');
-    }
-
-    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
+        $this->Authorization->authorize($this->Turnos);
         $turnos = $this->paginate($this->Turnos);
 
         $this->set(compact('turnos'));
@@ -60,6 +36,7 @@ class TurnosController extends AppController
     public function view($id = null)
     {
         $turno = $this->Turnos->get($id);
+        $this->Authorization->authorize($turno);
         $this->set(compact('turno'));
     }
 
@@ -70,6 +47,7 @@ class TurnosController extends AppController
      */
     public function add()
     {
+        $this->Authorization->authorize($this->Turnos);
         $turno = $this->Turnos->newEmptyEntity();
         if ($this->request->is('post')) {
             $turno = $this->Turnos->patchEntity($turno, $this->request->getData());
@@ -93,6 +71,7 @@ class TurnosController extends AppController
     public function edit($id = null)
     {
         $turno = $this->Turnos->get($id, contain: []);
+        $this->Authorization->authorize($turno);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $turno = $this->Turnos->patchEntity($turno, $this->request->getData());
             if ($this->Turnos->save($turno)) {
@@ -116,6 +95,7 @@ class TurnosController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $turno = $this->Turnos->get($id);
+        $this->Authorization->authorize($turno);
         if ($this->Turnos->delete($turno)) {
             $this->Flash->success(__('The turno has been deleted.'));
         } else {

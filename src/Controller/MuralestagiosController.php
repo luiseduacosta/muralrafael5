@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Authorization\Exception\ForbiddenException;
+
 /**
  * Muralestagios Controller
  *
  * @property \App\Model\Table\MuralestagiosTable $Muralestagios
  * @method \App\Model\Entity\Muralestagio[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class MuralestagiosController extends AppController {
+class MuralestagiosController extends AppController
+{
     /**
      * beforeFilter method
      */
@@ -77,6 +80,14 @@ class MuralestagiosController extends AppController {
      */
     public function add()
     {
+        try {
+            $this->Authorization->authorize($this->Muralestagios);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
+
         $periodo = $this->fetchTable("Configuracoes")->find()->first()['mural_periodo_atual'];
         
         $muralestagio = $this->Muralestagios->newEmptyEntity();
@@ -106,6 +117,15 @@ class MuralestagiosController extends AppController {
     public function edit($id = null)
     {
         $muralestagio = $this->Muralestagios->get($id);
+
+        try {
+            $this->Authorization->authorize($muralestagio);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $muralestagio = $this->Muralestagios->patchEntity($muralestagio, $this->request->getData());
             if ($this->Muralestagios->save($muralestagio)) {
@@ -133,10 +153,16 @@ class MuralestagiosController extends AppController {
     {
         $this->request->allowMethod(['post', 'delete']);
         $muralestagio = $this->Muralestagios->get($id);
-        if ($this->Muralestagios->delete($muralestagio)) {
-            $this->Flash->success(__('The muralestagio has been deleted.'));
-        } else {
-            $this->Flash->error(__('The muralestagio could not be deleted. Please, try again.'));
+
+        try {
+            $this->Authorization->authorize($muralestagio);
+            if ($this->Muralestagios->delete($muralestagio)) {
+                $this->Flash->success(__('The muralestagio has been deleted.'));
+            } else {
+                $this->Flash->error(__('The muralestagio could not be deleted. Please, try again.'));
+            }
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
         }
 
         return $this->redirect(['action' => 'index']);
