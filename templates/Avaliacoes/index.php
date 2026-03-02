@@ -26,11 +26,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
     
     <?php if ($user_data['administrador_id']): ?>
     
+        <?php $this->Paginator->setPaginated($avaliacoes); ?>
         <h3><?= __('Lista de Avaliações') ?></h3>
     
-        <div class="paginator">
-            <?= $this->element('paginator'); ?>
-        </div>
         <div class="table_wrap">
             <table>
                 <thead>
@@ -61,13 +59,10 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tbody>
             </table>
         </div>
-        <div class="paginator">
-            <?= $this->element('paginator'); ?>
-            <?= $this->element('paginator_count'); ?>
-        </div>
 
 	<?php else: ?>
     
+        <?php $this->Paginator->setPaginated($estagiarios); ?>
         <div class="table-responsive">
             <table class="table table-striped table-hover table-responsive">
                 <thead>
@@ -76,14 +71,14 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                             <th class="actions"><?= __('Ações') ?></th>
                         <th><?= $this->Paginator->sort('id') ?></th>
                         <?php endif; ?>
-                        <th><?= $this->Paginator->sort('estagiarios->avaliacao->id', 'Avaliação') ?></th>
-                        <th><?= $this->Paginator->sort('estagiarios->aluno->nome', 'Aluno') ?></th>
-                        <th><?= $this->Paginator->sort('estagiarios->periodo', 'Período') ?></th>
-                        <th><?= $this->Paginator->sort('estagiarios->nivel', 'Nível') ?></th>
-                        <th><?= $this->Paginator->sort('estagiarios->instituicao->instituicao', 'Instituição') ?></th>
-                        <th><?= $this->Paginator->sort('estagiarios->supervisor->nome', 'Supervisor(a)') ?></th>
-                        <th><?= $this->Paginator->sort('estagiarios->ch', 'Carga horária') ?></th>
-                        <th><?= $this->Paginator->sort('estagiarios->nota', 'Nota') ?></th>
+                        <th><?= __('Avaliação') ?></th>
+                        <th><?= $this->Paginator->sort('Estagiarios.Alunos.nome', 'Aluno') ?></th>
+                        <th><?= $this->Paginator->sort('Estagiarios.periodo', 'Período') ?></th>
+                        <th><?= $this->Paginator->sort('Estagiarios.nivel', 'Nível') ?></th>
+                        <th><?= $this->Paginator->sort('Estagiarios.Instituicoes.instituicao', 'Instituição') ?></th>
+                        <th><?= $this->Paginator->sort('Estagiarios.Supervisores.nome', 'Supervisor(a)') ?></th>
+                        <th><?= $this->Paginator->sort('Estagiarios.ch', 'Carga horária') ?></th>
+                        <th><?= $this->Paginator->sort('Estagiarios.nota', 'Nota') ?></th>
                     </tr>
                 </thead>
                 <tbody>

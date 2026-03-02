@@ -39,7 +39,7 @@ class FolhadeatividadesTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('folha_atividades');
+        $this->setTable('folhadeatividades');
         $this->setAlias('Folhadeatividades');
         $this->setDisplayField('atividade');
         $this->setPrimaryKey('id');

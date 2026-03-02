@@ -48,6 +48,7 @@ class InstituicoesTable extends Table
 
         $this->belongsTo('Areas', [
             'foreignKey' => 'area_id',
+            'propertyName' => 'area_instituicao',
         ]);
 
         $this->hasMany('Inscricoes', [

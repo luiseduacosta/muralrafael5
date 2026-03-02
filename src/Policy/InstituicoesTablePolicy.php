@@ -58,7 +58,7 @@ final class InstituicoesTablePolicy implements BeforePolicyInterface
      */
     public function canAdd(): Result
     {
-        return new Result(false, 'Erro: instituicoes add policy not authorized');
+        return new Result(true);
     }
 
     /**

@@ -68,6 +68,7 @@ class EstagiariosTable extends Table
         ]);
         $this->belongsTo('Turnos', [
             'foreignKey' => 'turno_id',
+            'propertyName' => 'turno_estagiario',
         ]);
         $this->belongsTo('Complementos', [
             'foreignKey' => 'complemento_id',

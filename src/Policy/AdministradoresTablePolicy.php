@@ -34,7 +34,7 @@ final class AdministradoresTablePolicy implements BeforePolicyInterface
      */
     public function canIndex(): Result
     {
-        return new Result(false, 'Erro: admin index policy not authorized');
+        return new Result(true);
     }
 
     /**

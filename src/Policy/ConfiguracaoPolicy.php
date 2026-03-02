@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace App\Policy;
 
+use App\Model\Entity\Configuracao;
 use Authorization\IdentityInterface;
 use Authorization\Policy\BeforePolicyInterface;
 use Authorization\Policy\Result;
 use Authorization\Policy\ResultInterface;
 
-final class ConfiguracoesTablePolicy implements BeforePolicyInterface
+final class ConfiguracaoPolicy implements BeforePolicyInterface
 {
     /**
      * @param \Authorization\IdentityInterface|null $identity
@@ -30,42 +31,22 @@ final class ConfiguracoesTablePolicy implements BeforePolicyInterface
     }
 
     /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Entity\Configuracao $configuracaoData
      * @return \Authorization\Policy\Result
      */
-    public function canIndex(): Result
+    public function canView(IdentityInterface $userSession, Configuracao $configuracaoData): Result
     {
         return new Result(true);
     }
 
     /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Entity\Configuracao $configuracaoData
      * @return \Authorization\Policy\Result
      */
-    public function canView(): Result
+    public function canEdit(IdentityInterface $userSession, Configuracao $configuracaoData): Result
     {
-        return new Result(false, 'Erro: configuracoes view policy not authorized');
-    }
-
-    /**
-     * @return \Authorization\Policy\Result
-     */
-    public function canEdit(): Result
-    {
-        return new Result(false, 'Erro: configuracoes edit policy not authorized');
-    }
-
-    /**
-     * @return \Authorization\Policy\Result
-     */
-    public function canAdd(): Result
-    {
-        return new Result(false, 'Erro: configuracoes add policy not authorized');
-    }
-
-    /**
-     * @return \Authorization\Policy\Result
-     */
-    public function canDelete(): Result
-    {
-        return new Result(false, 'Erro: configuracoes delete policy not authorized');
+        return new Result(false, 'Erro: configuracao edit policy not authorized');
     }
 }

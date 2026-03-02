@@ -41,7 +41,7 @@ final class TurmasTablePolicy implements BeforePolicyInterface
      */
     public function canIndex(): Result
     {
-        return new Result(false, 'Erro: turmas index policy not authorized');
+        return new Result(true);
     }
 
     /**
@@ -65,7 +65,7 @@ final class TurmasTablePolicy implements BeforePolicyInterface
      */
     public function canAdd(): Result
     {
-        return new Result(false, 'Erro: turmas add policy not authorized');
+        return new Result(true);
     }
 
     /**

@@ -34,7 +34,7 @@ final class ComplementosTablePolicy implements BeforePolicyInterface
      */
     public function canIndex(): Result
     {
-        return new Result(false, 'Erro: complementos index policy not authorized');
+        return new Result(true);
     }
 
     /**
@@ -58,7 +58,7 @@ final class ComplementosTablePolicy implements BeforePolicyInterface
      */
     public function canAdd(): Result
     {
-        return new Result(false, 'Erro: complementos add policy not authorized');
+        return new Result(true);
     }
 
     /**

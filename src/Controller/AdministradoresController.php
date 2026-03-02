@@ -20,13 +20,6 @@ class AdministradoresController extends AppController
     public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
-        try {
-            $this->Authorization->authorize($this->Administradores);
-        } catch (ForbiddenException $error) {
-            $this->Flash->error('Authorization error: ' . $error->getMessage());
-
-            return $this->redirect('/');
-        }
     }
 
     /**
@@ -37,6 +30,14 @@ class AdministradoresController extends AppController
 
     public function index()
     {
+        try {
+            $this->Authorization->authorize($this->Administradores);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
+
         $administradores = $this->paginate($this->Administradores);
         $this->set(compact('administradores'));
     }
@@ -53,6 +54,15 @@ class AdministradoresController extends AppController
         $administrador = $this->Administradores->get($id, [
             'contain' => ['Users'],
         ]);
+
+        try {
+            $this->Authorization->authorize($administrador);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
+
         $this->set(compact('administrador'));
     }
 
@@ -66,6 +76,15 @@ class AdministradoresController extends AppController
     public function edit(?string $id = null)
     {
         $administrador = $this->Administradores->get($id);
+
+        try {
+            $this->Authorization->authorize($administrador);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
+        }
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $administrador = $this->Administradores->patchEntity($administrador, $this->request->getData());
             if ($this->Administradores->save($administrador)) {

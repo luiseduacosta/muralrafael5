@@ -33,6 +33,11 @@ class FolhadeatividadesController extends AppController
         }
 
         $estagiario_id = $this->getRequest()->getQuery("estagiario_id");
+        if (empty($estagiario_id)) {
+            $this->Flash->error(__("Selecione o estagiário"));
+            return $this->redirect(["controller" => "Estagiarios", "action" => "index"]);
+        }
+
         $estagiariotabela = $this->fetchTable("Estagiarios");
         if ($estagiario_id) {
             $folhadeatividades = $this->Folhadeatividades

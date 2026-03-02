@@ -45,7 +45,7 @@ final class InscricoesTablePolicy implements BeforePolicyInterface
      */
     public function canIndex(IdentityInterface $userSession, InscricoesTable $inscricoesTable): Result
     {
-        return new Result(false, 'Erro: inscricoes index policy not authorized');
+        return new Result(true);
     }
 
     /**

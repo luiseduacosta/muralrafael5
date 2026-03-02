@@ -8,7 +8,7 @@ use Authorization\Policy\BeforePolicyInterface;
 use Authorization\Policy\Result;
 use Authorization\Policy\ResultInterface;
 
-final class ConfiguracoesTablePolicy implements BeforePolicyInterface
+final class ProfessoresTablePolicy implements BeforePolicyInterface
 {
     /**
      * @param \Authorization\IdentityInterface|null $identity
@@ -42,7 +42,7 @@ final class ConfiguracoesTablePolicy implements BeforePolicyInterface
      */
     public function canView(): Result
     {
-        return new Result(false, 'Erro: configuracoes view policy not authorized');
+        return new Result(false, 'Erro: professores view policy not authorized');
     }
 
     /**
@@ -50,7 +50,7 @@ final class ConfiguracoesTablePolicy implements BeforePolicyInterface
      */
     public function canEdit(): Result
     {
-        return new Result(false, 'Erro: configuracoes edit policy not authorized');
+        return new Result(false, 'Erro: professores edit policy not authorized');
     }
 
     /**
@@ -58,7 +58,7 @@ final class ConfiguracoesTablePolicy implements BeforePolicyInterface
      */
     public function canAdd(): Result
     {
-        return new Result(false, 'Erro: configuracoes add policy not authorized');
+        return new Result(false, 'Erro: professores add policy not authorized');
     }
 
     /**
@@ -66,6 +66,6 @@ final class ConfiguracoesTablePolicy implements BeforePolicyInterface
      */
     public function canDelete(): Result
     {
-        return new Result(false, 'Erro: configuracoes delete policy not authorized');
+        return new Result(false, 'Erro: professores delete policy not authorized');
     }
 }

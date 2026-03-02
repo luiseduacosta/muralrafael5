@@ -47,7 +47,7 @@ class InscricoesTable extends Table
             'foreignKey' => 'aluno_id',
         ]);
         $this->belongsTo('Muralestagios', [
-            'foreignKey' => 'mural_estagio_id',
+            'foreignKey' => 'muralestagio_id',
         ]);
     }
 

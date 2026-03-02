@@ -34,7 +34,7 @@ final class AreasTablePolicy implements BeforePolicyInterface
      */
     public function canIndex(): Result
     {
-        return new Result(false, 'Erro: areas index policy not authorized');
+        return new Result(true);
     }
 
     /**
@@ -58,7 +58,7 @@ final class AreasTablePolicy implements BeforePolicyInterface
      */
     public function canAdd(): Result
     {
-        return new Result(false, 'Erro: areas add policy not authorized');
+        return new Result(true);
     }
 
     /**

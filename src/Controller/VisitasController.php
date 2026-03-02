@@ -38,10 +38,13 @@ class VisitasController extends AppController
      */
     public function view(?string $id = null)
     {
+        try {
         $visita = $this->Visitas->get($id, [
-            'contain' => ['Instituicoes', 'Professores'],
+            'contain' => ['Instituicoes'],
         ]);
-        $this->Authorization->authorize($visita);
+        } catch (RecordNotFoundException $e) {
+            throw new ForbiddenException('A visita que você tentou visualizar não existe.');
+        }
 
         $this->set(compact('visita'));
     }

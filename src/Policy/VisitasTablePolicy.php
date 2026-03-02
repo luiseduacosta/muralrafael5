@@ -41,7 +41,7 @@ final class VisitasTablePolicy implements BeforePolicyInterface
      */
     public function canIndex(): Result
     {
-        return new Result(false, 'Erro: visitas index policy not authorized');
+        return new Result(true);
     }
 
     /**
@@ -65,7 +65,7 @@ final class VisitasTablePolicy implements BeforePolicyInterface
      */
     public function canAdd(): Result
     {
-        return new Result(false, 'Erro: visitas add policy not authorized');
+        return new Result(true);
     }
 
     /**
