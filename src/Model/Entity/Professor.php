@@ -41,9 +41,16 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenDate|null $dataegresso
  * @property string|null $motivoegresso
  * @property string|null $observacoes
+ * @property int|null $cress
+ * @property int|null $regiao
+ * @property string|null $sexo
+ * @property string|null $email
+ * @property string|null $categoria
  * @property int $user_id
  *
- * @property \App\Model\Entity\User[] $users
+ * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\Estagiario[] $estagiarios
+ * @property \App\Model\Entity\Muralestagio[] $muralestagios
  */
 class Professor extends Entity
 {
@@ -89,8 +96,13 @@ class Professor extends Entity
         'dataegresso' => true,
         'motivoegresso' => true,
         'observacoes' => true,
+        'cress' => true,
+        'regiao' => true,
+        'sexo' => true,
+        'email' => true,
+        'categoria' => true,
+        'user_id' => true,
         'estagiarios' => true,
         'muralestagios' => true,
-        'user_id' => true,
     ];
 }

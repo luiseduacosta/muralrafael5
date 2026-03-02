@@ -10,11 +10,15 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $nome
+ * @property string|null $nomesocial
  * @property int $registro
+ * @property int|null $ingresso
+ * @property string|null $turno
  * @property int $codigo_telefone
  * @property string|null $telefone
  * @property int $codigo_celular
  * @property string|null $celular
+ * @property string|null $email
  * @property string|null $cpf
  * @property string|null $identidade
  * @property string|null $orgao
@@ -24,9 +28,13 @@ use Cake\ORM\Entity;
  * @property string|null $municipio
  * @property string|null $bairro
  * @property string|null $observacoes
+ * @property int|null $estagiario_count
+ * @property int|null $inscricao_count
  * @property int $user_id
  *
- * @property \App\Model\Entity\User[] $user
+ * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\Estagiario[] $estagiarios
+ * @property \App\Model\Entity\Inscricao[] $inscricoes
  */
 class Aluno extends Entity
 {
@@ -41,11 +49,15 @@ class Aluno extends Entity
      */
     protected array $_accessible = [
         'nome' => true,
+        'nomesocial' => true,
         'registro' => true,
+        'ingresso' => true,
+        'turno' => true,
         'codigo_telefone' => true,
         'telefone' => true,
         'codigo_celular' => true,
         'celular' => true,
+        'email' => true,
         'cpf' => true,
         'identidade' => true,
         'orgao' => true,
@@ -55,7 +67,8 @@ class Aluno extends Entity
         'municipio' => true,
         'bairro' => true,
         'observacoes' => true,
+        'estagiario_count' => true,
+        'inscricao_count' => true,
         'user_id' => true,
-
     ];
 }

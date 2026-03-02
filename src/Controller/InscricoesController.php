@@ -91,7 +91,7 @@ class InscricoesController extends AppController
             return $this->redirect('/');
         }
         $dados = $this->request->getData();
-        
+
         $periodo = $this->fetchTable("Configuracoes")->find()->first()['mural_periodo_atual'];
         $dados['periodo'] = $periodo;
         
@@ -101,7 +101,7 @@ class InscricoesController extends AppController
         } else {
             $mural_estagio = $this->fetchTable('Muralestagios')->get($mural_estagio_id);
             $dados['mural_estagio'] = $mural_estagio;
-            $dados['mural_estagio_id'] = $mural_estagio->id;
+            $dados['muralestagio_id'] = $mural_estagio->id;
             
             /** Verifico o periodo do mural e comparo com o periodo da inscricao */
             if ($mural_estagio->periodo != $periodo) {
@@ -115,28 +115,21 @@ class InscricoesController extends AppController
         $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
         $user_session = $this->request->getAttribute('identity');
         if ($user_session) { $user_data = $user_session->getOriginalData(); }
-        
-        $aluno = $this->fetchTable('Alunos')->get($user_data['aluno_id']);
-        if (!$aluno) {
-            $this->Flash->error(__('Erro ao selecionar aluno'));
-            
-            if ($user_data['administrador_id']) {
-                return $this->redirect(['controller' => 'Users', 'action' => 'alternarusuario']);
-            } else {
-                $user_id = $this->Authentication->getIdentifier();
-                return $this->redirect(['controller' => 'Users', 'action' => 'view', $user_id]);
-            }
-            
-        } else {  
+
+        if ($user_data['categoria'] != '2') { 
+            $this->Flash->error(__('Selecione um aluno(a) para fazer a inscrição.'));
+            return $this->redirect(['controller' => 'Alunos', 'action' => 'index']);
+        } else if ($user_data['categoria'] == '2') {
+            $aluno = $this->fetchTable('Alunos')->get($user_data['aluno_id']);
             $dados['registro'] = $aluno->registro;
             $dados['aluno_id'] = $aluno->id;
-            
-            /** Verifico se já fez inscrição para não duplicar */
-            $inscricao_duplicada = $this->Inscricoes->find()->where(['Inscricoes.aluno_id' => $aluno->id, 'Inscricoes.mural_estagio_id' => $mural_estagio->id])->first();
-            if ($inscricao_duplicada) {
-                $this->Flash->error(__("Inscrição já realizada"));
-                return $this->redirect(['controller' => 'Inscricoes', 'action' => 'view', $inscricao_duplicada->id]);
-            }
+        }
+
+        /** Verifico se já fez inscrição para não duplicar */
+        $inscricao_duplicada = $this->Inscricoes->find()->where(['Inscricoes.aluno_id' => $aluno->id, 'Inscricoes.muralestagio_id' => $mural_estagio->id])->first();
+        if ($inscricao_duplicada) {
+            $this->Flash->error(__("Inscrição já realizada"));
+            return $this->redirect(['controller' => 'Inscricoes', 'action' => 'view', $inscricao_duplicada->id]);
         }
         
         $data = date('Y-m-d');
@@ -224,6 +217,7 @@ class InscricoesController extends AppController
      */
     public function termocompromisso($id = null) 
     {
+        $this->Authorization->authorize($this->Inscricoes);
 
         $registro = $this->getRequest()->getQuery('registro');
 

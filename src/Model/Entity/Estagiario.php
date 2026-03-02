@@ -11,7 +11,7 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property int $aluno_id
  * @property int $registro
- * @property string $ajustecurricular2020
+ * @property string $ajuste2020
  * @property string $nivel
  * @property int $tc
  * @property \Cake\I18n\FrozenDate|null $tc_solicitacao
@@ -19,17 +19,25 @@ use Cake\ORM\Entity;
  * @property int|null $supervisor_id
  * @property int|null $professor_id
  * @property string $periodo
- * @property int $turma_id
+ * @property int $turmaestagio_id
  * @property int $turno_id
  * @property string|null $nota
  * @property int|null $ch
  * @property string|null $observacoes
+ * @property int|null $alunoestagiario_id
+ * @property string|null $turno
+ * @property bool|null $benetransporte
+ * @property bool|null $benealimentacao
+ * @property string|null $benebolsa
+ * @property int|null $complemento_id
  *
  * @property \App\Model\Entity\Aluno $aluno
  * @property \App\Model\Entity\Instituicao $instituicao
  * @property \App\Model\Entity\Supervisor $supervisor
  * @property \App\Model\Entity\Professor $professor
- * @property \App\Model\Entity\Turmaestagio $turma
+ * @property \App\Model\Entity\Turma $turma
+ * @property \App\Model\Entity\Turno $turno_rel
+ * @property \App\Model\Entity\Complemento $complemento
  */
 class Estagiario extends Entity
 {
@@ -45,7 +53,7 @@ class Estagiario extends Entity
     protected array $_accessible = [
         'aluno_id' => true,
         'registro' => true,
-        'ajustecurricular2020' => true,
+        'ajuste2020' => true,
         'nivel' => true,
         'tc' => true,
         'tc_solicitacao' => true,
@@ -53,11 +61,16 @@ class Estagiario extends Entity
         'supervisor_id' => true,
         'professor_id' => true,
         'periodo' => true,
-        'turma_id' => true,
+        'turmaestagio_id' => true,
         'turno_id' => true,
         'nota' => true,
         'ch' => true,
         'observacoes' => true,
+        'alunoestagiario_id' => true,
+        'turno' => true,
+        'benetransporte' => true,
+        'benealimentacao' => true,
+        'benebolsa' => true,
         'complemento_id' => true,
     ];
 }

@@ -21,7 +21,7 @@ final class SupervisoresTablePolicy implements BeforePolicyInterface
         if ($identity) {
             $user_data = $identity->getOriginalData();
 
-            if ($user_data && $user_data['administrador_id']) {
+            if ($user_data && $user_data['categoria'] == '1') {
                 return true;
             }
         }
@@ -40,32 +40,8 @@ final class SupervisoresTablePolicy implements BeforePolicyInterface
     /**
      * @return \Authorization\Policy\Result
      */
-    public function canView(): Result
-    {
-        return new Result(false, 'Erro: supervisores view policy not authorized');
-    }
-
-    /**
-     * @return \Authorization\Policy\Result
-     */
-    public function canEdit(): Result
-    {
-        return new Result(false, 'Erro: supervisores edit policy not authorized');
-    }
-
-    /**
-     * @return \Authorization\Policy\Result
-     */
     public function canAdd(): Result
     {
         return new Result(false, 'Erro: supervisores add policy not authorized');
-    }
-
-    /**
-     * @return \Authorization\Policy\Result
-     */
-    public function canDelete(): Result
-    {
-        return new Result(false, 'Erro: supervisores delete policy not authorized');
     }
 }

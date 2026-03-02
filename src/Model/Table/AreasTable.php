@@ -60,7 +60,7 @@ class AreasTable extends Table
 
         $validator
             ->scalar('area')
-            ->maxLength('area', 70)
+            ->maxLength('area', 90)
             ->notEmptyString('area');
 
         return $validator;

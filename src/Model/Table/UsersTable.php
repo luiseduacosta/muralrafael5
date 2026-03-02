@@ -80,8 +80,28 @@ class UsersTable extends Table
 
         $validator
             ->scalar('password')
-            ->maxLength('password', 40)
+            ->maxLength('password', 80)
             ->notEmptyString('password', 'Erro: senha vazia');
+
+        $validator
+            ->scalar('categoria')
+            ->notEmptyString('categoria');
+
+        $validator
+            ->integer('numero')
+            ->allowEmptyString('numero');
+
+        $validator
+            ->integer('aluno_id')
+            ->allowEmptyString('aluno_id');
+
+        $validator
+            ->integer('supervisor_id')
+            ->allowEmptyString('supervisor_id');
+
+        $validator
+            ->integer('professor_id')
+            ->allowEmptyString('professor_id');
 
         $validator
             ->dateTime('created')

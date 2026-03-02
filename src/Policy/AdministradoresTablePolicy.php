@@ -21,7 +21,7 @@ final class AdministradoresTablePolicy implements BeforePolicyInterface
         if ($identity) {
             $user_data = $identity->getOriginalData();
 
-            if ($user_data && $user_data['administrador_id']) {
+            if ($user_data && $user_data['categoria'] == '1') {
                 return true;
             }
         }
@@ -35,29 +35,5 @@ final class AdministradoresTablePolicy implements BeforePolicyInterface
     public function canIndex(): Result
     {
         return new Result(true);
-    }
-
-    /**
-     * @return \Authorization\Policy\Result
-     */
-    public function canView(): Result
-    {
-        return new Result(false, 'Erro: admin view policy not authorized');
-    }
-
-    /**
-     * @return \Authorization\Policy\Result
-     */
-    public function canEdit(): Result
-    {
-        return new Result(false, 'Erro: admin edit policy not authorized');
-    }
-
-    /**
-     * @return \Authorization\Policy\Result
-     */
-    public function canDelete(): Result
-    {
-        return new Result(false, 'Erro: admin delete policy not authorized');
     }
 }

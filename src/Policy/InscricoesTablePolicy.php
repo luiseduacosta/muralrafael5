@@ -26,9 +26,8 @@ final class InscricoesTablePolicy implements BeforePolicyInterface
             if (
                 $user_data
                 && (
-                    $user_data['administrador_id']
-                    || $user_data['professor_id']
-                    || $user_data['supervisor_id']
+                    $user_data['categoria'] == '1'
+                    || $user_data['categoria'] == '3'
                 )
             ) {
                 return true;
@@ -65,7 +64,7 @@ final class InscricoesTablePolicy implements BeforePolicyInterface
      */
     public function canAdd(IdentityInterface $userSession, InscricoesTable $inscricoesTable): Result
     {
-        $alunocadastrado = $this->fetchTable('Alunos')->find()->where(['user_id' => $userSession->id]);
+        $alunocadastrado = \Cake\ORM\TableRegistry::getTableLocator()->get('Alunos')->find()->where(['user_id' => $userSession->id]);
 
         return $alunocadastrado->count() > 0
             ? new Result(false, 'Erro: inscricoes canAdd policy not authorized')

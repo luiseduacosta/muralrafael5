@@ -22,7 +22,7 @@ final class UserPolicy implements BeforePolicyInterface
         if ($identity) {
             $user_data = $identity->getOriginalData();
 
-            if ($user_data && $user_data['administrador_id']) {
+            if ($user_data && $user_data['categoria'] == '1') {
                 return true;
             }
         }

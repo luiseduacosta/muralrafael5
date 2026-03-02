@@ -214,6 +214,27 @@ class ProfessoresTable extends Table
             ->allowEmptyString('motivoegresso');
 
         $validator
+            ->integer('cress')
+            ->allowEmptyString('cress');
+
+        $validator
+            ->integer('regiao')
+            ->allowEmptyString('regiao');
+
+        $validator
+            ->scalar('sexo')
+            ->allowEmptyString('sexo');
+
+        $validator
+            ->email('email')
+            ->allowEmptyString('email');
+
+        $validator
+            ->scalar('categoria')
+            ->maxLength('categoria', 10)
+            ->allowEmptyString('categoria');
+
+        $validator
             ->scalar('observacoes')
             ->allowEmptyString('observacoes');
 

@@ -356,6 +356,7 @@ class AlunosController extends AppController
         $user_session = $this->request->getAttribute('identity');
         if ($user_session) { $user_data = $user_session->getOriginalData(); }
         
+        $this->Authorization->authorize($this->Alunos);
         /**
          * Autorização. Verifica se o aluno cadastrado no Users está acessando seu próprio registro.
          */
@@ -473,6 +474,7 @@ class AlunosController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function declaracaoperiodopdf($id = NULL) {
+        $this->Authorization->authorize($this->Alunos);
 
         $this->layout = false;
         $id = $this->getRequest()->getQuery('id');
@@ -535,6 +537,7 @@ class AlunosController extends AppController
      */    
     public function folhasolicita()
     {
+        $this->Authorization->skipAuthorization();
         $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
         $user_session = $this->request->getAttribute('identity');
         if ($user_session) { $user_data = $user_session->getOriginalData(); }

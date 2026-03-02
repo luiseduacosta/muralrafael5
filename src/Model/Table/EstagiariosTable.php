@@ -47,10 +47,6 @@ class EstagiariosTable extends Table
         $this->setDisplayField('registro');
         $this->setPrimaryKey('id');
 
-        $this->hasMany('Avaliacoes', [
-            'foreignKey' => 'estagiario_id',
-        ]);
-
         $this->belongsTo('Alunos', [
             'foreignKey' => 'aluno_id',
         ]);
@@ -64,11 +60,10 @@ class EstagiariosTable extends Table
             'foreignKey' => 'professor_id',
         ]);
         $this->belongsTo('Turmas', [
-            'foreignKey' => 'turma_id',
+            'foreignKey' => 'turmaestagio_id',
         ]);
         $this->belongsTo('Turnos', [
             'foreignKey' => 'turno_id',
-            'propertyName' => 'turno_estagiario',
         ]);
         $this->belongsTo('Complementos', [
             'foreignKey' => 'complemento_id',
@@ -92,9 +87,9 @@ class EstagiariosTable extends Table
             ->notEmptyString('registro');
 
         $validator
-            ->scalar('ajustecurricular2020')
-            ->maxLength('ajustecurricular2020', 1)
-            ->notEmptyString('ajustecurricular2020');
+            ->scalar('ajuste2020')
+            ->maxLength('ajuste2020', 1)
+            ->notEmptyString('ajuste2020');
 
         $validator
             ->scalar('nivel')
@@ -125,6 +120,28 @@ class EstagiariosTable extends Table
             ->maxLength('observacoes', 255)
             ->allowEmptyString('observacoes');
 
+        $validator
+            ->integer('alunoestagiario_id')
+            ->allowEmptyString('alunoestagiario_id');
+
+        $validator
+            ->scalar('turno')
+            ->maxLength('turno', 1)
+            ->allowEmptyString('turno');
+
+        $validator
+            ->boolean('benetransporte')
+            ->allowEmptyString('benetransporte');
+
+        $validator
+            ->boolean('benealimentacao')
+            ->allowEmptyString('benealimentacao');
+
+        $validator
+            ->scalar('benebolsa')
+            ->maxLength('benebolsa', 5)
+            ->allowEmptyString('benebolsa');
+
         return $validator;
     }
 
@@ -141,8 +158,9 @@ class EstagiariosTable extends Table
         $rules->add($rules->existsIn(['instituicao_id'], 'Instituicoes'), ['errorField' => 'instituicao_id']);
         $rules->add($rules->existsIn(['supervisor_id'], 'Supervisores'), ['errorField' => 'supervisor_id']);
         $rules->add($rules->existsIn(['professor_id'], 'Professores'), ['errorField' => 'professor_id']);
-        $rules->add($rules->existsIn(['turma_id'], 'Turmas'), ['errorField' => 'turma_id']);
+        $rules->add($rules->existsIn(['turmaestagio_id'], 'Turmas'), ['errorField' => 'turmaestagio_id']);
         $rules->add($rules->existsIn(['turno_id'], 'Turnos'), ['errorField' => 'turno_id']);
+        $rules->add($rules->existsIn(['complemento_id'], 'Complementos'), ['errorField' => 'complemento_id']);
 
         return $rules;
     }

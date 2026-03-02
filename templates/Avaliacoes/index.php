@@ -9,12 +9,13 @@ declare(strict_types=1);
 
 $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $user_session->getOriginalData(); }
-
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
+}
 ?>
 <div class="avaliacoes index content">
 
-    <?php if ( $user_data['administrador_id'] || $user_data['professor_id'] || $user_data['supervisor_id'] == 4 ): ?>
+    <?php if ( $user_data['categoria'] == '1' OR $user_data['categoria'] == '3' ): ?>
 
         <aside>
             <div class="nav">
@@ -24,7 +25,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
     <?php endif; ?>
     
-    <?php if ($user_data['administrador_id']): ?>
+    <?php if ($user_data['categoria'] == '1'): ?>
     
         <?php $this->Paginator->setPaginated($avaliacoes); ?>
         <h3><?= __('Lista de Avaliações') ?></h3>
@@ -51,7 +52,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         </td>
                         <td><?= $this->Html->link((string)$avaliacao->id, ['action' => 'view', $avaliacao->id]) ?></td>
                         <td><?= ($avaliacao->estagiario and $avaliacao->estagiario->aluno) ? $this->Html->link(h($avaliacao->estagiario->aluno->nome), ['controller' => 'Alunos', 'action' => 'view', $avaliacao->estagiario->aluno->id]) : '' ?></td>
-                                                <td><?= ($avaliacao->estagiario and $avaliacao->estagiario->instituicao) ? $this->Html->link(h($avaliacao->estagiario->instituicao->instituicao), ['controller' => 'Instituicoes', 'action' => 'view', $avaliacao->estagiario->instituicao->id]) : '' ?></td>
+                        <td><?= ($avaliacao->estagiario and $avaliacao->estagiario->instituicao) ? $this->Html->link(h($avaliacao->estagiario->instituicao->instituicao), ['controller' => 'Instituicoes', 'action' => 'view', $avaliacao->estagiario->instituicao->id]) : '' ?></td>
                         <td><?= h($avaliacao->avaliacao1) ?></td>
                         <td><?= h($avaliacao->timestamp) ?></td>
                     </tr>
@@ -83,10 +84,8 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </thead>
                 <tbody>
                     <?php foreach ($estagiarios as $estagiario): ?>
-                        <?php // pr($estagiario); ?>
-                        <?php // die(); ?>
                         <tr>
-                            <?php if ($user_data['administrador_id']): ?>
+                            <?php if ($user_data['categoria'] == '1'): ?>
                                 <?php if (isset($estagiario->avaliacao->id)): ?>
                                     <td class="actions">
                                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $estagiario->avaliacao->id]) ?>

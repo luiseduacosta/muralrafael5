@@ -24,9 +24,8 @@ final class AvaliacoesTablePolicy implements BeforePolicyInterface
             if (
                 $user_data
                 && (
-                    $user_data['administrador_id']
-                    || $user_data['professor_id']
-                    || $user_data['supervisor_id']
+                    $user_data['categoria'] == '1'
+                    || $user_data['categoria'] == '3'
                 )
             ) {
                 return true;
@@ -47,32 +46,8 @@ final class AvaliacoesTablePolicy implements BeforePolicyInterface
     /**
      * @return \Authorization\Policy\Result
      */
-    public function canView(): Result
-    {
-        return new Result(true);
-    }
-
-    /**
-     * @return \Authorization\Policy\Result
-     */
-    public function canEdit(): Result
-    {
-        return new Result(false, 'Erro: avaliacoes edit policy not authorized');
-    }
-
-    /**
-     * @return \Authorization\Policy\Result
-     */
     public function canAdd(): Result
     {
         return new Result(true);
-    }
-
-    /**
-     * @return \Authorization\Policy\Result
-     */
-    public function canDelete(): Result
-    {
-        return new Result(false, 'Erro: avaliacoes delete policy not authorized');
     }
 }

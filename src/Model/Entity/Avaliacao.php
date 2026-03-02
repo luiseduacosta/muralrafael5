@@ -30,7 +30,8 @@ use Cake\ORM\Entity;
  * @property string|null $avaliacao13_1
  * @property string $avaliacao14
  * @property string $observacoes
- * @property \Cake\I18n\FrozenTime $TIMESTAMP
+ * @property \Cake\I18n\FrozenTime $criado_em
+ * @property \Cake\I18n\FrozenTime $atualizado_em
  *
  * @property \App\Model\Entity\Estagiario[] $estagiarios
  */
@@ -67,7 +68,8 @@ class Avaliacao extends Entity
         'avaliacao13_1' => true,
         'avaliacao14' => true,
         'observacoes' => true,
-        'TIMESTAMP' => true,
+        'criado_em' => true,
+        'atualizado_em' => true,
         'estagiarios' => true,
     ];
 }

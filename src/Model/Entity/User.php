@@ -18,6 +18,11 @@ use Cake\ORM\TableRegistry;
  * @property int $id
  * @property string|null $email
  * @property string|null $password
+ * @property string $categoria
+ * @property int|null $numero
+ * @property int|null $aluno_id
+ * @property int|null $supervisor_id
+ * @property int|null $professor_id
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  */
@@ -39,6 +44,12 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
      */
     protected array $_accessible = [
         'email' => true,
+        'password' => true,
+        'categoria' => true,
+        'numero' => true,
+        'aluno_id' => true,
+        'supervisor_id' => true,
+        'professor_id' => true,
         'created' => true,
         'modified' => true,
     ];

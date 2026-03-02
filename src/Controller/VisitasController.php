@@ -45,6 +45,7 @@ class VisitasController extends AppController
         } catch (RecordNotFoundException $e) {
             throw new ForbiddenException('A visita que você tentou visualizar não existe.');
         }
+        $this->Authorization->authorize($visita);
 
         $this->set(compact('visita'));
     }

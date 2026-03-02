@@ -26,7 +26,7 @@
                 <?php
                     echo $this->Form->control('registro');
                     echo $this->Form->control('aluno_id', ['type' => 'number', 'label' => 'aluno_id']);
-                    echo $this->Form->control('mural_estagio_id', ['type' => 'number', 'label' => 'mural_estagio_id']);
+                    echo $this->Form->control('muralestagio_id', ['type' => 'number', 'label' => 'muralestagio_id']);
                     echo $this->Form->control('data');
                     echo $this->Form->control('periodo');
                     echo $this->Form->control('timestamp');

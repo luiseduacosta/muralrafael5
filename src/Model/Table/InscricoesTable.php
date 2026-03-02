@@ -71,11 +71,11 @@ class InscricoesTable extends Table
 
         $validator
                 ->integer('alunonovo_id')
-                ->notEmptyString('alunonovo_id');
+                ->allowEmptyString('alunonovo_id');
 
         $validator
-                ->integer('instituicao_id')
-                ->notEmptyString('instituicao_id');
+                ->integer('muralestagio_id')
+                ->notEmptyString('muralestagio_id');
 
         $validator
                 ->date('data')
@@ -103,8 +103,8 @@ class InscricoesTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn(['registro'], 'Alunos'), ['errorField' => 'registro']);
-        $rules->add($rules->existsIn(['instituicao_id'], 'Muralestagios'), ['errorField' => 'instituicao_id']);
+        $rules->add($rules->existsIn(['aluno_id'], 'Alunos'), ['errorField' => 'aluno_id']);
+        $rules->add($rules->existsIn(['muralestagio_id'], 'Muralestagios'), ['errorField' => 'muralestagio_id']);
 
         return $rules;
     }

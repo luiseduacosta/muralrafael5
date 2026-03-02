@@ -180,8 +180,12 @@ class AvaliacoesTable extends Table
                 ->notEmptyString('observacoes');
 
         $validator
-                ->dateTime('TIMESTAMP')
-                ->notEmptyDateTime('TIMESTAMP');
+                ->dateTime('criado_em')
+                ->notEmptyDateTime('criado_em');
+
+        $validator
+                ->dateTime('atualizado_em')
+                ->notEmptyDateTime('atualizado_em');
 
         return $validator;
     }

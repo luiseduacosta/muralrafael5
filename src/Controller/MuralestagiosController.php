@@ -31,6 +31,7 @@ class MuralestagiosController extends AppController
      */
     public function index($id = null)
     {
+        $this->Authorization->authorize($this->Muralestagios);
         $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->fetchTable("Configuracoes")->find()->first()['mural_periodo_atual'];
         $this->set('periodo', $periodo);
         
@@ -69,6 +70,7 @@ class MuralestagiosController extends AppController
         $muralestagio = $this->Muralestagios->get($id, [
             'contain' => ['Instituicoes', 'Turmas', 'Turnos', 'Professores', 'Inscricoes' => ['Alunos']],
         ]);
+        $this->Authorization->authorize($muralestagio);
         
         $this->set(compact('muralestagio'));
     }

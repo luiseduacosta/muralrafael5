@@ -49,11 +49,12 @@ class AvaliacoesController extends AppController
 
         $avaliacoes = null;
         $estagiarios = null;
+        $categoria = $user_data['categoria'] ?? null;
 
-        if ($user_data['administrador_id']) {
+        if ($categoria == '1') {
             $query = $this->Avaliacoes->find()->contain(['Estagiarios' => ['Alunos', 'Instituicoes']]);
             $avaliacoes = $this->paginate($query, ['sortableFields' => ['id', 'Estagiarios.Alunos.nome', 'Estagiarios.Instituicoes.instituicao', 'avaliacao1', 'timestamp']]);
-        } elseif ($user_data['aluno_id']) {
+        } elseif ($categoria == '2') {
             $estagiario_id = $this->getRequest()->getQuery('estagiario_id');
             if ($estagiario_id) {
                 $registro = $this->Avaliacoes->Estagiarios->find()
@@ -67,32 +68,36 @@ class AvaliacoesController extends AppController
 
                 $estagiarios = $this->paginate($query, ['sortableFields' => ['id', 'Alunos.nome', 'periodo', 'nivel', 'Instituicoes.instituicao', 'Supervisores.nome', 'ch', 'nota']]);
             } else {
-                $this->Flash->error(__('Selecionar estagiário, período e nível de estágio a ser avaliado'));
-
-                return $this->redirect('/avaliacoes');
+                 // Fallback for students without estagiario_id in query
+                 $estagiariostabela = $this->fetchTable('Estagiarios');
+                 $query = $estagiariostabela->find()
+                    ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Avaliacoes'])
+                    ->where(['Estagiarios.aluno_id' => $user_data['aluno_id']]);
+                 $estagiarios = $this->paginate($query, ['sortableFields' => ['id', 'Alunos.nome', 'periodo', 'nivel', 'Instituicoes.instituicao', 'Supervisores.nome', 'ch', 'nota']]);
             }
-        } elseif ($user_data['professor_id']) {
+        } elseif ($categoria == '3') {
             $estagiariostabela = $this->fetchTable('Estagiarios');
             $query = $estagiariostabela->find()
-                ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Avaliacoes'])
-                ->where(['Estagiarios.professor_id' => $user_data['professor_id']]);
-
-            $estagiarios = $this->paginate($query, ['sortableFields' => ['id', 'Alunos.nome', 'periodo', 'nivel', 'Instituicoes.instituicao', 'Supervisores.nome', 'ch', 'nota']]);
-        } elseif ($user_data['supervisor_id']) {
-            $estagiariostabela = $this->fetchTable('Estagiarios');
-            $query = $estagiariostabela->find()
-                ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Avaliacoes'])
-                ->where(['Estagiarios.supervisor_id' => $user_data['supervisor_id']]);
+                ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Avaliacoes']);
+            
+            if ($user_data['professor_id']) {
+                $query->where(['Estagiarios.professor_id' => $user_data['professor_id']]);
+            } elseif ($user_data['supervisor_id']) {
+                $query->where(['Estagiarios.supervisor_id' => $user_data['supervisor_id']]);
+            }
 
             $estagiarios = $this->paginate($query, ['sortableFields' => ['id', 'Alunos.nome', 'periodo', 'nivel', 'Instituicoes.instituicao', 'Supervisores.nome', 'ch', 'nota']]);
         }
 
         // Initialize empty paginated results if still null to prevent template crashes
-        if ($user_data['administrador_id'] && is_null($avaliacoes)) {
-            $avaliacoes = $this->paginate($this->Avaliacoes);
-        }
-        if (!$user_data['administrador_id'] && is_null($estagiarios)) {
-            $estagiarios = $this->paginate($this->fetchTable('Estagiarios'));
+        if ($categoria == '1') {
+            if (is_null($avaliacoes)) {
+                $avaliacoes = $this->paginate($this->Avaliacoes);
+            }
+        } else {
+            if (is_null($estagiarios)) {
+                $estagiarios = $this->paginate($this->fetchTable('Estagiarios'));
+            }
         }
 
         $this->set(compact('avaliacoes', 'estagiarios'));
@@ -105,6 +110,7 @@ class AvaliacoesController extends AppController
      */
     public function supervisoravaliacao($id = NULL)
     {
+        $this->Authorization->authorize($this->Avaliacoes);
 
         /* O submenu_navegacao envia o cress */
         $cress = $this->getRequest()->getQuery('cress');
@@ -292,6 +298,7 @@ class AvaliacoesController extends AppController
 
     public function selecionaavaliacao($id = NULL)
     {
+        $this->Authorization->authorize($this->Avaliacoes);
 
         /* No login foi capturado o id do estagiário */
         $id = $this->getRequest()->getSession()->read('estagiario_id');
@@ -311,6 +318,7 @@ class AvaliacoesController extends AppController
 
     public function imprimeavaliacaopdf($id = NULL)
     {
+        $this->Authorization->authorize($this->Avaliacoes);
 
         /* No login foi capturado o id do estagiário */
         $this->layout = false;

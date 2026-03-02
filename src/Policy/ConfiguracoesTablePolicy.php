@@ -21,7 +21,7 @@ final class ConfiguracoesTablePolicy implements BeforePolicyInterface
         if ($identity) {
             $user_data = $identity->getOriginalData();
 
-            if ($user_data && $user_data['administrador_id']) {
+            if ($user_data && $user_data['categoria'] == '1') {
                 return true;
             }
         }
@@ -40,32 +40,8 @@ final class ConfiguracoesTablePolicy implements BeforePolicyInterface
     /**
      * @return \Authorization\Policy\Result
      */
-    public function canView(): Result
-    {
-        return new Result(false, 'Erro: configuracoes view policy not authorized');
-    }
-
-    /**
-     * @return \Authorization\Policy\Result
-     */
-    public function canEdit(): Result
-    {
-        return new Result(false, 'Erro: configuracoes edit policy not authorized');
-    }
-
-    /**
-     * @return \Authorization\Policy\Result
-     */
     public function canAdd(): Result
     {
         return new Result(false, 'Erro: configuracoes add policy not authorized');
-    }
-
-    /**
-     * @return \Authorization\Policy\Result
-     */
-    public function canDelete(): Result
-    {
-        return new Result(false, 'Erro: configuracoes delete policy not authorized');
     }
 }

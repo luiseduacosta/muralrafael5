@@ -24,9 +24,9 @@ class RequestPolicy implements RequestPolicyInterface
         $home = in_array('home', $request->getParam('pass'), true);
 
         // only home page is allowed
-        if ($pages && $display && !$home) {
-            return false;
-        }
+        // if ($pages && $display && !$home) {
+        //     return false;
+        // }
 
         return true;
     }

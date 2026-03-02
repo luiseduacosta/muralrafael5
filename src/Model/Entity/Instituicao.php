@@ -20,16 +20,23 @@ use Cake\ORM\Entity;
  * @property string $municipio
  * @property string $cep
  * @property string $telefone
+ * @property string|null $fax
  * @property string|null $beneficio
  * @property string|null $fim_de_semana
- * @property string $local_inscricao
+ * @property string $localInscricao
  * @property int $convenio
  * @property \Cake\I18n\FrozenDate|null $expira
  * @property string $seguro
  * @property string $avaliacao
  * @property string|null $observacoes
+ * @property int|null $areainstituicoes_id
+ * @property string|null $area
  *
- * @property \App\Model\Entity\Area[] $area
+ * @property \App\Model\Entity\Area $area_rel
+ * @property \App\Model\Entity\Estagiario[] $estagiarios
+ * @property \App\Model\Entity\Muralestagio[] $muralestagios
+ * @property \App\Model\Entity\Visita[] $visitas
+ * @property \App\Model\Entity\Supervisor[] $supervisores
  */
 class Instituicao extends Entity
 {
@@ -54,13 +61,16 @@ class Instituicao extends Entity
         'municipio' => true,
         'cep' => true,
         'telefone' => true,
+        'fax' => true,
         'beneficio' => true,
         'fim_de_semana' => true,
-        'local_inscricao' => true,
+        'localInscricao' => true,
         'convenio' => true,
         'expira' => true,
         'seguro' => true,
         'avaliacao' => true,
         'observacoes' => true,
+        'areainstituicoes_id' => true,
+        'area' => true,
     ];
 }

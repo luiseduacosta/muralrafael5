@@ -74,9 +74,23 @@ class AlunosTable extends Table
             ->notEmptyString('nome');
 
         $validator
+            ->scalar('nomesocial')
+            ->maxLength('nomesocial', 50)
+            ->allowEmptyString('nomesocial');
+
+        $validator
             ->integer('registro')
             ->notEmptyString('registro')
             ->add('registro', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+
+        $validator
+            ->integer('ingresso')
+            ->allowEmptyString('ingresso');
+
+        $validator
+            ->scalar('turno')
+            ->maxLength('turno', 1)
+            ->allowEmptyString('turno');
 
         $validator
             ->notEmptyString('codigo_telefone');
@@ -93,6 +107,10 @@ class AlunosTable extends Table
             ->scalar('celular')
             ->maxLength('celular', 10)
             ->allowEmptyString('celular');
+
+        $validator
+            ->email('email')
+            ->allowEmptyString('email');
 
         $validator
             ->scalar('cpf')
@@ -137,6 +155,14 @@ class AlunosTable extends Table
             ->scalar('observacoes')
             ->maxLength('observacoes', 250)
             ->allowEmptyString('observacoes');
+
+        $validator
+            ->integer('estagiario_count')
+            ->allowEmptyString('estagiario_count');
+
+        $validator
+            ->integer('inscricao_count')
+            ->allowEmptyString('inscricao_count');
 
         return $validator;
     }

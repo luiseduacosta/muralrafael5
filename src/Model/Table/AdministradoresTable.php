@@ -62,6 +62,10 @@ class AdministradoresTable extends Table
             ->maxLength('nome', 128)
             ->notEmptyString('nome');
 
+        $validator
+            ->integer('user_id')
+            ->notEmptyString('user_id');
+
         return $validator;
     }
 }

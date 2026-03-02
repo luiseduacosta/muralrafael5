@@ -297,6 +297,7 @@ class FolhadeatividadesController extends AppController
      */
     public function imprimefolhadeatividades($id = null)
     {
+        $this->Authorization->authorize($this->Folhadeatividades);
         $registro = $this->getRequest()->getQuery("registro");
         if ($registro) {
             $estagiariotable = $this->fetchTable("Estagiarios");
@@ -339,6 +340,7 @@ class FolhadeatividadesController extends AppController
      */
     public function exadd($id = null)
     {
+        $this->Authorization->authorize($this->Folhadeatividades);
         /** Verifica se há estagiários */
         $estagiario_id = $this->getRequest()->getQuery("estagiario_id");
         $estagiariostabela = $this->fetchTable("Estagiarios");
@@ -396,6 +398,7 @@ class FolhadeatividadesController extends AppController
 
     public function selecionafolhadeatividades($id = null)
     {
+        $this->Authorization->authorize($this->Folhadeatividades);
         /* No login foi capturado o id do estagiário */
         $id = $this->getRequest()->getSession()->read("estagiario_id");
         //$this->layout = false;
@@ -425,6 +428,7 @@ class FolhadeatividadesController extends AppController
 
     public function folhadeatividadespdf($id = null)
     {
+        $this->Authorization->authorize($this->Folhadeatividades);
         $estagiario_id = $this->getRequest()->getQuery("estagiario_id");
         // pr($estagiario_id);
         $this->layout = false;

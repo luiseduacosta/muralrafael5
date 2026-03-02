@@ -10,11 +10,12 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $registro
- * @property int|null $aluno_id
- * @property int $mural_estagio_id
+ * @property int $muralestagio_id
  * @property \Cake\I18n\FrozenDate $data
  * @property string $periodo
  * @property \Cake\I18n\FrozenTime $timestamp
+ * @property int|null $alunonovo_id
+ * @property int $aluno_id
  *
  * @property \App\Model\Entity\Aluno $aluno
  * @property \App\Model\Entity\Muralestagio $muralestagio
@@ -32,11 +33,11 @@ class Inscricao extends Entity
      */
     protected array $_accessible = [
         'registro' => true,
-        'aluno_id' => true,
-        'instituicao_id' => true, // id atual do mural de estagios
-        'mural_estagio_id' => true,
+        'muralestagio_id' => true,
         'data' => true,
         'periodo' => true,
         'timestamp' => true,
+        'alunonovo_id' => true,
+        'aluno_id' => true,
     ];
 }

@@ -47,6 +47,8 @@ class UsersController extends AppController
 
         $contained = [];//'Administradores', 'Alunos', 'Professores', 'Supervisores'];
         
+        $this->Authorization->authorize($this->Users);
+        
         if ($user_data['administrador_id']) {
             $query = $this->Users->find('all')->contain($contained);
         } else {
@@ -240,6 +242,7 @@ class UsersController extends AppController
      */
     public function alternarusuario() 
     {
+        $this->Authorization->skipAuthorization();
 
         // pr($this->data);
         // die();

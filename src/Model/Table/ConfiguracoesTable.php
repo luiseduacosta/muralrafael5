@@ -37,7 +37,7 @@ class ConfiguracoesTable extends Table
 
         $this->setTable('configuracoes');
         $this->setAlias('Configuracoes');
-        $this->setDisplayField('instituicao');
+        $this->setDisplayField('mural_periodo_atual');
         $this->setPrimaryKey('id');
     }
 

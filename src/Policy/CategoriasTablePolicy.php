@@ -8,7 +8,7 @@ use Authorization\Policy\BeforePolicyInterface;
 use Authorization\Policy\Result;
 use Authorization\Policy\ResultInterface;
 
-final class FolhadeatividadesTablePolicy implements BeforePolicyInterface
+final class CategoriasTablePolicy implements BeforePolicyInterface
 {
     /**
      * @param \Authorization\IdentityInterface|null $identity
@@ -21,13 +21,7 @@ final class FolhadeatividadesTablePolicy implements BeforePolicyInterface
         if ($identity) {
             $user_data = $identity->getOriginalData();
 
-            if (
-                $user_data
-                && (
-                    $user_data['categoria'] == '1'
-                    || $user_data['categoria'] == '3'
-                )
-            ) {
+            if ($user_data && $user_data['categoria'] == '1') {
                 return true;
             }
         }
@@ -48,6 +42,6 @@ final class FolhadeatividadesTablePolicy implements BeforePolicyInterface
      */
     public function canAdd(): Result
     {
-        return new Result(true);
+        return new Result(false, 'Erro: categorias add policy not authorized');
     }
 }

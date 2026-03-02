@@ -10,28 +10,30 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int|null $instituicao_id
+ * @property string $instituicao
  * @property string $convenio
  * @property int $vagas
  * @property string|null $beneficios
- * @property string|null $fim_de_semana
- * @property int|null $carga_horaria
+ * @property string|null $final_de_semana
+ * @property int|null $cargaHoraria
  * @property string|null $requisitos
- * @property int $turma_id
- * @property int $turno_id
- * @property int $professor_id
- * @property \Cake\I18n\FrozenDate|null $data_selecao
- * @property \Cake\I18n\FrozenDate|null $data_inscricao
- * @property string|null $horario_selecao
- * @property string|null $local_selecao
- * @property string|null $forma_selecao
+ * @property int|null $turmaestagio_id
+ * @property string|null $horario
+ * @property int|null $professor_id
+ * @property \Cake\I18n\FrozenDate|null $dataSelecao
+ * @property \Cake\I18n\FrozenDate|null $dataInscricao
+ * @property string|null $horarioSelecao
+ * @property string|null $localSelecao
+ * @property string|null $formaSelecao
  * @property string|null $contato
  * @property string|null $outras
  * @property string|null $periodo
- * @property string $local_inscricao
+ * @property \Cake\I18n\FrozenDate|null $datafax
+ * @property string $localInscricao
  * @property string|null $email
  *
- * @property \App\Model\Entity\Instituicao $instituicaoestagio
- * @property \App\Model\Entity\Turmaestagio $turma
+ * @property \App\Model\Entity\Instituicao $instituicao_rel
+ * @property \App\Model\Entity\Turma $turma
  * @property \App\Model\Entity\Professor $professor
  */
 
@@ -49,24 +51,26 @@ class Muralestagio extends Entity
 
     protected array $_accessible = [
         'instituicao_id' => true,
+        'instituicao' => true,
         'convenio' => true,
         'vagas' => true,
         'beneficios' => true,
-        'fim_de_semana' => true,
-        'carga_horaria' => true,
+        'final_de_semana' => true,
+        'cargaHoraria' => true,
         'requisitos' => true,
-        'area_estagio_id' => true,
-        'turno_id' => true,
+        'turmaestagio_id' => true,
+        'horario' => true,
         'professor_id' => true,
-        'data_selecao' => true,
-        'data_inscricao' => true,
-        'horario_selecao' => true,
-        'local_selecao' => true,
-        'forma_selecao' => true,
+        'dataSelecao' => true,
+        'dataInscricao' => true,
+        'horarioSelecao' => true,
+        'localSelecao' => true,
+        'formaSelecao' => true,
         'contato' => true,
         'outras' => true,
         'periodo' => true,
-        'local_inscricao' => true,
+        'datafax' => true,
+        'localInscricao' => true,
         'email' => true,
     ];
 }

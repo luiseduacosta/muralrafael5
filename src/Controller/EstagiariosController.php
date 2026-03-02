@@ -302,6 +302,7 @@ class EstagiariosController extends AppController
      */
     public function termodecompromisso($id = null)
     {
+        $this->Authorization->authorize($this->Estagiarios);
         $aluno_id = $this->getRequest()->getQuery("aluno_id");
         $instituicao_id = $this->getRequest()->getQuery("instituicao_id");
 
@@ -680,6 +681,7 @@ class EstagiariosController extends AppController
      */
     public function termodecompromissopdf($id = null)
     {
+        $this->Authorization->authorize($this->Estagiarios);
         $this->layout = false;
         if (is_null($id)) {
             $this->cakeError("error404");
@@ -714,6 +716,7 @@ class EstagiariosController extends AppController
      */
     public function selecionadeclaracaodeestagio($id = null)
     {
+        $this->Authorization->authorize($this->Estagiarios);
         /* No login foi capturado o id do estagiário */
         if (is_null($id)) {
             $id = $this->getRequest()->getSession()->read("estagiario_id");
@@ -740,6 +743,7 @@ class EstagiariosController extends AppController
      */
     public function declaracaodeestagiopdf($id = null)
     {
+        $this->Authorization->authorize($this->Estagiarios);
         $estagiarioquery = $this->Estagiarios
             ->find()
             ->contain(["Alunos", "Supervisores", "Instituicoes"])
@@ -801,6 +805,7 @@ class EstagiariosController extends AppController
      */
     public function selecionafolhadeatividades($id = null)
     {
+        $this->Authorization->authorize($this->Estagiarios);
         /* No login foi capturado o id do estagiário */
         $id = $this->getRequest()->getSession()->read("estagiario_id");
         if (is_null($id)) {
@@ -830,6 +835,7 @@ class EstagiariosController extends AppController
      */
     public function folhadeatividadespdf($id = null)
     {
+        $this->Authorization->authorize($this->Estagiarios);
         $this->layout = false;
         if (is_null($id)) {
             $this->Flash->error(__("Por favor selecionar o estágio do aluno"));
@@ -869,6 +875,7 @@ class EstagiariosController extends AppController
      */
     public function selecionaavaliacaodiscente($id = null)
     {
+        $this->Authorization->authorize($this->Estagiarios);
         /* No login foi capturado o id do estagiário */
         $id = $this->getRequest()->getSession()->read("estagiario_id");
         if (is_null($id)) {
@@ -898,6 +905,7 @@ class EstagiariosController extends AppController
      */
     public function avaliacaodiscentepdf($id = null)
     {
+        $this->Authorization->authorize($this->Estagiarios);
         $this->layout = false;
         $estagiario_id = $this->getRequest()->getQuery("estagiario_id");
 
@@ -933,6 +941,7 @@ class EstagiariosController extends AppController
      */
     public function lancanota($id = null)
     {
+        $this->Authorization->authorize($this->Estagiarios);
         $siape = $this->getRequest()->getQuery("siape");
 
         $periodo = $this->getRequest()->getParam("pass")

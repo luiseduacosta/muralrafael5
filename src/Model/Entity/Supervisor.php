@@ -10,18 +10,19 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $nome
- * @property string $cpf
- * @property string $endereco
- * @property string $bairro
- * @property string $municipio
- * @property string $cep
- * @property string $codigo_tel
- * @property string $telefone
- * @property string $codigo_cel
- * @property string $celular
- * @property string $escola
- * @property string $ano_formatura
- * @property int|null $cress
+ * @property string|null $cpf
+ * @property string|null $endereco
+ * @property string|null $bairro
+ * @property string|null $municipio
+ * @property string|null $cep
+ * @property string|null $codigo_tel
+ * @property string|null $telefone
+ * @property string|null $codigo_cel
+ * @property string|null $celular
+ * @property string|null $email
+ * @property string|null $escola
+ * @property string|null $ano_formatura
+ * @property int $cress
  * @property int $regiao
  * @property string|null $outros_estudos
  * @property string|null $area_curso
@@ -58,6 +59,7 @@ class Supervisor extends Entity
         'telefone' => true,
         'codigo_cel' => true,
         'celular' => true,
+        'email' => true,
         'escola' => true,
         'ano_formatura' => true,
         'cress' => true,

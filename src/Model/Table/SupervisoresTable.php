@@ -80,52 +80,52 @@ class SupervisoresTable extends Table
 
         $validator
             ->scalar('cpf')
-            ->maxLength('cpf', 12)
-            ->notEmptyString('cpf');
+            ->maxLength('cpf', 14)
+            ->allowEmptyString('cpf');
 
         $validator
             ->scalar('endereco')
             ->maxLength('endereco', 100)
-            ->requirePresence('endereco', 'create')
-            ->notEmptyString('endereco');
+            ->allowEmptyString('endereco');
 
         $validator
             ->scalar('bairro')
             ->maxLength('bairro', 30)
-            ->requirePresence('bairro', 'create')
-            ->notEmptyString('bairro');
+            ->allowEmptyString('bairro');
 
         $validator
             ->scalar('municipio')
             ->maxLength('municipio', 30)
-            ->requirePresence('municipio', 'create')
-            ->notEmptyString('municipio');
+            ->allowEmptyString('municipio');
 
         $validator
             ->scalar('cep')
             ->maxLength('cep', 9)
-            ->requirePresence('cep', 'create')
-            ->notEmptyString('cep');
+            ->allowEmptyString('cep');
 
         $validator
             ->scalar('codigo_tel')
             ->maxLength('codigo_tel', 2)
-            ->notEmptyString('codigo_tel');
+            ->allowEmptyString('codigo_tel');
 
         $validator
             ->scalar('telefone')
-            ->maxLength('telefone', 9)
-            ->notEmptyString('telefone');
+            ->maxLength('telefone', 15)
+            ->allowEmptyString('telefone');
 
         $validator
             ->scalar('codigo_cel')
             ->maxLength('codigo_cel', 2)
-            ->notEmptyString('codigo_cel');
+            ->allowEmptyString('codigo_cel');
 
         $validator
             ->scalar('celular')
-            ->maxLength('celular', 10)
-            ->notEmptyString('celular');
+            ->maxLength('celular', 15)
+            ->allowEmptyString('celular');
+
+        $validator
+            ->email('email')
+            ->allowEmptyString('email');
 
         $validator
             ->scalar('escola')

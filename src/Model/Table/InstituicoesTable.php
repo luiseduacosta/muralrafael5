@@ -133,6 +133,11 @@ class InstituicoesTable extends Table
             ->allowEmptyString('telefone');
 
         $validator
+            ->scalar('fax')
+            ->maxLength('fax', 50)
+            ->allowEmptyString('fax');
+
+        $validator
             ->scalar('beneficio')
             ->maxLength('beneficio', 50);
 
@@ -141,7 +146,8 @@ class InstituicoesTable extends Table
             ->maxLength('fim_de_semana', 1);
 
         $validator
-            ->scalar('local_inscricao');
+            ->scalar('localInscricao')
+            ->maxLength('localInscricao', 7);
 
         $validator
             ->integer('convenio');
@@ -163,6 +169,15 @@ class InstituicoesTable extends Table
             ->scalar('observacoes')
             ->maxLength('observacoes', 255)
             ->allowEmptyString('observacoes');
+
+        $validator
+            ->integer('areainstituicoes_id')
+            ->allowEmptyString('areainstituicoes_id');
+
+        $validator
+            ->scalar('area')
+            ->maxLength('area', 100)
+            ->allowEmptyString('area');
 
         return $validator;
     }

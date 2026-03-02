@@ -44,27 +44,24 @@ class MuralestagiosTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('mural_estagios');
+        $this->setTable('mural_estagio');
         $this->setAlias('Muralestagios');
         $this->setDisplayField('instituicao_id');
         $this->setPrimaryKey('id');
+        $this->setEntityClass('Muralestagio');
 
         $this->hasMany('Inscricoes', [
-            'foreignKey' => ['mural_estagio_id'],
+            'foreignKey' => 'muralestagio_id',
         ]);
 
         $this->belongsTo('Instituicoes', [
-            'foreignKey' => ['instituicao_id'],
-            'propertyName' => 'instituicaoestagio',
+            'foreignKey' => 'instituicao_id',
         ]);
         $this->belongsTo('Turmas', [
-            'foreignKey' => ['turma_id'],
-        ]);
-        $this->belongsTo('Turnos', [
-            'foreignKey' => ['turno_id'],
+            'foreignKey' => 'turmaestagio_id',
         ]);
         $this->belongsTo('Professores', [
-            'foreignKey' => ['professor_id'],
+            'foreignKey' => 'professor_id',
         ]);
     }
 
@@ -103,46 +100,53 @@ class MuralestagiosTable extends Table
 
         $validator
                 ->scalar('beneficios')
-                ->maxLength('beneficios', 50)
+                ->maxLength('beneficios', 70)
                 ->allowEmptyString('beneficios');
 
         $validator
-                ->scalar('fim_de_semana')
-                ->maxLength('fim_de_semana', 1)
-                ->allowEmptyString('fim_de_semana');
+                ->scalar('final_de_semana')
+                ->maxLength('final_de_semana', 1)
+                ->allowEmptyString('final_de_semana');
 
         $validator
-                ->allowEmptyString('carga_horaria');
+                ->allowEmptyString('cargaHoraria');
 
         $validator
                 ->scalar('requisitos')
-                ->maxLength('requisitos', 255)
+                ->maxLength('requisitos', 455)
                 ->allowEmptyString('requisitos');
 
         $validator
-                ->scalar('local_inscricao')
-                ->notEmptyString('local_inscricao');
-        $validator
-                ->date('data_inscricao')
-                ->allowEmptyDate('data_inscricao');
+                ->scalar('horario')
+                ->maxLength('horario', 1)
+                ->allowEmptyString('horario');
 
         $validator
-                ->date('data_selecao')
-                ->allowEmptyDate('data_selecao');
-        $validator
-                ->scalar('horario_selecao')
-                ->maxLength('horario_selecao', 5)
-                ->allowEmptyString('horario_selecao');
+                ->scalar('localInscricao')
+                ->notEmptyString('localInscricao');
 
         $validator
-                ->scalar('local_selecao')
-                ->maxLength('local_selecao', 70)
-                ->allowEmptyString('local_selecao');
+                ->date('dataInscricao')
+                ->allowEmptyDate('dataInscricao');
 
         $validator
-                ->scalar('forma_selecao')
-                ->maxLength('forma_selecao', 1)
-                ->allowEmptyString('forma_selecao');
+                ->date('dataSelecao')
+                ->allowEmptyDate('dataSelecao');
+
+        $validator
+                ->scalar('horarioSelecao')
+                ->maxLength('horarioSelecao', 5)
+                ->allowEmptyString('horarioSelecao');
+
+        $validator
+                ->scalar('localSelecao')
+                ->maxLength('localSelecao', 70)
+                ->allowEmptyString('localSelecao');
+
+        $validator
+                ->scalar('formaSelecao')
+                ->maxLength('formaSelecao', 1)
+                ->allowEmptyString('formaSelecao');
 
         $validator
                 ->scalar('contato')
@@ -157,6 +161,10 @@ class MuralestagiosTable extends Table
                 ->scalar('periodo')
                 ->maxLength('periodo', 6)
                 ->allowEmptyString('periodo');
+
+        $validator
+                ->date('datafax')
+                ->allowEmptyDate('datafax');
 
         $validator
                 ->email('email')
@@ -176,8 +184,7 @@ class MuralestagiosTable extends Table
     {
         $rules->add($rules->existsIn(['instituicao_id'], 'Instituicoes'), ['errorField' => 'instituicao_id']);
         $rules->add($rules->existsIn(['professor_id'], 'Professores'), ['errorField' => 'professor_id']);
-        $rules->add($rules->existsIn(['turma_id'], 'Turmas'), ['errorField' => 'turma_id']);
-        $rules->add($rules->existsIn(['turno_id'], 'Turnos'), ['errorField' => 'turno_id']);
+        $rules->add($rules->existsIn(['turmaestagio_id'], 'Turmas'), ['errorField' => 'turmaestagio_id']);
 
         return $rules;
     }
