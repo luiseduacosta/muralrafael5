@@ -37,26 +37,24 @@ if ($user_session)
 
         <li><?php echo $this->Html->link("Mural", ['controller' => 'Muralestagios', 'action' => 'index']); ?></li>
 
+        <?php if ($user_data['categoria'] == '1' || $user_data['categoria'] == '2'): ?>
         <li class="menu-declaracoes">
             <input id="menu-declaracoes-toggler" type="checkbox" class="toggle-input" />
             <label for="menu-declaracoes-toggler" class="toggle-label">Declarações <span class="toggle-more">▾</span><span class="toggle-less">◂</span></label>
             
             <menu class="toggle-dropdown">
                 
-                <?php if ($user_data['categoria'] == '1' || $user_data['categoria'] == '2'): ?>
-
                     <li><?php echo $this->Html->link("Declaração de periódo", ["controller" => "Alunos", "action" => "declaracaoperiodo"]); ?></li>
-                    <li><?php echo $this->Html->link("Termo de compromisso", ["controller" => "Alunos", "action" => "termosolicita"]); ?></li>
-                    <li><?php echo $this->Html->link("Folha de atividades", ["controller" => "Alunos", "action" => "folhasolicita"]); ?></li>
-                    <li><?php echo $this->Html->link("Folha de atividades on-line", ["controller" => "folhadeatividades", "action" => "busca_dre"]); ?></li>
-                    <li><?php echo $this->Html->link("Folha de avaliação discente", ["controller" => "Alunos", "action" => "avaliacaosolicita"]); ?></li>
-                    <li><?php echo $this->Html->link("Avaliação discente on-line", ["controller" => "Avaliacoes", "action" => "busca_dre"]); ?></li>
-                    <li><?php echo $this->Html->link("Declaração de estágio", ["controller" => "Alunos", "action" => "busca_dre"]); ?></li>
+                    <li><?php echo $this->Html->link("Termo de compromisso", ["controller" => "Estagiarios", "action" => "termocompromisso"]); ?></li>
+                    <li><?php echo $this->Html->link("Declaração de estágio", ["controller" => "Estagiarios", "action" => "declaracaodeestagiopdf"]); ?></li>
+                    <li><?php echo $this->Html->link("Folha de atividades", ["controller" => "Folhadeatividades", "action" => "index"]); ?></li>
+                    <li><?php echo $this->Html->link("Avaliação discente", ["controller" => "Avaliacoes", "action" => "index"]); ?></li>
 
-                <?php endif; ?>
             </menu>
         </li>
+        <?php endif; ?>
 
+        <?php if ($user_data['categoria'] == '1'): ?>
         <li class="menu-consulta">
             <input id="menu-consulta-toggler" type="checkbox" class="toggle-input" />
             <label for="menu-consulta-toggler" class="toggle-label">Consulta <span class="toggle-more">▾</span><span class="toggle-less">◂</span></label>
@@ -72,6 +70,7 @@ if ($user_session)
         
             </menu>
         </li>
+        <?php endif; ?>
         
         <li><?php echo $this->Html->link('Grupo Google', 'https://groups.google.com/forum/#!forum/estagio_ess'); ?></li>
         

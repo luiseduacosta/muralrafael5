@@ -141,7 +141,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
                 <tr>
                     <td colspan = '2' class="text-center">
-                        <?php echo $this->Html->link('Fazer inscrição', ['controller' => 'Inscricoes', 'action' => 'add', $muralestagio['id']], ['role' => 'button', 'class' => 'button btn-primary']); ?>
+                        <?php echo $this->Html->link('Fazer inscrição', ['controller' => 'Inscricoes', 'action' => 'add', '?' => ['mural_estagio_id' => $muralestagio['id']]], ['role' => 'button', 'class' => 'btn btn-primary']); ?>
                     </td>
                 </tr>
 

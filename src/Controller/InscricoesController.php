@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -24,17 +25,14 @@ class InscricoesController extends AppController
             $this->Authorization->authorize($this->Inscricoes);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
-
             return $this->redirect('/');
         }
         $periodo = $this->getRequest()->getQuery('periodo');
-
         if (empty($periodo)) {
             $configuracao = $this->fetchTable('Configuracoes');
             $periodo_atual = $configuracao->find()->select(['mural_periodo_atual'])->first();
             $periodo = $periodo_atual->mural_periodo_atual;
         }
-        
         $estagiariotabela = $this->fetchTable('Estagiarios');
         $periodototal = $estagiariotabela->find('list', [
             'keyField' => 'periodo',
@@ -64,40 +62,37 @@ class InscricoesController extends AppController
         $inscricao = $this->Inscricoes->get($id, [
             'contain' => ['Alunos', 'Muralestagios' => ['Instituicoes']],
         ]);
-
         try {
             $this->Authorization->authorize($inscricao);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
-
             return $this->redirect('/');
         }
-
         $this->set(compact('inscricao'));
     }
 
     /**
-     * Add method
+     * Add method. O aluno e o admin podem fazer inscrição.
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
     public function add($id = null)
     {
-        try {
-            $this->Authorization->authorize($this->Inscricoes);
-        } catch (ForbiddenException $error) {
-            $this->Flash->error('Authorization error: ' . $error->getMessage());
+        $this->Authorization->skipAuthorization();
+        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_session = $this->request->getAttribute('identity');
+        if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
-            return $this->redirect('/');
-        }
         $dados = $this->request->getData();
 
         $periodo = $this->fetchTable("Configuracoes")->find()->first()['mural_periodo_atual'];
         $dados['periodo'] = $periodo;
         
-        $mural_estagio_id = $id;
+        $mural_estagio_id = $this->getRequest()->getQuery("mural_estagio_id");
+
         if (!$mural_estagio_id) {
             $this->Flash->error(__('Erro no identificador do mural de estagios'));
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         } else {
             $mural_estagio = $this->fetchTable('Muralestagios')->get($mural_estagio_id);
             $dados['mural_estagio'] = $mural_estagio;
@@ -116,25 +111,23 @@ class InscricoesController extends AppController
         $user_session = $this->request->getAttribute('identity');
         if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
-        if ($user_data['categoria'] != '2') { 
-            $this->Flash->error(__('Selecione um aluno(a) para fazer a inscrição.'));
-            return $this->redirect(['controller' => 'Alunos', 'action' => 'index']);
-        } else if ($user_data['categoria'] == '2') {
+        // Admin não pode fazer inscrição de aluno? Corrigir
+        if ($user_data['categoria'] == '2') {
             $aluno = $this->fetchTable('Alunos')->get($user_data['aluno_id']);
             $dados['registro'] = $aluno->registro;
             $dados['aluno_id'] = $aluno->id;
+        } else {
+            $this->Flash->error(__('Selecione um aluno(a) para fazer a inscrição.'));
+            return $this->redirect(['controller' => 'Alunos', 'action' => 'index']);
         }
-
         /** Verifico se já fez inscrição para não duplicar */
         $inscricao_duplicada = $this->Inscricoes->find()->where(['Inscricoes.aluno_id' => $aluno->id, 'Inscricoes.muralestagio_id' => $mural_estagio->id])->first();
         if ($inscricao_duplicada) {
             $this->Flash->error(__("Inscrição já realizada"));
             return $this->redirect(['controller' => 'Inscricoes', 'action' => 'view', $inscricao_duplicada->id]);
         }
-        
         $data = date('Y-m-d');
         $dados['data'] = $data;
-
         $inscricao = $this->Inscricoes->newEmptyEntity();
         if ($this->request->is('post')) {
             $inscricao = $this->Inscricoes->patchEntity($inscricao, $dados);
@@ -203,157 +196,6 @@ class InscricoesController extends AppController
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
         }
-
         return $this->redirect(['action' => 'index']);
     }
-
-    /**
-     * Termocompromisso method
-     *
-     * @param string|null $id Inscricao id.
-     * @return \Cake\Http\Response|null|void Renders termocompromisso
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function termocompromisso($id = null) 
-    {
-        $this->Authorization->authorize($this->Inscricoes);
-
-        $registro = $this->getRequest()->getQuery('registro');
-
-        $alunosTable = $this->fetchTable("Alunos");
-        if (empty($registro) && !empty($id)) { 
-            $aluno = $alunosTable->get($id);
-            $registro = $aluno->registro; 
-        }
-
-        /* Captura o periodo de estagio para o termo de compromisso */
-        $periodo = $this->fetchTable("Configuracoes")->find()->first()['termo_compromisso_periodo'];
-
-        /* Busca em estagiarios o ultimo estagio do aluno */
-        $estagiario = $this->fetchTable("Estagiarios")->find('all', [
-            'conditions' => ['Estagiarios.registro IS' => $registro]
-        ])->first();
-        // pr($estagiario);
-        // die('estagiario');
-
-        /* Capturo os dados do aluno na tabela alunos */
-        if (empty($aluno)) {
-            $aluno = $this->fetchTable("Alunos")->find('all', [
-                'conditions' => ['Alunos.registro IS' => $registro]
-            ])->first();
-        }
-        // pr($aluno);
-        // die('aluno');
-        
-        /* Se nao encontra nada entao eh um aluno que ainda nao eh estagiario, portanto vai cursar estagio I */
-        if (empty($estagiario)) {
-            /* Aluno sem estágios registrados. Inícia estágio I */
-            $nivel_ultimo = 1; // Nivel eh 1
-            $inserir = 0; // Inserir estagiário novo no nível I
-        } 
-        
-        if (empty($registro)) { $this->Flash->error(__("Registro não encontrado")); }
-        else if (empty($aluno)) {
-            $this->Flash->error(__("Aluno não cadastrado"));
-            $this->redirect(['controller' => 'Alunos', 'action' => 'add?registro=' . $registro]);
-        }
-        
-        $reg = (string)$registro;
-        
-        /* Calculo o ano de ingresso para definir se é do ajuste2020 */
-        if (strlen(trim($reg)) == 9) {
-            /* Se o aluno ingressou depois de 2019 entao são tres niveis de estagio, senao son 4 niveis */
-            /* O calculo deveria ser realizado com o campo de inscricao e nao a partir do registro */
-            if (intval(substr(trim($reg), 1, 2)) > 19) {
-                // echo 'estudante ingressou em 2020 ou depois';
-                $estagiario['ajuste2020'] = 1;
-                $ultimo_nivel_curricular = 3;
-            } else {
-                $estagiario['ajuste2020'] = 0;
-                $ultimo_nivel_curricular = 4;
-            }
-        } elseif (strlen(trim($reg)) == 8) {
-            /* Alunos anteriores ao ano de 2000 */
-            $estagiario['ajuste2020'] = 0;
-            $ultimo_nivel_curricular = 4;
-        }
-        // die();
-        $nivel_ultimo = null;
-        /* Ultimo periodo cadastrado é menor que periodo atual então tem que cadastrar novo estágio */
-        if ($estagiario['periodo'] < $periodo) {
-
-            $estagiario['id'] = null;
-            $inserir = 0; // Inserir
-
-            /* Se o nivel de estagio a ser cadastrado eh menor que o ultimo nivel curricular entao aumento o nivel de estagio para o seguinte nivel */
-            if ($estagiario['nivel'] < $ultimo_nivel_curricular) {
-                $nivel_ultimo = $estagiario['nivel'] + 1;
-                // die("Inserir novo estágio");
-            /* Caso contrario, ou seja, se o nivel a ser cadastrado supera o nivel curricular, entao o aluno ja finalizou estagio curricular e agora esta fazendo estagio nao obrigatorio */    
-            } elseif ($estagiario['nivel'] >= $ultimo_nivel_curricular) {
-                $nivel_ultimo = 9; // estágio não obrigatório
-                // die("Inserir novo estágio não obrigatório");
-            }
-            // pr($nivel_ultimo);
-            // die();
-            /* Se o periodo cadastrado é igual ao periodo atual então o aluno está solicitando novamente o mesmo termo de compromisso */
-        } elseif ($estagiario['periodo'] == $periodo) {
-            $nivel_ultimo = $estagiario['nivel'];
-            $inserir = 1; // Atualizar estagiario
-            // die("Atualizar estágio");
-        } else {
-            $this->Flash->error(__("Período atual é menor que período de estágio cadastrado. Verifique os dados."));
-            //$this->redirect(['controller' => 'inscricaos', 'action' => 'termosolicita']);
-        }
-        
-        /* Capturo as instituicoes */
-        $instituicoesTable = $this->fetchTable("Instituicoes");
-        $instituicoes = $instituicoesTable->find(
-                'list',
-                [
-                    'fields' => ['Instituicoes.id', 'Instituicoes.instituicao'],
-                    'order' => 'Instituicoes.instituicao',
-                ]
-        );
-        // pr($instituicoes);
-
-        /* Capturo os supervisores da instituicao atual */
-        if (isset($estagiario['instituicao_id'])) {
-            $supervisores = $instituicoesTable->find('all',
-                [
-                    //'contain' => ['Supervisor' => ['order' => 'nome']],
-                    'conditions' => ['Instituicoes.id' => $estagiario['instituicao_id']]
-                ]
-            );
-
-            foreach ($supervisores as $supervisor) {
-                $supervisoresAtuais[$supervisor['id']] = $supervisor['nome'];
-                // pr($supervisor['nome']);
-            }
-        }
-        
-        // Envio os dados
-        $this->set('estagiario_id', $estagiario['id']);
-        $this->set('inserir', $inserir);
-        $this->set('nivel', $nivel_ultimo);
-        $this->set('ingresso', isset($estagiario['ingresso']) ? $estagiario['ingresso'] : (isset($aluno['ingresso']) ? $aluno['ingresso'] : null));
-        $this->set('alunoturno', isset($estagiario['turno']) ? $estagiario['turno'] : (isset($aluno['turno']) ? $aluno['turno'] : null));
-        $this->set('aluno_id', isset($estagiario['id_aluno']) ? $estagiario['id_aluno'] : null);
-        $this->set('registro', $registro);
-        $this->set('aluno', isset($estagiario['nome']) ? $estagiario['nome'] : (isset($aluno['nome']) ? $aluno['nome'] : null));
-        $this->set('turno', isset($turno_ultimo) ? $turno_ultimo : 'I');
-        $this->set('periodo', $periodo);
-        // $this->set('id_area', $id_area);
-        $this->set('complemento_id', isset($estagiario['complemento_id']) ? $estagiario['complemento_id'] : null);
-        //$this->set('alunos_id', isset($estagiario'id']) ? $estagiario['id'] : '');
-        $this->set('ajuste2020', isset($estagiario['ajuste2020']) ? $estagiario['ajuste2020'] : 0);
-
-        $this->set('professor_atual', isset($estagiario['id_professor']) ? $estagiario['id_professor'] : 0);
-        $this->set('instituicao_atual', isset($estagiario['id_instituicao']) ? $estagiario['id_instituicao'] : 0);
-        $this->set('supervisor_atual', isset($estagiario['id_supervisor']) ? $estagiario['id_supervisor'] : 0);
-
-        $this->set('instituicoes', $instituicoes);
-        $this->set('supervisores', isset($super_atuais) ? $super_atuais : null); // Aluno sem estaǵio não tem supervisores de instituição cadastrados
-    }
-    
 }
