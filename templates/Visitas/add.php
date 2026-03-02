@@ -7,11 +7,11 @@
 <div>
     <div class="column-responsive column-80">
         <div class="visitas form content">
-        <aside>
-            <div class="nav">
-                <?= $this->Html->link(__('Listar Visitas'), ['action' => 'index'], ['class' => 'button']) ?>
-            </div>
-        </aside>
+            <aside>
+                <div class="nav">
+                    <?= $this->Html->link(__('Listar Visitas'), ['action' => 'index'], ['class' => 'button']) ?>
+                </div>
+            </aside>
             <?= $this->Form->create($visita) ?>
             <fieldset>
                 <h3><?= __('Adicionar Visita') ?></h3>

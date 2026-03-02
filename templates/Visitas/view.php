@@ -3,7 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Visita $visita
  */
-//pr($visita);
 ?>
 <div>
     <div class="column-responsive column-80">

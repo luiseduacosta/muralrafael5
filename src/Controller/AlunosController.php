@@ -488,30 +488,5 @@ class AlunosController extends AppController
         $instituicao = $this->fetchTable("Configuracoes")->find()->first()['instituicao'];
         $this->set('instituicao', $instituicao);
         // die();
-    }
-    
-    /**
-     * Cargahoraria method
-     *
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */    
-    public function folhasolicita()
-    {
-        $this->Authorization->skipAuthorization();
-        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
-        $user_session = $this->request->getAttribute('identity');
-        if ($user_session) { $user_data = $user_session->getOriginalData(); }
-        
-        $registro = $this->getRequest()->getQuery('registro');
-        //pr('reg: ' . $registro);
-
-        if (empty($registro)) {
-            if (!$user_data['administrador_id']) $this->Flash->info(__('Erro: os dados não foram encontrados'));
-        } else {
-            $this->redirect(['action' => 'folhadeatividadespdf', $registro, 'ext' => 'pdf', 'folhadeatividades']);
-            
-        } 
-    }
-    
+    }    
 }
