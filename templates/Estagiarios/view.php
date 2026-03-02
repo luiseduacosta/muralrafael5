@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
+
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
 <div>
@@ -16,11 +17,14 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <aside>
                 <div class="nav">
                     <?= $this->Html->link(__('Listar Estagiarios'), ['action' => 'index'], ['class' => 'button']) ?>
-					
 			        <?php if ($user_data['administrador_id']): ?>
 	                    <?= $this->Html->link(__('Editar Estagiario'), ['action' => 'edit', $estagiario->id], ['class' => 'button']) ?>
 	                    <?= $this->Form->postLink(__('Deletar Estagiario'), ['action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete estagiario #{0}?', $estagiario->id), 'class' => 'button']) ?>
 	                    <?= $this->Html->link(__('Novo Estagiario'), ['action' => 'add'], ['class' => 'button']) ?>
+					<?php endif; ?>
+                    <?php if ($user_data['categoria'] == '2'): ?>
+                        <?= $this->Html->link(__('Termo de Compromisso'), ['action' => 'termocompromisso', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Imprime Termo de Compromisso'), ['action' => 'termocompromissopdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
 					<?php endif; ?>
                 </div>
             </aside>
@@ -44,7 +48,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
                 <tr>
                     <th><?= __('Turno') ?></th>
-                    <td><?= $estagiario->turno ? h($estagiario->turno->turno) : '' ?></td>
+                    <td><?= $estagiario->turno_entidade ? h($estagiario->turno_entidade->turno) : '' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Supervisor') ?></th>

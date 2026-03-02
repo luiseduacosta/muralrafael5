@@ -1,7 +1,8 @@
 <?php
-// pr($aluno);
-// pr($totalperiodos);
-// echo $aluno->nome;
+/**
+ * @var \App\View\AppView $this
+ * @var \App\Model\Entity\Aluno $aluno
+ */
 ?>
 
 <div class="content">

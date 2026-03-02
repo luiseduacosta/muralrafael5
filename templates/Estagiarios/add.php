@@ -20,7 +20,7 @@
                     echo $this->Form->control('registro');
                     echo $this->Form->control('ajustecurricular2020');
                     echo $this->Form->control('turno');
-                    echo $this->Form->control('nivel');
+                    echo $this->Form->control('nivel', ['value' => $estagiario->nivel ? $estagiario->nivel + 1 : 1]);
                     echo $this->Form->control('tc');
                     echo $this->Form->control('tc_solicitacao', ['empty' => true]);
                     echo $this->Form->control('instituicao_id', ['options' => $instituicoes, 'class' => 'form-control']);

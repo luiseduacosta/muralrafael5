@@ -26,7 +26,7 @@ final class EstagiarioPolicy implements BeforePolicyInterface
                 $user_data
                 && (
                     $user_data['categoria'] == '1'
-                    || $user_data['categoria'] == '3'
+                    || $user_data['categoria'] == '2' // Aluno pode criar, editar e fazer termocompromisso
                 )
             ) {
                 return true;
@@ -74,6 +74,26 @@ final class EstagiarioPolicy implements BeforePolicyInterface
     public function canDelete(IdentityInterface $userSession, Estagiario $estagiarioData): Result
     {
         return new Result(false, 'Erro: estagiario delete policy not allowed');
+    }
+
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Entity\Estagiario $estagiarioData
+     * @return \Authorization\Policy\Result
+     */
+    public function canTermoCompromisso(IdentityInterface $userSession, Estagiario $estagiarioData): Result
+    {
+        return new Result(true);
+    }
+
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Entity\Estagiario $estagiarioData
+     * @return \Authorization\Policy\Result
+     */
+    public function canTermoCompromissopdf(IdentityInterface $userSession, Estagiario $estagiarioData): Result
+    {
+        return new Result(true);
     }
 
     /**

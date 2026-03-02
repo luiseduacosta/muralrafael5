@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $user_session->getOriginalData(); }
+if ($user_session) 
+{ 
+    $user_data = $user_session->getOriginalData(); 
+}
 
-// $user_data['administrador_id'] || $user_data['aluno_id'] || $user_data['professor_id'] || $user_data['supervisor_id']
-    
 ?>
 <!-- templates/element/submenu_navegacao.php -->
 <script>
@@ -41,18 +42,18 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <label for="menu-declaracoes-toggler" class="toggle-label">Declarações <span class="toggle-more">▾</span><span class="toggle-less">◂</span></label>
             
             <menu class="toggle-dropdown">
-                <li><?php echo $this->Html->link("Termo de compromisso", "/Inscricoes/termosolicita"); ?></li>
-                <li><?php echo $this->Html->link("Folha de avaliação discente", "/Alunos/avaliacaosolicita"); ?></li>
-                <li><?php echo $this->Html->link("Avaliação discente on-line", "/Avaliacoes/busca_dre"); ?></li>
-                <li><?php echo $this->Html->link("Folha de atividades", "/Alunos/folhasolicita"); ?></li>
-                <li><?php echo $this->Html->link("Folha de atividades on-line", "/folhadeatividades/busca_dre"); ?></li>
-
-                <?php if ($user_data['administrador_id'] || $user_data['professor_id'] || $user_data['supervisor_id']): ?>
-                    <li><?php echo $this->Html->link("Declaração de estágio", "/Alunos/busca_dre"); ?></li>
-                <?php else: ?>
-                    <li><?php echo $this->Html->link("Declaração de estágio", "/Estagiarios/view?registro="); ?></li>
-                <?php endif; ?>
                 
+                <?php if ($user_data['categoria'] == '1' || $user_data['categoria'] == '2'): ?>
+
+                    <li><?php echo $this->Html->link("Declaração de periódo", ["controller" => "Alunos", "action" => "declaracaoperiodo"]); ?></li>
+                    <li><?php echo $this->Html->link("Termo de compromisso", ["controller" => "Alunos", "action" => "termosolicita"]); ?></li>
+                    <li><?php echo $this->Html->link("Folha de atividades", ["controller" => "Alunos", "action" => "folhasolicita"]); ?></li>
+                    <li><?php echo $this->Html->link("Folha de atividades on-line", ["controller" => "folhadeatividades", "action" => "busca_dre"]); ?></li>
+                    <li><?php echo $this->Html->link("Folha de avaliação discente", ["controller" => "Alunos", "action" => "avaliacaosolicita"]); ?></li>
+                    <li><?php echo $this->Html->link("Avaliação discente on-line", ["controller" => "Avaliacoes", "action" => "busca_dre"]); ?></li>
+                    <li><?php echo $this->Html->link("Declaração de estágio", ["controller" => "Alunos", "action" => "busca_dre"]); ?></li>
+
+                <?php endif; ?>
             </menu>
         </li>
 
@@ -74,18 +75,18 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         
         <li><?php echo $this->Html->link('Grupo Google', 'https://groups.google.com/forum/#!forum/estagio_ess'); ?></li>
         
-        <?php if ($user_data['administrador_id']): ?>
+        <?php if ($user_data['categoria'] == '1'): ?>
             <li class="menu-admin">
                 <input id="menu-admin-toggler" type="checkbox" class="toggle-input" />
                 <label for="menu-admin-toggler" class="toggle-label">Administração <span class="toggle-more">▾</span><span class="toggle-less">◂</span></label>
                 
                 <menu class="toggle-dropdown">
-                    <li><?php echo $this->Html->link('Configurações', '/Configuracoes'); ?></li>
-                    <li><?php echo $this->Html->link('Usuários', '/Users'); ?></li>
-                    <li><?php echo $this->Html->link('Planilha seguro', '/Alunos/planilhaseguro/'); ?></li>
-                    <li><?php echo $this->Html->link('Planilha CRESS', '/Alunos/planilhacress/'); ?></li>
-                    <li><?php echo $this->Html->link('Carga horária', '/Alunos/cargahoraria/'); ?></li>
-                    <li><?php echo $this->Html->link('Complemento período', '/Complementos'); ?></li>
+                    <li><?php echo $this->Html->link('Configurações', ['controller' => 'Configuracoes', 'action' => 'view', 1]); ?></li>
+                    <li><?php echo $this->Html->link('Usuários', ['controller' => 'Users', 'action' => 'index']); ?></li>
+                    <li><?php echo $this->Html->link('Planilha seguro', ['controller' => 'Alunos', 'action' => 'planilhaseguro']); ?></li>
+                    <li><?php echo $this->Html->link('Planilha CRESS', ['controller' => 'Alunos', 'action' => 'planilhacress']); ?></li>
+                    <li><?php echo $this->Html->link('Carga horária', ['controller' => 'Alunos', 'action' => 'cargahoraria']); ?></li>
+                    <li><?php echo $this->Html->link('Complemento período', ['controller' => 'Complementos', 'action' => 'index']); ?></li>
                 </menu>
             </li>
         <?php else: ?>

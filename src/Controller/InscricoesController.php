@@ -207,7 +207,6 @@ class InscricoesController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-
     /**
      * Termocompromisso method
      *
@@ -226,9 +225,6 @@ class InscricoesController extends AppController
             $aluno = $alunosTable->get($id);
             $registro = $aluno->registro; 
         }
-            
-        // pr($registro);
-        // die("termocompromisso");
 
         /* Captura o periodo de estagio para o termo de compromisso */
         $periodo = $this->fetchTable("Configuracoes")->find()->first()['termo_compromisso_periodo'];
@@ -263,8 +259,6 @@ class InscricoesController extends AppController
         }
         
         $reg = (string)$registro;
-        //pr($reg);
-        //die();
         
         /* Calculo o ano de ingresso para definir se é do ajuste2020 */
         if (strlen(trim($reg)) == 9) {

@@ -209,6 +209,153 @@ class AlunosController extends AppController
             return;
         }
     }
+
+   /**
+     * Declaracaoperiodo method
+     *
+     * @param string|null $id Aluno id.
+     */
+    public function declaracaoperiodo($id = null) 
+    {
+        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_session = $this->request->getAttribute('identity');
+        if ($user_session) { $user_data = $user_session->getOriginalData(); }
+        
+        $this->Authorization->authorize($this->Alunos);
+
+        $totalperiodos = $this->request->getQuery('totalperiodos');
+        $novoperiodo = $this->request->getQuery('novoperiodo');
+
+        if ($user_data && $user_data['categoria'] == 2) {
+            $id = $user_data['aluno_id'];
+        }
+
+        if ($id == null) {
+            $this->Flash->error(__("Operação não pode ser realizada porque o 'id' não foi informado."));
+            return $this->redirect([ 'controller' => 'Alunos', 'action' => 'index']);
+        }
+
+        $aluno = $this->Alunos->get($id);
+
+        try {
+            $this->Authorization->authorize($aluno);
+        } catch (ForbiddenException $e) {
+            $this->Flash->error(__('Acesso não autorizado.'));
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
+        }
+
+        // Incomplete field ingresso on record of alunos
+        if (strlen($aluno->ingresso) < 6) {
+             $this->Flash->error(__('Período de ingresso incompleto.'));
+             return $this->redirect(['action' => 'view', $id]);
+        }
+
+        $configuracoes = $this->fetchTable('Configuracoes')->find()->first();
+        $periodo_atual = $configuracoes->periodo_calendario_academico;
+
+        if ($novoperiodo) {
+            $periodo_inicial = $novoperiodo;
+        } else {
+            $periodo_inicial = $aluno->ingresso;
+        }
+
+        $inicial = explode('-', $periodo_inicial);
+        $atual = explode('-', $periodo_atual);
+        $semestres = ($atual[0] - $inicial[0] + 1) * 2;
+
+        $totalperiodos = $semestres; // Simplified fallback
+        if ($inicial[1] == 1 && $atual[1] == 2) {
+            $totalperiodos = $semestres;
+        }
+        if ($inicial[1] == 1 && $atual[1] == 1) {
+            $totalperiodos = $semestres - 1;
+        }
+        if ($inicial[1] == 2 && $atual[1] == 2) {
+            $totalperiodos = $semestres - 1;
+        }
+        if ($inicial[1] == 2 && $atual[1] == 1) {
+            $totalperiodos = $semestres - 2;
+        }
+
+        if ($this->request->is(['post', 'put'])) {
+            $data = $this->request->getData();
+            $novoperiodo = $data['novoperiodo'] ?? $aluno->ingresso;
+
+            // Recalculate logic...
+             return $this->redirect([
+                'action' => 'declaracaoperiodo',
+                $id,
+                '?' => ['totalperiodos' => $totalperiodos, 'novoperiodo' => $novoperiodo],
+             ]);
+        }
+
+        $this->set(compact('aluno', 'totalperiodos', 'novoperiodo'));
+    }
+
+    /**
+     * Gera o PDF do certificado de período do aluno.
+     *
+     * @param string|null $id
+     * @return void
+     */
+    public function declaracaoperiodopdf(?string $id = null)
+    {
+        $this->Authorization->skipAuthorization();
+
+        $id = $this->request->getQuery('id');
+        $totalperiodos = $this->request->getQuery('totalperiodos');
+
+        if ($this->user && $this->user->categoria == 2) {
+            $id = $this->user->aluno_id;
+        }
+
+        if ($id === null) {
+            $this->Flash->error(__("Operação não pode ser realizada porque o 'id' não foi informado."));
+
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $aluno = $this->Alunos->get($id);
+
+        try {
+            $this->Authorization->authorize($aluno);
+        } catch (ForbiddenException $e) {
+            $this->Flash->error(__('Acesso não autorizado.'));
+
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $this->viewBuilder()->enableAutoLayout(false);
+        $this->viewBuilder()->setClassName('CakePdf.Pdf');
+        $this->viewBuilder()->setOption('pdfConfig', [
+            'orientation' => 'portrait',
+            'download' => true,
+            'filename' => 'declaracao_de_periodo_' . $id . '.pdf',
+        ]);
+
+        $this->set(compact('aluno', 'totalperiodos'));
+    }
+
+    /**
+     * Cargahoraria method
+     *
+     * @param string|null $id Aluno id.
+     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function cargahoraria($ordem = null) {
+
+        try {
+            $this->Authorization->authorize($this->Alunos);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Erro de authorização: ' . $error->getMessage());
+            return $this->redirect('/');
+        }
+        
+        $alunos = $this->Alunos->find()->contain(['Estagiarios']);
+
+        $this->set('alunos', $this->paginate($alunos));
+    }
     
     /**
      * Planilhacress method
@@ -265,8 +412,6 @@ class AlunosController extends AppController
                     ->order($ordered);
         }
 
-        // pr($cress);
-        // die();
         $this->set('cress', $this->paginate($cress));
     }
 
@@ -345,190 +490,6 @@ class AlunosController extends AppController
         // die();
     }
     
-    /**
-     * Declaracaoperiodo method
-     *
-     * @param string|null $id Aluno id.
-     */
-    public function declaracaoperiodo($id = null) 
-    {
-        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
-        $user_session = $this->request->getAttribute('identity');
-        if ($user_session) { $user_data = $user_session->getOriginalData(); }
-        
-        $this->Authorization->authorize($this->Alunos);
-        /**
-         * Autorização. Verifica se o aluno cadastrado no Users está acessando seu próprio registro.
-         */
-        $option = 0;
-
-
-        if ($user_data['administrador_id']) {
-            if ($id) $option = "id = " . $id;
-        }
-        
-        if ($user_data['aluno_id']) {
-            $option = "id = " . $user_data['aluno_id'];
-        }
-
-        /**
-         * Consulto a tabela alunos com o registro ou com o id
-         */
-        if ($option) {
-            $aluno = $this->Alunos->find()->where([$option])->first();
-        }
-
-        if (empty($aluno)) {
-            $this->Flash->error(__('Erro: Não foi possível encontrar o aluno.'));
-            return $this->redirect(['controller' => 'Users', 'action' => 'view', $user_data['id']]);
-            // die('Professores e Supervisores não autorizados');
-        }
-
-        /**
-         * Calculo a partir do ingresso em que periodo o aluno esté neste momento.
-         */
-        
-        /* Capturo o periodo do calendario academico atual */
-        $periodo_atual = $this->fetchTable("Configuracoes")->find()->first()['periodo_calendario_academico'];
-
-        
-        /** Capturo o periodo inicial para o cálculo dos semetres.
-         *  Inicialmente coincide com o campo de ingresso.
-         *  Mas pode ser alterada para fazer coincider os semestres no casos dos alunos que trancaram.
-         */
-        $novoperiodo = $this->getRequest()->getData('novoperiodo');
-        if ($novoperiodo) {
-            $periodo_inicial = $this->getRequest()->getData('novoperiodo');
-        } else {
-            $periodo_inicial = $aluno->ingresso;
-        }
-
-        /**
-         * Separo o periodo em duas partes: o ano e o indicador de primeiro ou segundo semestre.
-         */
-
-        $inicial = explode('-', $periodo_inicial);
-        $atual = explode('-', $periodo_atual);
-        
-        // echo $atual[0] . ' ' . $inicial[0] . '<br>';
-        // echo $atual[1] . ' ' . $inicial[1] . '<br>';
-        // die();
-        
-        /**
-         * Calculo o total de semestres
-         */
-        $semestres = (($atual[0] - $inicial[0]) + 1) * 2;
-        // pr($semestres);
-
-        /** Se começa no semestre 1 e finaliza no 2 então são anos inteiros */
-        if (($inicial[1] == 1) && ($atual[1] == 2)) {
-            $totalperiodos = $semestres;
-        }
-
-        /** Se começa no semestre 1 e finaliza no 1 então perdeu um semestre (o segundo semestre atual) */
-        if (($inicial[1] == 1) && ($atual[1] == 1)) {
-            $totalperiodos = $semestres - 1;
-        }
-
-        /** Se começa no semestre 2 e finaliza no 2 então perdeu um semestre (o primeiro semestre inicial) */
-        if (($inicial[1] == 2) && ($atual[1] == 2)) {
-            $totalperiodos = $semestres - 1;
-        }
-
-        /** Se começa no semestre 2 e finaliza no semestre 1 então perdeu dois semestres (o primeiro do ano inicial e o segundo do ano atual) */
-        if (($inicial[1] == 2) && ($atual[1] == 1)) {
-            $totalperiodos = $semestres - 2;
-        }
-
-        /** Se o período inicial é maior que o período atual então informar que há um erro */
-        if ($totalperiodos <= 0) {
-            $this->Flash->error(__('Erro: período inicial é maior que período atual.'));
-        }
-
-
-        if ($totalperiodos > 20) {
-            $this->Flash->error(__('Erro: período é maior q o permitido.'));
-        }
-
-        // pr($totalperiodos);
-        // die();
-        
-        if (isset($this->getRequest()->getData()['novoperiodo'])) {
-            $aluno->periodonovo = $this->getRequest()->getData()['novoperiodo'];
-        } else {
-            $aluno->periodonovo = $aluno->ingresso;
-        }
-
-        // pr($aluno);
-        // pr($aluno->turno);
-        // die();
-        $this->set('aluno', $aluno);
-        $this->set('totalperiodos', $totalperiodos);
-    }
-
-    /**
-     * Declaracaoperiodopdf method
-     *
-     * @param string|null $id Aluno id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function declaracaoperiodopdf($id = NULL) {
-        $this->Authorization->authorize($this->Alunos);
-
-        $this->layout = false;
-        $id = $this->getRequest()->getQuery('id');
-        $totalperiodos = $this->getRequest()->getQuery('totalperiodos');
-
-        if (is_null($id)) {
-            $this->cakeError('error404');
-        } else {
-            $aluno = $this->Alunos->find()
-                    ->contain([])
-                    ->where(['Alunos.id' => $id])
-                    ->first();
-        }
-        // pr($id);
-        // pr($totalperiodos);
-        // pr($aluno);
-        // die('aluno');
-
-        $this->viewBuilder()->enableAutoLayout(false);
-        $this->viewBuilder()->setClassName('CakePdf.Pdf');
-        $this->viewBuilder()->setOption(
-                'pdfConfig',
-                [
-                    'orientation' => 'portrait',
-                    //'download' => true, // This can be omitted if "filename" is specified.
-                    //'filename' => 'declaracao_de_periodo_' . $id . '.pdf' //// This can be omitted if you want file name based on URL.
-                ]
-        );
-
-        $this->set('aluno', $aluno);
-        $this->set('totalperiodos', $totalperiodos);
-    }
-
-    /**
-     * Cargahoraria method
-     *
-     * @param string|null $id Aluno id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function cargahoraria($ordem = null) {
-
-        try {
-            $this->Authorization->authorize($this->Alunos);
-        } catch (ForbiddenException $error) {
-            $this->Flash->error('Erro de authorização: ' . $error->getMessage());
-            return $this->redirect('/');
-        }
-        
-        $alunos = $this->Alunos->find()->contain(['Estagiarios']);
-
-        $this->set('alunos', $this->paginate($alunos));
-    }
-
     /**
      * Cargahoraria method
      *

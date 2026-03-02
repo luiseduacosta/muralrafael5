@@ -19,6 +19,7 @@ $dataDeHoje = new DateTime(null, $timeZone);
         text-align: center;
     }
 </style>
+
 <?php
 if ($estagiario->nivel === '9'):
     $nivel = ' <b>não obrigatório</b> ';
