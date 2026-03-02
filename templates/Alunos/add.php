@@ -37,10 +37,13 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     echo $this->Form->control('telefone');
                     echo $this->Form->control('codigo_celular');
                     echo $this->Form->control('celular');
+                    echo $this->Form->control('email', ['type' => 'email', 'value' => $email, 'readonly' => true]);
                     echo $this->Form->control('cpf');
                     echo $this->Form->control('identidade');
                     echo $this->Form->control('orgao');
                     echo $this->Form->control('nascimento', ['empty' => true]);
+                    echo $this->Form->control('ingresso', ['label' => 'Período de Ingresso (ex: 2022.1)', 'empty' => false]);
+                    echo $this->Form->control('turno', ['options' => ['diurno' => 'Diurno', 'noturno' => 'Noturno', 'indefinido' => 'Indefinido']]);
                     echo $this->Form->control('endereco');
                     echo $this->Form->control('cep');
                     echo $this->Form->control('municipio');

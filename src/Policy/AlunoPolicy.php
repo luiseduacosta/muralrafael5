@@ -73,6 +73,30 @@ final class AlunoPolicy implements BeforePolicyInterface
     /**
      * @param \Authorization\IdentityInterface $userSession
      * @param \App\Model\Entity\Aluno $alunoData
+     * @return \Authorization\Policy\Result
+     */
+    public function canDeclaracaoperiodo(IdentityInterface $userSession, Aluno $alunoData): Result
+    {
+        return $this->sameUser($userSession, $alunoData)
+            ? new Result(true)
+            : new Result(false, 'Erro: aluno declaracao periodo policy not authorized');
+    }
+
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Entity\Aluno $alunoData
+     * @return \Authorization\Policy\Result
+     */
+    public function canDeclaracaoperiodopdf(IdentityInterface $userSession, Aluno $alunoData): Result
+    {
+        return $this->sameUser($userSession, $alunoData)
+            ? new Result(true)
+            : new Result(false, 'Erro: aluno declaracao periodo policy not authorized');
+    }
+
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Entity\Aluno $alunoData
      * @return bool
      */
     protected function sameUser(IdentityInterface $userSession, Aluno $alunoData): bool

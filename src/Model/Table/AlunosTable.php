@@ -84,12 +84,13 @@ class AlunosTable extends Table
             ->add('registro', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator
-            ->integer('ingresso')
+            ->scalar('ingresso')
+            ->maxLength('ingresso', 6)
             ->allowEmptyString('ingresso');
 
         $validator
             ->scalar('turno')
-            ->maxLength('turno', 1)
+            ->maxLength('turno', 10)
             ->allowEmptyString('turno');
 
         $validator

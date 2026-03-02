@@ -18,7 +18,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <?= $this->Html->link(__('Editar Email'), ['action' => 'edit', $user->id], ['class' => 'button']) ?>
                     <?= $this->Html->link(__('Editar Senha'), ['action' => 'editpassword', $user->id], ['class' => 'button']) ?>
                     
-                    <?php if ($user_data['administrador_id']): ?>
+                    <?php if ($user_data['categoria'] == '1'): ?>
                         <?= $this->Html->link(__('Listar Usuários'), ['action' => 'index'], ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Deletar Usuário'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete {0}?', $user->email), 'class' => 'button']) ?>
                         <?= $this->Html->link(__('Novo Usuário'), ['action' => 'add'], ['class' => 'button']) ?>
@@ -46,7 +46,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
             </table>
 
-            <?php if (!empty($user->administrador)) : ?>
+            <?php if ($user->categoria == '1') : ?>
             <div class="related">
                 <h4><?= __('Related Administrador') ?></h4>
                 <div class="table_wrap">
@@ -70,7 +70,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             </div>
             <?php endif; ?>
             
-            <?php if (!empty($user->aluno)) : ?>
+            <?php if ($user->categoria == '2') : ?>
             <div class="related">
                 <h4><?= __('Aluno') ?></h4>
                 <div class="table_wrap">
@@ -108,7 +108,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 <p><?= $this->Html->link('Adicionar aluno', ['controller' => 'alunos', 'action' => 'add'], ['class' => 'button btn-info']) ?></p>
             <?php endif; ?>
 
-            <?php if (!empty($user->professor)) : ?>
+            <?php if ($user->categoria == '3') : ?>
             <div class="related">
                 <h4><?= __('Professor') ?></h4>
                 <div class="table_wrap">
@@ -143,7 +143,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <?php endif; ?>
             
 
-            <?php if (!empty($user->supervisor)) : ?>
+            <?php if ($user->categoria == '4') : ?>
             <div class="related">
                 <h4><?= __('Supervisor') ?></h4>
                 <div class="table_wrap">

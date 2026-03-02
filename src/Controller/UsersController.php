@@ -211,7 +211,37 @@ class UsersController extends AppController
         // If the user is logged in send them away.
         if ($result->isValid()) {
             $this->Flash->success(__('Usuario logado.'));
-            
+            // Verificar se o usuario é administrador
+            if ($result->getData()['categoria'] == '1') {
+                return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
+            }
+            // Verificar se o usuario é aluno e está cadastrado
+            if ($result->getData()['categoria'] == '2') {
+                if ($result->getData()['aluno_id'] > 0) {
+                    return $this->redirect(['controller' => 'alunos', 'action' => 'view', $result->getData()['aluno_id']]);
+                } else {
+                    return $this->redirect(['controller' => 'alunos', 'action' => 'add', '?' => ['email' => $result->getData()['email']]]);
+                }
+            }
+            // Verificar se o usuario é professor e está cadastrado
+            if ($result->getData()['categoria'] == '3') {
+                if ($result->getData()['professor_id'] > 0) {
+                    return $this->redirect(['controller' => 'professores', 'action' => 'view', $result->getData()['professor_id']]);
+                } else {
+                    return $this->redirect(['controller' => 'professores', 'action' => 'add', '?' => ['email' => $result->getData()['email']]]);
+                }
+            }
+            // Verificar se o usuario é supervisor e está cadastrado
+            if ($result->getData()['categoria'] == '4') {
+                if ($result->getData()['supervisor_id'] > 0) {
+                    return $this->redirect(['controller' => 'supervisores', 'action' => 'view', $result->getData()['supervisor_id']]);
+                } else {
+                    return $this->redirect(['controller' => 'supervisores', 'action' => 'add', '?' => ['email' => $result->getData()['email']]]);
+                }
+            }
+            die();
+
+
             $target = $this->Authentication->getLoginRedirect() ?? '/';
             return $this->redirect($target);
         }

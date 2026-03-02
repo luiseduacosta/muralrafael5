@@ -73,12 +73,23 @@ class AlunosController extends AppController
      */
     public function add()
     {
+        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_session = $this->request->getAttribute('identity');
+        if ($user_session) { $user_data = $user_session->getOriginalData(); }
+
+        $email = $this->request->getQuery('email');
+
+        if ($user_data['aluno_id'] > 0) {
+            $this->Flash->warning(__('Aluno ja esta cadastrado.'));
+            return $this->redirect(['action' => 'view', $user_data['aluno_id']]);
+        }
+
         $aluno = $this->Alunos->newEmptyEntity();
         
         try {
             $this->Authorization->authorize($this->Alunos);
         } catch (ForbiddenException $error) {
-            $this->Flash->warning('Erro de authorização: aluno já está cadastrado');
+            $this->Flash->warning('Sem permissão para adicionar aluno.');
             return $this->redirect('/');
         }
         
@@ -92,11 +103,21 @@ class AlunosController extends AppController
             
             if ($this->Alunos->save($aluno)) {
                 $this->Flash->success(__('O aluno foi adicionado com sucesso.'));
-                return $this->redirect(['action' => 'index']);
+                // Update user record with aluno_id and numero
+                $user = $this->fetchTable('Users')->get($aluno->user_id);
+                $user->aluno_id = $aluno->id;
+                $user->numero = $aluno->registro;
+                $this->fetchTable('Users')->save($user);
+                // Then update user session with aluno_id and numero
+                $user_session = $this->request->getAttribute('identity');
+                $user_session->set('aluno_id', $aluno->id);
+                $user_session->set('numero', $aluno->registro);
+                // Go to aluno view page
+                return $this->redirect(['action' => 'view', $aluno->id]);
             }
             $this->Flash->error(__('Erro ao adicionar: não foi possível salvar os dados.'));
         }
-        $this->set(compact('aluno'));
+        $this->set(compact('aluno', 'email'));
     }
 
     /**
@@ -302,11 +323,15 @@ class AlunosController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
+        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_session = $this->request->getAttribute('identity');
+        if ($user_session) { $user_data = $user_session->getOriginalData(); }
+
         $id = $this->request->getQuery('id');
         $totalperiodos = $this->request->getQuery('totalperiodos');
 
-        if ($this->user && $this->user->categoria == 2) {
-            $id = $this->user->aluno_id;
+        if ($user_data && $user_data['categoria'] == 2) {
+            $id = $user_data['aluno_id'];
         }
 
         if ($id === null) {
@@ -325,7 +350,7 @@ class AlunosController extends AppController
             return $this->redirect(['action' => 'index']);
         }
 
-        $this->viewBuilder()->enableAutoLayout(false);
+        $this->viewBuilder()->setLayout('pdf/default');
         $this->viewBuilder()->setClassName('CakePdf.Pdf');
         $this->viewBuilder()->setOption('pdfConfig', [
             'orientation' => 'portrait',

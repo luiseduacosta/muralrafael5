@@ -100,6 +100,15 @@ final class AlunosTablePolicy implements BeforePolicyInterface
      */
     public function canCargahoraria(): Result
     {
-        return new Result(false, 'Erro: alunos planilha seguro policy not authorized');
+        return new Result(false, 'Erro: alunos cargahoraria policy not authorized');
     }
+
+    /**
+     * @return \Authorization\Policy\Result
+     */
+    public function canDeclaracaoperiodo(): Result
+    {
+        return new Result(true);
+    }
+
 }

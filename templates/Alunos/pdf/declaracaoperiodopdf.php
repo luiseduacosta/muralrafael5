@@ -18,20 +18,19 @@ if ($aluno->turno == 'diurno') {
     $duracaocurso = '10';
 }
 
-$this->layout = 'pdf/default';
+$this->layout = 'default';
 $this->assign('title', 'Certificado de Período');
 ?>
 
 <h1 style="text-align:center">
-    <img src="<?= $logoUfrj ?>" alt="ESS" width="200" height="50" />
-    <br />
+    <!-- Logo rendered by PDF layout -->
     Coordenação de Estágio<br />
     Declaração
 </h1>
 <br />
 <br />
 <p style="text-align:justify; line-height: 2.5;">
-    Declaramos que o/a aluno <b><?= h($aluno->nome) ?></b> 
+    Declaramos que o/a aluno/a <b><?= h($aluno->nome) ?></b> 
     inscrito(a) no CPF sob o nº <?= h($aluno->cpf) ?> 
     e no RG nº <?= h($aluno->identidade) ?> 
     expedido por <?= h($aluno->orgao) ?>, 
@@ -39,7 +38,7 @@ $this->assign('title', 'Certificado de Período');
     Universidade Federal do Rio de Janeiro com o número <?= h($aluno->registro) ?>, 
     ingressou em <?= h($aluno->ingresso) ?> no turno <?= ucfirst(h($aluno->turno)) ?>
     cursando atualmente <?= $totalperiodos ?><sup>o</sup> período.
-<p>
+</p>
 
 <p style="text-align:justify; line-height: 2.5;">
     O turno <?= ucfirst(h($aluno->turno)) ?> do curso de Serviço Social consta de <?= ($aluno->turno == 'diurno') ? '8' : '10' ?> semestres.
@@ -50,14 +49,15 @@ $this->assign('title', 'Certificado de Período');
 
 <br style='line-height: 10.0'/>
 
-<table style="width:100%">
-    <tr>
-        <td style="text-decoration: overline;">Coordenação de Estágio</td>
-    </tr>
-    <tr>
-        <td>Escola de Serviço Social</td>
-    </tr>
-    <tr>
-        <td>Universidade Federal do Rio de Janeiro</td>
-    </tr>
+
+<table style="margin-left: auto; margin-right: auto;">
+        <tr style="text-align:center">
+            <td style="text-decoration: overline;">Coordenação de Estágio</td>
+        </tr>
+        <tr style="text-align:center">
+            <td>Escola de Serviço Social</td>
+        </tr>
+        <tr style="text-align:center">
+            <td>Universidade Federal do Rio de Janeiro</td>
+        </tr>
 </table>

@@ -15,10 +15,10 @@ if ($user_session) {
 	<?php if ($user_data['categoria'] == '1' OR $user_data['categoria'] == '2'): ?>
 	<aside>
 		<div class="nav">
-			<?= $this->Html->link(__('Novo Aluno'), ['action' => 'add'], ['class' => 'button']) ?>
-			<?php if ($user_data['administrador_id']): ?>
+            <?php if ($user_data['administrador_id']): ?>
+				<?= $this->Html->link(__('Novo Aluno'), ['action' => 'add'], ['class' => 'button']) ?>
 				<?= $this->Html->link(__('Buscar Aluno'), ['action' => 'busca'], ['class' => 'button']) ?>
-			<?php endif; ?>
+            <?php endif; ?>
 		</div>
 	</aside>
     <?php endif; ?>
@@ -43,8 +43,8 @@ if ($user_session) {
                     <th><?= $this->Paginator->sort('celular') ?></th>
                     <th><?= $this->Paginator->sort('cpf') ?></th>
                     <th><?= $this->Paginator->sort('nascimento') ?></th>
-                    <th><?= $this->Paginator->sort('estagiario_count') ?></th>
-                    <th><?= $this->Paginator->sort('inscricao_count') ?></th>
+                    <th><?= $this->Paginator->sort('ingresso') ?></th>
+                    <th><?= $this->Paginator->sort('turno') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -65,8 +65,8 @@ if ($user_session) {
                     <td><?= $aluno->celular ? '(' . $aluno->codigo_celular . ') ' . h($aluno->celular) : '' ?></td>
                     <td><?= h($aluno->cpf) ?></td>
                     <td><?= h($aluno->nascimento) ?></td>
-                    <td><?= h($aluno->estagiario_count) ?></td>
-                    <td><?= h($aluno->inscricao_count) ?></td>
+                    <td><?= h($aluno->ingresso) ?></td>
+                    <td><?= h($aluno->turno) ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
