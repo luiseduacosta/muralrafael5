@@ -4,11 +4,8 @@
 
 # READ VARS
 
-echo -e "database name?"
-read database
-
-echo -e "database dump location?"
-read dump
+database="muralrafael5"
+dump="muralrafael5.sql"
 
 echo -e "username?"
 read username
@@ -31,11 +28,10 @@ echo -e "[y] unix socket [n] change password [y] remove users [y] login remote [
 read
 sudo mysql_secure_installation
 
-sudo mariadb -e "CREATE DATABASE $database;"
 sudo mariadb -e "CREATE USER IF NOT EXISTS '$username'@'%' IDENTIFIED BY '$password'"
 sudo mariadb -e "GRANT ALL PRIVILEGES ON *.* TO '$username'@'%' WITH GRANT OPTION;"
 sudo mariadb -e "FLUSH PRIVILEGES;"
-sudo mariadb $database < $dump
+sudo mariadb < $dump
 echo "mariadb database configured"
 
 # SET USERS PERMISSIONS
@@ -102,4 +98,3 @@ sudo apt -y install phpmyadmin
 sudo ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf-available/phpmyadmin.conf
 sudo ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
 echo "phpmyadmin configured"
-
