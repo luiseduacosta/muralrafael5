@@ -5,6 +5,10 @@
  */
 ?>
 
+<div class="d-flex justify-content-start">
+    <a href="<?= $this->Url->build(['action' => 'view', $aluno->id]) ?>" class="button btn-info">Voltar</a>
+</div>
+
 <div class="content">
     <?= $this->Form->create($aluno) ?>
     <fieldset>

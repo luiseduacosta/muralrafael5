@@ -94,6 +94,8 @@ class MuralestagiosController extends AppController
         
         $muralestagio = $this->Muralestagios->newEmptyEntity();
         if ($this->request->is('post')) {
+            pr($this->request->getData());
+            die();
             $muralestagio = $this->Muralestagios->patchEntity($muralestagio, $this->request->getData());
             if ($this->Muralestagios->save($muralestagio)) {
                 $this->Flash->success(__('Registro de mural de estágio feito com sucesso.'));
@@ -102,10 +104,10 @@ class MuralestagiosController extends AppController
             }
             $this->Flash->error(__('Registro de mural de estágio não foi feito. Tente novamente.'));
         }
-        $professores = $this->Muralestagios->Professores->find('list');
-        $instituicoes = $this->Muralestagios->Instituicoes->find('list');
-        $turmas = $this->Muralestagios->Turmas->find('list');
-        $turnos = $this->Muralestagios->Turnos->find('list');
+        $professores = $this->fetchTable("Professores")->find('list');
+        $instituicoes = $this->fetchTable("Instituicoes")->find('list');
+        $turmas = $this->fetchTable("Turmas")->find('list');
+        $turnos = $this->fetchTable("Turnos")->find('list');
         $this->set(compact('muralestagio', 'instituicoes', 'turmas', 'turnos', 'professores', 'periodo'));
     }
 

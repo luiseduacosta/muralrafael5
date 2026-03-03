@@ -235,17 +235,18 @@ class EstagiariosController extends AppController
                     $this->Flash->error("Estagiario já existe para este periodo.");
                     return $this->redirect(["action" => "view", $estagiarioexiste->id]);
                 }
-
+                
                 if ($this->Estagiarios->save($estagiario, $this->request->getData())) {
                     $this->Flash->success(__("Estagiario salvo com sucesso."));
                     return $this->redirect(["action" => "view", $estagiario->id]);
                 }
+                debug($estagiario->getErrors());
                 $this->Flash->error(
                     __("Ocorreu um erro ao salvar o estagiario. Por favor, tente novamente."),
                 );
             }
 
-            $alunos = $this->fetchTable("Alunos")->find("list");
+            $aluno = $this->fetchTable("Alunos")->find()->where(['id' => $id])->first();
             $instituicoes = $this->fetchTable("Instituicoes")->find("list");
             if (!empty($estagiario->instituicao_id)) {
                 $supervisores = $this->fetchTable("Supervisores")->find("list")->where(['instituicao_id' => $estagiario->instituicao_id]);
@@ -261,7 +262,7 @@ class EstagiariosController extends AppController
                 compact(
                     "periodo",
                     "estagiario",
-                    "alunos",
+                    "aluno",
                     "instituicoes",
                     "supervisores",
                     "professores",
@@ -394,6 +395,11 @@ class EstagiariosController extends AppController
         } catch (RecordNotFoundException $e) {
             $this->Flash->error(__('Aluno sem estágio.'));
             // Cadastra estágio nível 1
+            return $this->redirect(['controller' => 'Estagiarios', 'action' => 'add', '?' => ['aluno_id' => $aluno_id]]);
+        }
+
+        if (empty($estagiario)) {
+            $this->Flash->error(__('Aluno sem estágio.'));
             return $this->redirect(['controller' => 'Estagiarios', 'action' => 'add', '?' => ['aluno_id' => $aluno_id]]);
         }
 

@@ -17,6 +17,7 @@
                 <h3><?= __('Adicionar vagas de estagio') ?></h3>
                 <?php
                     echo $this->Form->control('instituicao_id', ['options' => $instituicoes, 'empty' => false, 'class' => 'form-control']);
+                    echo $this->Form->control('instituicao', ['empty' => false, 'class' => 'form-control']);
                     echo $this->Form->control('email');
                     echo $this->Form->control('convenio', ['type' => 'select', 'options' => [1 => 'Sim', 0 => 'Não'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
                     echo $this->Form->control('vagas', ['label' => 'Número de vagas', 'default' => '1']);
