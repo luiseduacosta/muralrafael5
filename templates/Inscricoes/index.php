@@ -3,8 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Inscricao[]|\Cake\Collection\CollectionInterface $inscricoes
  */
-// pr($inscricoes);
-// die();
 ?>
 <div class="inscricoes index content">
 	<aside>
@@ -33,13 +31,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($inscricoes as $inscricao): ?>
-
-    
-<?php
-//pr($inscricao);
-//die();
-?>
+                <?php foreach ($inscricoes as $inscricao): ?>    
                 <tr>
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $inscricao->id]) ?>
@@ -49,7 +41,7 @@
                     <td><?= $this->Html->link((string)$inscricao->id, ['action' => 'view', $inscricao->id]) ?></td>
                     <td><?= $inscricao->aluno ? $this->Html->link($inscricao->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $inscricao->aluno->id]) : '' ?></td>
                     <td><?= $this->Number->format($inscricao->registro) ?></td>
-					<td><?= $inscricao->muralestagio ? $this->Html->link($inscricao->muralestagio->instituicao ? $inscricao->muralestagio->instituicao->instituicao . ' (' . $inscricao->muralestagio->dataSelecao . ')' : $inscricao->muralestagio->id , ['controller' => 'Muralestagios', 'action' => 'view', $inscricao->muralestagio->id]) : $inscricao->muralestagio_id ?></td>
+                    <td><?= $this->Html->link($inscricao->muralestagio->instituicao_entidade->instituicao, ['controller' => 'Muralestagios', 'action' => 'view', $inscricao->muralestagio->id]) ?></td>
                     <td><?= h($inscricao->data) ?></td>
                     <td><?= h($inscricao->periodo) ?></td>
                     <td><?= $inscricao->timestamp ? h($inscricao->timestamp) : '' ?></td>

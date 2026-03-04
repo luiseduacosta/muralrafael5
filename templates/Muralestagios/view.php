@@ -146,9 +146,11 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
 
             <?php else: ?>
-                <?php if (date('d-m-Y') <= $muralestagio['data_inscricao']): ?>
+                <!-- if dataInscricao is empty them let the close day of application open //-->
+                <?php if (empty($muralestagio->data_inscricao)) $muralestagio->data_inscricao = new \DateTime('tomorrow'); ?>
+                <?php if (new \DateTime() <= $muralestagio->data_inscricao): ?>
                     <!--
-                    Se a inscricao e na instituição também tem que fazer inscrição no mural
+                    Se a inscricao eh na instituição também tem que fazer inscrição no mural
                     //-->
                     <?php if ((string)$muralestagio['localInscricao'] === '1'): ?>
 
@@ -162,7 +164,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
                     <tr>
                         <td colspan = 2 class="text-center">
-                            <?php echo $this->Html->link('Fazer inscrição', ['controller' => 'Inscricoes', 'action' => 'add', $muralestagio['id']], ['role' => 'button', 'class' => 'button btn-primary']); ?>
+                            <?php echo $this->Html->link('Fazer inscrição', ['controller' => 'Inscricoes', 'action' => 'add', '?' => ['mural_estagio_id' => $muralestagio['id']]], ['role' => 'button', 'class' => 'button btn-primary']); ?>
                         </td>
                     </tr>
                 <?php else: ?>

@@ -72,5 +72,8 @@ class Muralestagio extends Entity
         'datafax' => true,
         'localInscricao' => true,
         'email' => true,
+        'instituicao_rel' => true,
+        'turma' => true,
+        'professor' => true,
     ];
 }

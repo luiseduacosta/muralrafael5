@@ -68,7 +68,7 @@ class MuralestagiosController extends AppController
     public function view($id = null)
     {
         $muralestagio = $this->Muralestagios->get($id, [
-            'contain' => ['Instituicoes', 'Turmas', 'Turnos', 'Professores', 'Inscricoes' => ['Alunos']],
+            'contain' => ['Instituicoes', 'Turmas', 'Professores', 'Inscricoes' => ['Alunos']],
         ]);
         $this->Authorization->authorize($muralestagio);
         
@@ -94,8 +94,7 @@ class MuralestagiosController extends AppController
         
         $muralestagio = $this->Muralestagios->newEmptyEntity();
         if ($this->request->is('post')) {
-            pr($this->request->getData());
-            die();
+
             $muralestagio = $this->Muralestagios->patchEntity($muralestagio, $this->request->getData());
             if ($this->Muralestagios->save($muralestagio)) {
                 $this->Flash->success(__('Registro de mural de estágio feito com sucesso.'));

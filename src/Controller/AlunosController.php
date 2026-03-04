@@ -53,9 +53,8 @@ class AlunosController extends AppController
             'Inscricoes' => ['Muralestagios' => ['Instituicoes']], 
             'Users'
         ];
-
         $aluno = $this->Alunos->get($id, [ 'contain' => $contained ]);
-
+ 
         try {
             $this->Authorization->authorize($aluno);
         } catch (ForbiddenException $error) {
