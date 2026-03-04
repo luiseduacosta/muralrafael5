@@ -23,7 +23,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <?php endif; ?>
             <?= $this->Form->create($aluno) ?>
             <fieldset>
-                <h3><?= __('Adicionando Aluno') ?></h3>
+                <h3><?= __('Adicionando Aluno()a') ?></h3>
                 <?php
                     if ($user_data['administrador_id']):
                         $val = $this->request->getParam('pass') ? $this->request->getParam('pass')[0] : '';
@@ -32,22 +32,23 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         echo $this->Form->control('user_id', ['type' => 'number', 'value' => $user_session->get('id'), 'hidden' => true, 'label' => false ]); 
                     endif;
                     echo $this->Form->control('nome');
-                    echo $this->Form->control('registro');
-                    echo $this->Form->control('codigo_telefone');
-                    echo $this->Form->control('telefone');
-                    echo $this->Form->control('codigo_celular');
-                    echo $this->Form->control('celular');
-                    echo $this->Form->control('email', ['type' => 'email', 'value' => $email, 'readonly' => true]);
-                    echo $this->Form->control('cpf');
-                    echo $this->Form->control('identidade');
-                    echo $this->Form->control('orgao');
-                    echo $this->Form->control('nascimento', ['empty' => true]);
-                    echo $this->Form->control('ingresso', ['label' => 'Período de Ingresso (ex: 2022.1)', 'empty' => false]);
+                    echo $this->Form->control('nomesocial');
+                    echo $this->Form->control('ingresso', ['label' => 'Período de Ingresso (ex: 2022-1)', 'placeholder' => '2022-1']);
                     echo $this->Form->control('turno', ['options' => ['diurno' => 'Diurno', 'noturno' => 'Noturno', 'indefinido' => 'Indefinido']]);
-                    echo $this->Form->control('endereco');
-                    echo $this->Form->control('cep');
-                    echo $this->Form->control('municipio');
-                    echo $this->Form->control('bairro');
+                    echo $this->Form->control('registro', ['label' => 'Número de Registro - DRE']);
+                    echo $this->Form->control('codigo_telefone', ['label' => 'Código do Telefone']);
+                    echo $this->Form->control('telefone', ['placeholder' => '(xx) xxxxx-xxxx']);
+                    echo $this->Form->control('codigo_celular', ['label' => 'Código do Celular']);
+                    echo $this->Form->control('celular', ['placeholder' => '(xx) xxxxx-xxxx']);
+                    echo $this->Form->control('email', ['type' => 'email', 'value' => $email, 'readonly' => true]);
+                    echo $this->Form->control('cpf', ['placeholder' => 'xxx.xxx.xxx-xx']);
+                    echo $this->Form->control('identidade', ['label' => 'Registro da Identidade']);
+                    echo $this->Form->control('orgao', ['label' => 'Órgão Emissor da Identidade']);
+                    echo $this->Form->control('nascimento', ['placeholder' => 'dd/mm/aaaa']);
+                    echo $this->Form->control('cep', ['placeholder' => 'xxxxx-xxx']);
+                    echo $this->Form->control('endereco', ['placeholder' => 'Rua, Avenida, etc.']);
+                    echo $this->Form->control('municipio', ['placeholder' => 'Município']);
+                    echo $this->Form->control('bairro', ['placeholder' => 'Bairro']);
                     echo $this->Form->control('observacoes');
                 ?>
             </fieldset>

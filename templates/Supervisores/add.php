@@ -15,12 +15,12 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <div class="supervisores form content">
             <aside>
                 <div class="nav">
-                    <?= $this->Html->link(__('Listar Supervisores'), ['action' => 'index'], ['class' => 'button']) ?>
+                    <?= $this->Html->link(__('Listar Supervisores(as)'), ['action' => 'index'], ['class' => 'button']) ?>
                 </div>
             </aside>
             <?= $this->Form->create($supervisor) ?>
             <fieldset>
-                <h3><?= __('Adicionando Supervisor') ?></h3>
+                <h3><?= __('Adicionando Supervisor(a)') ?></h3>
                 <?php
                     if ($user_data['administrador_id']):
                         $val = $this->request->getParam('pass') ? $this->request->getParam('pass')[0] : '';
@@ -29,26 +29,26 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         echo $this->Form->control('user_id', ['type' => 'number', 'value' => $user_session->get('id'), 'hidden' => true ]); 
                     endif;
                     echo $this->Form->control('nome');
-                    echo $this->Form->control('cpf');
+                    echo $this->Form->control('cpf', ['placeholder' => '000.000.000-00', 'label' => 'CPF']);
                     echo $this->Form->control('endereco');
                     echo $this->Form->control('bairro');
                     echo $this->Form->control('municipio');
-                    echo $this->Form->control('cep');
-                    echo $this->Form->control('codigo_tel');
-                    echo $this->Form->control('telefone');
-                    echo $this->Form->control('codigo_cel');
-                    echo $this->Form->control('celular');
-                    echo $this->Form->control('email');
-                    echo $this->Form->control('escola');
+                    echo $this->Form->control('cep', ['placeholder' => '00000-000', 'label' => 'CEP']);
+                    echo $this->Form->control('codigo_tel', ['label' => 'DDD']);
+                    echo $this->Form->control('telefone', ['placeholder' => '(00)0000-0000', 'label' => 'Telefone']);
+                    echo $this->Form->control('codigo_cel', ['label' => 'DDD']);
+                    echo $this->Form->control('celular', ['placeholder' => '(00)0000-0000', 'label' => 'Celular']);
+                    echo $this->Form->control('email', ['placeholder' => 'email@example.com']);
+                    echo $this->Form->control('escola', ['label' => 'Instituição de Ensino']);
                     echo $this->Form->control('ano_formatura');
-                    echo $this->Form->control('cress');
-                    echo $this->Form->control('regiao');
+                    echo $this->Form->control('cress', ['label' => 'CRESS']);
+                    echo $this->Form->control('regiao', ['label' => 'Região', 'default' => '7ª']);
                     echo $this->Form->control('outros_estudos');
                     echo $this->Form->control('area_curso');
                     echo $this->Form->control('ano_curso');
-                    echo $this->Form->control('cargo');
-                    echo $this->Form->control('num_inscricao');
-                    echo $this->Form->control('curso_turma');
+                    echo $this->Form->control('cargo', ['label' => 'Cargo na instituição']);
+                    echo $this->Form->control('num_inscricao', ['label' => 'Número de Inscrição no curso de supervisores']);
+                    echo $this->Form->control('curso_turma', ['label' => 'Turma de Curso de Supervisores']);
                     echo $this->Form->control('observacoes');
                     echo $this->Form->control('instituicoes._ids', ['options' => $instituicoes]);
                 ?>
