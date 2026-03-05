@@ -9,7 +9,7 @@
 <?php
 
 $nivel = $estagiario->nivel;
-if ($nivel > 4) {
+if ($nivel == 9) {
     $nivel = "estágio extra-curricular";
 }
 

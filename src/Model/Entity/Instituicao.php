@@ -72,5 +72,10 @@ class Instituicao extends Entity
         'observacoes' => true,
         'areainstituicoes_id' => true,
         'area' => true,
+        'area_rel' => true,
+        'estagiarios' => true,
+        'muralestagios' => true,
+        'visitas' => true,
+        'supervisores' => true,
     ];
 }

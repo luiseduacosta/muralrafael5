@@ -71,6 +71,18 @@ if ($user_session)
             </menu>
         </li>
         <?php endif; ?>
+
+        <?php if ($user_data['categoria'] == '2') { ?>
+                <li><?php echo $this->Html->link("Meus dados", ['controller' => 'Alunos', 'action' => 'view', $user_data['aluno_id']]); ?></li>
+        <?php } ?>
+
+        <?php if ($user_data['categoria'] == '3') { ?>
+                <li><?php echo $this->Html->link("Meus dados", ['controller' => 'Professores', 'action' => 'view', $user_data['professor_id']]); ?></li>
+        <?php } ?>
+
+        <?php if ($user_data['categoria'] == '4') { ?>
+                <li><?php echo $this->Html->link("Meus dados", ['controller' => 'Supervisores', 'action' => 'view', $user_data['supervisor_id']]); ?></li>
+        <?php } ?>
         
         <li><?php echo $this->Html->link('Grupo Google', 'https://groups.google.com/forum/#!forum/estagio_ess'); ?></li>
         

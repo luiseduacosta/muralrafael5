@@ -70,7 +70,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             </div>
             <?php endif; ?>
             
-            <?php if ($user->categoria == '2') : ?>
+            <?php if (($user->categoria == '2' && $user_data['aluno_id'] == $user->id) || ($user_data['categoria'] == '1' )) : ?>
             <div class="related">
                 <h4><?= __('Aluno') ?></h4>
                 <div class="table_wrap">
@@ -90,7 +90,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'alunos', 'action' => 'view', $user->aluno->id]) ?>
                                 <?= $this->Html->link(__('Editar'), ['controller' => 'alunos', 'action' => 'edit', $user->aluno->id]) ?>
-                                <?= $this->Form->postLink(__('Deletar'), ['controller' => 'alunos', 'action' => 'delete', $user->aluno->id], ['confirm' => __('Are you sure you want to delete aluno_{0}?', $user->aluno->id)]) ?>
+                                <?php if ($user_data['categoria'] == '1') : ?>
+                                    <?= $this->Form->postLink(__('Excluir'), ['controller' => 'alunos', 'action' => 'delete', $user->aluno->id], ['confirm' => __('Are you sure you want to delete aluno_{0}?', $user->aluno->id)]) ?>
+                                <?php endif; ?>
                             </td>
                             <td><?= $this->Html->link((string)$user->aluno->id, ['controller' => 'alunos', 'action' => 'view', $user->aluno->id]) ?></td>
                             <td><?= h($user->aluno->nome) ?></td>
@@ -104,7 +106,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     </table>
                 </div>
             </div>
-            <?php else: ?>
+            <?php elseif ($user->categoria == '1') : ?>
                 <p><?= $this->Html->link('Adicionar aluno', ['controller' => 'alunos', 'action' => 'add'], ['class' => 'button btn-info']) ?></p>
             <?php endif; ?>
 
@@ -138,11 +140,10 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     </table>
                 </div>
             </div>
-            <?php else: ?>
+            <?php elseif ($user->categoria == '1') : ?>
                 <p><?= $this->Html->link('Adicionar professor', ['controller' => 'professores', 'action' => 'add'], ['class' => 'button btn-info']) ?></p>
             <?php endif; ?>
             
-
             <?php if ($user->categoria == '4') : ?>
             <div class="related">
                 <h4><?= __('Supervisor') ?></h4>
@@ -171,7 +172,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     </table>
                 </div>
             </div>
-            <?php else: ?>
+            <?php elseif ($user->categoria == '1') : ?>
                 <p><?= $this->Html->link('Adicionar supervisor', ['controller' => 'supervisores', 'action' => 'add'], ['class' => 'button btn-info']) ?></p>
             <?php endif; ?>
             

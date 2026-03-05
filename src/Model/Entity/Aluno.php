@@ -70,5 +70,8 @@ class Aluno extends Entity
         'estagiario_count' => true,
         'inscricao_count' => true,
         'user_id' => true,
+        'user' => true,
+        'estagiarios' => true,
+        'inscricoes' => true,
     ];
 }

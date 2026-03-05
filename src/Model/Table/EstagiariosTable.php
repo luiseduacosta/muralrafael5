@@ -64,7 +64,7 @@ class EstagiariosTable extends Table
         ]);
         $this->belongsTo('Turnos', [
             'foreignKey' => 'turno_id',
-            'propertyName' => 'turno_entidade',
+            'propertyName' => 'turno_entidade', // para evitar conflito com o campo turno
         ]);
         $this->belongsTo('Complementos', [
             'foreignKey' => 'complemento_id',
@@ -98,7 +98,7 @@ class EstagiariosTable extends Table
             ->notEmptyString('nivel');
 
         $validator
-            ->notEmptyString('tc');
+            ->allowEmptyString('tc');
 
         $validator
             ->date('tc_solicitacao')

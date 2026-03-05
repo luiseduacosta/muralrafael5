@@ -48,7 +48,7 @@ class InstituicoesTable extends Table
 
         $this->belongsTo('Areas', [
             'foreignKey' => 'area_id',
-            'propertyName' => 'area_instituicao',
+            'propertyName' => 'area_rel', // para evitar conflito com o campo area
         ]);
 
         $this->hasMany('Inscricoes', [
@@ -171,8 +171,8 @@ class InstituicoesTable extends Table
             ->allowEmptyString('observacoes');
 
         $validator
-            ->integer('areainstituicoes_id')
-            ->allowEmptyString('areainstituicoes_id');
+            ->integer('area_id')
+            ->allowEmptyString('area_id');
 
         $validator
             ->scalar('area')

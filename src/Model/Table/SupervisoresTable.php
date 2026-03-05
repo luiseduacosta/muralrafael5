@@ -50,10 +50,6 @@ class SupervisoresTable extends Table
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
         ]);
-        /*
-        $this->hasOne('Users', [
-            'foreignKey' => 'supervisor_id',
-        ]);  */
         $this->belongsToMany('Instituicoes', [
             'foreignKey' => 'supervisor_id',
             'targetForeignKey' => 'instituicao_id',
@@ -130,20 +126,19 @@ class SupervisoresTable extends Table
         $validator
             ->scalar('escola')
             ->maxLength('escola', 70)
-            ->requirePresence('escola', 'create')
-            ->notEmptyString('escola');
+            ->allowEmptyString('escola');
 
         $validator
-            ->scalar('ano_formatura')
-            ->maxLength('ano_formatura', 4)
-            ->requirePresence('ano_formatura', 'create')
-            ->notEmptyString('ano_formatura');
+            ->integer('ano_formatura')
+            ->allowEmptyString('ano_formatura');
 
         $validator
             ->integer('cress')
-            ->allowEmptyString('cress');
+            ->notEmptyString('cress');
 
         $validator
+            ->scalar('regiao')
+            ->maxLength('regiao', 2)
             ->notEmptyString('regiao');
 
         $validator
@@ -157,8 +152,7 @@ class SupervisoresTable extends Table
             ->allowEmptyString('area_curso');
 
         $validator
-            ->scalar('ano_curso')
-            ->maxLength('ano_curso', 4)
+            ->integer('ano_curso')
             ->allowEmptyString('ano_curso');
 
         $validator

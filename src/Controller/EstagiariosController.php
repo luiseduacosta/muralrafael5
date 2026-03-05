@@ -232,15 +232,14 @@ class EstagiariosController extends AppController
                     ->first();
 
                 if ($estagiarioexiste) {
-                    $this->Flash->error("Estagiario já existe para este periodo.");
+                    $this->Flash->warning("Estagiario já existe para este periodo.");
                     return $this->redirect(["action" => "view", $estagiarioexiste->id]);
                 }
-                
-                if ($this->Estagiarios->save($estagiario, $this->request->getData())) {
+                $estagiario = $this->Estagiarios->patchEntity($estagiario, $this->request->getData());
+                if ($this->Estagiarios->save($estagiario)) {
                     $this->Flash->success(__("Estagiario salvo com sucesso."));
                     return $this->redirect(["action" => "view", $estagiario->id]);
                 }
-                debug($estagiario->getErrors());
                 $this->Flash->error(
                     __("Ocorreu um erro ao salvar o estagiario. Por favor, tente novamente."),
                 );
@@ -248,8 +247,11 @@ class EstagiariosController extends AppController
 
             $aluno = $this->fetchTable("Alunos")->find()->where(['id' => $id])->first();
             $instituicoes = $this->fetchTable("Instituicoes")->find("list");
+
             if (!empty($estagiario->instituicao_id)) {
-                $supervisores = $this->fetchTable("Supervisores")->find("list")->where(['instituicao_id' => $estagiario->instituicao_id]);
+                $supervisores = $this->fetchTable("Supervisores")->find("list")->matching('Instituicoes', function ($q) use ($estagiario) {
+                    return $q->where(['Instituicoes.id' => $estagiario->instituicao_id]);
+                });
             } else {
                 $supervisores = $this->fetchTable("Supervisores")->find("list");
             }
@@ -308,10 +310,13 @@ class EstagiariosController extends AppController
         $alunos = $this->Estagiarios->Alunos->find("list");
         $instituicoes = $this->Estagiarios->Instituicoes->find("list");
         if (!empty($estagiario->instituicao_id)) {
-            $supervisores = $this->Estagiarios->Supervisores->find("list")->where(['instituicao_id' => $estagiario->instituicao_id]);
+            $supervisores = $this->Estagiarios->Supervisores->find("list")->matching('Instituicoes', function ($q) use ($estagiario) {
+                return $q->where(['Instituicoes.id' => $estagiario->instituicao_id]);
+            });
         } else {
             $supervisores = $this->Estagiarios->Supervisores->find("list");
         }
+
         $professores = $this->Estagiarios->Professores->find("list");
         $turmas = $this->Estagiarios->Turmas->find("list");
         $turnos = $this->Estagiarios->Turnos->find("list");

@@ -115,7 +115,7 @@ class AlunosTable extends Table
 
         $validator
             ->scalar('cpf')
-            ->maxLength('cpf', 12)
+            ->maxLength('cpf', 14)
             ->allowEmptyString('cpf');
 
         $validator

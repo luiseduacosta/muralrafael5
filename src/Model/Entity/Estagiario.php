@@ -72,5 +72,13 @@ class Estagiario extends Entity
         'benealimentacao' => true,
         'benebolsa' => true,
         'complemento_id' => true,
+        'turno_entidade' => true,
+        'aluno' => true,
+        'instituicao' => true,
+        'supervisor' => true,
+        'professor' => true,
+        'turma' => true,
+        'turno_rel' => true,
+        'complemento' => true,
     ];
 }

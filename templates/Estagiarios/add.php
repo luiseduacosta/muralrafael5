@@ -20,8 +20,8 @@
                     echo $this->Form->control('aluno_nome', ['label' => 'Aluno', 'value' => $aluno->nome, 'readonly' => true]);
                     echo $this->Form->control('registro', ['value' => $aluno->registro, 'readonly']);
                     echo $this->Form->control('turno', ['options' => ['d' => 'Diurno', 'n' => 'Noturno', 'i' => 'Indeterminado'], 'value' => $aluno->turno, 'readonly']);
-                    echo $this->Form->control('nivel', ['value' => $estagiario->nivel ? $estagiario->nivel + 1 : 1]);                    
-                    echo $this->Form->control('tc', ['required' => false, 'empty' => true, 'default' => null]);
+                    echo $this->Form->control('nivel', ['value' => $estagiario->nivel, 'readonly' => true, 'required' => true]);
+                    echo $this->Form->control('tc', ['label' => 'Termo de compromisso assinado S/N', 'required' => false, 'default' => null]);
                     echo $this->Form->control('tc_solicitacao', ['label' => 'Data de Solicitação', 'value' => \Cake\I18n\DateTime::now()->format('Y-m-d'), 'readonly' => true]);
                     echo $this->Form->control('instituicao_id', ['options' => $instituicoes, 'class' => 'form-control']);
                     echo $this->Form->control('supervisor_id', ['options' => $supervisores, 'empty' => true, 'class' => 'form-control']);
@@ -29,7 +29,7 @@
                     echo $this->Form->control('periodo', ['value' => $periodo, 'readonly' => true]);
                     echo $this->Form->control('nota', ['type' => 'hidden']); // Aluno can't fill this field
                     echo $this->Form->control('ch', ['type' => 'hidden']); // Aluno can't fill this field
-                    echo $this->Form->control('complemento_id', ['type' => 'hidden']); // Used only during the Covid-19
+                    echo $this->Form->control('complemento_id', ['type' => 'hidden', 'default' => null]); // Used only during the Covid-19
                     echo $this->Form->control('ajuste2020', ['options' => ['1' => 'Sim (3 semestres)', '0' => 'Nao (4 semestres)'], 'value' => $aluno->ajuste2020, 'readonly']);
                     echo $this->Form->control('benetransporte', ['label' => 'Transporte', 'required' => false, 'empty' => true, 'default' => null]);
                     echo $this->Form->control('benealimentacao', ['label' => 'Alimentação', 'required' => false, 'empty' => true, 'default' => null]);
