@@ -2,8 +2,6 @@
 /**
  * @var \App\View\AppView $this
  */
-
-//pr($carga_horaria_total); 
 ?>
 <div class="alunos cargahoraria content">
     <h3><?= __('Carga Horária') ?></h3>
@@ -34,7 +32,6 @@
             </thead>
 
             <?php foreach ($alunos as $aluno): ?>
-            <?php //pr($aluno['estagiarios']); ?>
             <?php $carga_estagio = 0; ?>
                 <tr>
                     <td><?php echo $this->Html->link($aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $aluno->id ]); ?></td>

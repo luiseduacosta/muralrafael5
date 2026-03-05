@@ -22,9 +22,7 @@ if ($user_session) {
 		</div>
 	</aside>
     <?php endif; ?>
-	
-    <h3><?= __('Lista de Alunos') ?></h3>
-    
+    <h3><?= __('Lista de Alunos(as)') ?></h3>
     <div class="paginator">
         <?= $this->element('paginator'); ?>
     </div>
@@ -54,7 +52,7 @@ if ($user_session) {
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $aluno->id]) ?>
                         <?= $this->Html->link(__('Editar'), ['action' => 'edit', $aluno->id]) ?>
-                        <?= $this->Form->postLink(__('Deletar'), ['action' => 'delete', $aluno->id], ['confirm' => __('Are you sure you want to delete {0}?', $aluno->nome)]) ?>
+                        <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $aluno->id], ['confirm' => __('Are you sure you want to delete {0}?', $aluno->nome)]) ?>
                     </td>
                     <td><?= $this->Html->link((string)$aluno->id, ['action' => 'view', $aluno->id]) ?></td>
                     <?php endif; ?>

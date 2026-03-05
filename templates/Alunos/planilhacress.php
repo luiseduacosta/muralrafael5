@@ -1,23 +1,19 @@
 <?php
-// pr($cress);
-// pr($periodos);
-// pr($periodoselecionado);
-// die();
+declare(strict_types=1);
 ?>
 
-<script>
+<script type="text/javascript">
     $(document).ready(function () {
         var base_url = "<?= $this->Html->Url->build(['controller' => 'alunos', 'action' => 'planilhacress']); ?>";
         var select = $("#periodo");
 		var pathname = location.pathname.split('/').filter(Boolean);
-		if (pathname[pathname.length - 2] == 'planilhaseguro') select.val(pathname[pathname.length - 1]);
+		if (pathname[pathname.length - 2] == 'planilhacress') select.val(pathname[pathname.length - 1]);
         
         select.on('change', function () {
             var periodo = $(this).val();
             window.location = base_url + "/" + periodo;
         })
     });
-
 </script>
 
 <div class='alunos planilhacress content'>
@@ -58,7 +54,6 @@
                 </tr>
             </thead>
             <?php foreach ($cress as $c_cress): ?>
-                <?php // pr($c_cress); ?>
                 <tr>
                     <td><?php echo isset($c_cress->aluno->nome) ? $this->Html->link($c_cress->aluno->nome, '/alunos/view/' . $c_cress->aluno->id) : 'Sem informação'; ?></td>
                     <td><?php echo isset($c_cress->instituicao->instituicao) ? $this->Html->link($c_cress->instituicao->instituicao, '/instituicoes/view/' . $c_cress->instituicao->id) : 'Sem informação'; ?></td>

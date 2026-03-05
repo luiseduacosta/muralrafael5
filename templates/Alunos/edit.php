@@ -16,16 +16,18 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <aside>
                 <div class="nav">
                     <?= $this->Html->link(__('Listar Alunos'), ['action' => 'index'], ['class' => 'button']) ?>
+                    <?php if ($user_data['administrador_id']): ?>
                     <?= $this->Form->postLink(
-                        __('Deletar'),
+                        __('Excluir Aluno(a)'),
                         ['action' => 'delete', $aluno->id],
                         ['confirm' => __('Are you sure you want to delete {0}?', $aluno->nome), 'class' => 'button']
                     ) ?>
+                    <?php endif; ?>
                 </div>
             </aside>
             <?= $this->Form->create($aluno) ?>
             <fieldset>
-                <h3><?= __('Editando aluno_' . $aluno->id) ?></h3>
+                <h3><?= __('Editando aluno(a) ' . $aluno->id) ?></h3>
                 <?php
                     if ($user_data['administrador_id']):
                        echo $this->Form->control('user_id', ['type' => 'number']); 
@@ -40,7 +42,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     echo $this->Form->control('identidade', ['label' => 'Identidade - RG']);
                     echo $this->Form->control('orgao', ['label' => 'Orgão expedidor']);
                     echo $this->Form->control('nascimento', ['empty' => true]);
-                    echo $this->Form->control('ingresso', ['label' => 'Período de Ingresso (ex: 2022.1)', 'empty' => false]);
+                    echo $this->Form->control('ingresso', ['label' => 'Período de Ingresso (ex: 2022.1)']);
                     echo $this->Form->control('turno', ['options' => ['diurno' => 'Diurno', 'noturno' => 'Noturno', 'indefinido' => 'Indefinido']]);
                     echo $this->Form->control('endereco');
                     echo $this->Form->control('cep', ['label' => 'CEP']);

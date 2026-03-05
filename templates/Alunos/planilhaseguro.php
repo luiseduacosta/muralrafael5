@@ -1,11 +1,8 @@
 <?php 
-// pr($t_seguro); 
-// pr($periodos); 
-// pr($periodoselecionado);
-// die();
+declare(strict_types=1);
 ?>
 
-<script>
+<script type="text/javascript">
     $(document).ready(function () {
         var base_url = "<?= $this->Html->Url->build(['controller' => 'Alunos', 'action' => 'planilhaseguro']); ?>";
         var select = $("#periodo");
@@ -20,7 +17,6 @@
 </script>
 
 <div class="alunos planilhaseguro content">
-	
 	<div class="row justify-content-center">
 	    <div class="col-auto">
             <?= $this->Form->create(null, ['url' => 'index'], ['class' => 'form-inline']); ?>
