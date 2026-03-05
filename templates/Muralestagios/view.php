@@ -17,7 +17,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 		    <aside>
 		        <div class="nav">
 					<?= $this->Html->link(__('Mural estagios'), ['action' => 'index'], ['class' => 'button']) ?>
-                    <?php if ($user_data['administrador_id']): ?>
+                    <?php if ($user_data->categoria == '1'): ?>
 			            <?= $this->Html->link(__('Editar estagio'), ['action' => 'edit', $muralestagio->id], ['class' => 'button']) ?>
 			            <?= $this->Form->postLink(__('Deletar estagio'), ['action' => 'delete', $muralestagio->id], ['confirm' => __('Are you sure you want to delete # {0}?', $muralestagio->id), 'class' => 'button']) ?>
 			            <?= $this->Html->link(__('Novo estagio'), ['action' => 'add'], ['class' => 'button']) ?>
@@ -31,11 +31,11 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <td><?= h($muralestagio->id) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Instituicao') ?></th>
+                    <th><?= __('Instituição') ?></th>
                     <td><?= $muralestagio->instituicao_entidade ? $this->Html->link($muralestagio->instituicao_entidade->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $muralestagio->instituicao_entidade->id]) : '' ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Convenio') ?></th>
+                    <th><?= __('Convênio') ?></th>
                     <td>
 						<?= $muralestagio->convenio ? 'Sim' : 'Não'; ?>
 					</td>
@@ -67,7 +67,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 					</td>
                 </tr>
                 <tr>
-                    <th><?= __('Carga Horaria') ?></th>
+                    <th><?= __('Carga Horária') ?></th>
                     <td><?= $this->Number->format($muralestagio->carga_horaria) ?></td>
                 </tr>
                 <tr>
@@ -87,27 +87,27 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <td><?= $muralestagio->professor ? $this->Html->link($muralestagio->professor->nome, ['controller' => 'Professores', 'action' => 'view', $muralestagio->professor->id]) : '' ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Local Inscricao') ?></th>
+                    <th><?= __('Local Inscrição') ?></th>
                     <td><?= h($muralestagio->local_inscricao) ? "Inscrição somente no mural da Coordenação de Estágio da ESS" : "Inscrição na Instituição e no mural da Coordenação de Estágio da ESS" ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Data Inscricao') ?></th>
+                    <th><?= __('Data de encerramento das inscrições') ?></th>
                     <td><?= h($muralestagio->data_inscricao) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Local Selecao') ?></th>
+                    <th><?= __('Local da Seleção') ?></th>
                     <td><?= h($muralestagio->local_selecao) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Data Selecao') ?></th>
+                    <th><?= __('Data da Seleção') ?></th>
                     <td><?= h($muralestagio->data_selecao) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Horario Selecao') ?></th>
+                    <th><?= __('Horário da Seleção') ?></th>
                     <td><?= h($muralestagio->horario_selecao) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Forma Selecao') ?></th>
+                    <th><?= __('Forma de Seleção') ?></th>
                     <td>
 						<?php
 						$forma_selecao = '';
@@ -131,21 +131,19 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
             </table>
             <div class="text">
-                <strong><?= __('Outras') ?></strong>
+                <strong><?= __('Outras informações') ?></strong>
                 <blockquote>
                     <?= $this->Text->autoParagraph($muralestagio->outras); ?>
                 </blockquote>
             </div>
 
-			<?php if ($user_data['administrador_id']): ?>
-
+			<?php if ($user_data->categoria == '1'): ?>
                 <tr>
                     <td colspan = '2' class="text-center">
-                        <?php echo $this->Html->link('Fazer inscrição', ['controller' => 'Inscricoes', 'action' => 'add', '?' => ['mural_estagio_id' => $muralestagio['id']]], ['role' => 'button', 'class' => 'btn btn-primary']); ?>
+                        <?php echo $this->Html->link('Admin inscrição', ['controller' => 'Inscricoes', 'action' => 'add', '?' => ['muralestagio_id' => $muralestagio->id]], ['role' => 'button', 'class' => ' button btn-primary']); ?>
                     </td>
                 </tr>
-
-            <?php else: ?>
+            <?php elseif ($user_data->categoria == '2'): ?>
                 <!-- if dataInscricao is empty them let the close day of application open //-->
                 <?php if (empty($muralestagio->data_inscricao)) $muralestagio->data_inscricao = new \DateTime('tomorrow'); ?>
                 <?php if (new \DateTime() <= $muralestagio->data_inscricao): ?>
@@ -164,21 +162,20 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
                     <tr>
                         <td colspan = 2 class="text-center">
-                            <?php echo $this->Html->link('Fazer inscrição', ['controller' => 'Inscricoes', 'action' => 'add', '?' => ['mural_estagio_id' => $muralestagio['id']]], ['role' => 'button', 'class' => 'button btn-primary']); ?>
+                            <?php echo $this->Html->link('Fazer inscrição', ['controller' => 'Inscricoes', 'action' => 'add', '?' => ['muralestagio_id' => $muralestagio->id]], ['role' => 'button', 'class' => 'button btn-primary']); ?>
                         </td>
                     </tr>
                 <?php else: ?>
                     <tr>
                         <td colspan = 2>
-                            <p class="text-center text-danger">Inscrições encerradas!</p>
+                            <button class="button btn-danger">Inscrições encerradas!</button>
                         </td>
                     </tr>
                 <?php endif; ?>
 
             <?php endif; ?>
 
-
-            <?php if ($user_data['administrador_id'] || $user_data['professor_id'] || $user_data['supervisor_id']): ?>
+            <?php if ($user_data->administrador_id || $user_data->professor_id || $user_data->supervisor_id): ?>
 	            <?php if (!empty($muralestagio->inscricoes)) : ?>
 	            <div class="related">
 	                <h4><?= __('Inscrições') ?></h4>

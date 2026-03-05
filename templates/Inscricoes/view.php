@@ -3,16 +3,24 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Inscricao $inscricao
  */
+$user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+$user_session = $this->request->getAttribute('identity');
+if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
 <div>
     <div class="column-responsive column-80">
         <div class="inscricoes view content">
             <aside>
                 <div class="nav">
-                    <?= $this->Html->link(__('Listar Inscricoes'), ['action' => 'index'], ['class' => 'button']) ?>
-                    <?= $this->Html->link(__('Editar Inscricao'), ['action' => 'edit', $inscricao->id], ['class' => 'button']) ?>
-                    <?= $this->Form->postLink(__('Deletar Inscricao'), ['action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete inscricao_{0}?', $inscricao->id), 'class' => 'button']) ?>
-                    <?= $this->Html->link(__('Nova Inscricao'), ['action' => 'add'], ['class' => 'button']) ?>
+                    <?php if ($user_data->categoria == '2' && ($user_data->aluno_id == $inscricao->aluno_id)): ?>
+                        <?= $this->Html->link(__('Listar Inscricões'), ['controller' => 'Alunos', 'action' => 'view', $user_data->aluno_id], ['class' => 'button btn-secondary']) ?>
+                        <?= $this->Html->link(__('Editar Inscrição'), ['action' => 'edit', $inscricao->id], ['class' => 'button']) ?>
+                        <?= $this->Form->postLink(__('Excluir Inscrição'), ['action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete inscricao_{0}?', $inscricao->id), 'class' => 'button']) ?>
+                    <?php elseif ($user_data->categoria == '1'): ?>
+                        <?= $this->Html->link(__('Listar Inscricões'), ['controller' => 'Muralestagios', 'action' => 'view', $inscricao->muralestagio_id], ['class' => 'button btn-secondary']) ?>
+                        <?= $this->Html->link(__('Editar Inscrição'), ['action' => 'edit', $inscricao->id], ['class' => 'button']) ?>
+                        <?= $this->Form->postLink(__('Excluir Inscrição'), ['action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete inscricao_{0}?', $inscricao->id), 'class' => 'button']) ?>
+                    <?php endif ?>
                 </div>
             </aside>
             <h3>Inscricao_<?= h($inscricao->id) ?></h3>

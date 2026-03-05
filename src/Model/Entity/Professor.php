@@ -102,6 +102,7 @@ class Professor extends Entity
         'email' => true,
         'categoria' => true,
         'user_id' => true,
+        'user' => true,
         'estagiarios' => true,
         'muralestagios' => true,
     ];

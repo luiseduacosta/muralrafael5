@@ -22,11 +22,11 @@
                 <h3><?= __('Editando estagio_' . $muralestagio->id) ?></h3>
                 <?php
                     echo $this->Form->control('instituicao');
-                    echo $this->Form->control('convenio');
+                    echo $this->Form->control('convenio', ['options' => ['1' => 'Sim', '0' => 'Não'], 'class' => 'form-control']);
                     echo $this->Form->control('email');
                     echo $this->Form->control('vagas');
                     echo $this->Form->control('beneficios');
-                    echo $this->Form->control('fim_de_semana');
+                    echo $this->Form->control('fim_de_semana', ['options' => ['1' => 'Sim', '0' => 'Não', '2' => 'Parcialmente'], 'class' => 'form-control']);
                     echo $this->Form->control('carga_horaria');
                     echo $this->Form->control('requisitos', ['class' => 'formCode hidden']);
                     echo $this->element('input_div', ['name' => 'requisitos', 'content' => $muralestagio->requisitos ]);
@@ -45,7 +45,7 @@
                     echo $this->element('input_div', ['name' => 'outras', 'content' => $muralestagio->outras ]);
                 ?>
             </fieldset>
-            <?= $this->Form->button(__('Editar'), ['class' => 'button']) ?>
+            <?= $this->Form->button(__('Salvar'), ['class' => 'button']) ?>
             <?= $this->Form->end() ?>
         </div>
     </div>

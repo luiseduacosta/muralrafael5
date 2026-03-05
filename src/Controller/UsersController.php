@@ -212,6 +212,7 @@ class UsersController extends AppController
         // If the user is logged in send them away.
         if ($result->isValid()) {
             $this->Flash->success(__('Usuario logado.'));
+            pr($result);
             // Verificar se o usuario é administrador
             if ($result->getData()['categoria'] == '1') {
                 return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);

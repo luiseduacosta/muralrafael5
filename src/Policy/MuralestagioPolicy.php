@@ -30,7 +30,7 @@ final class MuralestagioPolicy implements BeforePolicyInterface
                 )
             ) {
                 return true;
-            }
+                }
         }
 
         return null;
@@ -43,7 +43,7 @@ final class MuralestagioPolicy implements BeforePolicyInterface
      */
     public function canView(IdentityInterface $user, Muralestagio $muralestagio): Result
     {
-        return new Result(true);
+        return new Result(false);
     }
 
     /**

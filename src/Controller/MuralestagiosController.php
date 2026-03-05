@@ -21,7 +21,7 @@ class MuralestagiosController extends AppController
     {
         parent::beforeFilter($event);
     
-        $this->Authentication->allowUnauthenticated(['index', 'view']);
+        $this->Authentication->allowUnauthenticated(['index']);
     }
 
     /**
@@ -67,11 +67,17 @@ class MuralestagiosController extends AppController
      */
     public function view($id = null)
     {
+        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_session = $this->request->getAttribute('identity');
+        if ($user_session) { $user_data = $user_session->getOriginalData(); }
+        
         $muralestagio = $this->Muralestagios->get($id, [
             'contain' => ['Instituicoes', 'Turmas', 'Professores', 'Inscricoes' => ['Alunos']],
         ]);
-        $this->Authorization->authorize($muralestagio);
-        
+        if (empty($user_session)) {
+            $this->Flash->error('Authorization error: User not authenticated.');
+             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
+        } 
         $this->set(compact('muralestagio'));
     }
 
@@ -86,7 +92,6 @@ class MuralestagiosController extends AppController
             $this->Authorization->authorize($this->Muralestagios);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
-
             return $this->redirect('/');
         }
 
@@ -138,9 +143,9 @@ class MuralestagiosController extends AppController
             }
             $this->Flash->error(__('The muralestagio could not be saved. Please, try again.'));
         }
-        $instituicoes = $this->Muralestagios->Instituicoes->find('list');
-        $turmas = $this->Muralestagios->Turmas->find('list');
-        $turnos = $this->Muralestagios->Turnos->find('list'); // Not necessarie
+        $instituicoes = $this->fetchTable('Instituicoes')->find('list');
+        $turmas = $this->fetchTable('Turmas')->find('list');
+        $turnos = $this->fetchTable('Turnos')->find('list'); // Not necessarie
         $professores = $this->fetchTable('Professores')->find('list', ['limit' => 500]);
         $this->set(compact('muralestagio', 'instituicoes', 'turmas', 'turnos', 'professores'));
     }

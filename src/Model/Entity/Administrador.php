@@ -28,5 +28,6 @@ class Administrador extends Entity
     protected array $_accessible = [
         'nome' => true,
         'user_id' => true,
+        'user' => true,
     ];
 }

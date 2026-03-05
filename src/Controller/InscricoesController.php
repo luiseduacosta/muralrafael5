@@ -93,21 +93,16 @@ class InscricoesController extends AppController
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         } else {
             $muralestagio = $this->fetchTable('Muralestagios')->get($muralestagio_id);
-            $dados['muralestagio'] = $muralestagio;
-            $dados['muralestagio_id'] = $mural_estagio->id;
+            // $dados['muralestagio'] = $muralestagio;
+            $dados['muralestagio_id'] = $muralestagio->id;
             
             /** Verifico o periodo do mural e comparo com o periodo da inscricao */
-            if ($mural_estagio->periodo != $periodo) {
+            if ($muralestagio->periodo != $periodo) {
                 $this->Flash->error(__('O periodo de inscricao nao coincide com o periodo do Mural.'));
-                return $this->redirect(['controller' => 'Muralestagios', 'action' => 'view', $mural_estagio_id]);
+                return $this->redirect(['controller' => 'Muralestagios', 'action' => 'view', $muralestagio_id]);
             }
-
-            $instituicao = $this->fetchTable('Instituicoes')->get($mural_estagio->instituicao_id);
+            $instituicao = $this->fetchTable('Instituicoes')->get($muralestagio->instituicao_id);
         }
-
-        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
-        $user_session = $this->request->getAttribute('identity');
-        if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
         // Admin não pode fazer inscrição de aluno? Corrigir
         if ($user_data['categoria'] == '2') {
@@ -119,7 +114,7 @@ class InscricoesController extends AppController
             return $this->redirect(['controller' => 'Alunos', 'action' => 'index']);
         }
         /** Verifico se já fez inscrição para não duplicar */
-        $inscricao_duplicada = $this->Inscricoes->find()->where(['Inscricoes.aluno_id' => $aluno->id, 'Inscricoes.muralestagio_id' => $mural_estagio->id])->first();
+        $inscricao_duplicada = $this->Inscricoes->find()->where(['Inscricoes.aluno_id' => $aluno->id, 'Inscricoes.muralestagio_id' => $muralestagio->id])->first();
         if ($inscricao_duplicada) {
             $this->Flash->error(__("Inscrição já realizada"));
             return $this->redirect(['controller' => 'Inscricoes', 'action' => 'view', $inscricao_duplicada->id]);
