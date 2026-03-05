@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\EventInterface;
 
 /**
@@ -49,7 +50,6 @@ class EstagiariosController extends AppController
             "Professores",
             "Supervisores",
             "Instituicoes",
-            "Turnos",
             "Turmas",
         ];
 
@@ -109,8 +109,7 @@ class EstagiariosController extends AppController
                 "Supervisores",
                 "Professores",
                 "Turmas",
-                "Turnos",
-                "Complementos" /*, 'Folhadeatividades' */,
+                "Complementos",
             ],
         ]);
 
@@ -120,10 +119,6 @@ class EstagiariosController extends AppController
             $this->Flash->error("Authorization error: " . $error->getMessage());
             return $this->redirect("/");
         }
-
-        //$folhadeatividades = $this->Estagiarios->Folhadeatividades->find()
-        //    ->where(['estagiario_id' => $id])
-        //    ->all();
 
         $this->set(compact("estagiario"));
     }
@@ -135,9 +130,11 @@ class EstagiariosController extends AppController
      */
     public function add()
     {
-        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
         $user_session = $this->request->getAttribute('identity');
-        if ($user_session) { $user_data = $user_session->getOriginalData(); }
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
 
         $estagiario = $this->Estagiarios->newEmptyEntity();
 
@@ -184,7 +181,7 @@ class EstagiariosController extends AppController
                     ),
                 );
                 $nivel = $ultimo_estagio->nivel + 1;
-                
+
                 $ajuste2020 = $ultimo_estagio->ajuste2020;
                 // Ajusta o nível de acordo com o ajuste 2020
                 if ($ajuste2020 == 1) {
@@ -201,21 +198,22 @@ class EstagiariosController extends AppController
                 if ($ultimo_estagio->periodo >= $periodoatual->mural_periodo_atual) {
                     $this->Flash->error(
                         __(
-                            'O período de estágio do aluno tem que ser igual o maior que o período atual ' . $periodoatual->mural_periodo_atual,
+                            'O período de estágio do aluno tem que ser igual ou maior que o período atual ' . $periodoatual->mural_periodo_atual,
                         ),
                     );
 
                     return $this->redirect([
-                    'controller' => 'Estagiarios',
-                    'action' => 'view',
-                    $ultimo_estagio->id,
+                        'controller' => 'Estagiarios',
+                        'action' => 'view',
+                        $ultimo_estagio->id,
                     ]);
                 }
             } else {
                 $this->Flash->success(__('O aluno ainda não é estagiário'));
+                $nivel = 1;
             }
-            // Set nivel based on ultimo_estagio. Default to 1.
-            $this->set('nivel', $nivel ?? '1');
+
+            $this->set('nivel', $nivel);
 
             if ($this->request->is("post")) {
                 // Verifica se o estagiario já existe no periodo atual
@@ -257,9 +255,7 @@ class EstagiariosController extends AppController
             }
             $professores = $this->fetchTable("Professores")->find("list");
             $turmas = $this->fetchTable("Turmas")->find("list");
-            $turnos = $this->fetchTable("Turnos")->find("list");
 
-            // Nivel já foi enviado
             $this->set(
                 compact(
                     "periodo",
@@ -269,10 +265,9 @@ class EstagiariosController extends AppController
                     "supervisores",
                     "professores",
                     "turmas",
-                    "turnos",
                 ),
             );
-        }    
+        }
     }
 
     /**
@@ -319,7 +314,6 @@ class EstagiariosController extends AppController
 
         $professores = $this->Estagiarios->Professores->find("list");
         $turmas = $this->Estagiarios->Turmas->find("list");
-        $turnos = $this->Estagiarios->Turnos->find("list");
 
         $this->set(
             compact(
@@ -329,7 +323,6 @@ class EstagiariosController extends AppController
                 "supervisores",
                 "professores",
                 "turmas",
-                "turnos",
             ),
         );
     }
@@ -382,9 +375,11 @@ class EstagiariosController extends AppController
      */
     public function termocompromisso(?string $id = null)
     {
-        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
         $user_session = $this->request->getAttribute('identity');
-        if ($user_session) { $user_data = $user_session->getOriginalData(); }
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
 
         $this->Authorization->skipAuthorization();
 
@@ -397,17 +392,11 @@ class EstagiariosController extends AppController
             return $this->redirect(['controller' => 'Alunos', 'action' => 'index']);
         }
 
-        try {
-            $estagiario = $this->Estagiarios
+        $estagiario = $this->Estagiarios
             ->find()
             ->where(['aluno_id' => $aluno_id])
             ->order(['nivel' => 'desc'])
             ->first();
-        } catch (RecordNotFoundException $e) {
-            $this->Flash->error(__('Aluno sem estágio.'));
-            // Cadastra estágio nível 1
-            return $this->redirect(['controller' => 'Estagiarios', 'action' => 'add', '?' => ['aluno_id' => $aluno_id]]);
-        }
 
         if (empty($estagiario)) {
             $this->Flash->error(__('Aluno sem estágio.'));
@@ -451,7 +440,7 @@ class EstagiariosController extends AppController
     }
 
     /**
-     * Termodecompromissopdf method
+     * Termocompromissopdf method
      *
      * @param string|null $id Estagiario id.
      * @return \Cake\Http\Response|null|void
@@ -460,9 +449,11 @@ class EstagiariosController extends AppController
     public function termocompromissopdf(?string $id = null)
     {
         $this->Authorization->skipAuthorization();
-        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
         $user_session = $this->request->getAttribute('identity');
-        if ($user_session) { $user_data = $user_session->getOriginalData(); }
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
 
         if (empty($id)) {
             if ($user_data['categoria'] == '2') {
@@ -509,9 +500,11 @@ class EstagiariosController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
         $user_session = $this->request->getAttribute('identity');
-        if ($user_session) { $user_data = $user_session->getOriginalData(); }
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
 
         if (empty($id)) {
             if ($user_data['categoria'] == '2') {
@@ -570,8 +563,6 @@ class EstagiariosController extends AppController
         $this->viewBuilder()->setClassName("CakePdf.Pdf");
         $this->viewBuilder()->setOption("pdfConfig", [
             "orientation" => "portrait",
-            //'download' => true, // This can be omitted if "filename" is specified.
-            //'filename' => 'declaracao_de_estagio_' . $id . '.pdf' //// This can be omitted if you want file name based on URL.
         ]);
         $this->set("estagiario", $estagiario);
     }
@@ -593,9 +584,6 @@ class EstagiariosController extends AppController
                 ->contain(["Supervisores"])
                 ->where(["Instituicoes.id" => $instituicao_id])
                 ->first();
-
-            // pr($supervisoresDaInstituicao);
-            // die();
 
             if ($supervisoresDaInstituicao) {
                 foreach (
@@ -654,100 +642,5 @@ class EstagiariosController extends AppController
         return $nivel;
     }
 
-    /**
-     * Alunoinsere method (obsoleto)
-     *
-     * Inserir dados de aluno na tabela alunoestagiario (obsoleto).
-     *
-     */
-    private function alunoinsere($aluno_id, $estagiario_id)
-    {
-        /**
-         * Verificar se o aluno está cadastrado em estagiarios.
-         */
-        $estagiario = $this->Estagiarios
-            ->find()
-            ->where(["id" => $estagiario_id])
-            ->first();
-        $alunostabela = $this->fetchTable("Alunoestagiarios");
-        $alunoestagiario = $alunostabela
-            ->find()
-            ->where(["registro" => $estagiario->registro])
-            ->first();
-        if ($alunoestagiario) {
-            echo "Aluno cadastrado: atualizar apenas o aluno_id em estagiarios" .
-                "<br>";
-            $estagiario_entity = $this->Estagiarios->get($estagiario_id);
-            $estagiario = $this->Estagiarios
-                ->find()
-                ->where(["id" => $estagiario_id])
-                ->first();
-            // pr($estagiario);
-            $dadosinsere = $estagiario->toArray();
-            // pr($dadosinsere);
-            // die('estagiario');
-            $dadosinsere["aluno_id"] = $alunoestagiario->id;
-            // pr($dadosinsere);
-            // die();
-            $estagiario_aluno_resultado = $this->Estagiarios->patchEntity(
-                $estagiario_entity,
-                $dadosinsere,
-            );
-            if ($this->Estagiarios->save($estagiario_aluno_resultado)) {
-                $this->Flash->success(__("Estagiário atualizado"));
-            } else {
-                // debug($estagiario_aluno_resultado);
-                // die();
-            }
-        } else {
-            echo "Aluno não cadastrado: fazer uma inserção nova na tabela alunos e atualizar aluno_id na tabela estagiarios" .
-                "<br>";
-            $estudantestabela = $this->fetchTable("Alunos");
-            $aluno = $estudantestabela
-                ->find()
-                ->where(["Alunos.id" => $aluno_id])
-                ->first()
-                ->toArray();
-            // pr($aluno);
-            // die();
-            $alunostabela = $this->fetchTable("Alunos");
-            $aluno_novo = $alunostabela->newEmptyEntity();
-            $aluno_novo_resultado = $alunostabela->patchEntity(
-                $aluno_novo,
-                $aluno,
-            );
-            // pr($aluno_novo_resultado);
-            // die();
-            if ($alunostabela->save($aluno_novo_resultado)) {
-                $this->Flash->success(__("Aluno inserido"));
-                /** Atualizo o aluno_id na tabela estagiarios */
-                $estagiario_entity = $this->Estagiarios->get($estagiario_id);
-                $estagiario = $this->Estagiarios
-                    ->find()
-                    ->where(["id" => $estagiario_id])
-                    ->first();
-                // pr($estagiario);
-                $dadosinsere = $estagiario->toArray();
-                // pr($dadosinsere);
-                // die('estagiario');
-                $dadosinsere["aluno_id"] = $aluno_novo_resultado->id;
-                // pr($dadosinsere);
-                // die();
-                $estagiario_aluno_resultado = $this->Estagiarios->patchEntity(
-                    $estagiario_entity,
-                    $dadosinsere,
-                );
-                if ($this->Estagiarios->save($estagiario_aluno_resultado)) {
-                    $this->Flash->success(__("Estagiário atualizado"));
-                } else {
-                    // debug($estagiario_aluno_resultado);
-                    // die();
-                }
-            } else {
-                // debug($aluno_novo_resultado);
-                // die('Error');
-            }
-        }
-        return;
-    }
+
 }
