@@ -32,7 +32,7 @@ class UsersController extends AppController
         'sortableFields' => [
             'id', 'email', 'Alunos.nome', 'Professores.nome', 'Supervisores.nome', 'created', 'modified'
         ]
-    ];   
+    ];
     
     /**
      * Index method
@@ -138,8 +138,7 @@ class UsersController extends AppController
 
         $user = $this->Users->get($id);
         $sameUser = ($user_session and $user_session->get('id') == $id);
-        
-        
+                
         try {
             $this->Authorization->authorize($user);
         } catch (ForbiddenException $error) {
@@ -155,9 +154,11 @@ class UsersController extends AppController
             if (array_key_exists('password', $data)) {
                 $opt = [
                     'fields' => ['email', 'password'],
-                    'accessibleFields' => ['password' => ($user_data['administrador_id'] OR $sameUser)]
+                    'accessibleFields' => ['password' => ($user_data['administrador_id'] || $sameUser)]
                 ];
-            } else { unset($data['password']); }
+            } else {
+                unset($data['password']);
+            }
             
             $user = $this->Users->patchEntity($user, $data, $opt);
             
@@ -169,7 +170,7 @@ class UsersController extends AppController
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
 
-        $user['password'] = '';    
+        $user->password = '';
         $this->set(compact('user'));
     }
 
@@ -239,9 +240,8 @@ class UsersController extends AppController
                     return $this->redirect(['controller' => 'supervisores', 'action' => 'add', '?' => ['email' => $result->getData()['email']]]);
                 }
             }
-            die();
 
-
+            // Fallback redirect
             $target = $this->Authentication->getLoginRedirect() ?? '/';
             return $this->redirect($target);
         }
@@ -270,14 +270,13 @@ class UsersController extends AppController
      * Alternarusuario method
      * https://book.cakephp.org/authentication/3/en/impersonation.html
      */
-    public function alternarusuario() 
+    public function alternarusuario()
     {
         $this->Authorization->skipAuthorization();
 
-        // pr($this->data);
-        // die();
-        
- 
+        // TODO: Implement user impersonation logic
+        $this->Flash->warning(__('Funcionalidade não implementada.'));
+        return $this->redirect(['action' => 'index']);
     }
     
 }
