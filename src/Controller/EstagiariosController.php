@@ -611,7 +611,9 @@ class EstagiariosController extends AppController
      * Nivelestagio method
      *
      * Compara o periodoautal com o periodo de estagio do estagiario para definiar o nivel de estagio
-     *
+     * @param string $periodoatual Periodo atual
+     * @param Estagiario $ultimoestagio Ultimo estagio
+     * @return int Nivel de estagio
      */
     private function nivelestagio($periodoatual, $ultimoestagio)
     {
@@ -622,8 +624,13 @@ class EstagiariosController extends AppController
         } elseif ($periodoatual > $ultimoestagio->periodo) {
             $nivel = $ultimoestagio->nivel + 1;
             /** Calculo o ultimo nível de estágio possível a partir do ajuste curricular. */
+            if ($ultimoestagio->ajuste2020 == 1) {
+                $ultimo_nivel_curricular = 3;
+            } else {
+                $ultimo_nivel_curricular = 4;
+            }
             /** Se nivel é maior que o ultimo nivel curricular então está realizando estagio extracurricular e o nivel é 9. */
-            if ($nivel > 4) {
+            if ($nivel > $ultimo_nivel_curricular) {
                 // Estágio não curricular
                 $nivel = 9;
             }
@@ -634,7 +641,7 @@ class EstagiariosController extends AppController
                 ),
             );
             return $this->redirect([
-                "action" => "termodecompromisso",
+                "action" => "view",
                 $ultimoestagio->id,
             ]);
         }
@@ -642,7 +649,7 @@ class EstagiariosController extends AppController
     }
 
     /**
-     * Alunoinsere method
+     * Alunoinsere method (obsoleto)
      *
      * Inserir dados de aluno na tabela alunoestagiario (obsoleto).
      *

@@ -186,12 +186,12 @@ class FolhadeatividadesController extends AppController
             }
         }
 
-        if (!isset($folhadeatividade)) {
+        if (empty($folhadeatividade)) {
             $this->Flash->error(__("Sem atividades cadastradas"));
             return $this->redirect([
                 "controller" => "estagiarios",
                 "action" => "view",
-                isset($estagiario_id) ? $estagiario_id : $id,
+                $estagiario_id,
             ]);
         }
         $this->set(compact("folhadeatividade"));
@@ -232,15 +232,12 @@ class FolhadeatividadesController extends AppController
                 __("Não foi possível atualizar. Tente outra vez."),
             );
         }
-        $estagiarioquery = $this->Folhadeatividades
+        $estagiario = $this->Folhadeatividades
             ->find()
             ->where(["Folhadeatividades.id" => $id])
             ->contain(["Estagiarios" => ["Alunos"]])
-            ->select(["Estagiarios.id", "Alunos.nome"]);
-        // pr($estagiarioquery->first());
-        $estagiario = $estagiarioquery->first();
-        // pr($estagiario);
-        // die();
+            ->select(["Estagiarios.id", "Alunos.nome"])
+            ->first();
         $this->set(compact("folhadeatividade", "estagiario"));
     }
 
@@ -285,11 +282,19 @@ class FolhadeatividadesController extends AppController
             }
         } catch (ForbiddenException $error) {
             $this->Flash->error("Authorization error: " . $error->getMessage());
-
             return $this->redirect("/");
         }
     }
 
+    /**
+     * Folhadeatividadespdf method
+     *
+     * Gera a folha de atividades em PDF.
+     *
+     * @param string|null $id Folhadeatividade id.
+     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
     public function folhadeatividadespdf($id = null)
     {
         $this->Authorization->skipAuthorization();
@@ -299,12 +304,36 @@ class FolhadeatividadesController extends AppController
         if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
         $estagiario_id = $this->getRequest()->getQuery("estagiario_id");
+
+        if ($user_data['aluno_id'] > 0) {
+            $redirect = [
+                "controller" => "alunos",
+                "action" => "view",
+                $user_data['aluno_id'],
+            ];
+        } else {
+            $redirect = [
+                "controller" => "muralestagios",
+                "action" => "index",
+            ];
+        }
         if (empty($estagiario_id)) {
             $this->Flash->error(__('Sem parâmetros para gerar a folha de atividades.'));
-            return $this->redirect([
-                "controller" => "alunos",
-                "action" => "index",
-            ]);
+            return $this->redirect($redirect);
+        }
+
+        $estagiario = $this->Folhadeatividades->Estagiarios
+            ->find()
+            ->where(['id' => $estagiario_id])
+            ->first();
+
+        if (empty($estagiario)) {
+            $this->Flash->error(__('Sem estagiário para gerar a folha de atividades.'));
+            return $this->redirect($redirect);
+        }
+        if ($estagiario->aluno_id != $user_data['aluno_id'] && $user_data['aluno_id'] > 0) {
+            $this->Flash->error(__('Você não tem permissão para gerar a folha de atividades.'));
+            return $this->redirect($redirect);
         }
 
         $this->layout = false;
@@ -332,7 +361,7 @@ class FolhadeatividadesController extends AppController
         $this->viewBuilder()->setOption("pdfConfig", [
             "orientation" => "portrait",
             "download" => true, // This can be omitted if "filename" is specified.
-            "filename" => "folha_de_atividades_" . $id . ".pdf", //// This can be omitted if you want file name based on URL.
+            "filename" => "folha_de_atividades_" . $estagiario_id . ".pdf", //// This can be omitted if you want file name based on URL.
         ]);
         $this->set("atividades", $atividades);
         $this->set("estagiario", $estagiario);

@@ -24,7 +24,8 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <?= $this->Html->link(__('Termo de Compromisso'), ['action' => 'termocompromisso', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Imprime Termo de Compromisso'), ['action' => 'termocompromissopdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Declaração de estágio'), ['action' => 'declaracaodeestagio', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
-                    <?php endif; ?>
+                        <?= $this->Html->link(__('Atividades'), ['controller' => 'Folhadeatividades', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                        <?php endif; ?>
                 </div>
             </aside>
             <h3>Estagiario: <?= h($estagiario->aluno->nome) ?></h3>
