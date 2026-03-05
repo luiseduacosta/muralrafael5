@@ -35,7 +35,7 @@ class ProfessoresController extends AppController
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
 
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
         $professores = $this->paginate($this->Professores->find('all', [
@@ -67,7 +67,6 @@ class ProfessoresController extends AppController
 
         $this->paginate = [
             'Estagiarios' => ['limit' => 5, 'scope' => 'estagiario'],
-            /*'Muralestagios' => ['limit' => 5, 'scope' => 'muralestagio']*/
         ];
 
         $estagiarios = $this->paginate($this->Professores->Estagiarios->find('all', [
@@ -78,17 +77,8 @@ class ProfessoresController extends AppController
 
             ]);
         }));
-        /*
-        $muralestagios = $this->paginate($this->Professores->Muralestagios->find('all', [
-            'contain' => ['Instituicoes'],
-        ])->innerJoinWith('Professores', function (\Cake\ORM\Query $query) use ($professor) {
-            return $query->where([
-                'professor_id' => $professor->id,
 
-            ]);
-        }));
-        */
-        $this->set(compact('professor', 'estagiarios'/*, 'muralestagios'*/));
+    $this->set(compact('professor', 'estagiarios'));
     }
 
     /**
@@ -174,10 +164,15 @@ class ProfessoresController extends AppController
     public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $professor = $this->Professores->get($id);
+        $professor = $this->Professores->get($id, ['contain' => 'Estagiarios']);
 
         try {
             $this->Authorization->authorize($professor);
+            if (sizeof($professor->estagiarios) > 0) {
+                $this->Flash->warning(__("O(a) professor(a) tem estagiários associados."));
+                return $this->redirect(['controller' => 'Professores', 'action' => 'view', $id]);
+            }
+
             if ($this->Professores->delete($professor)) {
                 $this->Flash->success(__('The professor has been deleted.'));
             } else {

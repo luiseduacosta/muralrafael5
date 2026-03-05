@@ -126,7 +126,7 @@ class MuralestagiosController extends AppController
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
 
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -140,8 +140,8 @@ class MuralestagiosController extends AppController
         }
         $instituicoes = $this->Muralestagios->Instituicoes->find('list');
         $turmas = $this->Muralestagios->Turmas->find('list');
-        $turnos = $this->Muralestagios->Turnos->find('list');
-        $professores = $this->Muralestagios->Professores->find('list', ['limit' => 500]);
+        $turnos = $this->Muralestagios->Turnos->find('list'); // Not necessarie
+        $professores = $this->fetchTable('Professores')->find('list', ['limit' => 500]);
         $this->set(compact('muralestagio', 'instituicoes', 'turmas', 'turnos', 'professores'));
     }
 
@@ -155,10 +155,17 @@ class MuralestagiosController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $muralestagio = $this->Muralestagios->get($id);
+        $muralestagio = $this->Muralestagios->get($id, ['contain' => 'Inscricoes']);
 
         try {
             $this->Authorization->authorize($muralestagio);
+
+            // If have inscricoes not delete
+            if (sizeof($muralestagio->inscricoes) > 0) {
+                $this->Flash->waring(__('Inscrições associadas a este Mural de estágios'));
+                return $this->redirect(['controller' => 'Muralestagios', 'action' => 'view', $id]);
+            }
+
             if ($this->Muralestagios->delete($muralestagio)) {
                 $this->Flash->success(__('The muralestagio has been deleted.'));
             } else {

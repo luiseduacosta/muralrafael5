@@ -345,10 +345,16 @@ class EstagiariosController extends AppController
     {
         $this->request->allowMethod(["post", "delete"]);
 
-        $estagiario = $this->Estagiarios->get($id);
+        $estagiario = $this->Estagiarios->get($id, ['contain' => 'Folhadeatividades']);
 
         try {
             $this->Authorization->authorize($estagiario);
+
+            if (sizeof($estagiario->folhadeatividades) > 0) {
+                $this->Flash->warning(__('Estagiário com atividades associadas'));
+                return $this->redirect(['controller' => 'Estagiarios', 'action' => 'view', $id]);
+            }
+
             if ($this->Estagiarios->delete($estagiario)) {
                 $this->Flash->success(__("The estagiario has been deleted."));
             } else {

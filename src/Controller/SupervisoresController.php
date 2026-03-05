@@ -33,8 +33,7 @@ class SupervisoresController extends AppController
             $this->Authorization->authorize($this->Supervisores);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
-
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
         $supervisores = $this->paginate($this->Supervisores->find('all', [
@@ -70,7 +69,7 @@ class SupervisoresController extends AppController
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
 
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
         $this->set(compact('supervisor'));
@@ -138,7 +137,7 @@ class SupervisoresController extends AppController
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
 
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -164,10 +163,16 @@ class SupervisoresController extends AppController
     public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $supervisor = $this->Supervisores->get($id);
+        $supervisor = $this->Supervisores->get($id, ['contain' => 'Estagiarios']);
 
         try {
             $this->Authorization->authorize($supervisor);
+
+            if (sizeof($supervisor->estagiarios > 0)) {
+                $this->Flash->warrning(__('Supervisor(a) tem estagiários associados'));
+                return $this->redirect(['controller' => 'Supervisores', 'action' => 'view', $id]);
+            }
+
             if ($this->Supervisores->delete($supervisor)) {
                 $this->Flash->success(__('The supervisor has been deleted.'));
             } else {

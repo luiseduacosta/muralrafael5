@@ -45,7 +45,7 @@ class UsersController extends AppController
         $user_session = $this->request->getAttribute('identity');
         if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
-        $contained = [];//'Administradores', 'Alunos', 'Professores', 'Supervisores'];
+        $contained = []; //'Administradores', 'Alunos', 'Professores', 'Supervisores'];
         
         $this->Authorization->authorize($this->Users);
         

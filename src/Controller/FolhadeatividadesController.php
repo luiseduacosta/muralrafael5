@@ -92,7 +92,7 @@ class FolhadeatividadesController extends AppController
         } catch (ForbiddenException $error) {
             $this->Flash->error("Authorization error: " . $error->getMessage());
 
-            return $this->redirect("/");
+            return $this->redirect(["controller" => "Muralestagios", "action" => "index"]);
         }
 
         $estagiario_id = $this->getRequest()->getQuery("estagiario_id");
@@ -124,31 +124,27 @@ class FolhadeatividadesController extends AppController
         $folhadeatividadeentity = $this->Folhadeatividades->newEmptyEntity();
 
         if ($this->request->is("post")) {
-            // pr($this->request->getData());
             $dados = $this->request->getData();
             $dados["horario"] = null;
-            // pr($dados);
-            // die();
             $folhadeatividaderesposta = $this->Folhadeatividades->patchEntity(
                 $folhadeatividadeentity,
                 $dados,
             );
-            // pr($folhadeatividaderesposta);
-            // die();
             if ($this->Folhadeatividades->save($folhadeatividaderesposta)) {
                 $this->Flash->success(__("Atividades cadastrada!"));
 
                 return $this->redirect([
+                    "controller" => "Folhadeatividades",
                     "action" => "view",
-                    $folhadeatividaderesposta->id,
+                    "?" => [
+                        "id" => $folhadeatividaderesposta->id,
+                    ],
                 ]);
             }
             $this->Flash->error(
                 __("Atividade não foi cadastrada. Tente mais uma vez."),
             );
-        } else {
-            // die('post');
-        }
+        } 
 
         if (!empty($folhadeatividades)) {
             $this->set("estagiario", $estagiario);
@@ -168,6 +164,7 @@ class FolhadeatividadesController extends AppController
         if ($estagiario_id) {
             $folhadeatividade = $this->Folhadeatividades
                 ->find()
+                ->contain(["Estagiarios" => ["Alunos", "Instituicoes"]])
                 ->where(["estagiario_id" => $estagiario_id])
                 ->first();
         } else {
@@ -182,7 +179,7 @@ class FolhadeatividadesController extends AppController
             } catch (ForbiddenException $error) {
                 $this->Flash->error("Authorization error: " . $error->getMessage());
 
-                return $this->redirect("/");
+                return $this->redirect(["controller" => "Muralestagios", "action" => "index"]);
             }
         }
 
@@ -215,7 +212,7 @@ class FolhadeatividadesController extends AppController
         } catch (ForbiddenException $error) {
             $this->Flash->error("Authorization error: " . $error->getMessage());
 
-            return $this->redirect("/");
+            return $this->redirect(["controller" => "Muralestagios", "action" => "index"]);
         }
 
         if ($this->request->is(["patch", "post", "put"])) {
@@ -226,7 +223,7 @@ class FolhadeatividadesController extends AppController
             if ($this->Folhadeatividades->save($folhadeatividade)) {
                 $this->Flash->success(__("Atividade atualizada."));
 
-                return $this->redirect(["action" => "view", $id]);
+                return $this->redirect(["controller" => "Folhadeatividades", "action" => "view", "?" => ["id" => $folhadeatividade->id]]);
             }
             $this->Flash->error(
                 __("Não foi possível atualizar. Tente outra vez."),
@@ -234,9 +231,8 @@ class FolhadeatividadesController extends AppController
         }
         $estagiario = $this->Folhadeatividades
             ->find()
+            ->contain(["Estagiarios" => ["Alunos", "Instituicoes"]])
             ->where(["Folhadeatividades.id" => $id])
-            ->contain(["Estagiarios" => ["Alunos"]])
-            ->select(["Estagiarios.id", "Alunos.nome"])
             ->first();
         $this->set(compact("folhadeatividade", "estagiario"));
     }
@@ -282,7 +278,7 @@ class FolhadeatividadesController extends AppController
             }
         } catch (ForbiddenException $error) {
             $this->Flash->error("Authorization error: " . $error->getMessage());
-            return $this->redirect("/");
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
     }
 

@@ -25,21 +25,18 @@ class InscricoesController extends AppController
             $this->Authorization->authorize($this->Inscricoes);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
         $periodo = $this->getRequest()->getQuery('periodo');
         if (empty($periodo)) {
             $configuracao = $this->fetchTable('Configuracoes');
-            $periodo_atual = $configuracao->find()->select(['mural_periodo_atual'])->first();
-            $periodo = $periodo_atual->mural_periodo_atual;
+            $configuracoes = $configuracao->find()->select(['mural_periodo_atual'])->first();
+            $periodo = $configuracoes->mural_periodo_atual;
         }
-        $estagiariotabela = $this->fetchTable('Estagiarios');
-        $periodototal = $estagiariotabela->find('list', [
-            'keyField' => 'periodo',
-            'valueField' => 'periodo',
-            'order' => 'periodo'
-        ]);
-        $periodos = $periodototal->toArray();
+        $periodos = $this->fetchTable('Estagiarios')->find()->select([
+            'periodo'
+        ])->order(['periodo' => 'DESC'])->toArray();
+        $periodos = array_merge($periodos, ['all' => 'Todos']);
 
         $query = $this->Inscricoes->find()
                 ->contain(['Alunos', 'Muralestagios' => ['Instituicoes']])
@@ -66,7 +63,7 @@ class InscricoesController extends AppController
             $this->Authorization->authorize($inscricao);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Inscricoes', 'action' => 'index']);
         }
         $this->set(compact('inscricao'));
     }
@@ -85,17 +82,18 @@ class InscricoesController extends AppController
 
         $dados = $this->request->getData();
 
-        $periodo = $this->fetchTable("Configuracoes")->find()->first()['mural_periodo_atual'];
+        $configuracoes = $this->fetchTable("Configuracoes")->find()->select(['mural_periodo_atual'])->first();
+        $periodo = $configuracoes->mural_periodo_atual;
         $dados['periodo'] = $periodo;
         
-        $mural_estagio_id = $this->getRequest()->getQuery("mural_estagio_id");
+        $muralestagio_id = $this->getRequest()->getQuery("muralestagio_id");
 
-        if (!$mural_estagio_id) {
+        if (!$muralestagio_id) {
             $this->Flash->error(__('Erro no identificador do mural de estagios'));
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         } else {
-            $mural_estagio = $this->fetchTable('Muralestagios')->get($mural_estagio_id);
-            $dados['mural_estagio'] = $mural_estagio;
+            $muralestagio = $this->fetchTable('Muralestagios')->get($muralestagio_id);
+            $dados['muralestagio'] = $muralestagio;
             $dados['muralestagio_id'] = $mural_estagio->id;
             
             /** Verifico o periodo do mural e comparo com o periodo da inscricao */
@@ -126,19 +124,17 @@ class InscricoesController extends AppController
             $this->Flash->error(__("Inscrição já realizada"));
             return $this->redirect(['controller' => 'Inscricoes', 'action' => 'view', $inscricao_duplicada->id]);
         }
-        $data = date('Y-m-d');
-        $dados['data'] = $data;
+        // Date atual
+        $data = new \DateTime();
+        $dados['data'] = $data->format('Y-m-d');
         $inscricao = $this->Inscricoes->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $inscricao = $this->Inscricoes->patchEntity($inscricao, $dados);
-            if ($this->Inscricoes->save($inscricao)) {
-                $this->Flash->success(__('Inscricao realizada com sucesso.'));
-
-                return $this->redirect(['action' => 'view', $inscricao->id]);
-            }
-            $this->Flash->error(__('The inscricao could not be saved. Please, try again.'));
+        $inscricao = $this->Inscricoes->patchEntity($inscricao, $dados);
+        if ($this->Inscricoes->save($inscricao)) {
+            $this->Flash->success(__('Inscricao realizada com sucesso.'));
+            return $this->redirect(['controller' => 'Inscricoes', "action" => "view", $inscricao->id]);
         }
-        $this->set(compact('inscricao', 'aluno', 'periodo', 'mural_estagio', 'data', 'instituicao'));
+        $this->Flash->error(__('The inscricao could not be saved. Please, try again.'));
+        $this->set(compact('inscricao', 'aluno', 'periodo', 'muralestagio', 'data', 'instituicao'));
     }
 
     /**
@@ -158,8 +154,7 @@ class InscricoesController extends AppController
             $this->Authorization->authorize($inscricao);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
-
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -167,7 +162,7 @@ class InscricoesController extends AppController
             if ($this->Inscricoes->save($inscricao)) {
                 $this->Flash->success(__('The inscricao has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'Inscricoes', 'action' => 'view', $inscricao->id]);
             }
             $this->Flash->error(__('The inscricao could not be saved. Please, try again.'));
         }
