@@ -101,15 +101,17 @@ class SupervisoresController extends AppController
 
             if ($this->Supervisores->save($supervisor)) {
                 $this->Flash->success(__('The supervisor has been saved.'));
-                // Update the user with the supervisor id
-                $user = $this->fetchTable('Users')->get($supervisor->user_id);
-                $user->supervisor_id = $supervisor->id;
-                $user->numero = $supervisor->cress;
-                $this->Supervisores->Users->save($user);
-                // Then update user session with aluno_id and numero
-                $user_session = $this->request->getAttribute('identity');
-                $user_session->set('aluno_id', $aluno->id);
-                $user_session->set('numero', $aluno->registro);
+                // Update the user with the supervisor id only if the atual user is supervisor
+                if ($user_data->categoria == '4') {
+                    $user = $this->fetchTable('Users')->get($supervisor->user_id);
+                    $user->supervisor_id = $supervisor->id;
+                    $user->numero = $supervisor->cress;
+                    $this->fetchTable('Users')->save($user);
+                    // Then update user session with supervisor_id and numero
+                    $user_session = $this->request->getAttribute('identity');
+                    $user_session->set('supervisor_id', $supervisor->id);
+                    $user_session->set('numero', $supervisor->cress);
+                }
                 // Go to view
                 return $this->redirect(['action' => 'view', $supervisor->id]);
             }

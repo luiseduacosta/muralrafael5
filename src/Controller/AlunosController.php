@@ -102,15 +102,17 @@ class AlunosController extends AppController
             
             if ($this->Alunos->save($aluno)) {
                 $this->Flash->success(__('O aluno foi adicionado com sucesso.'));
-                // Update user record with aluno_id and numero
-                $user = $this->fetchTable('Users')->get($aluno->user_id);
-                $user->aluno_id = $aluno->id;
-                $user->numero = $aluno->registro;
-                $this->fetchTable('Users')->save($user);
-                // Then update user session with aluno_id and numero
-                $user_session = $this->request->getAttribute('identity');
-                $user_session->set('aluno_id', $aluno->id);
-                $user_session->set('numero', $aluno->registro);
+                // Update user record with aluno_id and numero only if the user is a aluno
+                if ($user_data->categoria == '2') {
+                    $user = $this->fetchTable('Users')->get($aluno->user_id);
+                    $user->aluno_id = $aluno->id;
+                    $user->numero = $aluno->registro;
+                    $this->fetchTable('Users')->save($user);
+                    // Then update user session with aluno_id and numero
+                    $user_session = $this->request->getAttribute('identity');
+                    $user_session->set('aluno_id', $aluno->id);
+                    $user_session->set('numero', $aluno->registro);
+                }
                 // Go to aluno view page
                 return $this->redirect(['action' => 'view', $aluno->id]);
             }

@@ -107,14 +107,17 @@ class ProfessoresController extends AppController
 
             if ($this->Professores->save($professor)) {
                 $this->Flash->success(__('The professor has been saved.'));
-                // Update the user with the professor_id
-                $user = $this->fetchTable('Users')->get($professor->user_id);
-                $user->professor_id = $professor->id;
-                $this->Professores->Users->save($user);
-                // Reload the user with the new values
-                $user_session = $this->request->getAttribute('identity');
-                $user_session->set('professor_id', $professor->id);
-                $user_session->set('numero', $professor->registro);
+                // Update the user with the professor_id if the atual user is professor
+                if ($user_data->categoria == '3') {
+                    $user = $this->fetchTable('Users')->get($professor->user_id);
+                    $user->professor_id = $professor->id;
+                    $user->numero = $professor->siape;
+                    $this->fetchTable('Users')->save($user);
+                    // Reload the user with the new values
+                    $user_session = $this->request->getAttribute('identity');
+                    $user_session->set('professor_id', $professor->id);
+                    $user_session->set('numero', $professor->siape);
+                }
                 // Got to view
                 return $this->redirect(['action' => 'view', $professor->id]);
             }
