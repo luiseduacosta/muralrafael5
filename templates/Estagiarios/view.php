@@ -60,15 +60,15 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </div>
                 <div class="row">
                     <dt class="col-2"><?= __('Ajuste curricular') ?></dt>
-                    <dd><?= h($estagiario->ajuste2020) ?></dd>
+                    <dd><?= h($estagiario->ajuste2020 == 1 ? 'Sim' : 'Nao')  ?></dd>
                 </div>
                 <div class="row">
-                    <dt class="col-2"><?= __('Tc Solicitacao') ?></dt>
+                    <dt class="col-2"><?= __('Data de solicitacao do TC') ?></dt>
                     <dd><?= h($estagiario->tc_solicitacao) ?></dd>
                 </div>
                 <div class="row">
                     <dt class="col-2"><?= __('Termo de Compromisso assinado') ?></dt>
-                    <dd><?= $this->Number->format($estagiario->tc ?? '') ?></dd>
+                    <dd><?= h($estagiario->tc == '1' ? 'Sim' : 'Nao') ?></dd>
                 </div>
                 <div class="row">
                     <dt class="col-2"><?= __('Supervisor(a)') ?></dt>
@@ -86,14 +86,14 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <dt class="col-2"><?= __('Complemento (Periodo Especial)') ?></dt>
                     <dd><?= $estagiario->complemento ? h($estagiario->complemento->periodo_especial) : '' ?></dd>
                 </div>
-                <div class="row">
-                    <dt class="col-2"><?= __('Nota') ?></dt>
-                    <dd><?= $this->Number->format($estagiario->nota ?? '') ?></dd>
-                </div>                
-                <div class="row">
-                    <dt class="col-2"><?= __('CH') ?></dt>
-                    <dd><?= $this->Number->format($estagiario->ch ?? '') ?></dd>
-                </div>                
+                    <div class="row">
+                        <dt class="col-2"><?= __('Nota') ?></dt>
+                        <dd><?= $this->Number->format($estagiario->nota ?? '') ?></dd>
+                    </div>                
+                    <div class="row">
+                        <dt class="col-2"><?= __('CH') ?></dt>
+                        <dd><?= $this->Number->format($estagiario->ch ?? '') ?></dd>
+                    </div>                
                 <div class="row">
                     <dt class="col-2"><?= __('Observações') ?></dt>
                     <dd><?= h($estagiario->observacoes) ?></dd>

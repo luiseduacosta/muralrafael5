@@ -86,6 +86,7 @@ class AlunosTable extends Table
         $validator
             ->scalar('ingresso')
             ->maxLength('ingresso', 6)
+            ->pattern('ingresso', '/^[0-9]{4}\-[1-2]$/', 'Período de ingresso inválido')
             ->allowEmptyString('ingresso');
 
         $validator
@@ -106,7 +107,8 @@ class AlunosTable extends Table
 
         $validator
             ->scalar('celular')
-            ->maxLength('celular', 10)
+            ->maxLength('celular', 12)
+            ->pattern('celular', '/^\([0-9]{2}\) [0-9]{4,5}\.[0-9]{4}$/', 'Telefone inválido')
             ->allowEmptyString('celular');
 
         $validator
@@ -116,6 +118,7 @@ class AlunosTable extends Table
         $validator
             ->scalar('cpf')
             ->maxLength('cpf', 14)
+            ->pattern('cpf', '/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/', 'CPF inválido')
             ->allowEmptyString('cpf');
 
         $validator
@@ -140,6 +143,7 @@ class AlunosTable extends Table
         $validator
             ->scalar('cep')
             ->maxLength('cep', 9)
+            ->pattern('cep', '/^[0-9]{5}\-[0-9]{3}$/', 'CEP inválido')
             ->allowEmptyString('cep');
 
         $validator

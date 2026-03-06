@@ -302,19 +302,18 @@ class EstagiariosController extends AppController
             );
         }
 
-        $alunos = $this->Estagiarios->Alunos->find("list");
-        $instituicoes = $this->Estagiarios->Instituicoes->find("list");
+        $alunos = $this->fetchTable("Alunos")->find("list");
+        $instituicoes = $this->fetchTable("Instituicoes")->find("list");
         if (!empty($estagiario->instituicao_id)) {
-            $supervisores = $this->Estagiarios->Supervisores->find("list")->matching('Instituicoes', function ($q) use ($estagiario) {
+            $supervisores = $this->fetchTable("Supervisores")->find("list")->matching('Instituicoes', function ($q) use ($estagiario) {
                 return $q->where(['Instituicoes.id' => $estagiario->instituicao_id]);
             });
         } else {
-            $supervisores = $this->Estagiarios->Supervisores->find("list");
+            $supervisores = $this->fetchTable("Supervisores")->find("list");
         }
-
-        $professores = $this->Estagiarios->Professores->find("list");
-        $turmas = $this->Estagiarios->Turmas->find("list");
-
+        $professores = $this->fetchTable("Professores")->find("list");
+        $turmas = $this->fetchTable("Turmas")->find("list");
+        $complementos = $this->fetchTable("Complementos")->find("list");
         $this->set(
             compact(
                 "estagiario",
@@ -323,6 +322,7 @@ class EstagiariosController extends AppController
                 "supervisores",
                 "professores",
                 "turmas",
+                "complementos",
             ),
         );
     }

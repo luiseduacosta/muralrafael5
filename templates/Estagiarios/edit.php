@@ -3,7 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Estagiario $estagiario
  */
-
 declare(strict_types=1);
 
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
@@ -35,20 +34,26 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 <h3><?= __('Editando estagiario_' . $estagiario->id) ?></h3>
                 <?php
                     echo $this->Form->control('aluno_id', ['options' => $alunos, 'class' => 'form-control']);
-                    echo $this->Form->control('registro');
-                    echo $this->Form->control('ajustecurricular2020');
-                    echo $this->Form->control('turno_id', ['options' => $turnos, 'class' => 'form-control']);
-                    echo $this->Form->control('nivel');
-                    echo $this->Form->control('tc');
-                    echo $this->Form->control('tc_solicitacao', ['empty' => true]);
-                    echo $this->Form->control('instituicao_id', ['options' => $instituicoes, 'class' => 'form-control']);
-                    echo $this->Form->control('supervisor_id', ['options' => $supervisores, 'empty' => true, 'class' => 'form-control']);
-                    echo $this->Form->control('professor_id', ['options' => $professores, 'empty' => true, 'class' => 'form-control']);
-                    echo $this->Form->control('periodo');
-                    echo $this->Form->control('turma_id', ['options' => $turmas, 'empty' => true, 'class' => 'form-control']);
-                    echo $this->Form->control('nota');
-                    echo $this->Form->control('ch');
-                    echo $this->Form->control('observacoes');
+                    echo $this->Form->control('registro', ['required' => true]);
+                    echo $this->Form->control('turno', ['options' => ['d' => 'Diurno', 'n' => 'Noturno', 'i' => 'Indeterminado'], 'value' => $aluno->turno ?? '', 'readonly']);
+                    echo $this->Form->control('nivel', ['required' => true]);
+                    echo $this->Form->control('ajuste2020', ['options' => ['1' => 'Sim (3 semestres)', '0' => 'Nao (4 semestres)']]);
+                    echo $this->Form->control('tc', ['label' => 'Termo de compromisso assinado S/N?', 'options' => ['1' => 'Sim', '0' => 'Nao']]);
+                    echo $this->Form->control('tc_solicitacao', ['label' => 'Data de solicitacao do termo de compromisso', 'required' => false]);
+                    echo $this->Form->control('instituicao_id', ['options' => $instituicoes, 'required' => true, 'empty'=> true, 'class' => 'form-control']);
+                    echo $this->Form->control('supervisor_id', ['options' => $supervisores, 'required' => true, 'empty' => true, 'class' => 'form-control']);
+                    echo $this->Form->control('professor_id', ['options' => $professores, 'required' => false, 'empty' => true, 'class' => 'form-control']);
+                    echo $this->Form->control('periodo', ['label' => 'Periodo', 'required' => true]);
+                    if ($user_data['categoria'] == "1") {
+                        echo $this->Form->control('nota');
+                        echo $this->Form->control('ch');
+                    }
+                    echo $this->Form->control('complemento_id', ['options' => $complementos, 'empty' => true, 'required' => false]);
+                    echo $this->Form->control('turma_id', ['options' => $turmas, 'required' => false, 'empty' => true, 'class' => 'form-control']);
+                    echo $this->Form->control('benetransporte', ['label' => 'Beneficio de transporte', 'options' => ['1' => 'Sim', '0' => 'Nao'], 'required' => false]);
+                    echo $this->Form->control('benealimentacao', ['label' => 'Beneficio de alimentacao', 'options' => ['1' => 'Sim', '0' => 'Nao'], 'required' => false]);
+                    echo $this->Form->control('benbolsa', ['label' => 'Beneficio de bolsa - valor em R$', 'required' => false, 'type' => 'text']);
+                    echo $this->Form->control('observacoes', ['label' => 'Observacoes', 'required' => false]);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Salvar'), ['class' => 'button']) ?>
