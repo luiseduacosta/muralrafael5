@@ -100,7 +100,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </div>
             </dl>
         </div>
-        <?php echo $this->Html->link('Voltar', ['action' => 'index'], ['class' => 'button float-left']); ?>
-        <?php echo $this->Html->link('Editar', ['action' => 'edit', $estagiario->id], ['class' => 'button float-right']); ?>        
+        <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
+        <?= $this->Html->link('Editar', ['action' => 'edit', $estagiario->id], ['class' => 'button float-right']); ?>        
     </div>
 </div>
