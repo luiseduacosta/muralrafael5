@@ -3,9 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Folhadeatividade[]|\Cake\Collection\CollectionInterface $folhadeatividades
  */
-// pr($estagiario);
-// pr($folhadeatividades);
-// die();
 
 $supervisora = isset($estagiario->supervisor->nome);
 if ($supervisora) {
@@ -33,9 +30,11 @@ if ($professora) {
 
     <aside>
         <div class="nav">
-            <?= $this->Html->link(__('Cadastra nova atividade'), ['action' => 'add', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
-            <?= $this->Html->link(__('Imprime folha de atividades'), ['action' => 'folhadeatividadespdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
-        </div>
+        <?= $this->Html->link(__('Estagiario(a)'), ['controller' => 'Estagiarios','action' => 'view', $estagiario->id], ['class' => 'button']) ?>
+        <?= $this->Html->link(__('Nova atividade'), ['action' => 'add', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+        <?= $this->Html->link(__('Imprime atividades'), ['action' => 'folhadeatividadespdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+        <?= $this->Html->link(__('Imprime folha de atividades'), ['action' => 'atividadesmanualpdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+    </div>
     </aside>
 
     <h3><?= __('Folha de atividades da(o) estagiária(o) ' . $estagiario->aluno->nome) ?></h3>

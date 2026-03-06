@@ -4,14 +4,11 @@
  * @var \App\Model\Entity\Avaliacao $avaliacao
  */
 
-
 declare(strict_types=1);
 
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
-
-// pr($avaliacao);
 
 ?>
 <div>
@@ -19,17 +16,17 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <div class="avaliacoes view content">
             <aside>
                 <div class="nav">
-                    <?php if ($user_data['administrador_id']): ?>
+                    <?php if ($user_data->categoria == '1' || $user_data->categoria == '4'): ?>
                         <?= $this->Html->link(__('Editar avaliação'), ['action' => 'edit', $avaliacao->id], ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Excluir avaliação'), ['action' => 'delete', $avaliacao->id], ['confirm' => __('Tem certeza que quer excluir o registro # {0}?', $avaliacao->id), 'class' => 'button']) ?>
                         <?= $this->Html->link(__('Listar avaliações'), ['action' => 'index'], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Nova avaliação'), ['action' => 'add'], ['class' => 'button']) ?>
                     <?php endif; ?>
-                    <?= $this->Html->link(__('Imprimir avaliação'), ['action' => 'imprimeavaliacaopdf/' . $avaliacao->id], ['class' => 'button']) ?>
+                    <?= $this->Html->link(__('Imprimir avaliação'), ['action' => 'imprimeavaliacaopdf', $avaliacao->id], ['class' => 'button']) ?>
                 </div>
             </aside>
             <div>
-                <h3><?= h('avaliacao_' . $avaliacao->id) ?></h3>
+                <h3><?= h('avaliacao_' . $avaliacao->estagiario->aluno->nome) ?></h3>
                 <p>Avaliação da(o) estagiario(a): <?= $avaliacao->estagiario ? $this->Html->link($avaliacao->estagiario->aluno->nome, ['controller' => 'Estagiarios', 'action' => 'view', $avaliacao->estagiario->id]) : '' ?></p>
                 <p>Campo de estágio: <?= $avaliacao->estagiario ? $this->Html->link($avaliacao->estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $avaliacao->estagiario->instituicao->id]) : '' ?></p> 
                 <p>Supervisor(a): <?= $avaliacao->estagiario ? $this->Html->link($avaliacao->estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $avaliacao->estagiario->supervisor->id]) : '' ?></p>

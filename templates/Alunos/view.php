@@ -14,11 +14,11 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <div class="alunos view content">
             <aside>
                 <div class="nav">
-        	        <?php if ($user_data['administrador_id']): ?>
+        	        <?php if ($user_data->categoria == '1'): ?>
                         <?= $this->Form->postLink(__('Excluir Aluno(a)'), ['action' => 'delete', $aluno->id], ['confirm' => __('Are you sure you want to delete {0}?', $aluno->nome), 'class' => 'button']) ?>
                         <?= $this->Html->link(__('Novo Aluno(a)'), ['action' => 'add'], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Listar Alunos(as)'), ['action' => 'index'], ['class' => 'button']) ?>
-        	        <?php elseif ($user_data['aluno_id'] == $aluno->id): ?>
+        	        <?php elseif ($user_data->categoria == '2' && $user_data->aluno_id == $aluno->id): ?>
                         <?= $this->Html->link(__('Editar Aluno(a)'), ['action' => 'edit', $aluno->id], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Declaração de período'), ['controller' => 'Alunos', 'action' => 'declaracaoperiodo', $aluno->id], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Termo de compromisso'), ['controller' => 'Estagiarios', 'action' => 'termocompromisso', $aluno->id], ['class' => 'button']) ?>
@@ -119,63 +119,6 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             </div>
             <?php endif; ?>
 
-            <?php if (!empty($aluno->estagiarios)) : ?>
-            <div class="related">
-                <h4><?= __('Estágios') ?></h4>
-                <div class="table_wrap">
-                    <table>
-                        <tr>
-                            <th class="actions"><?= __('Actions') ?></th>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('Instituicao') ?></th>
-                            <th><?= __('Periodo') ?></th>
-                            <th><?= __('Turno') ?></th>
-                            <th><?= __('Supervisor(a)') ?></th>
-                            <th><?= __('Professor(a)') ?></th>
-                            <th><?= __('Turma') ?></th>
-                            <th><?= __('Nivel') ?></th>
-                            <th><?= __('TC') ?></th>
-                            <th><?= __('Nota') ?></th>
-                            <th><?= __('CH') ?></th>
-                        </tr>
-                        <?php foreach ($aluno->estagiarios as $estagiario) : ?>
-                        <tr>
-                            <td class="actions">
-                                <?= $this->Html->link(__('Ver'), ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?>
-                                <?= $this->Html->link(__('Editar'), ['controller' => 'Estagiarios', 'action' => 'edit', $estagiario->id]) ?>
-                                <?php if ($user_data['administrador_id']): ?>
-                                    <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete {0}?', $estagiario->id)]) ?>
-                                <?php endif; ?>
-                            </td>
-                            <td><?= $this->Html->link((string)$estagiario->id, ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?></td>
-                            <td><?= $estagiario->instituicao ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario->instituicao->id]) : '' ?></td>
-                            <td><?= h($estagiario->periodo) ?></td>
-                            <td>
-        						<?php
-        						$turno = '';
-        						switch ( $estagiario->turno ) {
-        							case 'D': $turno = 'Diurno';   break;
-        							case 'N': $turno = 'Noturno';  break;
-        		                    case 'I': $turno = 'Indeterminado'; break;
-        						}
-        						echo h($turno);
-        						?>
-                            </td>
-                            <td><?= ($estagiario->supervisor and $estagiario->supervisor->nome) ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
-                            <td><?= $estagiario->professor ? $this->Html->link($estagiario->professor->nome, ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id]) : '' ?></td>
-                            <td><?= $estagiario->turma ? $this->Html->link($estagiario->turma->turma, ['controller' => 'Turmas', 'action' => 'view', $estagiario->turma->id]) : '' ?></td>
-                            <td><?= h($estagiario->nivel) ?></td>
-                            <td><?= h($estagiario->tc) ?></td>
-                            <td><?= h($estagiario->nota) ?></td>
-                            <td><?= h($estagiario->ch) ?></td>
-                            <td><?= h($estagiario->observacoes) ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </div>
-            </div>
-            <?php endif; ?>
-            
             <?php if (!empty($aluno->inscricoes)) : ?>
             <div class="related">
                 <h4><?= __('Inscrições') ?></h4>
@@ -209,7 +152,61 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </div>
             </div>
             <?php endif; ?>
-            
+
+            <?php if (!empty($aluno->estagiarios)) : ?>
+            <div class="related">
+                <h4><?= __('Estágios') ?></h4>
+                <div class="table_wrap">
+                    <table>
+                        <tr>
+                            <th class="actions"><?= __('Actions') ?></th>
+                            <th><?= __('Id') ?></th>
+                            <th><?= __('Instituicao') ?></th>
+                            <th><?= __('Periodo') ?></th>
+                            <th><?= __('Turno') ?></th>
+                            <th><?= __('Supervisor(a)') ?></th>
+                            <th><?= __('Professor(a)') ?></th>
+                            <th><?= __('Turma') ?></th>
+                            <th><?= __('Nivel') ?></th>
+                            <th><?= __('Nota') ?></th>
+                            <th><?= __('CH') ?></th>
+                        </tr>
+                        <?php foreach ($aluno->estagiarios as $estagiario) : ?>
+                        <tr>
+                            <td class="actions">
+                                <?= $this->Html->link(__('Ver'), ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?>
+                                <?php if ($user_data->categoria == '1'): ?>
+                                    <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete {0}?', $estagiario->id)]) ?>
+                                <?php endif; ?>
+                            </td>
+                            <td><?= $this->Html->link((string)$estagiario->id, ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?></td>
+                            <td><?= $estagiario->instituicao ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario->instituicao->id]) : '' ?></td>
+                            <td><?= h($estagiario->periodo) ?></td>
+                            <td>
+        						<?php
+        						$turno = '';
+        						switch ( $estagiario->turno ) {
+        							case 'D': $turno = 'Diurno';   break;
+        							case 'N': $turno = 'Noturno';  break;
+        		                    case 'I': $turno = 'Indeterminado'; break;
+        						}
+        						echo h($turno);
+        						?>
+                            </td>
+                            <td><?= ($estagiario->supervisor and $estagiario->supervisor->nome) ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
+                            <td><?= $estagiario->professor ? $this->Html->link($estagiario->professor->nome, ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id]) : '' ?></td>
+                            <td><?= $estagiario->turma ? $this->Html->link($estagiario->turma->turma, ['controller' => 'Turmas', 'action' => 'view', $estagiario->turma->id]) : '' ?></td>
+                            <td><?= h($estagiario->nivel) ?></td>
+                            <td><?= h($estagiario->nota) ?></td>
+                            <td><?= h($estagiario->ch) ?></td>
+                            <td><?= h($estagiario->observacoes) ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
+            </div>
+            <?php endif; ?>
+      
         </div>
     </div>
 </div>

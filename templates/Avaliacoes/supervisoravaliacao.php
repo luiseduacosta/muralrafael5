@@ -9,7 +9,7 @@
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
-    
+
 ?>
 <div class="container">
     <h3><?= __('Avaliações') ?></h3>
@@ -17,7 +17,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <table class="table table-striped table-hover table-responsive">
             <thead>
                 <tr>
-                    <?php if ($user_data['administrador_id']): ?>
+                    <?php if ($user_data->categoria == '1'): ?>
                         <th class="actions"><?= __('Ações') ?></th>
                         <th><?= $this->Paginator->sort('id') ?></th>
                     <?php endif; ?>
@@ -37,7 +37,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <?php // pr(estagiario); ?>
                     <?php // die(); ?>
                     <tr>
-                        <?php if ($user_data['administrador_id']): ?>
+                        <?php if ($user_data->categoria == '1'): ?>
                             <?php if (isset($estagiario->avaliacao->id)): ?>
                                 <td class="actions">
                                     <?= $this->Html->link(__('View'), ['action' => 'view', $estagiario->avaliacao->id]) ?>
@@ -50,7 +50,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                             <td><?= isset($estagiario->id) ? $estagiario->id : '' ?></td>
                         <?php endif; ?>
 
-                        <?php if ($user_data['administrador_id'] || $user_data['supervisor_id']): ?>
+                        <?php if ($user_data->categoria == '1' || $user_data->categoria == '4'): ?>
                             <td><?= $estagiario->hasValue('avaliacao') ? $this->Html->link('Ver avaliação', ['controller' => 'Avaliacoes', 'action' => 'view', $estagiario->avaliacao->id], ['class' => 'btn btn-success']) : $this->Html->link('Fazer avaliação on-line', ['controller' => 'avaliacoes', 'action' => 'add', $estagiario->id], ['class' => 'btn btn-warning']) ?></td>
                         <?php else: ?>
                             <td><?= $estagiario->hasValue('avaliacao') ? $this->Html->link('Ver avaliação', ['controller' => 'Avaliacoes', 'action' => 'view', $estagiario->avaliacao->id], ['class' => 'btn btn-success']) : 'Sem avaliação on-line' ?></td>
@@ -58,7 +58,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
                         <td><?= $this->Html->link('Imprime avaliação discente', ['controller' => 'estagiarios', 'action' => 'avaliacaodiscentepdf', $estagiario->id], ['class' => 'btn btn-success']) ?></td>    
 
-                        <?php if ($user_data['administrador_id']): ?>
+                        <?php if ($user_data->categoria == '1'): ?>
                             <td><?= $estagiario->hasValue('aluno') ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
                         <?php else: ?>
                             <td><?= $estagiario->hasValue('aluno') ? $estagiario->aluno->nome : '' ?></td>

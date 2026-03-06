@@ -4,11 +4,9 @@
  * @var \App\Model\Entity\Folhadeatividade $folhadeatividade
  */
 // pr($folhadeatividades);
-// pr($estagiario);
-// die();
 ?>
 
-<div class="areas add content">
+<div class="folhadeatividades add content">
     <aside>
         <div class="nav">
             <?= $this->Html->link(__('Listar atividades'), ['controller' => 'folhadeatividades', 'action' => 'index', '?' => ['estagiario_id' => isset($estagiario) ? $estagiario->id : '1']], ['class' => 'button']) ?>
@@ -58,10 +56,10 @@
             <h3><?= __('Adicionar uma atividade') ?></h3>
             <?php
             echo isset($estagiario) ? $this->Form->control('estagiario_id', ['options' => [$estagiario->id => $estagiario->aluno->nome]], 'readonly') : $this->Form->control('estagiario_id', ['type' => 'number']);
-            echo $this->Form->control('dia');
-            echo $this->Form->control('inicio', ['label' => ['text' => 'Horário de início']]);
-            echo $this->Form->control('final', ['label' => ['text' => 'Horário de finalização']]);
-            echo $this->Form->control('atividade', ['label' => ['text' => 'Atividade realizada']]);
+            echo $this->Form->control('dia', ['class' => 'form-control', 'label' => ['text' => 'Data'], 'type' => 'date']);
+            echo $this->Form->control('inicio', ['class' => 'form-control', 'label' => ['text' => 'Horário de início'], 'type' => 'time']);
+            echo $this->Form->control('final', ['class' => 'form-control', 'label' => ['text' => 'Horário de finalização'], 'type' => 'time']);
+            echo $this->Form->control('atividade', ['class' => 'form-control', 'label' => ['text' => 'Atividade realizada'], 'type' => 'text']);
             echo $this->Form->control('horario', ['type' => 'hidden', 'value' => null]);
             ?>
         </fieldset>

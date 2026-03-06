@@ -30,8 +30,7 @@ class FolhadeatividadesController extends AppController
             $this->Authorization->authorize($this->Folhadeatividades);
         } catch (ForbiddenException $error) {
             $this->Flash->error("Authorization error: " . $error->getMessage());
-
-            return $this->redirect("/");
+            return $this->redirect(["controller" => "Muralestagios", "action" => "index"]);
         }
 
         $estagiario_id = $this->getRequest()->getQuery("estagiario_id");
@@ -40,30 +39,19 @@ class FolhadeatividadesController extends AppController
             return $this->redirect(["controller" => "Estagiarios", "action" => "index"]);
         }
 
-        $estagiariotabela = $this->fetchTable("Estagiarios");
         if ($estagiario_id) {
             $folhadeatividades = $this->Folhadeatividades
+                ->find()
+                ->contain(["Estagiarios" => ["Alunos", "Instituicoes", "Supervisores"]])
                 ->find("all")
-                ->order(["id"])
+                ->order(["Folhadeatividades.id"])
                 ->where(["estagiario_id" => $estagiario_id]);
 
-            $estagiario = $estagiariotabela
+            $estagiario = $this->fetchTable("Estagiarios")
                 ->find()
-                ->contain(["Alunos", "Instituicoes"])
+                ->contain(["Alunos", "Instituicoes", "Supervisores", "Professores", "Folhadeatividades"])
                 ->where(["Estagiarios.id" => $estagiario_id])
                 ->first();
-        }
-
-        if (empty($estagiario)) {
-            $this->Flash->error(__("Selecione o estagiário"));
-            $estagiario = $estagiariotabela
-                ->find()
-                ->contain(["Alunos", "Instituicoes"])
-                ->first();
-            $folhadeatividades = $this->Folhadeatividades
-                ->find("all")
-                ->order(["id"])
-                ->where(["estagiario_id" => $estagiario->id]);
         }
 
         if (empty($folhadeatividades)) {
@@ -72,7 +60,6 @@ class FolhadeatividadesController extends AppController
             );
             //return $this->redirect(['controller' => 'estagiarios', 'action' => 'index']);
         }
-
         $folhadeatividades = $this->paginate($folhadeatividades);
 
         $this->set(compact("estagiario", "folhadeatividades"));
@@ -91,12 +78,11 @@ class FolhadeatividadesController extends AppController
             $this->Authorization->authorize($this->Folhadeatividades);
         } catch (ForbiddenException $error) {
             $this->Flash->error("Authorization error: " . $error->getMessage());
-
             return $this->redirect(["controller" => "Muralestagios", "action" => "index"]);
         }
 
         $estagiario_id = $this->getRequest()->getQuery("estagiario_id");
-
+        pr($estagiario_id);
         if ($estagiario_id) {
             $folhadeatividades = $this->Folhadeatividades
                 ->find("all")
@@ -104,21 +90,11 @@ class FolhadeatividadesController extends AppController
                 ->contain(["Estagiarios" => ["Alunos", "Instituicoes"]])
                 ->where(["estagiario_id" => $estagiario_id]);
 
-            $estagiariotabela = $this->fetchTable("Estagiarios");
-            $estagiario = $estagiariotabela
+            $estagiario = $this->fetchTable("Estagiarios")
                 ->find()
                 ->contain(["Alunos", "Instituicoes"])
                 ->where(["Estagiarios.id" => $estagiario_id])
                 ->first();
-        }
-
-        if (empty($folhadeatividades)) {
-            $this->Flash->error(
-                __("Selecione o estagiário e o período da folha de atividades"),
-            );
-            //return $this->redirect(['controller' => 'folhadeatividades', 'action' => 'add', '?' => ['estagiario_id' => $estagiario_id]]);
-        } else {
-            $this->set("folhadeatividades", $folhadeatividades);
         }
 
         $folhadeatividadeentity = $this->Folhadeatividades->newEmptyEntity();
@@ -136,17 +112,18 @@ class FolhadeatividadesController extends AppController
                 return $this->redirect([
                     "controller" => "Folhadeatividades",
                     "action" => "view",
-                    "?" => [
-                        "id" => $folhadeatividaderesposta->id,
+                    $folhadeatividaderesposta->id,
                     ],
-                ]);
+                );
             }
             $this->Flash->error(
                 __("Atividade não foi cadastrada. Tente mais uma vez."),
             );
         } 
-
         if (!empty($folhadeatividades)) {
+            $this->set("folhadeatividades", $folhadeatividades);
+        }
+        if (!empty($estagiario)) {
             $this->set("estagiario", $estagiario);
         }
     }
@@ -178,7 +155,6 @@ class FolhadeatividadesController extends AppController
                 $this->Authorization->authorize($folhadeatividade);
             } catch (ForbiddenException $error) {
                 $this->Flash->error("Authorization error: " . $error->getMessage());
-
                 return $this->redirect(["controller" => "Muralestagios", "action" => "index"]);
             }
         }
@@ -186,9 +162,8 @@ class FolhadeatividadesController extends AppController
         if (empty($folhadeatividade)) {
             $this->Flash->error(__("Sem atividades cadastradas"));
             return $this->redirect([
-                "controller" => "estagiarios",
-                "action" => "view",
-                $estagiario_id,
+                "controller" => "folhadeatividades",
+                "action" => "add", "?" => ["estagiario_id" => $estagiario_id],
             ]);
         }
         $this->set(compact("folhadeatividade"));
@@ -359,7 +334,59 @@ class FolhadeatividadesController extends AppController
             "download" => true, // This can be omitted if "filename" is specified.
             "filename" => "folha_de_atividades_" . $estagiario_id . ".pdf", //// This can be omitted if you want file name based on URL.
         ]);
+
         $this->set("atividades", $atividades);
         $this->set("estagiario", $estagiario);
+    }
+
+    /**
+     * Atividadesmanualpdf method - Generates PDF for activities of an intern without relying on Folhadeatividade entity
+     *
+     * @param string|null $id Estagiário id (unused in sig, used via query)
+     * @return \Cake\Http\Response|null|void Renders PDF view
+     */
+    public function atividadesmanualpdf($id = null)
+    {
+
+        $estagiario_id = $this->getRequest()->getQuery('estagiario_id');
+        $this->Authorization->skipAuthorization();
+
+        if ($estagiario_id == null) {
+            $this->Flash->error(__('Selecione o estagiário e o período da folha de atividades'));
+            return $this->redirect(['controller' => 'Estagiarios', 'action' => 'index']);
+        }
+
+        try {
+            $estagiario = $this->fetchTable('Estagiarios')->find()
+                ->contain(['Alunos', 'Professores', 'Instituicoes', 'Supervisores'])
+                ->where(['Estagiarios.id' => $estagiario_id])
+                ->select([
+                    'estagiario_id' => 'Estagiarios.id',
+                    'aluno_nome' => 'Alunos.nome',
+                    'aluno_registro' => 'Alunos.registro',
+                    'estagiario_periodo' => 'Estagiarios.periodo',
+                    'estagiario_nivel' => 'Estagiarios.nivel',
+                    'supervisor_nome' => 'Supervisores.nome',
+                    'supervisor_cress' => 'Supervisores.cress',
+                    'instituicao_nome' => 'Instituicoes.instituicao',
+                    'professor_nome' => 'Professores.nome',
+                ])
+                ->first();
+        } catch (RecordNotFoundException $e) {
+            $this->Flash->error(__('Estagiário(a) não localizado(a).'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $this->viewBuilder()->enableAutoLayout(false);
+        $this->viewBuilder()->setClassName('CakePdf.Pdf');
+        $this->viewBuilder()->setOption(
+            'pdfConfig',
+            [
+                'orientation' => 'portrait',
+                'download' => true,
+                'filename' => 'folha_de_atividades_' . $estagiario->aluno_nome . '.pdf',
+            ],
+        );
+        $this->set('estagiario', $estagiario);
     }
 }

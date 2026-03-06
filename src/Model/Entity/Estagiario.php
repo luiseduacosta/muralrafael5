@@ -38,6 +38,8 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\Turma $turma
  * @property \App\Model\Entity\Turno $turno_rel
  * @property \App\Model\Entity\Complemento $complemento
+ * @property \App\Model\Entity\Folhadeatividade $folhadeatividade
+ * @property \App\Model\Entity\Avaliacao $avaliacao
  */
 class Estagiario extends Entity
 {
@@ -80,5 +82,7 @@ class Estagiario extends Entity
         'turma' => true,
         'turno_rel' => true,
         'complemento' => true,
+        'folhadeatividade' => true,
+        'avaliacoes' => true,
     ];
 }

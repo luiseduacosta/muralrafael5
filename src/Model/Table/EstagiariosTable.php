@@ -16,6 +16,10 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\ProfessoresTable&\Cake\ORM\Association\BelongsTo $Professores
  * @property \App\Model\Table\TurmasTable&\Cake\ORM\Association\BelongsTo $Turmas
  * @property \App\Model\Table\TurnosTable&\Cake\ORM\Association\BelongsTo $Turnos
+ * @property \App\Model\Table\ComplementosTable&\Cake\ORM\Association\BelongsTo $Complementos
+ * @property \App\Model\Table\FolhadeatividadesTable&\Cake\ORM\Association\HasMany $Folhadeatividades
+ * @property \App\Model\Table\AvaliacoesTable&\Cake\ORM\Association\HasOne $Avaliacoes
+ * 
  * @method \App\Model\Entity\Estagiario newEmptyEntity()
  * @method \App\Model\Entity\Estagiario newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Estagiario[] newEntities(array $data, array $options = [])
@@ -68,6 +72,12 @@ class EstagiariosTable extends Table
         ]);
         $this->belongsTo('Complementos', [
             'foreignKey' => 'complemento_id',
+        ]);
+        $this->hasMany('Folhadeatividades', [
+            'foreignKey' => 'estagiario_id',
+        ]);
+        $this->hasOne('Avaliacoes', [
+            'foreignKey' => 'estagiario_id',
         ]);
     }
 

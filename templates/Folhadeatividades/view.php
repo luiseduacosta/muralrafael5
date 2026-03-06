@@ -7,10 +7,11 @@
 <div class="areas view content">
     <aside>
         <div class="nav">
-                <?= $this->Html->link(__('Editar atividade'), ['action' => 'edit', $folhadeatividade->id], ['class' => 'button']) ?>
-                <?= $this->Form->postLink(__('Excluir atividade'), ['action' => 'delete', $folhadeatividade->id], ['confirm' => __('Tem certeza que quer excluir o registro # {0}?', $folhadeatividade->id), 'class' => 'button']) ?>
-                <?= $this->Html->link(__('Listar atividades'), ['action' => 'index', '?' => ['estagiario_id' => $folhadeatividade->estagiario_id]], ['class' => 'button']) ?>
-                <?= $this->Html->link(__('Nova atividade'), ['action' => 'add', '?' => ['estagiario_id' => $folhadeatividade->estagiario_id]], ['class' => 'button']) ?>
+            <?= $this->Html->link(__('Estagiário(a)'), ['controller' => 'Estagiarios', 'action' => 'view', $folhadeatividade->estagiario_id], ['class' => 'button']) ?>
+            <?= $this->Html->link(__('Editar atividade'), ['action' => 'edit', $folhadeatividade->id], ['class' => 'button']) ?>
+            <?= $this->Form->postLink(__('Excluir atividade'), ['action' => 'delete', $folhadeatividade->id], ['confirm' => __('Tem certeza que quer excluir o registro # {0}?', $folhadeatividade->id), 'class' => 'button']) ?>
+            <?= $this->Html->link(__('Listar atividades'), ['action' => 'index', '?' => ['estagiario_id' => $folhadeatividade->estagiario_id]], ['class' => 'button']) ?>
+            <?= $this->Html->link(__('Nova atividade'), ['action' => 'add', '?' => ['estagiario_id' => $folhadeatividade->estagiario_id]], ['class' => 'button']) ?>
         </div>
     </aside>
 
