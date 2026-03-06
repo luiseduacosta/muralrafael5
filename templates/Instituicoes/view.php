@@ -105,7 +105,7 @@ if ($user_session) {
                 </tr>
             </table>
             <div class="related">
-                <h4><?= __('Related Supervisores') ?></h4>
+                <h4><?= __('Supervisores') ?></h4>
                 <?php if (!empty($instituicao->supervisores)) : ?>
                 <div class="table_wrap">
                     <table>
@@ -123,8 +123,10 @@ if ($user_session) {
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Supervisores', 'action' => 'view', $supervisores->id]) ?>
-                                <?= $this->Html->link(__('Editar'), ['controller' => 'Supervisores', 'action' => 'edit', $supervisores->id]) ?>
-                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Supervisores', 'action' => 'delete', $supervisores->id], ['confirm' => __('Are you sure you want to delete # {0}?', $supervisores->id)]) ?>
+                                <?php if ($user_data['categoria'] == '1'): ?>
+                                    <?= $this->Html->link(__('Editar'), ['controller' => 'Supervisores', 'action' => 'edit', $supervisores->id]) ?>
+                                    <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Supervisores', 'action' => 'delete', $supervisores->id], ['confirm' => __('Are you sure you want to delete # {0}?', $supervisores->id)]) ?>
+                                <?php endif; ?>
                             </td>
                             <td><?= $this->Html->link((string)$supervisores->id, ['controller' => 'Supervisores', 'action' => 'view', $supervisores->id]) ?></td>
                             <td><?= $this->Html->link($supervisores->nome, ['controller' => 'Supervisores', 'action' => 'view', $supervisores->id]) ?></td>
@@ -140,7 +142,7 @@ if ($user_session) {
                 <?php endif; ?>
             </div>
             <div class="related">
-                <h4><?= __('Related Estagiarios') ?></h4>
+                <h4><?= __('Estagiarios') ?></h4>
                 <?php if (!empty($instituicao->estagiarios)) : ?>
                 <div class="table_wrap">
                     <table>
@@ -162,8 +164,10 @@ if ($user_session) {
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?>
-                                <?= $this->Html->link(__('Editar'), ['controller' => 'Estagiarios', 'action' => 'edit', $estagiario->id]) ?>
-                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete # {0}?', $estagiario->id)]) ?>
+                                <?php if ($user_data['categoria'] == '1'): ?>
+                                    <?= $this->Html->link(__('Editar'), ['controller' => 'Estagiarios', 'action' => 'edit', $estagiario->id]) ?>
+                                    <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete # {0}?', $estagiario->id)]) ?>
+                                <?php endif; ?>
                             </td>
                             <td><?= $this->Html->link((string)$estagiario->id, ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?></td>
                             <td><?= $estagiario->aluno ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
@@ -194,7 +198,7 @@ if ($user_session) {
                 <?php endif; ?>
             </div>
             <div class="related">
-                <h4><?= __('Related Muralestagios') ?></h4>
+                <h4><?= __('Muralestagios') ?></h4>
                 <?php if (!empty($instituicao->muralestagios)) : ?>
                 <div class="table_wrap">
                     <table>
@@ -213,8 +217,10 @@ if ($user_session) {
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Muralestagios', 'action' => 'view', $muralestagio->id]) ?>
-                                <?= $this->Html->link(__('Editar'), ['controller' => 'Muralestagios', 'action' => 'edit', $muralestagio->id]) ?>
-                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Muralestagios', 'action' => 'delete', $muralestagio->id], ['confirm' => __('Are you sure you want to delete # {0}?', $muralestagio->id)]) ?>
+                                <?php if ($user_data['categoria'] == '1'): ?>
+                                    <?= $this->Html->link(__('Editar'), ['controller' => 'Muralestagios', 'action' => 'edit', $muralestagio->id]) ?>
+                                    <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Muralestagios', 'action' => 'delete', $muralestagio->id], ['confirm' => __('Are you sure you want to delete # {0}?', $muralestagio->id)]) ?>
+                                <?php endif; ?>
                             </td>
                             <td><?= $this->Html->link($muralestagio->id, ['controller' => 'Muralestagios', 'action' => 'view', $muralestagio->id]) ?></td>
                             <td><?= h($muralestagio->vagas) ?></td>
@@ -243,7 +249,7 @@ if ($user_session) {
             
             <?php if (!empty($instituicao->visitas)) : ?>
             <div class="related">
-                <h4><?= __('Related Visitas') ?></h4>
+                <h4><?= __('Visitas') ?></h4>
                 <div class="table_wrap">
                     <table>
                         <tr>
@@ -259,8 +265,10 @@ if ($user_session) {
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Visitas', 'action' => 'view', $visita->id]) ?>
-                                <?= $this->Html->link(__('Editar'), ['controller' => 'Visitas', 'action' => 'edit', $visita->id]) ?>
-                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Visitas', 'action' => 'delete', $visita->id], ['confirm' => __('Are you sure you want to delete visita_{0}?', $visita->id)]) ?>
+                                <?php if ($user_data['categoria'] == '1'): ?>
+                                    <?= $this->Html->link(__('Editar'), ['controller' => 'Visitas', 'action' => 'edit', $visita->id]) ?>
+                                    <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Visitas', 'action' => 'delete', $visita->id], ['confirm' => __('Are you sure you want to delete visita_{0}?', $visita->id)]) ?>
+                                <?php endif; ?>
                             </td>
                             <td><?= $this->Html->link($visita->id, ['action' => 'view', $visita->id]) ?></td>
                             <td><?= h($visita->data) ?></td>

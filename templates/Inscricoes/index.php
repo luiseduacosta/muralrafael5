@@ -3,12 +3,18 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Inscricao[]|\Cake\Collection\CollectionInterface $inscricoes
  */
+
+$user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+$user_session = $this->request->getAttribute('identity');
+if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
 <div class="inscricoes index content">
 	<aside>
-		<div class="nav">
-            <?= $this->Html->link(__('Nova Inscricao'), ['action' => 'add'], ['class' => 'button']) ?>
-		</div>
+        <?php if ($user_data['categoria'] == '1'): ?>
+            <div class="nav">
+                <?= $this->Html->link(__('Nova Inscricao'), ['action' => 'add'], ['class' => 'button']) ?>
+            </div>
+        <?php endif; ?>
 	</aside>
     
     <h3><?= __('Lista de inscrições') ?></h3>
@@ -35,8 +41,10 @@
                 <tr>
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $inscricao->id]) ?>
-                        <?= $this->Html->link(__('Editar'), ['action' => 'edit', $inscricao->id]) ?>
-                        <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete # {0}?', $inscricao->id)]) ?>
+                        <?php if ($user_data['categoria'] == '1'): ?>
+                            <?= $this->Html->link(__('Editar'), ['action' => 'edit', $inscricao->id]) ?>
+                            <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete # {0}?', $inscricao->id)]) ?>
+                        <?php endif; ?>
                     </td>
                     <td><?= $this->Html->link((string)$inscricao->id, ['action' => 'view', $inscricao->id]) ?></td>
                     <td><?= $inscricao->aluno ? $this->Html->link($inscricao->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $inscricao->aluno->id]) : '' ?></td>

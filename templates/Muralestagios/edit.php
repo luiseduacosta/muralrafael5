@@ -26,13 +26,13 @@ if ($user_session) {
             </aside>
             <?= $this->Form->create($muralestagio) ?>
             <fieldset>
-                <h3><?= __('Editando estagio_' . $muralestagio->id) ?></h3>
+                <h3><?= __('Editando estagio_' . $muralestagio->instituicao) ?></h3>
                 <?php
                     echo $this->Form->control('instituicao');
                     echo $this->Form->control('convenio', ['options' => ['1' => 'Sim', '0' => 'Não'], 'class' => 'form-control']);
                     echo $this->Form->control('email');
                     echo $this->Form->control('vagas');
-                    echo $this->Form->control('beneficios');
+                    echo $this->Form->control('beneficios', ['label' => 'Benefícios']);
                     echo $this->Form->control('fim_de_semana', ['options' => ['1' => 'Sim', '0' => 'Não', '2' => 'Parcialmente'], 'class' => 'form-control']);
                     echo $this->Form->control('carga_horaria');
                     echo $this->Form->control('requisitos', ['class' => 'formCode hidden']);
@@ -40,14 +40,14 @@ if ($user_session) {
                     echo $this->Form->control('turma_id', ['options' => $turmas, 'class' => 'form-control']);
                     echo $this->Form->control('turno_id', ['options' => $turnos, 'class' => 'form-control']);
                     echo $this->Form->control('professor_id', ['options' => $professores, 'class' => 'form-control']);
-                    echo $this->Form->control('local_inscricao');
-                    echo $this->Form->control('data_inscricao', ['empty' => true]);
-                    echo $this->Form->control('local_selecao');
-                    echo $this->Form->control('data_selecao', ['empty' => true]);
-                    echo $this->Form->control('horario_selecao');
-                    echo $this->Form->control('forma_selecao');
-                    echo $this->Form->control('contato');
-                    echo $this->Form->control('periodo');
+                    echo $this->Form->control('data_inscricao', ['label' => 'Data de enecerramento da inscrição']);
+                    echo $this->Form->control('local_inscricao', ['label' => 'Local de inscrição']);
+                    echo $this->Form->control('data_selecao', ['empty' => true, 'label' => 'Data de seleção']);
+                    echo $this->Form->control('local_selecao', ['label' => 'Local de seleção']);
+                    echo $this->Form->control('horario_selecao', ['label' => 'Horário de seleção']);
+                    echo $this->Form->control('forma_selecao', ['label' => 'Forma de seleção', 'options' => [0 => 'Entrevista', 2 => 'Prova', 1 => 'CR', 3 => 'Outra']]);
+                    echo $this->Form->control('contato', ['label' => 'Contato']);
+                    echo $this->Form->control('periodo', ['label' => 'Período']);
                     echo $this->Form->control('outras', ['class' => 'formCode hidden']);
                     echo $this->element('input_div', ['name' => 'outras', 'content' => $muralestagio->outras ]);
                 ?>

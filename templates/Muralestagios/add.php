@@ -33,7 +33,7 @@
                     echo $this->Form->control('local_selecao', ['placeholder' => 'Será informado por e-mail', 'label' => 'Local de seleção']);
                     echo $this->Form->control('data_selecao', ['label' => 'Data de seleção']);
                     echo $this->Form->control('horario_selecao', ['placeholder' => '9:00']);
-                    echo $this->Form->control('forma_selecao',  ['type' => 'select', 'options' => [3 => 'Outra', 2 => 'Prova', 1 => 'CR', 0 => 'Entrevista'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
+                    echo $this->Form->control('forma_selecao',  ['type' => 'select', 'options' => [0 => 'Entrevista', 2 => 'Prova', 1 => 'CR', 3 => 'Outra'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
                     echo $this->Form->control('contato', ['label' => 'Informações de contato']);
                     echo $this->Form->control('periodo', ['value' => $periodo]);
                     echo $this->Form->control('outras', ['label' => 'Outras informações']);

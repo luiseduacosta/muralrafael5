@@ -30,24 +30,20 @@ if ($user_session) {
                     <td><?= h($supervisor->nome) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Cpf') ?></th>
+                    <th><?= __('CPF') ?></th>
                     <td><?= h($supervisor->cpf) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Endereco') ?></th>
-                    <td><?= h($supervisor->endereco) ?></td>
+                    <th><?= __('Id') ?></th>
+                    <td><?= h($supervisor->id) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Bairro') ?></th>
-                    <td><?= h($supervisor->bairro) ?></td>
+                    <th><?= __('CRESS') ?></th>
+                    <td><?= $this->Number->format($supervisor->cress) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Municipio') ?></th>
-                    <td><?= h($supervisor->municipio) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Cep') ?></th>
-                    <td><?= h($supervisor->cep) ?></td>
+                    <th><?= __('Região') ?></th>
+                    <td><?= $this->Number->format($supervisor->regiao) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Codigo Tel') ?></th>
@@ -82,76 +78,82 @@ if ($user_session) {
                     <td><?= h($supervisor->outros_estudos) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Area Curso') ?></th>
+                    <th><?= __('Área do outro estudo') ?></th>
                     <td><?= h($supervisor->area_curso) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Ano Curso') ?></th>
+                    <th><?= __('Ano de conclusao') ?></th>
                     <td><?= h($supervisor->ano_curso) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Cargo') ?></th>
+                    <th><?= __('Cargo na instituição') ?></th>
                     <td><?= h($supervisor->cargo) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Curso Turma') ?></th>
+                    <th><?= __('Turma do curso de supervisores') ?></th>
                     <td><?= h($supervisor->curso_turma) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= h($supervisor->id) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Cress') ?></th>
-                    <td><?= $this->Number->format($supervisor->cress) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Regiao') ?></th>
-                    <td><?= $this->Number->format($supervisor->regiao) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Num Inscricao') ?></th>
+                    <th><?= __('Num de Inscricao no curso de supervisores') ?></th>
                     <td><?= $supervisor->num_inscrica ? $this->Number->format($supervisor->num_inscricao) : '' ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('CEP') ?></th>
+                    <td><?= h($supervisor->endereco) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('EndereÇo') ?></th>
+                    <td><?= h($supervisor->endereco) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Bairro') ?></th>
+                    <td><?= h($supervisor->bairro) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Município') ?></th>
+                    <td><?= h($supervisor->municipio) ?></td>
                 </tr>
             </table>
             <div class="text">
-                <strong><?= __('Observacoes') ?></strong>
+                <strong><?= __('Observações') ?></strong>
                 <blockquote>
                     <?= $this->Text->autoParagraph(h($supervisor->observacoes)); ?>
                 </blockquote>
             </div>
             
             <?php if (!empty($supervisor->user)) : ?>
-            <div class="related">
-                <h4><?= __('User') ?></h4>
-                <div class="table_wrap">
-                    <table>
-                        <tr>
-                            <th class="actions"><?= __('Actions') ?></th>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('Email') ?></th>
-                            <th><?= __('Registro') ?></th>
-                            <th><?= __('Timestamp') ?></th>
-                        </tr>
-                        <tr>
-                            <td class="actions">
-                                <?= $this->Html->link(__('Ver'), ['controller' => 'Users', 'action' => 'view', $supervisor->user->id]) ?>
-                                <?= $this->Html->link(__('Editar'), ['controller' => 'Users', 'action' => 'edit', $supervisor->user->id]) ?>
-                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Users', 'action' => 'delete', $supervisor->user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $supervisor->user->id)]) ?>
-                            </td>
-                            <td><?= h($supervisor->user->id) ?></td>
-                            <td><?= $supervisor->user->email ? $this->Text->autoLinkEmails($supervisor->user->email) : '' ?></td>
-                            <td><?= h($supervisor->user->registro) ?></td>
-                            <td><?= $supervisor->user->timestamp ? h($supervisor->user->timestamp) : '' ?></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+                <?php if ($user_data['categoria'] == '1' || $user_data['supervisor_id'] == $supervisor->user->id): ?>
+                    <div class="related">
+                        <h4><?= __('User') ?></h4>
+                        <div class="table_wrap">
+                            <table>
+                                <tr>
+                                    <th class="actions"><?= __('Actions') ?></th>
+                                    <th><?= __('Id') ?></th>
+                                    <th><?= __('Email') ?></th>
+                                    <th><?= __('Registro') ?></th>
+                                    <th><?= __('Timestamp') ?></th>
+                                </tr>
+                                <tr>
+                                    <td class="actions">
+                                        <?= $this->Html->link(__('Ver'), ['controller' => 'Users', 'action' => 'view', $supervisor->user->id]) ?>
+                                        <?= $this->Html->link(__('Editar'), ['controller' => 'Users', 'action' => 'edit', $supervisor->user->id]) ?>
+                                        <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Users', 'action' => 'delete', $supervisor->user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $supervisor->user->id)]) ?>
+                                    </td>
+                                    <td><?= h($supervisor->user->id) ?></td>
+                                    <td><?= $supervisor->user->email ? $this->Text->autoLinkEmails($supervisor->user->email) : '' ?></td>
+                                    <td><?= h($supervisor->user->registro) ?></td>
+                                    <td><?= $supervisor->user->timestamp ? h($supervisor->user->timestamp) : '' ?></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                <?php endif; ?>
             <?php endif; ?>
             
             <?php if (!empty($supervisor->instituicoes)) : ?>
             <div class="related">
-                <h4><?= __('Related Instituicoes') ?></h4>
+                <h4><?= __('Instituicoes') ?></h4>
                     <div class="table_wrap">
                         <table>
                             <tr>
@@ -169,8 +171,10 @@ if ($user_session) {
                                 <tr>
                                     <td class="actions">
                                         <?= $this->Html->link(__('Ver'), ['controller' => 'Instituicoes', 'action' => 'view', $instituicao->id]) ?>
-                                        <?= $this->Html->link(__('Editar'), ['controller' => 'Instituicoes', 'action' => 'edit', $instituicao->id]) ?>
-                                        <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Instituicoes', 'action' => 'delete', $instituicao->id], ['confirm' => __('Are you sure you want to delete {0}?', $instituicao->instituicao)]) ?>
+                                        <?php if ($user_data['categoria'] == '1'): ?>
+                                            <?= $this->Html->link(__('Editar'), ['controller' => 'Instituicoes', 'action' => 'edit', $instituicao->id]) ?>
+                                            <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Instituicoes', 'action' => 'delete', $instituicao->id], ['confirm' => __('Are you sure you want to delete {0}?', $instituicao->instituicao)]) ?>
+                                        <?php endif; ?>
                                     </td>
                                     <td><?= h($instituicao->id) ?></td>
                                     <td><?= $this->Html->link($instituicao->instituicao, ['controller' => 'instituicoes', 'action' => 'view', $instituicao->id]) ?></td>
@@ -189,7 +193,7 @@ if ($user_session) {
             
             <?php if (!empty($supervisor->estagiarios)) : ?>
             <div class="related">
-                <h4><?= __('Related Estagiarios') ?></h4>
+                <h4><?= __('Estagiarios') ?></h4>
                 <div class="table_wrap">
                     <table>
                         <tr>
@@ -213,8 +217,10 @@ if ($user_session) {
                             <tr>
                                 <td class="actions">
                                     <?= $this->Html->link(__('Ver'), ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?>
-                                    <?= $this->Html->link(__('Editar'), ['controller' => 'Estagiarios', 'action' => 'edit', $estagiario->id]) ?>
-                                    <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete estagiario_{0}?', $estagiario->id)]) ?>
+                                    <?php if ($user_data['categoria'] == '1'): ?>
+                                        <?= $this->Html->link(__('Editar'), ['controller' => 'Estagiarios', 'action' => 'edit', $estagiario->id]) ?>
+                                        <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete estagiario_{0}?', $estagiario->id)]) ?>
+                                    <?php endif; ?>
                                 </td>
                                 <td><?= h($estagiario->id) ?></td>
                                 <td><?= $estagiario->aluno ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
