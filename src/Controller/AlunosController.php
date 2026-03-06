@@ -15,13 +15,6 @@ use Cake\Event\EventInterface;
 class AlunosController extends AppController
 {
     /**
-     * beforeFilter method
-     */
-    public function beforeFilter(EventInterface $event): void
-    {
-        parent::beforeFilter($event);
-    }
-    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
@@ -58,7 +51,7 @@ class AlunosController extends AppController
         try {
             $this->Authorization->authorize($aluno);
         } catch (ForbiddenException $error) {
-            $this->Flash->error('Erro de authorização: ' . $error->getMessage());
+            $this->Flash->error('Erro de autorização: ' . $error->getMessage());
             return $this->redirect('/');
         }
         
@@ -72,9 +65,11 @@ class AlunosController extends AppController
      */
     public function add()
     {
-        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
         $user_session = $this->request->getAttribute('identity');
-        if ($user_session) { $user_data = $user_session->getOriginalData(); }
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
 
         $email = $this->request->getQuery('email');
 
@@ -103,7 +98,7 @@ class AlunosController extends AppController
             if ($this->Alunos->save($aluno)) {
                 $this->Flash->success(__('O aluno foi adicionado com sucesso.'));
                 // Update user record with aluno_id and numero only if the user is a aluno
-                if ($user_data->categoria == '2') {
+                if ($user_data['categoria'] == '2') {
                     $user = $this->fetchTable('Users')->get($aluno->user_id);
                     $user->aluno_id = $aluno->id;
                     $user->numero = $aluno->registro;
@@ -135,7 +130,7 @@ class AlunosController extends AppController
         try {
             $this->Authorization->authorize($aluno);
         } catch (ForbiddenException $error) {
-            $this->Flash->error('Erro de authorização: ' . $error->getMessage());
+            $this->Flash->error('Erro de autorização: ' . $error->getMessage());
             return $this->redirect('/');
         }
         
@@ -175,7 +170,7 @@ class AlunosController extends AppController
                 $this->Flash->error(__('Erro ao deletar: Não foi possível deletar o aluno.'));
             }
         } catch (ForbiddenException $error) {
-            $this->Flash->error(__( 'Erro de authorização: ' . $error->getMessage() ));
+            $this->Flash->error(__('Erro de autorização: ' . $error->getMessage()));
         }
 
         return $this->redirect(['action' => 'index']);
@@ -191,7 +186,7 @@ class AlunosController extends AppController
         try {
             $this->Authorization->authorize($this->Alunos);
         } catch (ForbiddenException $error) {
-            $this->Flash->error('Erro de authorização: ' . $error->getMessage());
+            $this->Flash->error('Erro de autorização: ' . $error->getMessage());
             return $this->redirect('/');
         }
         
@@ -237,11 +232,13 @@ class AlunosController extends AppController
      *
      * @param string|null $id Aluno id.
      */
-    public function declaracaoperiodo($id = null) 
+    public function declaracaoperiodo($id = null)
     {
-        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
         $user_session = $this->request->getAttribute('identity');
-        if ($user_session) { $user_data = $user_session->getOriginalData(); }
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
         
         $this->Authorization->authorize($this->Alunos);
 
@@ -254,7 +251,7 @@ class AlunosController extends AppController
 
         if ($id == null) {
             $this->Flash->error(__("Operação não pode ser realizada porque o 'id' não foi informado."));
-            return $this->redirect([ 'controller' => 'Alunos', 'action' => 'index']);
+            return $this->redirect(['controller' => 'Alunos', 'action' => 'index']);
         }
 
         $aluno = $this->Alunos->get($id);
@@ -268,8 +265,8 @@ class AlunosController extends AppController
 
         // Incomplete field ingresso on record of alunos
         if (strlen($aluno->ingresso) < 6) {
-             $this->Flash->error(__('Período de ingresso incompleto.'));
-             return $this->redirect(['action' => 'view', $id]);
+            $this->Flash->error(__('Período de ingresso incompleto.'));
+            return $this->redirect(['action' => 'view', $id]);
         }
 
         $configuracoes = $this->fetchTable('Configuracoes')->find()->first();
@@ -304,11 +301,11 @@ class AlunosController extends AppController
             $novoperiodo = $data['novoperiodo'] ?? $aluno->ingresso;
 
             // Recalculate logic...
-             return $this->redirect([
+            return $this->redirect([
                 'action' => 'declaracaoperiodo',
                 $id,
                 '?' => ['totalperiodos' => $totalperiodos, 'novoperiodo' => $novoperiodo],
-             ]);
+            ]);
         }
 
         $this->set(compact('aluno', 'totalperiodos', 'novoperiodo'));
@@ -324,9 +321,11 @@ class AlunosController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
         $user_session = $this->request->getAttribute('identity');
-        if ($user_session) { $user_data = $user_session->getOriginalData(); }
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
 
         $id = $this->request->getQuery('id');
         $totalperiodos = $this->request->getQuery('totalperiodos');
@@ -365,16 +364,15 @@ class AlunosController extends AppController
     /**
      * Cargahoraria method
      *
-     * @param string|null $id Aluno id.
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function cargahoraria($ordem = null) {
-
+    public function cargahoraria()
+    {
         try {
             $this->Authorization->authorize($this->Alunos);
         } catch (ForbiddenException $error) {
-            $this->Flash->error('Erro de authorização: ' . $error->getMessage());
+            $this->Flash->error('Erro de autorização: ' . $error->getMessage());
             return $this->redirect('/');
         }
         
@@ -390,12 +388,12 @@ class AlunosController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function planilhacress($id = null) 
+    public function planilhacress($id = null)
     {
         try {
             $this->Authorization->authorize($this->Alunos);
         } catch (ForbiddenException $error) {
-            $this->Flash->error('Erro de authorização: ' . $error->getMessage());
+            $this->Flash->error('Erro de autorização: ' . $error->getMessage());
             return $this->redirect('/');
         }
         
@@ -408,7 +406,7 @@ class AlunosController extends AppController
             'valueField' => 'periodo'
         ]);
         $periodos = $periodototal->toArray();
-        $periodos = array_merge($periodos, array('all' => 'Todos'));
+        $periodos = array_merge($periodos, ['all' => 'Todos']);
         $periodos = array_reverse($periodos);
         $this->set('periodos', $periodos);
         
@@ -416,7 +414,6 @@ class AlunosController extends AppController
         if (empty($periodo)) {
             $periodo = end($periodos);
         }
-        // pr($periodos);
 
         $contained = ['Alunos', 'Instituicoes', 'Supervisores', 'Professores'];
         
@@ -425,7 +422,6 @@ class AlunosController extends AppController
         $ordered = ['Alunos.nome'];
         
         if ($periodo === 'all') {
-            //ini_set('memory_limit', '2048M');
             $cress = $this->Alunos->Estagiarios->find()
                     ->contain($contained)
                     ->select($selected)
@@ -448,12 +444,12 @@ class AlunosController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function planilhaseguro($id = null) 
+    public function planilhaseguro($id = null)
     {
         try {
             $this->Authorization->authorize($this->Alunos);
         } catch (ForbiddenException $error) {
-            $this->Flash->error('Erro de authorização: ' . $error->getMessage());
+            $this->Flash->error('Erro de autorização: ' . $error->getMessage());
             return $this->redirect('/');
         }
         
@@ -465,7 +461,7 @@ class AlunosController extends AppController
             'valueField' => 'periodo'
         ]);
         $periodos = $periodototal->toArray();
-        $periodos = array_merge($periodos, array('all' => 'Todos'));
+        $periodos = array_merge($periodos, ['all' => 'Todos']);
         $periodos = array_reverse($periodos);
         $this->set('periodos', $periodos);
 
@@ -490,7 +486,6 @@ class AlunosController extends AppController
         $ordered = ['Estagiarios.nivel'];
 
         if ($periodo === 'all') {
-            //ini_set('memory_limit', '2048M');
             $seguro = $this->Alunos->Estagiarios->find()
                 ->contain($contained)
                 ->select($selected)
@@ -503,16 +498,9 @@ class AlunosController extends AppController
                 ->order($ordered);
         }
 
-        //if (!empty($t_seguro)) {
-        //    array_multisort($criterio, SORT_ASC, $t_seguro);
-        //}
-        // pr($t_seguro);
-        //$this->set('t_seguro', $t_seguro);
-        
         $this->set('seguro', $this->paginate($seguro));
 
         $instituicao = $this->fetchTable("Configuracoes")->find()->first()['instituicao'];
         $this->set('instituicao', $instituicao);
-        // die();
-    }    
+    }
 }

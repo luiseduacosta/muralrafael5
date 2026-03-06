@@ -15,14 +15,6 @@ use Cake\Event\EventInterface;
 class SupervisoresController extends AppController
 {
     /**
-     * beforeFilter method
-     */
-    public function beforeFilter(EventInterface $event): void
-    {
-        parent::beforeFilter($event);
-    }
-
-    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
@@ -82,6 +74,12 @@ class SupervisoresController extends AppController
      */
     public function add()
     {
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
+        $user_session = $this->request->getAttribute('identity');
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
+
         try {
             $this->Authorization->authorize($this->Supervisores);
         } catch (ForbiddenException $error) {
@@ -102,7 +100,7 @@ class SupervisoresController extends AppController
             if ($this->Supervisores->save($supervisor)) {
                 $this->Flash->success(__('The supervisor has been saved.'));
                 // Update the user with the supervisor id only if the atual user is supervisor
-                if ($user_data->categoria == '4') {
+                if ($user_data['categoria'] == '4') {
                     $user = $this->fetchTable('Users')->get($supervisor->user_id);
                     $user->supervisor_id = $supervisor->id;
                     $user->numero = $supervisor->cress;
@@ -170,8 +168,8 @@ class SupervisoresController extends AppController
         try {
             $this->Authorization->authorize($supervisor);
 
-            if (sizeof($supervisor->estagiarios > 0)) {
-                $this->Flash->warrning(__('Supervisor(a) tem estagiários associados'));
+            if (sizeof($supervisor->estagiarios) > 0) {
+                $this->Flash->warning(__('Supervisor(a) tem estagiários associados'));
                 return $this->redirect(['controller' => 'Supervisores', 'action' => 'view', $id]);
             }
 

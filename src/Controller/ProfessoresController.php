@@ -16,14 +16,6 @@ use Cake\ORM\Query;
 class ProfessoresController extends AppController
 {
     /**
-     * beforeFilter method
-     */
-    public function beforeFilter(EventInterface $event): void
-    {
-        parent::beforeFilter($event);
-    }
-
-    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
@@ -54,7 +46,7 @@ class ProfessoresController extends AppController
     public function view(?string $id = null)
     {
         $professor = $this->Professores->get($id, [
-            'contain' => [ 'Users', 'Muralestagios' => ['Instituicoes'] ],
+            'contain' => ['Users', 'Muralestagios' => ['Instituicoes']],
         ]);
 
         try {
@@ -74,11 +66,10 @@ class ProfessoresController extends AppController
         ])->innerJoinWith('Professores', function (Query $query) use ($professor) {
             return $query->where([
                 'professor_id' => $professor->id,
-
             ]);
         }));
 
-    $this->set(compact('professor', 'estagiarios'));
+        $this->set(compact('professor', 'estagiarios'));
     }
 
     /**
@@ -88,6 +79,12 @@ class ProfessoresController extends AppController
      */
     public function add()
     {
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
+        $user_session = $this->request->getAttribute('identity');
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
+
         try {
             $this->Authorization->authorize($this->Professores);
         } catch (ForbiddenException $error) {
@@ -108,7 +105,7 @@ class ProfessoresController extends AppController
             if ($this->Professores->save($professor)) {
                 $this->Flash->success(__('The professor has been saved.'));
                 // Update the user with the professor_id if the atual user is professor
-                if ($user_data->categoria == '3') {
+                if ($user_data['categoria'] == '3') {
                     $user = $this->fetchTable('Users')->get($professor->user_id);
                     $user->professor_id = $professor->id;
                     $user->numero = $professor->siape;

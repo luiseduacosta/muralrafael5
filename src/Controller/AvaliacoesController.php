@@ -31,7 +31,7 @@ class AvaliacoesController extends AppController
      *
      * @return Response|null|void Renders view
      */
-    public function index($id = NULL)
+    public function index($id = null)
     {
         try {
             $this->Authorization->authorize($this->Avaliacoes);
@@ -104,7 +104,7 @@ class AvaliacoesController extends AppController
      *
      * @return Response|null|void Renders view
      */
-    public function supervisoravaliacao($id = NULL)
+    public function supervisoravaliacao($id = null)
     {
         $this->Authorization->authorize($this->Avaliacoes);
 
@@ -114,8 +114,8 @@ class AvaliacoesController extends AppController
             $user_data = $user_session->getOriginalData();
         }
 
-        if ($user_data->categoria == '4') {
-            $cress = $user_data->numero;
+        if ($user_data['categoria'] == '4') {
+            $cress = $user_data['numero'];
         }
         if (empty($cress)) {
             $cress = $this->getRequest()->getQuery('cress');
@@ -178,7 +178,7 @@ class AvaliacoesController extends AppController
      *
      * @return Response|null|void Redirects on successful add, renders view otherwise.
      */
-    public function add($id = NULL)
+    public function add($id = null)
     {
         try {
             $this->Authorization->authorize($this->Avaliacoes);
@@ -197,20 +197,16 @@ class AvaliacoesController extends AppController
         } elseif ($id) {
             $avaliacaoexiste = $this->Avaliacoes->find()
                 ->where(['id' => $id])
-                ->first();            
+                ->first();
         }
 
         if ($avaliacaoexiste) {
             $this->Flash->error(__('Estagiário já foi avaliado'));
-            // return $this->redirect(['controller' => 'avaliacoes', 'action' => 'view', $avaliacaoexiste->id]);
         }
-        // pr($this->request->getData());
-        // die();
+
         $avaliacao = $this->Avaliacoes->newEmptyEntity();
         if ($this->request->is('post')) {
             $avaliacaoresposta = $this->Avaliacoes->patchEntity($avaliacao, $this->request->getData());
-            // pr($avaliacao);
-            // die();
             if ($this->Avaliacoes->save($avaliacaoresposta)) {
                 $this->Flash->success(__('Avaliação registrada.'));
 
@@ -224,7 +220,6 @@ class AvaliacoesController extends AppController
                 ->contain(['Alunos'])
                 ->where(['Estagiarios.id' => $estagiario_id])
                 ->first();
-            // pr($estagiario);
         } else {
             $estagiario = $this->Avaliacoes->Estagiarios->find()
             ->contain(['Alunos'])
@@ -254,9 +249,9 @@ class AvaliacoesController extends AppController
 
             return $this->redirect('/');
         }
-        // pr($avaliacao->estagiario);
+
         $estagiario = $avaliacao->estagiario;
-        // die();
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $avaliacao = $this->Avaliacoes->patchEntity($avaliacao, $this->request->getData());
             if ($this->Avaliacoes->save($avaliacao)) {
@@ -267,7 +262,7 @@ class AvaliacoesController extends AppController
             $this->Flash->error(__('Avaliaçao não foi atualizada. Tente novamente.'));
             return $this->redirect(['action' => 'edit', $id]);
         }
-        // $estagiarios = $this->Avaliacoes->Estagiarios->find('list');
+
         $this->set(compact('avaliacao', 'estagiario'));
     }
 
@@ -297,7 +292,7 @@ class AvaliacoesController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    public function selecionaavaliacao($id = NULL)
+    public function selecionaavaliacao($id = null)
     {
         $this->Authorization->authorize($this->Avaliacoes);
 
@@ -317,7 +312,7 @@ class AvaliacoesController extends AppController
         $this->set('estagiarios', $estagiarios);
     }
 
-    public function imprimeavaliacaopdf($id = NULL)
+    public function imprimeavaliacaopdf($id = null)
     {
         $this->Authorization->skipAuthorization();
 
@@ -341,7 +336,7 @@ class AvaliacoesController extends AppController
 
         if (empty($avaliacao)) {
             $this->Flash->error(__('Sem avaliação on-line'));
-            return $this->redirect(['controller' => 'Avaliacoes', 'action' => 'avaliacaomanualpdf', '?' => ['estagiario_id' => $estagiario_id]]);    
+            return $this->redirect(['controller' => 'Avaliacoes', 'action' => 'avaliacaomanualpdf', '?' => ['estagiario_id' => $estagiario_id]]);
         }
 
         $this->viewBuilder()->enableAutoLayout(false);
@@ -350,14 +345,14 @@ class AvaliacoesController extends AppController
             'pdfConfig',
             [
                 'orientation' => 'portrait',
-                'download' => true, // This can be omitted if "filename" is specified.
-                'filename' => 'avaliacao_discente_' . $id . '.pdf' //// This can be omitted if you want file name based on URL.
+                'download' => true,
+                'filename' => 'avaliacao_discente_' . $id . '.pdf'
             ]
         );
-        $this->set('avaliacao', $avaliacao); 
+        $this->set('avaliacao', $avaliacao);
     }
 
-    public function avaliacaomanualpdf($id = NULL)
+    public function avaliacaomanualpdf($id = null)
     {
         $this->Authorization->skipAuthorization();
 
@@ -381,8 +376,8 @@ class AvaliacoesController extends AppController
             'pdfConfig',
             [
                 'orientation' => 'portrait',
-                'download' => true, // This can be omitted if "filename" is specified.
-                'filename' => 'avaliacao_discente_' . $id . '.pdf' //// This can be omitted if you want file name based on URL.
+                'download' => true,
+                'filename' => 'avaliacao_discente_' . $id . '.pdf'
             ]
         );
         $this->set('estagiario', $estagiario);

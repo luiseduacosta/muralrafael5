@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Model\Entity\Folhadeatividade;
 use Authorization\Exception\ForbiddenException;
+use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
  * Folhadeatividades Controller
@@ -24,8 +25,6 @@ class FolhadeatividadesController extends AppController
      */
     public function index($id = null)
     {
-        $this->Authorization->skipAuthorization();
-
         try {
             $this->Authorization->authorize($this->Folhadeatividades);
         } catch (ForbiddenException $error) {
@@ -58,7 +57,6 @@ class FolhadeatividadesController extends AppController
             $this->Flash->error(
                 __("Selecione o estagiário e o período da folha de atividades"),
             );
-            //return $this->redirect(['controller' => 'estagiarios', 'action' => 'index']);
         }
         $folhadeatividades = $this->paginate($folhadeatividades);
 
@@ -82,7 +80,6 @@ class FolhadeatividadesController extends AppController
         }
 
         $estagiario_id = $this->getRequest()->getQuery("estagiario_id");
-        pr($estagiario_id);
         if ($estagiario_id) {
             $folhadeatividades = $this->Folhadeatividades
                 ->find("all")
@@ -119,7 +116,7 @@ class FolhadeatividadesController extends AppController
             $this->Flash->error(
                 __("Atividade não foi cadastrada. Tente mais uma vez."),
             );
-        } 
+        }
         if (!empty($folhadeatividades)) {
             $this->set("folhadeatividades", $folhadeatividades);
         }
@@ -163,7 +160,8 @@ class FolhadeatividadesController extends AppController
             $this->Flash->error(__("Sem atividades cadastradas"));
             return $this->redirect([
                 "controller" => "folhadeatividades",
-                "action" => "add", "?" => ["estagiario_id" => $estagiario_id],
+                "action" => "add",
+                "?" => ["estagiario_id" => $estagiario_id],
             ]);
         }
         $this->set(compact("folhadeatividade"));
@@ -270,9 +268,11 @@ class FolhadeatividadesController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
         $user_session = $this->request->getAttribute('identity');
-        if ($user_session) { $user_data = $user_session->getOriginalData(); }
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
 
         $estagiario_id = $this->getRequest()->getQuery("estagiario_id");
 
@@ -331,8 +331,8 @@ class FolhadeatividadesController extends AppController
         $this->viewBuilder()->setClassName("CakePdf.Pdf");
         $this->viewBuilder()->setOption("pdfConfig", [
             "orientation" => "portrait",
-            "download" => true, // This can be omitted if "filename" is specified.
-            "filename" => "folha_de_atividades_" . $estagiario_id . ".pdf", //// This can be omitted if you want file name based on URL.
+            "download" => true,
+            "filename" => "folha_de_atividades_" . $estagiario_id . ".pdf",
         ]);
 
         $this->set("atividades", $atividades);
@@ -347,7 +347,6 @@ class FolhadeatividadesController extends AppController
      */
     public function atividadesmanualpdf($id = null)
     {
-
         $estagiario_id = $this->getRequest()->getQuery('estagiario_id');
         $this->Authorization->skipAuthorization();
 

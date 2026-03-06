@@ -21,7 +21,13 @@ class InstituicoesController extends AppController
      */
     public function index()
     {
-        $this->Authorization->authorize($this->Instituicoes);
+        try {
+            $this->Authorization->authorize($this->Instituicoes);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
+        }
+
         $instituicoes = $this->paginate($this->Instituicoes->find()->contain(['Areas']));
 
         $this->set(compact('instituicoes'));
@@ -36,7 +42,14 @@ class InstituicoesController extends AppController
      */
     public function view($id = null)
     {
-        $instituicao = $this->Instituicoes->find()->contain(['Areas', 'Supervisores'=> ['Users'], 'Estagiarios' => ['Alunos', 'Professores', 'Supervisores', 'Instituicoes', 'Turmas'], 'Muralestagios' => ['Instituicoes', 'Professores'], 'Visitas'])->where(['Instituicoes.id' => $id])->first();
+        $instituicao = $this->Instituicoes->find()->contain([
+            'Areas',
+            'Supervisores' => ['Users'],
+            'Estagiarios' => ['Alunos', 'Professores', 'Supervisores', 'Instituicoes', 'Turmas'],
+            'Muralestagios' => ['Instituicoes', 'Professores'],
+            'Visitas'
+        ])->where(['Instituicoes.id' => $id])->first();
+
         try {
             $this->Authorization->authorize($instituicao);
         } catch (ForbiddenException $error) {
@@ -54,7 +67,13 @@ class InstituicoesController extends AppController
      */
     public function add()
     {
-        $this->Authorization->authorize($this->Instituicoes);
+        try {
+            $this->Authorization->authorize($this->Instituicoes);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
+        }
+
         $instituicao = $this->Instituicoes->newEmptyEntity();
         if ($this->request->is('post')) {
             $instituicao = $this->Instituicoes->patchEntity($instituicao, $this->request->getData());
@@ -111,27 +130,26 @@ class InstituicoesController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $instituicao = $this->Instituicoes->get($id, ['contain' => ['Estagiarios']]);
+
         try {
             $this->Authorization->authorize($instituicao);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
             return $this->redirect(['controller' => 'Instituicoes', 'action' => 'index']);
         }
+
         // If the instituicao has estagiarios, show an error message and return to the view
         if (sizeof($instituicao->estagiarios) > 0) {
             $this->Flash->error(__('Erro ao deletar: A instituicao tem estagiários associados.'));
             return $this->redirect(['controller' => 'Instituicoes', 'action' => 'view', $id]);
         }
 
-        try {
-            if ($this->Instituicoes->delete($instituicao)) {
-                $this->Flash->success(__('The instituicao has been deleted.'));
-            } else {
-                $this->Flash->error(__('The instituicao could not be deleted. Please, try again.'));
-            }
-        } catch (ForbiddenException $error) {
-            $this->Flash->error('Authorization error: ' . $error->getMessage());
-            return $this->redirect(['controller' => 'Instituicoes', 'action' => 'index']);
+        if ($this->Instituicoes->delete($instituicao)) {
+            $this->Flash->success(__('The instituicao has been deleted.'));
+        } else {
+            $this->Flash->error(__('The instituicao could not be deleted. Please, try again.'));
         }
+
+        return $this->redirect(['action' => 'index']);
     }
 }

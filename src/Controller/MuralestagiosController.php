@@ -17,10 +17,10 @@ class MuralestagiosController extends AppController
     /**
      * beforeFilter method
      */
-    public function beforeFilter(\Cake\Event\EventInterface $event)
+    public function beforeFilter(\Cake\Event\EventInterface $event): void
     {
         parent::beforeFilter($event);
-    
+
         $this->Authentication->allowUnauthenticated(['index']);
     }
 
@@ -29,22 +29,22 @@ class MuralestagiosController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
-    public function index($id = null)
+    public function index()
     {
         $this->Authorization->authorize($this->Muralestagios);
         $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->fetchTable("Configuracoes")->find()->first()['mural_periodo_atual'];
         $this->set('periodo', $periodo);
-        
+
         $contained = ['Instituicoes', 'Professores'];
-        
+
         if ($periodo == 'all') {
             $muralestagios = $this->Muralestagios->find('all')
             ->contain($contained);
         } else {
-            $muralestagios = $this->Muralestagios->find('all', ['conditions' => ['Muralestagios.periodo' => $periodo] ])
+            $muralestagios = $this->Muralestagios->find('all', ['conditions' => ['Muralestagios.periodo' => $periodo]])
             ->contain($contained);
         }
-        
+
         $this->set('muralestagios', $this->paginate($muralestagios));
 
         $periodototal = $this->Muralestagios->find('list', [
@@ -52,9 +52,9 @@ class MuralestagiosController extends AppController
             'valueField' => 'periodo'
         ]);
         $periodos = $periodototal->toArray();
-        $periodos = array_merge($periodos, array('all' => 'Todos'));
+        $periodos = array_merge($periodos, ['all' => 'Todos']);
         $periodos = array_reverse($periodos);
-        
+
         $this->set('periodos', $periodos);
     }
 
@@ -67,17 +67,19 @@ class MuralestagiosController extends AppController
      */
     public function view($id = null)
     {
-        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
         $user_session = $this->request->getAttribute('identity');
-        if ($user_session) { $user_data = $user_session->getOriginalData(); }
-        
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
+
         $muralestagio = $this->Muralestagios->get($id, [
             'contain' => ['Instituicoes', 'Turmas', 'Professores', 'Inscricoes' => ['Alunos']],
         ]);
         if (empty($user_session)) {
             $this->Flash->error('Authorization error: User not authenticated.');
-             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
-        } 
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
+        }
         $this->set(compact('muralestagio'));
     }
 
@@ -145,7 +147,7 @@ class MuralestagiosController extends AppController
         }
         $instituicoes = $this->fetchTable('Instituicoes')->find('list');
         $turmas = $this->fetchTable('Turmas')->find('list');
-        $turnos = $this->fetchTable('Turnos')->find('list'); // Not necessarie
+        $turnos = $this->fetchTable('Turnos')->find('list');
         $professores = $this->fetchTable('Professores')->find('list', ['limit' => 500]);
         $this->set(compact('muralestagio', 'instituicoes', 'turmas', 'turnos', 'professores'));
     }
@@ -167,7 +169,7 @@ class MuralestagiosController extends AppController
 
             // If have inscricoes not delete
             if (sizeof($muralestagio->inscricoes) > 0) {
-                $this->Flash->waring(__('Inscrições associadas a este Mural de estágios'));
+                $this->Flash->warning(__('Inscrições associadas a este Mural de estágios'));
                 return $this->redirect(['controller' => 'Muralestagios', 'action' => 'view', $id]);
             }
 
