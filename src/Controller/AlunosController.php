@@ -158,7 +158,7 @@ class AlunosController extends AppController
         $aluno = $this->Alunos->get($id, ['contain' => ['Estagiarios']]);
         
         if (sizeof($aluno->estagiarios) > 0) {
-            $this->Flash->error(__('Erro ao deletar: O aluno tem estagiários associados.'));
+            $this->Flash->error(__('Erro ao Excluir: O aluno tem estagiários associados.'));
             return $this->redirect(['controller' => 'alunos', 'action' => 'view', $id]);
         }
 
@@ -167,7 +167,7 @@ class AlunosController extends AppController
             if ($this->Alunos->delete($aluno)) {
                 $this->Flash->success(__('O aluno foi deletado com sucesso.'));
             } else {
-                $this->Flash->error(__('Erro ao deletar: Não foi possível deletar o aluno.'));
+                $this->Flash->error(__('Erro ao Excluir: Não foi possível Excluir o aluno.'));
             }
         } catch (ForbiddenException $error) {
             $this->Flash->error(__('Erro de autorização: ' . $error->getMessage()));

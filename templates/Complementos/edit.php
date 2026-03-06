@@ -11,7 +11,7 @@
                 <div class="nav">
                     <?= $this->Html->link(__('Listar Complementos'), ['action' => 'index'], ['class' => 'button']) ?>
                     <?= $this->Form->postLink(
-                        __('Deletar'),
+                        __('Excluir'),
                         ['action' => 'delete', $complemento->id],
                         ['confirm' => __('Are you sure you want to delete {0}?', $complemento->nome), 'class' => 'button']
                     ) ?>

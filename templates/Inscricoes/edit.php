@@ -13,7 +13,7 @@
             <aside>
                 <div class="side-nav">
                     <?= $this->Form->postLink(
-                        __('Deletar'),
+                        __('Excluir'),
                         ['action' => 'delete', $inscricao->id],
                         ['confirm' => __('Are you sure you want to delete inscricao_{0}?', $inscricao->id), 'class' => 'button']
                     ) ?>

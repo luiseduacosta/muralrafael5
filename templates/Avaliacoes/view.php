@@ -16,7 +16,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <div class="avaliacoes view content">
             <aside>
                 <div class="nav">
-                    <?php if ($user_data->categoria == '1' || $user_data->categoria == '4'): ?>
+                    <?php if ($user_data['categoria'] == '1' || $user_data['categoria'] == '4'): ?>
                         <?= $this->Html->link(__('Editar avaliação'), ['action' => 'edit', $avaliacao->id], ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Excluir avaliação'), ['action' => 'delete', $avaliacao->id], ['confirm' => __('Tem certeza que quer excluir o registro # {0}?', $avaliacao->id), 'class' => 'button']) ?>
                         <?= $this->Html->link(__('Listar avaliações'), ['action' => 'index'], ['class' => 'button']) ?>

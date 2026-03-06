@@ -17,9 +17,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 		    <aside>
 		        <div class="nav">
 					<?= $this->Html->link(__('Mural estagios'), ['action' => 'index'], ['class' => 'button']) ?>
-                    <?php if ($user_data->categoria == '1'): ?>
+                    <?php if ($user_data['categoria'] == '1'): ?>
 			            <?= $this->Html->link(__('Editar estagio'), ['action' => 'edit', $muralestagio->id], ['class' => 'button']) ?>
-			            <?= $this->Form->postLink(__('Deletar estagio'), ['action' => 'delete', $muralestagio->id], ['confirm' => __('Are you sure you want to delete # {0}?', $muralestagio->id), 'class' => 'button']) ?>
+			            <?= $this->Form->postLink(__('Excluir estagio'), ['action' => 'delete', $muralestagio->id], ['confirm' => __('Are you sure you want to delete # {0}?', $muralestagio->id), 'class' => 'button']) ?>
 			            <?= $this->Html->link(__('Novo estagio'), ['action' => 'add'], ['class' => 'button']) ?>
 					<?php endif; ?>
 		        </div>
@@ -137,13 +137,13 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </blockquote>
             </div>
 
-			<?php if ($user_data->categoria == '1'): ?>
+			<?php if ($user_data['categoria'] == '1'): ?>
                 <tr>
                     <td colspan = '2' class="text-center">
                         <?php echo $this->Html->link('Admin inscrição', ['controller' => 'Inscricoes', 'action' => 'add', '?' => ['muralestagio_id' => $muralestagio->id]], ['role' => 'button', 'class' => ' button btn-primary']); ?>
                     </td>
                 </tr>
-            <?php elseif ($user_data->categoria == '2'): ?>
+            <?php elseif ($user_data['categoria'] == '2'): ?>
                 <!-- if dataInscricao is empty them let the close day of application open //-->
                 <?php if (empty($muralestagio->data_inscricao)) $muralestagio->data_inscricao = new \DateTime('tomorrow'); ?>
                 <?php if (new \DateTime() <= $muralestagio->data_inscricao): ?>
@@ -175,7 +175,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
             <?php endif; ?>
 
-            <?php if ($user_data->administrador_id || $user_data->professor_id || $user_data->supervisor_id): ?>
+            <?php if ($user_data['administrador_id'] || $user_data['professor_id'] || $user_data['supervisor_id']): ?>
 	            <?php if (!empty($muralestagio->inscricoes)) : ?>
 	            <div class="related">
 	                <h4><?= __('Inscrições') ?></h4>
@@ -196,7 +196,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 								<td class="actions">
 	                                <?= $this->Html->link(__('Ver'), ['controller' => 'Inscricoes', 'action' => 'view', $inscricao->id]) ?>
 	                                <?= $this->Html->link(__('Editar'), ['controller' => 'Inscricoes', 'action' => 'edit', $inscricao->id]) ?>
-	                                <?= $this->Form->postLink(__('Deletar'), ['controller' => 'Inscricoes', 'action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete # {0}?', $inscricao->id)]) ?>
+	                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Inscricoes', 'action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete # {0}?', $inscricao->id)]) ?>
 	                            </td>
 	                            <td><?= h($inscricao->id) ?></td>
 	                            <td><?= $inscricao->aluno ? h($inscricao->aluno->registro) : '' ?></td>

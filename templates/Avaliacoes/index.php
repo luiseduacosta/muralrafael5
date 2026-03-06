@@ -15,7 +15,7 @@ if ($user_session) {
 ?>
 <div class="avaliacoes index content">
 
-    <?php if ( $user_data->categoria == '1' OR $user_data->categoria == '4' ): ?>
+    <?php if ( $user_data['categoria'] == '1' OR $user_data['categoria'] == '4' ): ?>
 
         <aside>
             <div class="nav">
@@ -25,7 +25,7 @@ if ($user_session) {
 
     <?php endif; ?>
     
-    <?php if ($user_data->categoria == '1'): ?>
+    <?php if ($user_data['categoria'] == '1'): ?>
     
         <?php $this->Paginator->setPaginated($avaliacoes); ?>
         <h3><?= __('Lista de Avaliações') ?></h3>
@@ -68,7 +68,7 @@ if ($user_session) {
             <table class="table table-striped table-hover table-responsive">
                 <thead>
                     <tr>
-                        <?php if ($user_data->categoria == '1'): ?>
+                        <?php if ($user_data['categoria'] == '1'): ?>
                             <th class="actions"><?= __('Ações') ?></th>
                         <th><?= $this->Paginator->sort('id') ?></th>
                         <?php endif; ?>
@@ -85,7 +85,7 @@ if ($user_session) {
                 <tbody>
                     <?php foreach ($estagiarios as $estagiario): ?>
                         <tr>
-                            <?php if ($user_data->categoria == '1'): ?>
+                            <?php if ($user_data['categoria'] == '1'): ?>
                                 <?php if (isset($estagiario->avaliacao->id)): ?>
                                     <td class="actions">
                                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $estagiario->avaliacao->id]) ?>
@@ -96,7 +96,7 @@ if ($user_session) {
                                 <td><?= isset($estagiario->id) ? $this->Html->link((string)$estagiario->id, ['controller' => 'estagiarios', 'action' => 'view', $estagiario->id]) : '' ?></td>
                             <?php else: ?>
     
-                                <?php if ($user_data->categoria == '1' || $user_data->categoria == '4'): ?>
+                                <?php if ($user_data['categoria'] == '1' || $user_data['categoria'] == '4'): ?>
                                     <td><?= $estagiario->hasValue('avaliacao') ? $this->Html->link('Ver avaliação', ['controller' => 'Avaliacoes', 'action' => 'view', $estagiario->avaliacao->id], ['class' => 'btn btn-success']) : $this->Html->link('Fazer avaliação', ['controller' => 'avaliacoes', 'action' => 'add', $estagiario->id], ['class' => 'btn btn-warning']) ?>
                                     </td>
                                 <?php else: ?>
@@ -104,7 +104,7 @@ if ($user_session) {
                                     </td>
                                 <?php endif; ?>
     
-                                <?php if ($user_data->categoria == '1'): ?>
+                                <?php if ($user_data['categoria'] == '1'): ?>
                                     <td><?= $estagiario->hasValue('aluno') ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?>
                                     </td>
                                 <?php else: ?>

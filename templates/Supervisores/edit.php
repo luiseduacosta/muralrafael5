@@ -14,13 +14,15 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
     <div class="column-responsive column-80">
         <div class="supervisores form content">
             <aside>
-                <div class="nav">
+                <div class="nav">   
                     <?= $this->Html->link(__('Listar Supervisores'), ['action' => 'index'], ['class' => 'button']) ?>
-                    <?= $this->Form->postLink(
-                        __('Deletar'),
-                        ['action' => 'delete', $supervisor->id],
-                        ['confirm' => __('Are you sure you want to delete {0}?', $supervisor->nome), 'class' => 'button']
-                    ) ?>
+                    <?php if ($user_data['administrador_id']): ?>
+                        <?= $this->Form->postLink(
+                            __('Excluir'),
+                            ['action' => 'delete', $supervisor->id],
+                            ['confirm' => __('Are you sure you want to delete {0}?', $supervisor->nome), 'class' => 'button']
+                        ) ?>
+                    <?php endif; ?>
                 </div>
             </aside>
             <?= $this->Form->create($supervisor) ?>

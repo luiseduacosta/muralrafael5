@@ -3,8 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Avaliacao[]|\Cake\Collection\CollectionInterface $avaliacoes
  */
-// pr($estagiario->item->aluno);
-// die();
 ?>
 <div class="avaliacoes index container">
     <h3><?= __('Estágios cursados pela(o) estudande ') ?></h3>

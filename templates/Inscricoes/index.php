@@ -36,7 +36,7 @@
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $inscricao->id]) ?>
                         <?= $this->Html->link(__('Editar'), ['action' => 'edit', $inscricao->id]) ?>
-                        <?= $this->Form->postLink(__('Deletar'), ['action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete # {0}?', $inscricao->id)]) ?>
+                        <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete # {0}?', $inscricao->id)]) ?>
                     </td>
                     <td><?= $this->Html->link((string)$inscricao->id, ['action' => 'view', $inscricao->id]) ?></td>
                     <td><?= $inscricao->aluno ? $this->Html->link($inscricao->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $inscricao->aluno->id]) : '' ?></td>

@@ -9,7 +9,7 @@
         <div class="nav">
             <?= $this->Html->link(__('Listar Areas'), ['action' => 'index'], ['class' => 'button']) ?>
             <?= $this->Form->postLink(
-                __('Deletar'),
+                __('Excluir'),
                 ['action' => 'delete', $area->id],
                 ['confirm' => __('Are you sure you want to delete {0}?', $area->area), 'class' => 'button']
             ) ?>

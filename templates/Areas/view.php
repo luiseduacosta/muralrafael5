@@ -9,7 +9,7 @@
         <div class="nav">
             <?= $this->Html->link(__('Listar Areas'), ['action' => 'index'], ['class' => 'button']) ?>
             <?= $this->Html->link(__('Editar Area'), ['action' => 'edit', $area->id], ['class' => 'button']) ?>
-            <?= $this->Form->postLink(__('Deletar Area'), ['action' => 'delete', $area->id], ['confirm' => __('Are you sure you want to delete {0}?', $area->area), 'class' => 'button']) ?>
+            <?= $this->Form->postLink(__('Excluir Area'), ['action' => 'delete', $area->id], ['confirm' => __('Are you sure you want to delete {0}?', $area->area), 'class' => 'button']) ?>
             <?= $this->Html->link(__('Nova Area'), ['action' => 'add'], ['class' => 'button']) ?>
         </div>
     </aside>
@@ -45,7 +45,7 @@
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $instituicao->id]) ?>
                         <?= $this->Html->link(__('Editar'), ['action' => 'edit', $instituicao->id]) ?>
-                        <?= $this->Form->postLink(__('Deletar'), ['action' => 'delete', $instituicao->id], ['confirm' => __('Are you sure you want to delete # {0}?', $instituicao->id)]) ?>
+                        <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $instituicao->id], ['confirm' => __('Are you sure you want to delete # {0}?', $instituicao->id)]) ?>
                     </td>
                     <td><?= h($instituicao->id) ?></td>
                     <td><?= $this->Html->link($instituicao->instituicao, ['controller' => 'instituicoes', 'action' => 'view', $instituicao->id]) ?></td>

@@ -32,7 +32,7 @@
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $supervisor->id]) ?>
                         <?= $this->Html->link(__('Editar'), ['action' => 'edit', $supervisor->id]) ?>
-                        <?= $this->Form->postLink(__('Deletar'), ['action' => 'delete', $supervisor->id], ['confirm' => __('Are you sure you want to delete {0}?', $supervisor->nome)]) ?>
+                        <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $supervisor->id], ['confirm' => __('Are you sure you want to delete {0}?', $supervisor->nome)]) ?>
                     </td>
                     <td><?= $this->Html->link((string)$supervisor->id, ['action' => 'view', $supervisor->id]) ?></td>
                     <td><?= $this->Html->link($supervisor->nome, ['action' => 'view', $supervisor->id]) ?></td>

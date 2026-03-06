@@ -140,7 +140,7 @@ class InstituicoesController extends AppController
 
         // If the instituicao has estagiarios, show an error message and return to the view
         if (sizeof($instituicao->estagiarios) > 0) {
-            $this->Flash->error(__('Erro ao deletar: A instituicao tem estagiários associados.'));
+            $this->Flash->error(__('Erro ao Excluir: A instituicao tem estagiários associados.'));
             return $this->redirect(['controller' => 'Instituicoes', 'action' => 'view', $id]);
         }
 

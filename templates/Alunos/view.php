@@ -14,11 +14,11 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <div class="alunos view content">
             <aside>
                 <div class="nav">
-        	        <?php if ($user_data->categoria == '1'): ?>
+        	        <?php if ($user_data['categoria'] == '1'): ?>
                         <?= $this->Form->postLink(__('Excluir Aluno(a)'), ['action' => 'delete', $aluno->id], ['confirm' => __('Are you sure you want to delete {0}?', $aluno->nome), 'class' => 'button']) ?>
                         <?= $this->Html->link(__('Novo Aluno(a)'), ['action' => 'add'], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Listar Alunos(as)'), ['action' => 'index'], ['class' => 'button']) ?>
-        	        <?php elseif ($user_data->categoria == '2' && $user_data->aluno_id == $aluno->id): ?>
+        	        <?php elseif ($user_data['categoria'] == '2' && $user_data['aluno_id'] == $aluno->id): ?>
                         <?= $this->Html->link(__('Editar Aluno(a)'), ['action' => 'edit', $aluno->id], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Declaração de período'), ['controller' => 'Alunos', 'action' => 'declaracaoperiodo', $aluno->id], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Termo de compromisso'), ['controller' => 'Estagiarios', 'action' => 'termocompromisso', $aluno->id], ['class' => 'button']) ?>
@@ -106,7 +106,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Users', 'action' => 'view', $aluno->user->id]) ?>
                                 <?= $this->Html->link(__('Editar'), ['controller' => 'Users', 'action' => 'edit', $aluno->user->id]) ?>
                                 <?php if ($user_data['administrador_id']): ?>
-                                    <?= $this->Form->postLink(__('Deletar'), ['controller' => 'Users', 'action' => 'delete', $aluno->user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $aluno->user->id)]) ?>
+                                    <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Users', 'action' => 'delete', $aluno->user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $aluno->user->id)]) ?>
                                 <?php endif; ?>
                             </td>
                             <td><?= $this->Html->link((string)$aluno->user->id, ['controller' => 'Users', 'action' => 'view', $aluno->user->id]) ?></td>
@@ -175,7 +175,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?>
-                                <?php if ($user_data->categoria == '1'): ?>
+                                <?php if ($user_data['categoria'] == '1'): ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete {0}?', $estagiario->id)]) ?>
                                 <?php endif; ?>
                             </td>

@@ -10,7 +10,7 @@
             <aside>
                 <div class="nav">
                     <?= $this->Form->postLink(
-                        __('Deletar'),
+                        __('Excluir'),
                         ['action' => 'delete', $turno->id],
                         ['confirm' => __('Are you sure you want to delete # {0}?', $turno->id), 'class' => 'button']
                     ) ?>

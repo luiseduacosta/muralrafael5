@@ -16,11 +16,13 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <aside>
                 <div class="nav">
                     <?= $this->Html->link(__('Listar Professores'), ['action' => 'index'], ['class' => 'button']) ?>
-                    <?= $this->Form->postLink(
-                        __('Deletar'),
-                        ['action' => 'delete', $professor->id],
-                        ['confirm' => __('Are you sure you want to delete {0}?', $professor->nome), 'class' => 'button']
-                    ) ?>
+                    <?php if ($user_data['administrador_id']): ?>
+                        <?= $this->Form->postLink(
+                            __('Excluir'),
+                            ['action' => 'delete', $professor->id],
+                            ['confirm' => __('Are you sure you want to delete {0}?', $professor->nome), 'class' => 'button']
+                        ) ?>
+                    <?php endif; ?>
                 </div>
             </aside>
             <?= $this->Form->create($professor) ?>

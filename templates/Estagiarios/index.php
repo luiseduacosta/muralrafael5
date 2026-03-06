@@ -86,7 +86,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 	                    <td class="actions">
 	                        <?= $this->Html->link(__('Ver'), ['action' => 'view', $estagiario->id]) ?>
 	                        <?= $this->Html->link(__('Editar'), ['action' => 'edit', $estagiario->id]) ?>
-	                        <?= $this->Form->postLink(__('Deletar'), ['action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete estagiario #{0}?', $estagiario->id)]) ?>
+	                        <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete estagiario #{0}?', $estagiario->id)]) ?>
 	                    </td>
                     <?php endif; ?>
 	                <td><?= $this->Html->link((string)$estagiario->id, ['action' => 'view', $estagiario->id]) ?></td>

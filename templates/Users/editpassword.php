@@ -16,7 +16,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             echo $this->Html->link(__('Ver Usuário'), ['action' => 'view', $user->id], ['class' => 'button']);
             if ($user_data['administrador_id']):
                 echo $this->Html->link(__('Listar Usuários'), ['action' => 'index'], ['class' => 'button']);
-                echo $this->Form->postLink( __('Deletar'), ['action' => 'delete', $user->id],
+                echo $this->Form->postLink( __('Excluir'), ['action' => 'delete', $user->id],
                     ['confirm' => __('Are you sure you want to delete user_{0}?', $user->email), 'class' => 'button']
                 ); 
             endif; ?>

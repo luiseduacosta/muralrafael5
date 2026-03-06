@@ -49,7 +49,7 @@ if ($user_session) {
                         <td class="actions">
                             <?= $this->Html->link(__('Ver'), ['action' => 'view', $instituicao->id]) ?>
                             <?= $this->Html->link(__('Editar'), ['action' => 'edit', $instituicao->id]) ?>
-                            <?= $this->Form->postLink(__('Deletar'), ['action' => 'delete', $instituicao->id], ['confirm' => __('Are you sure you want to delete # {0}?', $instituicao->id)]) ?>
+                            <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $instituicao->id], ['confirm' => __('Are you sure you want to delete # {0}?', $instituicao->id)]) ?>
                         </td>
                         <td><?= $this->Html->link((string)$instituicao->id, ['action' => 'view', $instituicao->id]) ?></td>                    
                     <?php endif; ?>

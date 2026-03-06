@@ -3,12 +3,18 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\User[]|\Cake\Collection\CollectionInterface $users
  */
+declare(strict_types=1);
+$user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
+$user_session = $this->request->getAttribute('identity');
+if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
 <div class="users index content">
 	<aside>
-		<div class="nav">
-            <?= $this->Html->link(__('Novo usuário'), ['action' => 'add'], ['class' => 'button']) ?>
-		</div>
+        <?php if ($user_data['administrador_id']): ?>
+            <div class="nav">
+                <?= $this->Html->link(__('Novo usuário'), ['action' => 'add'], ['class' => 'button']) ?>
+            </div>
+        <?php endif; ?>
 	</aside>
     
     <h3><?= __('Lista de usuários') ?></h3>
@@ -32,9 +38,11 @@
                 <?php foreach ($users as $user): ?>
                 <tr>
                     <td class="actions">
-                        <?= $this->Html->link(__('Ver'), ['action' => 'view', $user->id]) ?>
-                        <?= $this->Html->link(__('Editar'), ['action' => 'edit', $user->id]) ?>
-                        <?= $this->Form->postLink(__('Deletar'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $user->id)]) ?>
+                        <?php if ($user_data['administrador_id']): ?>
+                            <?= $this->Html->link(__('Ver'), ['action' => 'view', $user->id]) ?>
+                            <?= $this->Html->link(__('Editar'), ['action' => 'edit', $user->id]) ?>
+                            <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $user->id)]) ?>
+                        <?php endif; ?>
                     </td>
                     <td><?= $this->Html->link((string)$user->id, ['action' => 'view', $user->id]) ?></td>
                     <td><?= $user->email ? $this->Text->autoLinkEmails($user->email) : '' ?></td>

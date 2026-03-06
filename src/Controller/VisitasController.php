@@ -21,9 +21,7 @@ class VisitasController extends AppController
     public function index()
     {
         $this->Authorization->authorize($this->Visitas);
-        //$this->paginate = [
-        //    'contain' => ['Instituicoes'],
-        //];
+
         $visitas = $this->paginate($this->Visitas->find()->contain(['Instituicoes']));
 
         $this->set(compact('visitas'));

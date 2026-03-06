@@ -3,6 +3,10 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Visita[]|\Cake\Collection\CollectionInterface $visitas
  */
+declare(strict_types=1);
+$user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
+$user_session = $this->request->getAttribute('identity');
+if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
 <div class="visitas index content">
 	<aside>
@@ -35,8 +39,10 @@
                 <?php //pr($visita); ?>
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $visita->id]) ?>
-                        <?= $this->Html->link(__('Editar'), ['action' => 'edit', $visita->id]) ?>
-                        <?= $this->Form->postLink(__('Deletar'), ['action' => 'delete', $visita->id], ['confirm' => __('Are you sure you want to delete visita_{0}?', $visita->id)]) ?>
+                        <?php if ($user_data['administrador_id']): ?>
+                            <?= $this->Html->link(__('Editar'), ['action' => 'edit', $visita->id]) ?>
+                            <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $visita->id], ['confirm' => __('Are you sure you want to delete visita_{0}?', $visita->id)]) ?>
+                        <?php endif; ?>
                     </td>
                     <td><?= $this->Html->link((string)$visita->id, ['action' => 'view', $visita->id]) ?></td>
                     <td><?= $visita->instituicao ? $this->Html->link($visita->instituicao->instituicao, ['controller' => 'Visitas', 'action' => 'view', $visita->id]) : '' ?></td>

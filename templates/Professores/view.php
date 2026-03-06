@@ -3,16 +3,21 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Professor $professor
  */
+$user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
+$user_session = $this->request->getAttribute('identity');
+if ($user_session) { $user_data = $this->request->getAttribute('identity')->getOriginalData(); }
 ?>
 <div>
     <div class="column-responsive column-80">
         <div class="professores view content">
             <aside>
                 <div class="nav">
+                    <?php if ($user_data['administrador_id']): ?>
+                        <?= $this->Html->link(__('Editar Professor'), ['action' => 'edit', $professor->id], ['class' => 'button']) ?>
+                        <?= $this->Form->postLink(__('Excluir Professor'), ['action' => 'delete', $professor->id], ['confirm' => __('Are you sure you want to delete {0}?', $professor->nome), 'class' => 'button']) ?>
+                        <?= $this->Html->link(__('Novo Professor'), ['action' => 'add'], ['class' => 'button']) ?>
+                    <?php endif; ?>
                     <?= $this->Html->link(__('Listar Professores'), ['action' => 'index'], ['class' => 'button']) ?>
-                    <?= $this->Html->link(__('Editar Professor'), ['action' => 'edit', $professor->id], ['class' => 'button']) ?>
-                    <?= $this->Form->postLink(__('Deletar Professor'), ['action' => 'delete', $professor->id], ['confirm' => __('Are you sure you want to delete {0}?', $professor->nome), 'class' => 'button']) ?>
-                    <?= $this->Html->link(__('Novo Professor'), ['action' => 'add'], ['class' => 'button']) ?>
                 </div>
             </aside>
             <h3>professor_<?= h($professor->id) ?></h3>
@@ -165,7 +170,7 @@
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Users', 'action' => 'view', $professor->user->id]) ?>
                                 <?= $this->Html->link(__('Editar'), ['controller' => 'Users', 'action' => 'edit', $professor->user->id]) ?>
-                                <?= $this->Form->postLink(__('Deletar'), ['controller' => 'Users', 'action' => 'delete', $professor->user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $professor->user->id)]) ?>
+                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Users', 'action' => 'delete', $professor->user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $professor->user->id)]) ?>
                             </td>
                             <td><?= h($professor->user->id) ?></td>
                             <td><?= $professor->user->email ? $this->Text->autoLinkEmails($professor->user->email) : '' ?></td>
@@ -207,7 +212,7 @@
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?>
                                 <?= $this->Html->link(__('Editar'), ['controller' => 'Estagiarios', 'action' => 'edit', $estagiario->id]) ?>
-                                <?= $this->Form->postLink(__('Deletar'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete estagiario_{0}?', $estagiario->id)]) ?>
+                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete estagiario_{0}?', $estagiario->id)]) ?>
                             </td>
                             <td><?= h($estagiario->id) ?></td>
                             <td><?= $estagiario->aluno ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
@@ -266,7 +271,7 @@
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Muralestagios', 'action' => 'view', $muralestagio->id]) ?>
                                 <?= $this->Html->link(__('Editar'), ['controller' => 'Muralestagios', 'action' => 'edit', $muralestagio->id]) ?>
-                                <?= $this->Form->postLink(__('Deletar'), ['controller' => 'Muralestagios', 'action' => 'delete', $muralestagio->id], ['confirm' => __('Are you sure you want to delete muralestagios_{0}?', $muralestagio->id)]) ?>
+                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Muralestagios', 'action' => 'delete', $muralestagio->id], ['confirm' => __('Are you sure you want to delete muralestagios_{0}?', $muralestagio->id)]) ?>
                             </td>
                             <td><?= h($muralestagio->id) ?></td>
                             <td><?= $muralestagio->instituicao ? $this->Html->link($muralestagio->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $muralestagio->instituicao->id]) : '' ?></td>
