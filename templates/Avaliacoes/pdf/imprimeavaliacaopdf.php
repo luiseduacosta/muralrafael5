@@ -3,10 +3,15 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Avaliacao $avaliacao
  */
+use Cake\I18n\I18n;
+use Cake\I18n\DateTime;
 
-$dia = strftime('%e', time());
-$mes = strftime('%B', time());
-$ano = strftime('%Y', time());
+I18n::setLocale('pt-BR');
+$hoje = DateTime::now('America/Sao_Paulo', 'pt_BR');
+
+$dia = $hoje->i18nFormat('d');
+$mes = $hoje->i18nFormat('MMMM');
+$ano = $hoje->i18nFormat('Y');
 
 $supervisora = isset($avaliacao->estagiario->supervisor->nome);
 if ($supervisora) {

@@ -1,9 +1,14 @@
 <?php
 
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
- */
+use Cake\I18n\I18n;
+use Cake\I18n\DateTime;
+
+I18n::setLocale('pt-BR');
+$hoje = DateTime::now('America/Sao_Paulo', 'pt_BR');
+
+$dia = $hoje->i18nFormat('d');
+$mes = $hoje->i18nFormat('MMMM');
+$ano = $hoje->i18nFormat('Y');
 
 ?>
 <?php
@@ -31,10 +36,6 @@ $cress = $estagiario->supervisor->cress;
 if (empty($cress)) {
     $cress = '_______';
 }
-
-$dia = strftime('%e', time());
-$mes = strftime('%B', time());
-$ano = strftime('%Y', time());
 
 ?>
 

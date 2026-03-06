@@ -10,16 +10,17 @@ declare(strict_types=1);
 
 use Cake\I18n\I18n;
 use Cake\I18n\DateTime;
+use Cake\I18n\Time;
 
 I18n::setLocale('pt-BR');
 $hoje = DateTime::now('America/Sao_Paulo', 'pt_BR');
 
+$dia = $hoje->i18nFormat('d');
+$mes = $hoje->i18nFormat('MMMM');
+$ano = $hoje->i18nFormat('Y');
+
 $this->setLayout('default');
 $this->assign('title', 'Avaliação do Estagiário');
-
-$dia = $hoje->format('d');
-$mes = $hoje->format('F');
-$ano = $hoje->format('Y');
 
 $supervisora = isset($estagiario->supervisor->nome);
 if ($supervisora) {
@@ -51,7 +52,6 @@ if ($cress) {
         </div>
     </aside>
 
-    
     <h3><?= __('Adicionando avaliação') ?></h3>
     
     <div>

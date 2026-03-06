@@ -12,6 +12,10 @@ use Cake\I18n\I18n;
 I18n::setLocale('pt-BR');
 $hoje = DateTime::now('America/Sao_Paulo', 'pt_BR');
 
+$dia = $hoje->i18nFormat('d');
+$mes = $hoje->i18nFormat('MMMM');
+$ano = $hoje->i18nFormat('Y');
+
 if ($aluno->turno == 'diurno') {
     $duracaocurso = '8';
 } elseif ($aluno->turno == 'noturno') {

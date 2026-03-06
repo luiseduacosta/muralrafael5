@@ -1,16 +1,14 @@
 <?php
 
-$timeZone = new DateTimeZone('America/Sao_Paulo');
-$dataDeHoje = new DateTime(null, $timeZone);
+use Cake\I18n\I18n;
+use Cake\I18n\DateTime;
 
-$dia = $dataDeHoje->format('d');
-$meses = [
-    '01' => 'Janeiro', '02' => 'Fevereiro', '03' => 'Março', '04' => 'Abril',
-    '05' => 'Maio', '06' => 'Junho', '07' => 'Julho', '08' => 'Agosto',
-    '09' => 'Setembro', '10' => 'Outubro', '11' => 'Novembro', '12' => 'Dezembro'
-];
-$mes = $meses[$dataDeHoje->format('m')];
-$ano = $dataDeHoje->format('Y');
+I18n::setLocale('pt-BR');
+$hoje = DateTime::now('America/Sao_Paulo', 'pt_BR');
+
+$dia = $hoje->i18nFormat('d');
+$mes = $hoje->i18nFormat('MMMM');
+$ano = $hoje->i18nFormat('Y');
 
 ?>
 

@@ -13,12 +13,10 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <aside>
                 <div class="nav">
                     <?php if ($user_data->categoria == '2' && ($user_data->aluno_id == $inscricao->aluno_id)): ?>
-                        <?= $this->Html->link(__('Listar Inscricões'), ['controller' => 'Alunos', 'action' => 'view', $user_data->aluno_id], ['class' => 'button btn-secondary']) ?>
-                        <?= $this->Html->link(__('Editar Inscrição'), ['action' => 'edit', $inscricao->id], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Excluir Inscrição'), ['action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete inscricao_{0}?', $inscricao->id), 'class' => 'button']) ?>
                     <?php elseif ($user_data->categoria == '1'): ?>
                         <?= $this->Html->link(__('Listar Inscricões'), ['controller' => 'Muralestagios', 'action' => 'view', $inscricao->muralestagio_id], ['class' => 'button btn-secondary']) ?>
-                        <?= $this->Html->link(__('Editar Inscrição'), ['action' => 'edit', $inscricao->id], ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Excluir Inscrição'), ['action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete inscricao_{0}?', $inscricao->id), 'class' => 'button']) ?>
                     <?php endif ?>
                 </div>

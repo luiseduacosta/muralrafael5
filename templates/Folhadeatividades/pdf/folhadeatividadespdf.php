@@ -12,6 +12,10 @@ use Cake\I18n\I18n;
 I18n::setLocale('pt-BR');
 $hoje = DateTime::now('America/Sao_Paulo', 'pt-BR');
 
+$dia = $hoje->i18nFormat('d');
+$mes = $hoje->i18nFormat('MMMM');
+$ano = $hoje->i18nFormat('Y');
+
 $supervisora = isset($estagiario->supervisor->nome);
 if ($supervisora) {
     $supervisora = $estagiario->supervisor->nome;
@@ -136,7 +140,7 @@ if ($professora) {
     </table>
 
     <p style="text-align:right; line-height:100%;">
-        Rio de Janeiro, <?= $hoje->i18nFormat("d ' de ' MMMM ' de ' yyyy"); ?>.
+        Rio de Janeiro, <?= $dia . ' de ' . $mes . ' de ' . $ano; ?>.
     </p>
 
     <br />

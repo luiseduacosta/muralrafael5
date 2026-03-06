@@ -3,9 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
  */
+use Cake\I18n\I18n;
+use Cake\I18n\DateTime;
+use Cake\I18n\Timezone;
 
 $timeZone = new DateTimeZone('America/Sao_Paulo');
 $dataDeHoje = new DateTime(null, $timeZone);
+
+$dia = $dataDeHoje->i18nFormat('d');
+$mes = $dataDeHoje->i18nFormat('MMMM');
+$ano = $dataDeHoje->i18nFormat('Y');
 
 ?>
 
@@ -93,7 +100,7 @@ $cress = is_null($estagiario->supervisor) ? "_____" : $estagiario->supervisor->c
 <br />
 <br />
 
-<p style="text-align:right; font-size: 90%;">Rio de Janeiro, <?= date_format($dataDeHoje, 'd-M-Y'); ?>.</p>
+<p style="text-align:right; font-size: 90%;">Rio de Janeiro, <?= $dia . ' de ' . $mes . ' de ' . $ano; ?>.</p>
 
 <br />
 <br />
