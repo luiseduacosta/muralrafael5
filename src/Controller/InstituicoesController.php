@@ -84,8 +84,8 @@ class InstituicoesController extends AppController
             }
             $this->Flash->error(__('The instituicao could not be saved. Please, try again.'));
         }
-        $areas = $this->fetchTable('Areas')->find()->select(['id', 'nome'])->toArray();
-        $supervisores = $this->fetchTable('Supervisores')->find()->select(['id', 'nome'])->toArray();
+        $areas = $this->fetchTable('Areas')->find('list')->select(['id', 'area'])->all()->toArray();
+        $supervisores = $this->fetchTable('Supervisores')->find('list')->select(['id', 'nome'])->all()->toArray();
         $this->set(compact('instituicao', 'areas', 'supervisores'));
     }
 
@@ -114,8 +114,8 @@ class InstituicoesController extends AppController
             }
             $this->Flash->error(__('The instituicao could not be saved. Please, try again.'));
         }
-        $areas = $this->fetchTable('Areas')->find()->select(['id', 'nome'])->toArray();
-        $supervisores = $this->fetchTable('Supervisores')->find()->select(['id', 'nome'])->toArray();
+        $areas = $this->fetchTable('Areas')->find('list')->select(['id', 'area'])->all()->toArray();
+        $supervisores = $this->fetchTable('Supervisores')->find('list')->select(['id', 'nome'])->all()->toArray();
         $this->set(compact('instituicao', 'areas', 'supervisores'));
     }
 

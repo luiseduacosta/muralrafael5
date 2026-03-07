@@ -24,22 +24,22 @@
                     echo $this->Form->control('instituicao');
                     echo $this->Form->control('area_id', ['options' => $areas, 'class' => 'form-control']);
                     echo $this->Form->control('natureza');
-                    echo $this->Form->control('cnpj');
-                    echo $this->Form->control('email');
-                    echo $this->Form->control('url');
-                    echo $this->Form->control('endereco');
-                    echo $this->Form->control('bairro');
-                    echo $this->Form->control('municipio');
-                    echo $this->Form->control('cep');
-                    echo $this->Form->control('telefone');
-                    echo $this->Form->control('beneficio');
-                    echo $this->Form->control('fim_de_semana');
-                    echo $this->Form->control('local_inscricao');
-                    echo $this->Form->control('convenio');
-                    echo $this->Form->control('expira', ['empty' => true]);
-                    echo $this->Form->control('seguro');
-                    echo $this->Form->control('avaliacao');
-                    echo $this->Form->control('observacoes');
+                    echo $this->Form->control('cnpj', ['label' => 'CNPJ', 'pattern' => '[0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}\-[0-9]{2}', 'placeholder' => '00.000.000/0000-00']);
+                    echo $this->Form->control('email', ['label' => 'Email']);
+                    echo $this->Form->control('url', ['label' => 'Site da instituição', 'placeholder' => 'http://www.site.com']);
+                    echo $this->Form->control('endereco', ['label' => 'Endereço']);
+                    echo $this->Form->control('bairro', ['label' => 'Bairro']);
+                    echo $this->Form->control('municipio', ['label' => 'Município']);
+                    echo $this->Form->control('cep', ['label' => 'CEP', 'pattern' => '[0-9]{5}\-[0-9]{3}', 'placeholder' => '00000-000']);
+                    echo $this->Form->control('telefone', ['label' => 'Telefone', 'required' => false]);
+                    echo $this->Form->control('beneficio', ['label' => 'Benefício', 'required' => false]);
+                    echo $this->Form->control('fim_de_semana', ['label' => 'Fim de semana', 'options' => ['1' => 'Sim', '0' => 'Nao', '2' => 'Parcial'], 'required' => false]);
+                    echo $this->Form->control('local_inscricao', ['label' => 'Local de inscrição', 'options' => ['1' => 'Coordenacao de Estagios', '0' => 'Instituicao']]);
+                    echo $this->Form->control('convenio', ['label' => 'Nº do convênio na UFRJ', 'required' => false]);
+                    echo $this->Form->control('expira', ['label' => 'Data de expiração', 'empty' => true]);
+                    echo $this->Form->control('seguro', ['options' => ['1' => 'Sim', '0' => 'Nao'], 'default' => '0']);
+                    echo $this->Form->control('avaliacao', ['options' => ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5'], 'default' => '3']);
+                    echo $this->Form->control('observacoes', ['label' => 'Observações']);
                     echo $this->Form->control('supervisores._ids', ['options' => $supervisores]);
                 ?>
             </fieldset>

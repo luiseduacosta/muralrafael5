@@ -16,6 +16,7 @@ if ($user_session) {
 		<div class="nav">    
         	<?php if ($user_data['categoria'] == '1'): ?>
                 <?= $this->Html->link(__('Nova Instituição'), ['action' => 'add'], ['class' => 'button']) ?>
+                <?= $this->Html->link(__('Áreas'), ['controller' => 'Areas', 'action' => 'index'], ['class' => 'button']) ?>
             <?php endif; ?>
 		</div>
 	</aside>
@@ -33,13 +34,13 @@ if ($user_session) {
                         <th class="actions"><?= __('Actions') ?></th>
                         <th><?= $this->Paginator->sort('id') ?></th>
                     <?php endif; ?>
-                    <th><?= $this->Paginator->sort('instituicao') ?></th>
+                    <th><?= $this->Paginator->sort('instituicao', 'Instituição') ?></th>
                     <th><?= $this->Paginator->sort('Area.area', 'Área') ?></th>
                     <th><?= $this->Paginator->sort('natureza') ?></th>
-                    <th><?= $this->Paginator->sort('cnpj') ?></th>
+                    <th><?= $this->Paginator->sort('cnpj', 'CNPJ') ?></th>
+                    <th><?= $this->Paginator->sort('convenio', 'Convênio') ?></th>
+                    <th><?= $this->Paginator->sort('expira', 'Expira') ?></th>
                     <th><?= $this->Paginator->sort('email') ?></th>
-                    <th><?= $this->Paginator->sort('url') ?></th>
-                    <th><?= $this->Paginator->sort('avaliacao') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -57,9 +58,10 @@ if ($user_session) {
                     <td><?= $instituicao->area ? $this->Html->link($instituicao->area->area, ['controller' => 'Areas', 'action' => 'view', $instituicao->area->id]) : '' ?></td>
                     <td><?= h($instituicao->natureza) ?></td>
                     <td><?= h($instituicao->cnpj) ?></td>
+                    <td><?= h($instituicao->convenio) ?></td>
+                    <td><?= h($instituicao->expira) ?></td>
                     <td><?= $instituicao->email ? $this->Text->autoLinkEmails($instituicao->email) : '' ?></td>
-                    <td><?= $instituicao->url ? $this->Html->link($instituicao->url) : '' ?></td>
-                    <td><?= h($instituicao->avaliacao) ?></td>
+
                 </tr>
                 <?php endforeach; ?>
             </tbody>

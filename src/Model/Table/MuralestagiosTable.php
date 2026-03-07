@@ -136,7 +136,7 @@ class MuralestagiosTable extends Table
 
         $validator
                 ->scalar('horarioSelecao')
-                ->maxLength('horarioSelecao', 5)
+                ->maxLength('horarioSelecao', 8)
                 ->allowEmptyString('horarioSelecao');
 
         $validator

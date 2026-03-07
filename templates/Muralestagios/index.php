@@ -3,6 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Muralestagio[]|\Cake\Collection\CollectionInterface $muralestagios
  */
+
 declare(strict_types=1);
 
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
@@ -70,9 +71,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <th><?= $this->Paginator->sort('vagas') ?></th>
                     <th><?= $this->Paginator->sort('beneficios') ?></th>
                     <th><?= $this->Paginator->sort('fim_de_semana', 'Fim de semana') ?></th>
-                    <th><?= $this->Paginator->sort('carga_horaria', 'Carga Horária') ?></th>
-                    <th><?= $this->Paginator->sort('data_selecao', 'Seleção') ?></th>
-                    <th><?= $this->Paginator->sort('data_inscricao', 'Inscrição') ?></th>
+                    <th><?= $this->Paginator->sort('cargaHoraria', 'Carga Horária') ?></th>
+                    <th><?= $this->Paginator->sort('dataSelecao', 'Seleção') ?></th>
+                    <th><?= $this->Paginator->sort('dataInscricao', 'Inscrição') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -100,9 +101,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 							echo $fim_de_semana;
 							?>
 						</td>
-                        <td><?= h($muralestagio->carga_horaria) ?></td>
-                        <td><?= h($muralestagio->data_selecao) ?></td>
-                        <td><?= h($muralestagio->data_inscricao) ?></td>
+                        <td><?= h($muralestagio->cargaHoraria) ?></td>
+                        <td><?= h($muralestagio->dataSelecao) ?></td>
+                        <td><?= h($muralestagio->dataInscricao) ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

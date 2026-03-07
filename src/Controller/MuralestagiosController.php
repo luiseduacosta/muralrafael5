@@ -102,19 +102,25 @@ class MuralestagiosController extends AppController
         $muralestagio = $this->Muralestagios->newEmptyEntity();
         if ($this->request->is('post')) {
 
+            if ($this->request->getData('convenio') == '0') {
+                $this->Flash->error(__('Instituição não conveniada.'));
+                return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
+            }
+
             $muralestagio = $this->Muralestagios->patchEntity($muralestagio, $this->request->getData());
+
             if ($this->Muralestagios->save($muralestagio)) {
                 $this->Flash->success(__('Registro de mural de estágio feito com sucesso.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'view', $muralestagio->id]);
             }
             $this->Flash->error(__('Registro de mural de estágio não foi feito. Tente novamente.'));
         }
         $professores = $this->fetchTable("Professores")->find('list');
         $instituicoes = $this->fetchTable("Instituicoes")->find('list');
-        $turmas = $this->fetchTable("Turmas")->find('list');
-        $turnos = $this->fetchTable("Turnos")->find('list');
-        $this->set(compact('muralestagio', 'instituicoes', 'turmas', 'turnos', 'professores', 'periodo'));
+        // $turmas = $this->fetchTable("Turmas")->find('list');
+        // $turnos = $this->fetchTable("Turnos")->find('list');
+        $this->set(compact('muralestagio', 'instituicoes', 'professores', 'periodo'));
     }
 
     /**
@@ -137,10 +143,10 @@ class MuralestagiosController extends AppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
+
             $muralestagio = $this->Muralestagios->patchEntity($muralestagio, $this->request->getData());
             if ($this->Muralestagios->save($muralestagio)) {
                 $this->Flash->success(__('The muralestagio has been saved.'));
-
                 return $this->redirect(['action' => 'view', $id]);
             }
             $this->Flash->error(__('The muralestagio could not be saved. Please, try again.'));

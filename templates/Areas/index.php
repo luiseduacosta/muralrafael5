@@ -3,11 +3,16 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Area[]|\Cake\Collection\CollectionInterface $areas
  */
+$user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
+$user_session = $this->request->getAttribute('identity');
+if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
 <div class="areas index content">
     <aside>
 		<div class="nav">
-            <?= $this->Html->link(__('Nova Area'), ['action' => 'add'], ['class' => 'button']) ?>
+            <?php if ($user_data['categoria'] == '1'): ?>
+                <?= $this->Html->link(__('Nova Área'), ['action' => 'add'], ['class' => 'button']) ?>
+            <?php endif; ?>
         </div>
 	</aside>
     
@@ -23,7 +28,7 @@
                 <tr>
                     <th class="actions"><?= __('Actions') ?></th>
                     <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('area') ?></th>
+                    <th><?= $this->Paginator->sort('area', 'Área') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -31,10 +36,12 @@
                 <tr>
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $area->id]) ?>
-                        <?= $this->Html->link(__('Editar'), ['action' => 'edit', $area->id]) ?>
-                        <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $area->id], ['confirm' => __('Are you sure you want to delete {0}?', $area->area)]) ?>
+                        <?php if ($user_data['categoria'] == '1'): ?>
+                            <?= $this->Html->link(__('Editar'), ['action' => 'edit', $area->id]) ?>
+                            <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $area->id], ['confirm' => __('Are you sure you want to delete {0}?', $area->area)]) ?>
+                        <?php endif; ?>
                     </td>
-                    <td><?= $this->Html->link((string)$area->id, ['action' => 'view', $area->id]) ?></td>
+                    <td><?= $this->Number->format($area->id) ?></td>
                     <td><?= $this->Html->link($area->area, ['action' => 'view', $area->id]) ?></td>
                 </tr>
                 <?php endforeach; ?>

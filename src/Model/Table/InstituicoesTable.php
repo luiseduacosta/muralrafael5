@@ -95,6 +95,7 @@ class InstituicoesTable extends Table
         $validator
             ->scalar('cnpj')
             ->maxLength('cnpj', 18)
+            ->regex('cnpj', '/^[0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}\-[0-9]{2}$/')
             ->allowEmptyString('cnpj');
 
         $validator
@@ -124,6 +125,7 @@ class InstituicoesTable extends Table
 
         $validator
             ->scalar('cep')
+            ->regex('cep', '/^[0-9]{5}\-[0-9]{3}$/')
             ->maxLength('cep', 9)
             ->allowEmptyString('cep');
 
@@ -150,7 +152,8 @@ class InstituicoesTable extends Table
             ->maxLength('localInscricao', 7);
 
         $validator
-            ->integer('convenio');
+            ->integer('convenio')
+            ->allowEmptyString('convenio');
 
         $validator
             ->date('expira')

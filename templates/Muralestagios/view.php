@@ -68,7 +68,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
                 <tr>
                     <th><?= __('Carga Horária') ?></th>
-                    <td><?= $this->Number->format($muralestagio->carga_horaria) ?></td>
+                    <td><?= $this->Number->format($muralestagio->cargaHoraria) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Requisitos') ?></th>
@@ -88,36 +88,36 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
                 <tr>
                     <th><?= __('Local Inscrição') ?></th>
-                    <td><?= h($muralestagio->local_inscricao) ? "Inscrição somente no mural da Coordenação de Estágio da ESS" : "Inscrição na Instituição e no mural da Coordenação de Estágio da ESS" ?></td>
+                    <td><?= h($muralestagio->localInscricao) ? "Inscrição somente no mural da Coordenação de Estágio da ESS" : "Inscrição na Instituição e no mural da Coordenação de Estágio da ESS" ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Data de encerramento das inscrições') ?></th>
-                    <td><?= h($muralestagio->data_inscricao) ?></td>
+                    <td><?= h($muralestagio->dataInscricao) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Local da Seleção') ?></th>
-                    <td><?= h($muralestagio->local_selecao) ?></td>
+                    <td><?= h($muralestagio->localSelecao) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Data da Seleção') ?></th>
-                    <td><?= h($muralestagio->data_selecao) ?></td>
+                    <td><?= h($muralestagio->dataSelecao) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Horário da Seleção') ?></th>
-                    <td><?= h($muralestagio->horario_selecao) ?></td>
+                    <td><?= h($muralestagio->horarioSelecao) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Forma de Seleção') ?></th>
                     <td>
 						<?php
 						$forma_selecao = '';
-						switch ( h($muralestagio->forma_selecao) ) {
-							case 0: $forma_selecao = 'Entrevista'; break;
-							case 1: $forma_selecao = 'CR';         break;
-							case 2: $forma_selecao = 'Prova';      break;
-							case 3: $forma_selecao = 'Outra';      break;
+						switch ( h($muralestagio->formaSelecao) ) {
+							case 0: $formaSelecao = 'Entrevista'; break;
+							case 1: $formaSelecao = 'CR';         break;
+							case 2: $formaSelecao = 'Prova';      break;
+							case 3: $formaSelecao = 'Outra';      break;
 						}
-						echo $forma_selecao;
+						echo $formaSelecao;
 						?>
 					</td>
                 </tr>
@@ -145,8 +145,8 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
             <?php elseif ($user_data['categoria'] == '2'): ?>
                 <!-- if dataInscricao is empty them let the close day of application open //-->
-                <?php if (empty($muralestagio->data_inscricao)) $muralestagio->data_inscricao = new \DateTime('tomorrow'); ?>
-                <?php if (new \DateTime() <= $muralestagio->data_inscricao): ?>
+                <?php if (empty($muralestagio->dataInscricao)) $muralestagio->dataInscricao = new \DateTime('tomorrow'); ?>
+                <?php if (new \DateTime() <= $muralestagio->dataInscricao): ?>
                     <!--
                     Se a inscricao eh na instituição também tem que fazer inscrição no mural
                     //-->
@@ -192,12 +192,12 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 	                        </tr>
 	                        <?php foreach ($muralestagio->inscricoes as $inscricao) : ?>
 	                        <tr>
-	                            <?php // pr($inscricao) ?>
 								<td class="actions">
 	                                <?= $this->Html->link(__('Ver'), ['controller' => 'Inscricoes', 'action' => 'view', $inscricao->id]) ?>
-	                                <?= $this->Html->link(__('Editar'), ['controller' => 'Inscricoes', 'action' => 'edit', $inscricao->id]) ?>
-	                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Inscricoes', 'action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete # {0}?', $inscricao->id)]) ?>
-	                            </td>
+                                        <?php if ($user_data['categoria'] == '1'): ?>
+                                        <?= $this->Html->link(__('Editar'), ['controller' => 'Inscricoes', 'action' => 'edit', $inscricao->id]) ?>
+                                    <?php endif; ?>
+                                </td>
 	                            <td><?= h($inscricao->id) ?></td>
 	                            <td><?= $inscricao->aluno ? h($inscricao->aluno->registro) : '' ?></td>
 	                            <td><?= $inscricao->aluno ? $this->Html->link($inscricao->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $inscricao->aluno->id])  : '' ?></td>

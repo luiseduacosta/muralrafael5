@@ -32,29 +32,29 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     if ($user_data['administrador_id']):
                        echo $this->Form->control('user_id', ['type' => 'number']); 
                     endif;
-                    echo $this->Form->control('nome');
-                    echo $this->Form->control('cpf');
-                    echo $this->Form->control('endereco');
-                    echo $this->Form->control('bairro');
-                    echo $this->Form->control('municipio');
-                    echo $this->Form->control('cep');
-                    echo $this->Form->control('codigo_tel');
-                    echo $this->Form->control('telefone');
-                    echo $this->Form->control('codigo_cel');
-                    echo $this->Form->control('celular');
-                    echo $this->Form->control('email');
-                    echo $this->Form->control('escola');
-                    echo $this->Form->control('ano_formatura');
-                    echo $this->Form->control('cress');
-                    echo $this->Form->control('regiao');
-                    echo $this->Form->control('outros_estudos');
-                    echo $this->Form->control('area_curso');
-                    echo $this->Form->control('ano_curso');
-                    echo $this->Form->control('cargo');
-                    echo $this->Form->control('num_inscricao');
-                    echo $this->Form->control('curso_turma');
-                    echo $this->Form->control('observacoes');
-                    echo $this->Form->control('instituicoes._ids', ['options' => $instituicoes]);
+                    echo $this->Form->control('nome', ['required' => true]);
+                    echo $this->Form->control('cpf', ['label' => 'CPF', 'pattern' => '[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}', 'placeholder' => '000.000.000-00', 'required' => false]);
+                    echo $this->Form->control('cep', ['label' => 'CEP', 'pattern' => '[0-9]{5}\-[0-9]{3}', 'placeholder' => '00000-000',  'required' => false]);
+                    echo $this->Form->control('endereco', ['label' => 'Endereço', 'required' => false]);
+                    echo $this->Form->control('bairro', ['label' => 'Bairro', 'required' => false]);
+                    echo $this->Form->control('municipio', ['label' => 'Município', 'required' => false]);
+                    echo $this->Form->control('codigo_tel', ['label' => 'DDD', 'required' => false]); // Changed from 'label' => 'DDD', 'required' => false
+                    echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)[\s-][0-9]{4}\-[0-9]{4}', 'placeholder' => '(00) 0000-0000', 'required' => false]); // Changed from 'label' => 'Telefone', 'pattern' => '[0-9]{4}\-[0-9]{4}', 'placeholder' => '(00)0000-0000', 'required' => false
+                    echo $this->Form->control('codigo_cel', ['label' => 'DDD', 'required' => false]); // Changed from 'label' => 'DDD', 'required' => false
+                    echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '\([0-9]{2}\)[\s-][0-9]{4,5}\-[0-9]{4}', 'placeholder' => '(00) 00000-0000', 'required' => false]); // Changed from 'label' => 'Celular', 'pattern' => '[0-9]{4}\-[0-9]{4}', 'placeholder' => '(00)0000-0000', 'required' => false
+                    echo $this->Form->control('email', ['required' => false]);
+                    echo $this->Form->control('escola', ['required' => false]);
+                    echo $this->Form->control('ano_formatura', ['required' => false]);
+                    echo $this->Form->control('cress', ['label' => 'CRESS', 'required' => true]);
+                    echo $this->Form->control('regiao', ['required' => false]);
+                    echo $this->Form->control('outros_estudos', ['required' => false]);
+                    echo $this->Form->control('area_curso', ['required' => false]);
+                    echo $this->Form->control('ano_curso', ['required' => false]);
+                    echo $this->Form->control('cargo', ['required' => false]);
+                    echo $this->Form->control('curso_turma', ['label' => 'Num da turma do curso de supervisores', 'required' => false]);
+                    echo $this->Form->control('num_inscricao', ['label' => 'Num de inscricao', 'required' => false]);
+                    echo $this->Form->control('observacoes', ['label' => 'Observações', 'required' => false]);
+                    echo $this->Form->control('instituicoes._ids', ['label' => 'Instituição', 'options' => $instituicoes]);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Editar'), ['class' => 'button']) ?>

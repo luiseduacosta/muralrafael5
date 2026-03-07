@@ -29,11 +29,11 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         echo $this->Form->control('user_id', ['type' => 'number', 'value' => $user_session->get('id'), 'hidden' => true ]); 
                     endif;
                     echo $this->Form->control('nome', ['required' => true]);
-                    echo $this->Form->control('cpf', ['placeholder' => '000.000.000-00', 'label' => 'CPF', 'required' => false]);
+                    echo $this->Form->control('cpf', ['label' => 'CPF', 'pattern' => '[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}', 'placeholder' => '000.000.000-00', 'required' => false]);
+                    echo $this->Form->control('cep', ['label' => 'CEP', 'pattern' => '[0-9]{5}\-[0-9]{3}', 'placeholder' => '00000-000',  'required' => false]);
                     echo $this->Form->control('endereco', ['required' => false]);
                     echo $this->Form->control('bairro', ['required' => false]);
                     echo $this->Form->control('municipio', ['required' => false]);
-                    echo $this->Form->control('cep', ['placeholder' => '00000-000', 'label' => 'CEP', 'required' => false]);
                     echo $this->Form->control('codigo_tel', ['label' => 'DDD', 'required' => false]);
                     echo $this->Form->control('telefone', ['placeholder' => '(00)0000-0000', 'label' => 'Telefone', 'required' => false]);
                     echo $this->Form->control('codigo_cel', ['label' => 'DDD', 'required' => false]);

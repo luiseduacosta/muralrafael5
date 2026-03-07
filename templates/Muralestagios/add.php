@@ -4,6 +4,20 @@
  * @var \App\Model\Entity\Muralestagio $muralestagio
  */
 ?>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+// Put the text of $instituicoes selected on the select with id 'instituicao_id' on the input with id 'instituicao'
+$(document).ready(function() {
+    $('#instituicao-id').change(function() {
+        var value = $(this).find('option:selected').text();
+        console.log(value);
+        $('#instituicao').val(value);
+    });
+});
+</script>
+
 <div>
     <div class="column-responsive column-80">
         <div class="muralestagios form content">
@@ -16,26 +30,26 @@
             <fieldset>
                 <h3><?= __('Adicionar vagas de estagio') ?></h3>
                 <?php
-                    echo $this->Form->control('instituicao_id', ['options' => $instituicoes, 'empty' => false, 'class' => 'form-control']);
-                    echo $this->Form->control('instituicao', ['label' => 'Instituição', 'class' => 'form-control']);
+                    echo $this->Form->control('instituicao_id', ['options' => $instituicoes, 'empty' => true, 'class' => 'form-control']);
+                    echo $this->Form->control('instituicao', ['type' => 'hidden', 'label' => 'Instituição', 'id' => 'instituicao', 'class' => 'form-control']);
                     echo $this->Form->control('email', ['label' => 'E-mail']);
                     echo $this->Form->control('convenio', ['type' => 'select', 'options' => [1 => 'Sim', 0 => 'Não'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
                     echo $this->Form->control('vagas', ['label' => 'Número de vagas', 'default' => '1']);
-                    echo $this->Form->control('beneficios', ['placeholder' => 'Bolsa, seguros, etc.']);
+                    echo $this->Form->control('periodo', ['value' => $periodo]);
+                    echo $this->Form->control('beneficios', ['placeholder' => 'Bolsa, alimentação, transporte, etc.']);
                     echo $this->Form->control('fim_de_semana', ['type' => 'select', 'options' => [2 => 'Parcialmente', 1 => 'Sim', 0 => 'Não'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
                     echo $this->Form->control('cargaHoraria', ['placeholder' => '12']);
-                    echo $this->Form->control('requisitos', ['placeholder' => 'A partir do estágio I']);
-                    echo $this->Form->control('turma', ['options' => $turmas, 'label' => 'Turma', 'empty' => true, 'class' => 'form-control']);
-                    echo $this->Form->control('turno_id', ['type' => 'select', 'options' => $turnos, 'empty' => true, 'class' => 'form-control']);
-                    echo $this->Form->control('professor_id', ['options' => $professores, 'empty' => true, 'class' => 'form-control']);
-                    echo $this->Form->control('local_inscricao', ['type' => 'select', 'options' => [1 => 'Inscrição somente no mural da Coordenação de Estágio da ESS', 0 => 'Inscrição na Instituição e no mural da Coordenação de Estágio da ESS'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
-                    echo $this->Form->control('data_inscricao', ['label' => 'Data de encerramento das inscrições']);
-                    echo $this->Form->control('local_selecao', ['placeholder' => 'Será informado por e-mail', 'label' => 'Local de seleção']);
-                    echo $this->Form->control('data_selecao', ['label' => 'Data de seleção']);
-                    echo $this->Form->control('horario_selecao', ['placeholder' => '9:00']);
-                    echo $this->Form->control('forma_selecao',  ['type' => 'select', 'options' => [0 => 'Entrevista', 2 => 'Prova', 1 => 'CR', 3 => 'Outra'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
+                    echo $this->Form->control('requisitos', ['placeholder' => 'Ética aprovada']);
+                    // echo $this->Form->control('turma', ['options' => $turmas, 'label' => 'Turma', 'empty' => true, 'class' => 'form-control']);
+                    // echo $this->Form->control('turno_id', ['type' => 'select', 'options' => $turnos, 'empty' => true, 'class' => 'form-control']);
+                    // echo $this->Form->control('professor_id', ['options' => $professores, 'empty' => true, 'class' => 'form-control']);
+                    echo $this->Form->control('localInscricao', ['type' => 'select', 'options' => [1 => 'Inscrição somente no mural da Coordenação de Estágio da ESS', 0 => 'Inscrição na Instituição e no mural da Coordenação de Estágio da ESS'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
+                    echo $this->Form->control('dataInscricao', ['type' => 'date', 'empty' => true, 'label' => 'Data de encerramento das inscrições']);
+                    echo $this->Form->control('localSelecao', ['placeholder' => 'Fique atento(a). Será informado oportunamente.', 'label' => 'Local de seleção']);
+                    echo $this->Form->control('dataSelecao', ['type' => 'date', 'empty' => true, 'label' => 'Data de seleção']);
+                    echo $this->Form->control('horarioSelecao', ['type' => 'time', 'empty' => true, 'placeholder' => '9:00', 'class' => 'form-control']);
+                    echo $this->Form->control('formaSelecao',  ['type' => 'select', 'options' => [0 => 'Entrevista', 2 => 'Prova', 1 => 'CR', 3 => 'Outra'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
                     echo $this->Form->control('contato', ['label' => 'Informações de contato']);
-                    echo $this->Form->control('periodo', ['value' => $periodo]);
                     echo $this->Form->control('outras', ['label' => 'Outras informações']);
                 ?>
             </fieldset>

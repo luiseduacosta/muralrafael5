@@ -12,9 +12,9 @@
     </aside>
     <?= $this->Form->create($area) ?>
     <fieldset>
-        <h3><?= __('Adicionando Area') ?></h3>
+        <h3><?= __('Adicionando Área') ?></h3>
         <?php
-            echo $this->Form->control('area');
+            echo $this->Form->control('area', ['label' => 'Área']);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Adicionar'), ['class' => 'button']) ?>
