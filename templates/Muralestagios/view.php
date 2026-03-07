@@ -21,7 +21,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 			            <?= $this->Html->link(__('Editar estagio'), ['action' => 'edit', $muralestagio->id], ['class' => 'button']) ?>
 			            <?= $this->Form->postLink(__('Excluir estagio'), ['action' => 'delete', $muralestagio->id], ['confirm' => __('Are you sure you want to delete # {0}?', $muralestagio->id), 'class' => 'button']) ?>
 			            <?= $this->Html->link(__('Novo estagio'), ['action' => 'add'], ['class' => 'button']) ?>
-					<?php endif; ?>
+                    <?php endif; ?>
 		        </div>
 		    </aside>
             <h3>estagio_<?= h($muralestagio->id) ?></h3>

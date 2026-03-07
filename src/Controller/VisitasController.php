@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
+use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
  * Visitas Controller
@@ -20,11 +21,16 @@ class VisitasController extends AppController
      */
     public function index()
     {
+        // When calling from view and not found it with the parameter, them pass it to the add button
+        $instituicao_id = $this->request->getQuery('instituicao_id');
+        if (!empty($instituicao_id)) {
+            $this->set('instituicao_id', $instituicao_id);
+        }
         $this->Authorization->authorize($this->Visitas);
 
         $visitas = $this->paginate($this->Visitas->find()->contain(['Instituicoes']));
 
-        $this->set(compact('visitas'));
+        $this->set('visitas', $visitas);
     }
 
     /**
@@ -36,13 +42,22 @@ class VisitasController extends AppController
      */
     public function view(?string $id = null)
     {
-        try {
-        $visita = $this->Visitas->get($id, [
-            'contain' => ['Instituicoes'],
-        ]);
-        } catch (RecordNotFoundException $e) {
-            throw new ForbiddenException('A visita que você tentou visualizar não existe.');
+        $instituicao_id = $this->request->getQuery('instituicao_id');
+        if (empty($instituicao_id)) {
+            $this->Flash->info(__('Sem parâmetro da instituição.'));
+            return $this->redirect($this->referer());
         }
+
+        try {
+            $visita = $this->Visitas->find()
+            ->contain(['Instituicoes'])
+            ->where(['Visitas.instituicao_id' => $instituicao_id])
+            ->firstOrFail();
+        } catch (RecordNotFoundException $e) {
+            $this->Flash->info(__('A visita que você tentou visualizar não existe.'));
+            return $this->redirect(['action' => 'index', '?' => ['instituicao_id' => $instituicao_id]]);
+        }
+
         $this->Authorization->authorize($visita);
 
         $this->set(compact('visita'));
@@ -66,8 +81,14 @@ class VisitasController extends AppController
             }
             $this->Flash->error(__('The visita could not be saved. Please, try again.'));
         }
-        $instituicoes = $this->Visitas->Instituicoes->find('list');
-        $this->set(compact('visita', 'instituicoes'));
+        $instituicao_id = $this->request->getQuery('instituicao_id');
+
+        // When having this parameter them use it to filter the institutions
+        if (!empty($instituicao_id)) {
+            $this->set('instituicao_id', $instituicao_id);
+        }
+        $this->set('instituicoes', $this->Visitas->Instituicoes->find('list'));
+        $this->set('visita', $visita);
     }
 
     /**
@@ -79,9 +100,14 @@ class VisitasController extends AppController
      */
     public function edit(?string $id = null)
     {
-        $visita = $this->Visitas->get($id, [
-            'contain' => [],
-        ]);
+        try {
+            $visita = $this->Visitas->get($id, [
+                'contain' => [],
+            ]);
+        } catch (RecordNotFoundException $e) {
+            $this->Flash->info(__('A visita que você tentou editar não existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         $this->Authorization->authorize($visita);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $visita = $this->Visitas->patchEntity($visita, $this->request->getData());
@@ -106,7 +132,12 @@ class VisitasController extends AppController
     public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $visita = $this->Visitas->get($id);
+        try {
+            $visita = $this->Visitas->get($id);
+        } catch (RecordNotFoundException $e) {
+            $this->Flash->info(__('A visita que você tentou deletar não existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         $this->Authorization->authorize($visita);
         if ($this->Visitas->delete($visita)) {
             $this->Flash->success(__('The visita has been deleted.'));

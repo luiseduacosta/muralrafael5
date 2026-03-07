@@ -10,9 +10,15 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
 <div class="visitas index content">
 	<aside>
-		<div class="nav">
-            <?= $this->Html->link(__('Nova Visita'), ['action' => 'add'], ['class' => 'button']) ?>
-		</div>
+		<?php if ($user_data['categoria'] == '1'): ?>
+            <div class="nav">
+                <?php if (isset($instituicao_id)): ?>
+                    <?= $this->Html->link(__('Nova Visita'), ['action' => 'add', '?' => ['instituicao_id' => $instituicao_id]], ['class' => 'button']) ?>
+                <?php else: ?>
+                    <?= $this->Html->link(__('Nova Visita'), ['action' => 'add'], ['class' => 'button']) ?>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
 	</aside>
     
     <h3><?= __('Lista de visitas') ?></h3>

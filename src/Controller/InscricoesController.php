@@ -89,7 +89,7 @@ class InscricoesController extends AppController
         $muralestagio_id = $this->getRequest()->getQuery("muralestagio_id");
 
         if (!$muralestagio_id) {
-            $this->Flash->error(__('Erro no identificador do mural de estagios'));
+            $this->Flash->info(__('Selecione no mural de estagios'));
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         } else {
             $muralestagio = $this->fetchTable('Muralestagios')->get($muralestagio_id);

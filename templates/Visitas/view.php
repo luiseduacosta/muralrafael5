@@ -28,7 +28,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <td><?= h($visita->id) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Instituicao') ?></th>
+                    <th><?= __('Instituição') ?></th>
                     <td><?= $visita->instituicao ? $this->Html->link(h($visita->instituicao->instituicao), ['controller' => 'Instituicoes', 'action' => 'view', $visita->instituicao->id]) : '' ?></td>
                 </tr>
                 <tr>
@@ -36,11 +36,11 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <td><?= h($visita->motivo) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Professor') ?></th>
-                    <td><?= $visita->professor ? $this->Html->link(h($visita->professor->nome), ['controller' => 'Professores', 'action' => 'view', $visita->professor->id]) : '' ?></td>
+                    <th><?= __('Responsável') ?></th>
+                    <td><?= h($visita->responsavel) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Avaliacao') ?></th>
+                    <th><?= __('Avaliação') ?></th>
                     <td><?= h($visita->avaliacao) ?></td>
                 </tr>
                 <tr>

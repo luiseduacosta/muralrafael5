@@ -107,7 +107,18 @@ class MuralestagiosController extends AppController
                 return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
             }
 
-            $muralestagio = $this->Muralestagios->patchEntity($muralestagio, $this->request->getData());
+            // Get Instituicao name
+            $instituicao = $this->fetchTable("Instituicoes")
+            ->find()
+            ->select(['id', 'instituicao']) 
+            ->where(['Instituicoes.id' => $this->request->getData('instituicao_id')])
+            ->first();
+
+            // Put the instituicao name in the data
+            $dados = $this->request->getData();
+            $dados['instituicao'] = $instituicao->instituicao;
+
+            $muralestagio = $this->Muralestagios->patchEntity($muralestagio, $dados);
 
             if ($this->Muralestagios->save($muralestagio)) {
                 $this->Flash->success(__('Registro de mural de estágio feito com sucesso.'));
@@ -144,7 +155,19 @@ class MuralestagiosController extends AppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
 
-            $muralestagio = $this->Muralestagios->patchEntity($muralestagio, $this->request->getData());
+            // Get Instituicao name
+            $instituicao = $this->fetchTable("Instituicoes")
+            ->find()
+            ->select(['id', 'instituicao']) 
+            ->where(['Instituicoes.id' => $this->request->getData('instituicao_id')])
+            ->first();
+
+            // Put the instituicao name in the data
+            $dados = $this->request->getData();
+            $dados['instituicao'] = $instituicao->instituicao;
+
+            $muralestagio = $this->Muralestagios->patchEntity($muralestagio, $dados);
+
             if ($this->Muralestagios->save($muralestagio)) {
                 $this->Flash->success(__('The muralestagio has been saved.'));
                 return $this->redirect(['action' => 'view', $id]);

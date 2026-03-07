@@ -19,7 +19,8 @@ if ($user_session) {
                         <?= $this->Html->link(__('Editar Instituição'), ['action' => 'edit', $instituicao->id], ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Excluir Instituição'), ['action' => 'delete', $instituicao->id], ['confirm' => __('Are you sure you want to delete {0}?', $instituicao->instituicao), 'class' => 'button']) ?>
                         <?= $this->Html->link(__('Nova Instituição'), ['action' => 'add'], ['class' => 'button']) ?>
-                    <?php endif; ?>
+			            <?= $this->Html->link(__('Visita'), ['controller' => 'Visitas', 'action' => 'view', '?' => ['instituicao_id' => $instituicao->id]], ['class' => 'button']) ?>
+                        <?php endif; ?>
                         <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
                 </div>
             </aside>
@@ -30,12 +31,12 @@ if ($user_session) {
                     <td><?= h($instituicao->id) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Instituicao') ?></th>
+                    <th><?= __('Instituição') ?></th>
                     <td><?= $instituicao->instituicao ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Area') ?></th>
-                    <td><?= $instituicao->area ? $this->Html->link(''.$instituicao->area->area, ['controller' => 'Areas', 'action' => 'view', $instituicao->area->id]) : '' ?></td>
+                    <th><?= __('Área') ?></th>
+                    <td><?= $instituicao->area_id ? $this->Html->link(''.$instituicao->area_rel->area, ['controller' => 'Areas', 'action' => 'view', $instituicao->area_rel->id]) : '' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Natureza') ?></th>
@@ -54,7 +55,7 @@ if ($user_session) {
                     <td><?= $instituicao->url ? $this->Html->link($instituicao->url) : '' ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Endereco') ?></th>
+                    <th><?= __('Endereço') ?></th>
                     <td><?= h($instituicao->endereco . ' - ' . $instituicao->bairro . ' - ' .  $instituicao->municipio . ' - ' . $instituicao->cep ) ?></td>
                 </tr>
                 <tr>
@@ -80,7 +81,7 @@ if ($user_session) {
                     </td>
                 </tr>
                 <tr>
-                    <th><?= __('Local Inscricao') ?></th>
+                    <th><?= __('Local de inscrição') ?></th>
                     <td><?= h($instituicao->local_inscricao) ? "Inscrição somente no mural da Coordenação de Estágio da ESS" : "Inscrição na Instituição e no mural da Coordenação de Estágio da ESS" ?></td>
                 </tr>
                 <tr>

@@ -9,6 +9,20 @@ if ($user_session) {
     $user_data = $user_session->getOriginalData();
 }
 ?>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+// Put the text of $instituicoes selected on the select with id 'instituicao_id' on the input with id 'instituicao'
+$(document).ready(function() {
+    $('#instituicao-id').change(function() {
+        var value = $(this).find('option:selected').text();
+        console.log(value);
+        $('#instituicao').val(value);
+    });
+});
+</script>
+
 <div>
     <div class="column-responsive column-80">
         <div class="muralestagios form content">
@@ -29,6 +43,7 @@ if ($user_session) {
                 <h3><?= __('Editando estagio_' . $muralestagio->instituicao) ?></h3>
                 <?php
                     echo $this->Form->control('instituicao_id', ['readonly' => true, 'class' => 'form-control']);
+                    echo $this->Form->control('instituicao', ['type' => 'hidden', 'label' => 'Instituição', 'id' => 'instituicao', 'class' => 'form-control']);
                     echo $this->Form->control('email');
                     echo $this->Form->control('convenio', ['options' => ['1' => 'Sim', '0' => 'Não'], 'class' => 'form-control']);
                     echo $this->Form->control('vagas');

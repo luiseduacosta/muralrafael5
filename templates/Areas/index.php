@@ -10,6 +10,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 <div class="areas index content">
     <aside>
 		<div class="nav">
+            <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
             <?php if ($user_data['categoria'] == '1'): ?>
                 <?= $this->Html->link(__('Nova Área'), ['action' => 'add'], ['class' => 'button']) ?>
             <?php endif; ?>
