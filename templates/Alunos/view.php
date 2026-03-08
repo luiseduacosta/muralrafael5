@@ -14,11 +14,13 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <div class="alunos view content">
             <aside>
                 <div class="nav">
+                    <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
         	        <?php if ($user_data['categoria'] == '1'): ?>
                         <?= $this->Form->postLink(__('Excluir Aluno(a)'), ['action' => 'delete', $aluno->id], ['confirm' => __('Are you sure you want to delete {0}?', $aluno->nome), 'class' => 'button']) ?>
                         <?= $this->Html->link(__('Novo Aluno(a)'), ['action' => 'add'], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Listar Alunos(as)'), ['action' => 'index'], ['class' => 'button']) ?>
-        	        <?php elseif ($user_data['categoria'] == '2' && $user_data['aluno_id'] == $aluno->id): ?>
+                        <?= $this->Html->link(__('Editar Aluno(a)'), ['action' => 'edit', $aluno->id], ['class' => 'button']) ?>
+                        <?php elseif ($user_data['categoria'] == '2' && $user_data['aluno_id'] == $aluno->id): ?>
                         <?= $this->Html->link(__('Editar Aluno(a)'), ['action' => 'edit', $aluno->id], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Declaração de período'), ['controller' => 'Alunos', 'action' => 'declaracaoperiodo', $aluno->id], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Termo de compromisso'), ['controller' => 'Estagiarios', 'action' => 'termocompromisso', $aluno->id], ['class' => 'button']) ?>
@@ -65,11 +67,19 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
                 <tr>
                     <th><?= __('Telefone') ?></th>
+                    <?php if (!empty($aluno->telefone) && strlen($aluno->telefone) < 10): ?>
                     <td><?= '(' . h($aluno->codigo_telefone) . ') ' . h($aluno->telefone) ?></td>
+                    <?php else: ?>
+                    <td><?= h($aluno->telefone) ?></td>
+                    <?php endif; ?>
                 </tr>
                 <tr>
                     <th><?= __('Celular') ?></th>
+                    <?php if (!empty($aluno->celular) && strlen($aluno->celular) < 10): ?>
                     <td><?= '(' . h($aluno->codigo_celular) . ') ' . h($aluno->celular) ?></td>
+                    <?php else: ?>
+                    <td><?= h($aluno->celular) ?></td>
+                    <?php endif; ?>
                 </tr>
                 <tr>
                     <th><?= __('Endereço') ?></th>

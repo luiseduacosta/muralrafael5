@@ -104,12 +104,61 @@ class UsersController extends AppController
         
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData(), [
-                'fields' => ['password', 'email'],
+                'fields' => ['categoria', 'numero', 'password', 'email'],
                 'accessibleFields' => ['password' => true]
             ]);
-                
+ 
+            // Verfify is numero has a valid value set. It is mandatory for all of the new users except admin
+            if ($this->request->getData('categoria') != '1') {
+                $numero = $this->request->getData('numero');
+                if (empty($numero)) {
+                    $this->Flash->error(__('O número e obrigatorio para o tipo de usuario selecionado.'));
+                    return $this->redirect(['action' => 'login']);
+                } else {
+                    if ($this->request->getData('categoria') == '2') {
+                        $aluno = $this->fetchTable('Alunos')->findByRegistro($numero)->first();
+                        if ($aluno) {
+                            $user->aluno_id = $aluno->id;
+                            $user->numero = $aluno->registro;
+                        } else {
+                            $user->numero = $numero;
+                        }
+                    } elseif ($this->request->getData('categoria') == '3') {
+                        $professor = $this->fetchTable('Professores')->findBySiape($numero)->first();
+                        if ($professor) {
+                            $user->professor_id = $professor->id;
+                            $user->numero = $professor->siape;
+                        }
+                    } elseif ($this->request->getData('categoria') == '4') {
+                        $supervisor = $this->fetchTable('Supervisores')->findByCress($numero)->first();
+                        if ($supervisor) {
+                            $user->supervisor_id = $supervisor->id;
+                            $user->numero = $supervisor->cress;
+                        }
+                    }
+                }
+            }
+
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
+                // Update the entity with the user id
+                if ($user->categoria == '2') {
+                    $aluno = $this->fetchTable('Alunos')->findByRegistro($user->numero)->first();
+                    if ($aluno) {
+                        $this->fetchTable('Alunos')->updateAll(['user_id' => $user->id], ['id' => $aluno->id]);
+                    }
+                } else if ($user->categoria == '3') {
+                    $professor = $this->fetchTable('Professores')->findBySiape($user->numero)->first();
+                    if ($professor) {
+                        $this->fetchTable('Professores')->updateAll(['user_id' => $user->id], ['id' => $professor->id]);
+                    }
+                } else if ($user->categoria == '4') {
+                    $supervisor = $this->fetchTable('Supervisores')->findByCress($user->numero)->first();
+                    if ($supervisor) {
+                        $this->fetchTable('Supervisores')->updateAll(['user_id' => $user->id], ['id' => $supervisor->id]);
+                    }
+                }
+
                 return $this->redirect(['action' => 'view', $user->id]);
             }
             
@@ -209,48 +258,65 @@ class UsersController extends AppController
         $this->Authorization->skipAuthorization();
         
         $result = $this->Authentication->getResult();
+
         // If the user is logged in send them away.
         if ($result->isValid()) {
             $this->Flash->success(__('Usuario logado.'));
-            pr($result);
             // Verificar se o usuario é administrador
             if ($result->getData()['categoria'] == '1') {
                 return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
             }
-            // Verificar se o usuario é aluno e está cadastrado
+            // Verificar se o usuario é aluno, está cadastrado e emparelhar o id do user e do aluno
             if ($result->getData()['categoria'] == '2') {
-                if ($result->getData()['aluno_id'] > 0) {
-                    return $this->redirect(['controller' => 'alunos', 'action' => 'view', $result->getData()['aluno_id']]);
-                } else {
-                    return $this->redirect(['controller' => 'alunos', 'action' => 'add', '?' => ['email' => $result->getData()['email']]]);
+                $aluno = $this->fetchTable('Alunos')->findByRegistro($result->getData()['numero'])->first();
+                if ($aluno) {
+                    if (empty($result->getData()['aluno_id'])) {
+                        $this->fetchTable('Users')->updateAll(['aluno_id' => $aluno->id], ['id' => $result->getData()['id']]);
+                    }
+                    if (empty($aluno->user_id)) {
+                        $this->fetchTable('Alunos')->updateAll(['user_id' => $result->getData()['id']], ['id' => $aluno->id]);
+                    }
+                    return $this->redirect(['controller' => 'Alunos', 'action' => 'view', $aluno->id]);
                 }
+                return $this->redirect(['controller' => 'Alunos', 'action' => 'add']);
             }
-            // Verificar se o usuario é professor e está cadastrado
+            
+            // Verificar se o usuario é professor, está cadastrado e emparelhar o id do user e do professor
             if ($result->getData()['categoria'] == '3') {
-                if ($result->getData()['professor_id'] > 0) {
-                    return $this->redirect(['controller' => 'professores', 'action' => 'view', $result->getData()['professor_id']]);
-                } else {
-                    return $this->redirect(['controller' => 'professores', 'action' => 'add', '?' => ['email' => $result->getData()['email']]]);
+                $professor = $this->fetchTable('Professores')->findBySiape($result->getData()['numero'])->first();
+                if ($professor) {
+                    if (empty($result->getData()['professor_id'])) {
+                    $this->fetchTable('Users')->updateAll(['professor_id' => $professor->id], ['id' => $result->getData()['id']]);
+                    }
+                    if (empty($professor->user_id)) {
+                        $this->fetchTable('Professores')->updateAll(['user_id' => $result->getData()['id']], ['id' => $professor->id]);
+                    }
+                    return $this->redirect(['controller' => 'Professores', 'action' => 'view', $professor->id]);
                 }
+                return $this->redirect(['controller' => 'Professores', 'action' => 'add']);
             }
-            // Verificar se o usuario é supervisor e está cadastrado
+            
+            // Verificar se o usuario é supervisor, está cadastrado e emparelhar o id do user e do supervisor 
             if ($result->getData()['categoria'] == '4') {
-                if ($result->getData()['supervisor_id'] > 0) {
-                    return $this->redirect(['controller' => 'supervisores', 'action' => 'view', $result->getData()['supervisor_id']]);
-                } else {
-                    return $this->redirect(['controller' => 'supervisores', 'action' => 'add', '?' => ['email' => $result->getData()['email']]]);
+                $supervisor = $this->fetchTable('Supervisores')->findByCress($result->getData()['numero'])->first();
+                if ($supervisor) {
+                    if (empty($result->getData()['supervisor_id'])) {
+                        $this->fetchTable('Users')->updateAll(['supervisor_id' => $supervisor->id], ['id' => $result->getData()['id']]);
+                    }
+                    if (empty($supervisor->user_id)) {
+                        $this->fetchTable('Supervisores')->updateAll(['user_id' => $result->getData()['id']], ['id' => $supervisor->id]);
+                    }
+                    return $this->redirect(['controller' => 'Supervisores', 'action' => 'view', $supervisor->id]);
                 }
+                return $this->redirect(['controller' => 'Supervisores', 'action' => 'add']);
             }
-
-            // Fallback redirect
-            $target = $this->Authentication->getLoginRedirect() ?? '/';
-            return $this->redirect($target);
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
         if ($this->request->is('post')) {
             $this->Flash->error('Invalid username or password');
         }
     }
-    
+
 
     /*
      * Logout method

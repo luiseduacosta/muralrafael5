@@ -115,8 +115,10 @@ class SupervisoresController extends AppController
             }
             $this->Flash->error(__('The supervisor could not be saved. Please, try again.'));
         }
+        $email = $user_data['email'];
+        $cress = $user_data['numero'];
         $instituicoes = $this->Supervisores->Instituicoes->find('list');
-        $this->set(compact('supervisor', 'instituicoes'));
+        $this->set(compact('supervisor', 'instituicoes', 'email', 'cress'));
     }
 
     /**

@@ -7,6 +7,16 @@ $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'su
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $this->request->getAttribute('identity')->getOriginalData(); }
 ?>
+
+<?php
+// May be this is a temporary solution. Put into de Configuracoes table in json data format is a better solution
+$departamentos = [
+    'Fundamentos' => 'Fundamentos',
+    'Métodos e técnicas' => 'Metodologia',
+    'Política social' => 'Politicas'
+]
+?>
+
 <div>
     <div class="column-responsive column-80">
         <div class="professores view content">
@@ -156,7 +166,7 @@ if ($user_session) { $user_data = $this->request->getAttribute('identity')->getO
             
             <?php if (!empty($professor->user)) : ?>
             <div class="related">
-                <h4><?= __('Related User') ?></h4>
+                <h4><?= __('User') ?></h4>
                 <div class="table_wrap">
                     <table>
                         <tr>
@@ -184,7 +194,7 @@ if ($user_session) { $user_data = $this->request->getAttribute('identity')->getO
             
             <?php if (!empty($estagiarios)) : ?>
             <div class="related">
-                <h4><?= __('Related Estagiarios') ?></h4>
+                <h4><?= __('Estagiarios') ?></h4>
                 <div class="paginator">
                     <?= $this->element('paginator'); ?>
                 </div>
@@ -249,55 +259,7 @@ if ($user_session) { $user_data = $this->request->getAttribute('identity')->getO
                 </div>
             </div>
             <?php endif; ?>
-            
-            <?php if (!empty($professor->muralestagios)) : ?>
-            <div class="related">
-                <h4><?= __('Related Muralestagios') ?></h4>
-                <div class="table_wrap">
-                    <table>
-                        <tr>
-                            <th class="actions"><?= __('Actions') ?></th>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('Instituicao') ?></th>
-                            <th><?= __('Vagas') ?></th>
-                            <th><?= __('Beneficios') ?></th>
-                            <th><?= __('Fim De Semana') ?></th>
-                            <th><?= __('CargaHoraria') ?></th>
-                            <th><?= __('DataSelecao') ?></th>
-                            <th><?= __('DataInscricao') ?></th>
-                        </tr>
-                        <?php foreach ($professor->muralestagios as $muralestagio) : ?>
-                        <tr>
-                            <td class="actions">
-                                <?= $this->Html->link(__('Ver'), ['controller' => 'Muralestagios', 'action' => 'view', $muralestagio->id]) ?>
-                                <?= $this->Html->link(__('Editar'), ['controller' => 'Muralestagios', 'action' => 'edit', $muralestagio->id]) ?>
-                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Muralestagios', 'action' => 'delete', $muralestagio->id], ['confirm' => __('Are you sure you want to delete muralestagios_{0}?', $muralestagio->id)]) ?>
-                            </td>
-                            <td><?= h($muralestagio->id) ?></td>
-                            <td><?= $muralestagio->instituicao ? $this->Html->link($muralestagio->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $muralestagio->instituicao->id]) : '' ?></td>
-                            <td><?= h($muralestagio->vagas) ?></td>
-                            <td><?= h($muralestagio->beneficios) ?></td>
-                            <td>
-                                <?php
-                                $fim_de_semana = '';
-                                switch ( $muralestagio->fim_de_semana ) {
-                                    case 0: $fim_de_semana = 'Não';          break;
-                                    case 1: $fim_de_semana = 'Sim';          break;
-                                    case 2: $fim_de_semana = 'Parcialmente'; break;
-                                }
-                                echo $fim_de_semana;
-                                ?>
-                            </td>
-                            <td><?= h($muralestagio->cargaHoraria) ?></td>
-                            <td><?= h($muralestagio->dataSelecao) ?></td>
-                            <td><?= h($muralestagio->dataInscricao) ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </div>
-            </div>
-            <?php endif; ?>
-            
+                        
         </div>
     </div>
 </div>

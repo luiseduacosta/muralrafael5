@@ -41,6 +41,12 @@ class AlunosController extends AppController
      */
     public function view($id = null)
     {
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
+        $user_session = $this->request->getAttribute('identity');
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
+
         $contained = [
             'Estagiarios' => ['Instituicoes', 'Supervisores', 'Professores', 'Turmas'], 
             'Inscricoes' => ['Muralestagios' => ['Instituicoes']], 
@@ -70,8 +76,6 @@ class AlunosController extends AppController
         if ($user_session) {
             $user_data = $user_session->getOriginalData();
         }
-
-        $email = $this->request->getQuery('email');
 
         if ($user_data['aluno_id'] > 0) {
             $this->Flash->warning(__('Aluno ja esta cadastrado.'));
@@ -107,13 +111,17 @@ class AlunosController extends AppController
                     $user_session = $this->request->getAttribute('identity');
                     $user_session->set('aluno_id', $aluno->id);
                     $user_session->set('numero', $aluno->registro);
+                    $user_data = $user_session->getOriginalData();
                 }
                 // Go to aluno view page
                 return $this->redirect(['action' => 'view', $aluno->id]);
             }
             $this->Flash->error(__('Erro ao adicionar: não foi possível salvar os dados.'));
         }
-        $this->set(compact('aluno', 'email'));
+
+        $email = $user_data['email'];
+        $registro = $user_data['numero'];
+        $this->set(compact('aluno', 'email', 'registro'));
     }
 
     /**

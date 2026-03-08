@@ -5,6 +5,15 @@
  */
 ?>
 
+<?php
+// May be this is a temporary solution. Put into de Configuracoes table in json data format is a better solution
+$departamentos = [
+    'Fundamentos' => 'Fundamentos',
+    'Métodos e técnicas' => 'Metodologia',
+    'Política social' => 'Politicas'
+]
+?>
+
 <div class="professores index content">
 	<aside>
 		<div class="nav">

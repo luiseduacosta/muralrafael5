@@ -10,7 +10,6 @@ use Cake\Validation\Validator;
  * Professores Model
  *
  * @property \App\Model\Table\EstagiariosTable&\Cake\ORM\Association\HasMany $Estagiarios
- * @property \App\Model\Table\MuralestagiosTable&\Cake\ORM\Association\HasMany $Muralestagios
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  * @method \App\Model\Entity\Professor newEmptyEntity()
  * @method \App\Model\Entity\Professor newEntity(array $data, array $options = [])
@@ -47,9 +46,6 @@ class ProfessoresTable extends Table
             'foreignKey' => 'user_id',
         ]);
         $this->hasMany('Estagiarios', [
-            'foreignKey' => 'professor_id',
-        ]);
-        $this->hasMany('Muralestagios', [
             'foreignKey' => 'professor_id',
         ]);
     }

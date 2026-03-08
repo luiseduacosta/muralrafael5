@@ -15,9 +15,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <div class="users view content">
             <aside>
                 <div class="nav">
+                    <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
                     <?= $this->Html->link(__('Editar Email'), ['action' => 'edit', $user->id], ['class' => 'button']) ?>
-                    <?= $this->Html->link(__('Editar Senha'), ['action' => 'editpassword', $user->id], ['class' => 'button']) ?>
-                    
+                    <?= $this->Html->link(__('Editar Senha'), ['action' => 'editpassword', $user->id], ['class' => 'button']) ?> 
                     <?php if ($user_data['categoria'] == '1'): ?>
                         <?= $this->Html->link(__('Listar Usuários'), ['action' => 'index'], ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Excluir Usuário'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete {0}?', $user->email), 'class' => 'button']) ?>
@@ -37,8 +37,12 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <td><?= $user->email ? $this->Text->autoLinkEmails($user->email) : '' ?></td>
                 </tr>
                 <tr>
+                    <th><?= __('Número (DRE, Siape ou CRESS)') ?></th>
+                    <td><?= h($user->numero) ?></td>
+                </tr>
+                <tr>
                     <th><?= __('Criado') ?></th>
-                    <td><?= h($user->created) ?></td>
+                    <td><?= h($user->timestamp) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Modificado') ?></th>

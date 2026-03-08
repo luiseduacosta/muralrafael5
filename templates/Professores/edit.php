@@ -10,6 +10,15 @@ $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'su
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
+<?php
+// May be this is a temporary solution. Put into de Configuracoes table in json data format is a better solution
+$departamentos = [
+    'Fundamentos' => 'Fundamentos',
+    'Métodos e técnicas' => 'Metodologia',
+    'Política social' => 'Politicas'
+]
+?>
+
 <div>
     <div class="column-responsive column-80">
         <div class="professores form content">

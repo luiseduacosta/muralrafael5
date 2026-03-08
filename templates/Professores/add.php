@@ -10,6 +10,15 @@ $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'su
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
+
+<?php
+// May be this is a temporary solution. Put into de Configuracoes table in json data format is a better solution
+$departamentos = [
+    'Fundamentos' => 'Fundamentos',
+    'Métodos e técnicas' => 'Metodologia',
+    'Política social' => 'Politicas'
+]
+?>
 <div>
     <div class="column-responsive column-80">
         <div class="professores form content">
@@ -28,39 +37,39 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     else:
                         echo $this->Form->control('user_id', ['type' => 'number', 'value' => $user_session->get('id'), 'hidden' => true ]); 
                     endif;
-                    echo $this->Form->control('nome');
-                    echo $this->Form->control('cpf');
-                    echo $this->Form->control('siape');
-                    echo $this->Form->control('datanascimento', ['empty' => true]);
-                    echo $this->Form->control('localnascimento');
-                    echo $this->Form->control('ddd_telefone');
-                    echo $this->Form->control('telefone');
-                    echo $this->Form->control('ddd_celular');
-                    echo $this->Form->control('celular');
-                    echo $this->Form->control('email');
-                    echo $this->Form->control('homepage');
-                    echo $this->Form->control('redesocial');
-                    echo $this->Form->control('curriculolattes');
-                    echo $this->Form->control('atualizacaolattes', ['empty' => true]);
-                    echo $this->Form->control('curriculosigma');
-                    echo $this->Form->control('pesquisadordgp');
-                    echo $this->Form->control('formacaoprofissional');
-                    echo $this->Form->control('universidadedegraduacao');
-                    echo $this->Form->control('anoformacao');
-                    echo $this->Form->control('mestradoarea');
-                    echo $this->Form->control('mestradouniversidade');
-                    echo $this->Form->control('mestradoanoconclusao');
-                    echo $this->Form->control('doutoradoarea');
-                    echo $this->Form->control('doutoradouniversidade');
-                    echo $this->Form->control('doutoradoanoconclusao');
-                    echo $this->Form->control('dataingresso', ['empty' => true]);
-                    echo $this->Form->control('formaingresso');
-                    echo $this->Form->control('tipocargo');
-                    echo $this->Form->control('regimetrabalho');
-                    echo $this->Form->control('departamento');
-                    echo $this->Form->control('dataegresso', ['empty' => true]);
-                    echo $this->Form->control('motivoegresso');
-                    echo $this->Form->control('observacoes');
+                    echo $this->Form->control('nome', ['label' => 'Nome Completo', 'required' => true]);
+                    echo $this->Form->control('cpf', ['label' => 'CPF', 'pattern' => '[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}', 'placeholder' => '000.000.000-00', 'required' => false]);
+                    echo $this->Form->control('siape', ['value' => $siape, 'required' => true, 'readonly' => true]);
+                    echo $this->Form->control('datanascimento', ['empty' => true, 'required' => false]);
+                    echo $this->Form->control('localnascimento', ['label' => 'Local Nascimento', 'required' => false]);
+                    echo $this->Form->control('ddd_telefone', ['label' => 'DDD Telefone', 'required' => false]);
+                    echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '[0-9]{4}\.[0-9]{4}', 'placeholder' => '0000.0000', 'required' => false]);
+                    echo $this->Form->control('ddd_celular', ['label' => 'DDD Celular', 'required' => false]);
+                    echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '[0-9]{4}\.[0-9]{4}', 'placeholder' => '0000.0000', 'required' => false]);
+                    echo $this->Form->control('email', ['type' => 'email', 'value' => $email, 'required' => true, 'readonly' => true]);
+                    echo $this->Form->control('homepage', ['label' => 'Homepage', 'required' => false]);
+                    echo $this->Form->control('redesocial', ['label' => 'Rede Social', 'required' => false]);
+                    echo $this->Form->control('curriculolattes', ['label' => 'Curriculo Lattes', 'required' => false]);
+                    echo $this->Form->control('atualizacaolattes', ['empty' => true, 'required' => false]);
+                    echo $this->Form->control('curriculosigma', ['label' => 'Curriculo Sigma', 'required' => false]);
+                    echo $this->Form->control('pesquisadordgp', ['label' => 'Pesquisa Dord GP', 'required' => false]);
+                    echo $this->Form->control('formacaoprofissional', ['label' => 'Formacao Profissional', 'required' => false]);
+                    echo $this->Form->control('universidadedegraduacao', ['label' => 'Universidade de Graduacao', 'required' => false]);
+                    echo $this->Form->control('anoformacao', ['label' => 'Ano de Formacao', 'required' => false]);
+                    echo $this->Form->control('mestradoarea', ['label' => 'Mestrado Area', 'required' => false]);
+                    echo $this->Form->control('mestradouniversidade', ['label' => 'Mestrado Universidade', 'required' => false]);
+                    echo $this->Form->control('mestradoanoconclusao', ['label' => 'Mestrado Ano Conclussão', 'required' => false]);
+                    echo $this->Form->control('doutoradoarea', ['label' => 'Doutorado Area', 'required' => false]);
+                    echo $this->Form->control('doutoradouniversidade', ['label' => 'Doutorado Universidade', 'required' => false]);
+                    echo $this->Form->control('doutoradoanoconclusao', ['label' => 'Doutorado Ano Conclussão', 'required' => false]);
+                    echo $this->Form->control('dataingresso', ['empty' => true, 'required' => false]);
+                    echo $this->Form->control('formaingresso', ['label' => 'Forma Ingresso', 'required' => false]);
+                    echo $this->Form->control('tipocargo', ['label' => 'Tipo Cargo', 'required' => false]);
+                    echo $this->Form->control('regimetrabalho', ['label' => 'Regime Trabalho', 'required' => false]);
+                    echo $this->Form->control('departamento', ['label' => 'Departamento', 'options' => $departamentos, 'required' => true]);
+                    echo $this->Form->control('dataegresso', ['empty' => true, 'required' => false]);
+                    echo $this->Form->control('motivoegresso', ['label' => 'Motivo Egresso', 'required' => false]);
+                    echo $this->Form->control('observacoes', ['label' => 'Observacoes', 'required' => false]);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Adicionar'), ['class' => 'button']) ?>

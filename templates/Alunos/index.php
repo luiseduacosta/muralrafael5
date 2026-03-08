@@ -39,10 +39,10 @@ if ($user_session) {
                     <th><?= $this->Paginator->sort('email') ?></th>
                     <th><?= $this->Paginator->sort('telefone') ?></th>
                     <th><?= $this->Paginator->sort('celular') ?></th>
-                    <th><?= $this->Paginator->sort('cpf') ?></th>
-                    <th><?= $this->Paginator->sort('nascimento') ?></th>
-                    <th><?= $this->Paginator->sort('ingresso') ?></th>
-                    <th><?= $this->Paginator->sort('turno') ?></th>
+                    <th><?= $this->Paginator->sort('cpf', 'CPF') ?></th>
+                    <th><?= $this->Paginator->sort('nascimento', 'Data de Nascimento') ?></th>
+                    <th><?= $this->Paginator->sort('ingresso', 'Data de Ingresso') ?></th>
+                    <th><?= $this->Paginator->sort('turno', 'Turno') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -58,9 +58,17 @@ if ($user_session) {
                     <?php endif; ?>
                     <td><?= $aluno->nome ? $this->Html->link(h($aluno->nome), ['action' => 'view', $aluno->id]) : '' ?></td>
                     <td><?= h($aluno->registro) ?></td>
-                    <td><?= ($aluno->user and $aluno->user->email) ? $this->Text->autoLinkEmails($aluno->user->email) : '' ?></td>
-                    <td><?= $aluno->telefone ? '(' . $aluno->codigo_telefone . ') ' . h($aluno->telefone) : '' ?></td>
-                    <td><?= $aluno->celular ? '(' . $aluno->codigo_celular . ') ' . h($aluno->celular) : '' ?></td>
+                    <td><?= ($aluno->user || $aluno->email) ? $this->Text->autoLinkEmails($aluno->email) : '' ?></td>
+                    <?php if (!empty($aluno->telefone) && strlen($aluno->telefone) < 10): ?>
+                        <td><?= $aluno->telefone ? '(' . $aluno->codigo_telefone . ') ' . h($aluno->telefone) : '' ?></td>
+                    <?php else: ?>
+                        <td><?= h($aluno->telefone) ?></td>
+                    <?php endif; ?>
+                    <?php if (!empty($aluno->celular) && strlen($aluno->celular) < 10): ?>
+                        <td><?= $aluno->celular ? '(' . $aluno->codigo_celular . ') ' . h($aluno->celular) : '' ?></td>
+                    <?php else: ?>
+                        <td><?= h($aluno->celular) ?></td>
+                    <?php endif; ?>
                     <td><?= h($aluno->cpf) ?></td>
                     <td><?= h($aluno->nascimento) ?></td>
                     <td><?= h($aluno->ingresso) ?></td>

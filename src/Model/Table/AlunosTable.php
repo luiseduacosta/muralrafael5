@@ -91,6 +91,7 @@ class AlunosTable extends Table
 
         $validator
             ->scalar('turno')
+            ->add('turno', 'inList', ['rule' => ['inList', ['diurno', 'noturno', 'indefinido', 'outro']], 'message' => 'Turno inválido'])
             ->maxLength('turno', 10)
             ->allowEmptyString('turno');
 
@@ -99,7 +100,8 @@ class AlunosTable extends Table
 
         $validator
             ->scalar('telefone')
-            ->maxLength('telefone', 9)
+            ->maxLength('telefone', 15)
+            ->regex('telefone', '/^\([0-9]{2}\) [0-9]{4,5}\.[0-9]{4}$/', 'Telefone inválido')
             ->allowEmptyString('telefone');
 
         $validator
@@ -107,7 +109,7 @@ class AlunosTable extends Table
 
         $validator
             ->scalar('celular')
-            ->maxLength('celular', 12)
+            ->maxLength('celular', 15)
             ->regex('celular', '/^\([0-9]{2}\) [0-9]{4,5}\.[0-9]{4}$/', 'Telefone inválido')
             ->allowEmptyString('celular');
 

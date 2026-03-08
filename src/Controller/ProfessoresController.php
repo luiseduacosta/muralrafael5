@@ -120,7 +120,9 @@ class ProfessoresController extends AppController
             }
             $this->Flash->error(__('The professor could not be saved. Please, try again.'));
         }
-        $this->set(compact('professor'));
+        $email = $user_data['email'];
+        $siape = $user_data['numero'];
+        $this->set(compact('professor','email', 'siape'));
     }
 
     /**

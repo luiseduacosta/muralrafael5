@@ -38,10 +38,10 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     echo $this->Form->control('telefone', ['placeholder' => '(00)0000-0000', 'label' => 'Telefone', 'required' => false]);
                     echo $this->Form->control('codigo_cel', ['label' => 'DDD', 'required' => false]);
                     echo $this->Form->control('celular', ['placeholder' => '(00)0000-0000', 'label' => 'Celular', 'required' => false]);
-                    echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'required' => false]);
+                    echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'value' => $email, 'readonly' => true, 'required' => true]);
                     echo $this->Form->control('escola', ['label' => 'Instituição de Ensino', 'default' => null, 'required' => false]);
                     echo $this->Form->control('ano_formatura', ['required' => false, 'default' => null]);
-                    echo $this->Form->control('cress', ['label' => 'CRESS', 'required' => true]);
+                    echo $this->Form->control('cress', ['label' => 'CRESS', 'value' => $cress, 'readonly' => true, 'required' => true]);
                     echo $this->Form->control('regiao', ['label' => 'Região', 'default' => '7', 'required' => false]);
                     echo $this->Form->control('outros_estudos', ['required' => false, 'default' => null]);
                     echo $this->Form->control('area_curso', ['required' => false, 'default' => null]);
