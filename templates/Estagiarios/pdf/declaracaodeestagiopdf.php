@@ -55,11 +55,11 @@ expedido por <?= $estagiario->aluno->orgao; ?>,
 matriculado(a) no Curso de Serviço Social da 
 Universidade Federal do Rio de Janeiro com o número <?= $estagiario->aluno->registro; ?>, 
 estagiou na instituição <b><?= $estagiario->instituicao->instituicao; ?></b>, 
-com a supervisão profissional do/a Assistente Social <b><?= $supervisora; ?></b> 
-registrada no CRESS <?= $regiao; ?>&ordf; região 
-com o número <?= $cress; ?>, 
-no semestre de <?= $estagiario->periodo; ?>, 
-com uma carga horária de <?= $horas; ?> horas.
+com a supervisão profissional do/a Assistente Social <b><?= $supervisora ?? '____________________'; ?></b> 
+registrada no CRESS <?= $regiao ?? '____'; ?>&ordf; região 
+com o número <?= $cress ?? '____'; ?>, 
+no semestre de <?= $estagiario->periodo ?? '____'; ?>, 
+com uma carga horária de <?= $horas ?? '____'; ?> horas.
 <p>
 
 <p style="text-align:justify; line-height: 2.5;">

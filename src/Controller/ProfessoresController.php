@@ -110,10 +110,8 @@ class ProfessoresController extends AppController
                     $user->professor_id = $professor->id;
                     $user->numero = $professor->siape;
                     $this->fetchTable('Users')->save($user);
-                    // Reload the user with the new values
-                    $user_session = $this->request->getAttribute('identity');
-                    $user_session->set('professor_id', $professor->id);
-                    $user_session->set('numero', $professor->siape);
+                    // Refresh the user identity in the session
+                    $this->Authentication->setIdentity($user);
                 }
                 // Got to view
                 return $this->redirect(['action' => 'view', $professor->id]);

@@ -105,10 +105,8 @@ class SupervisoresController extends AppController
                     $user->supervisor_id = $supervisor->id;
                     $user->numero = $supervisor->cress;
                     $this->fetchTable('Users')->save($user);
-                    // Then update user session with supervisor_id and numero
-                    $user_session = $this->request->getAttribute('identity');
-                    $user_session->set('supervisor_id', $supervisor->id);
-                    $user_session->set('numero', $supervisor->cress);
+                    // Refresh the user identity in the session
+                    $this->Authentication->setIdentity($user);
                 }
                 // Go to view
                 return $this->redirect(['action' => 'view', $supervisor->id]);

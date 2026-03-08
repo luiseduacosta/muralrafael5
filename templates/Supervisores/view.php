@@ -14,13 +14,16 @@ if ($user_session) {
         <div class="supervisores view content">
             <aside>
                 <div class="nav">
+                    <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
                     <?php if ($user_data['categoria'] == '1'): ?>
                         <?= $this->Html->link(__('Listar Supervisores'), ['action' => 'index'], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Editar Supervisor'), ['action' => 'edit', $supervisor->id], ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Excluir Supervisor'), ['action' => 'delete', $supervisor->id], ['confirm' => __('Are you sure you want to delete {0}?', $supervisor->nome), 'class' => 'button']) ?>
                         <?= $this->Html->link(__('Novo Supervisor'), ['action' => 'add'], ['class' => 'button']) ?>
                     <?php endif; ?>
-                    <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
+                    <?php if ($user_data['categoria'] == '4' && $user_data['supervisor_id'] == $supervisor->id): ?>
+                        <?= $this->Html->link(__('Editar'), ['action' => 'edit', $supervisor->id], ['class' => 'button']) ?>
+                    <?php endif; ?>
                 </div>
             </aside>
             <h3>supervisor_<?= h($supervisor->id) ?></h3>
@@ -159,13 +162,13 @@ if ($user_session) {
                             <tr>
                                 <th class="actions"><?= __('Actions') ?></th>
                                 <th><?= __('Id') ?></th>
-                                <th><?= __('Instituicao') ?></th>
-                                <th><?= __('Area') ?></th>
+                                <th><?= __('Instituição') ?></th>
+                                <th><?= __('Área') ?></th>
                                 <th><?= __('Natureza') ?></th>
-                                <th><?= __('Cnpj') ?></th>
+                                <th><?= __('CNPJ') ?></th>
                                 <th><?= __('Email') ?></th>
-                                <th><?= __('Url') ?></th>
-                                <th><?= __('Avaliacao') ?></th>
+                                <th><?= __('URL') ?></th>
+                                <th><?= __('Avaliação') ?></th>
                             </tr>
                             <?php foreach ($supervisor->instituicoes as $instituicao) : ?>
                                 <tr>
@@ -203,15 +206,14 @@ if ($user_session) {
                             <th><?= __('Registro') ?></th>
                             <th><?= __('Turno') ?></th>
                             <th><?= __('Nivel') ?></th>
-                            <th><?= __('Tc') ?></th>
-                            <th><?= __('Tc Solicitação') ?></th>
+                            <th><?= __('TC assinado') ?></th>
+                            <th><?= __('TC Solicitação') ?></th>
                             <th><?= __('Instituição') ?></th>
                             <th><?= __('Supervisor') ?></th>
                             <th><?= __('Professor') ?></th>
                             <th><?= __('Periodo') ?></th>
-                            <th><?= __('Area') ?></th>
                             <th><?= __('Nota') ?></th>
-                            <th><?= __('Ch') ?></th>
+                            <th><?= __('CH') ?></th>
                         </tr>
                         <?php foreach ($supervisor->estagiarios as $estagiario) : ?>
                             <tr>
@@ -244,7 +246,6 @@ if ($user_session) {
                                 <td><?= ($estagiario->supervisor and $estagiario->supervisor->nome) ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
                                 <td><?= $estagiario->professor ? $this->Html->link($estagiario->professor->nome, ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id]) : '' ?></td>
                                 <td><?= h($estagiario->periodo) ?></td>
-                                <td><?= $estagiario->turma ? $this->Html->link($estagiario->turma->turma, ['controller' => 'Turmas', 'action' => 'view', $estagiario->turma->id]) : '' ?></td>
                                 <td><?= $estagiario->nota ? $this->Number->format($estagiario->nota) : '' ?></td>
                                 <td><?= $estagiario->ch ? $this->Number->format($estagiario->ch) : '' ?></td>
                             </tr>

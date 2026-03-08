@@ -99,34 +99,36 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             </div>
             <?php endif; ?>
             
-            <?php if (!empty($aluno->user)) : ?>
-            <div class="related">
-                <h4><?= __('Usuário') ?></h4>
-                <div class="table_wrap">
-                    <table>
-                        <tr>
-                            <th class="actions"><?= __('Actions') ?></th>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('Email') ?></th>
-                            <th><?= __('Criado') ?></th>
-                            <th><?= __('Modificado') ?></th>
-                        </tr>
-                        <tr>
-                            <td class="actions">
-                                <?= $this->Html->link(__('Ver'), ['controller' => 'Users', 'action' => 'view', $aluno->user->id]) ?>
-                                <?= $this->Html->link(__('Editar'), ['controller' => 'Users', 'action' => 'edit', $aluno->user->id]) ?>
-                                <?php if ($user_data['administrador_id']): ?>
-                                    <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Users', 'action' => 'delete', $aluno->user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $aluno->user->id)]) ?>
-                                <?php endif; ?>
-                            </td>
-                            <td><?= $this->Html->link((string)$aluno->user->id, ['controller' => 'Users', 'action' => 'view', $aluno->user->id]) ?></td>
-                            <td><?= $aluno->user->email ? $this->Text->autoLinkEmails($aluno->user->email) : '' ?></td>
-                            <td><?= h($aluno->user->created) ?></td>
-                            <td><?= h($aluno->user->modified) ?></td>
-                        </tr>
-                    </table>
+            <?php if ($user_data['categoria'] == '1'): ?>
+                <?php if (!empty($aluno->user)) : ?>
+                <div class="related">
+                    <h4><?= __('Usuário') ?></h4>
+                    <div class="table_wrap">
+                        <table>
+                            <tr>
+                                <th class="actions"><?= __('Actions') ?></th>
+                                <th><?= __('Id') ?></th>
+                                <th><?= __('Email') ?></th>
+                                <th><?= __('Criado') ?></th>
+                                <th><?= __('Modificado') ?></th>
+                            </tr>
+                            <tr>
+                                <td class="actions">
+                                    <?= $this->Html->link(__('Ver'), ['controller' => 'Users', 'action' => 'view', $aluno->user->id]) ?>
+                                    <?= $this->Html->link(__('Editar'), ['controller' => 'Users', 'action' => 'edit', $aluno->user->id]) ?>
+                                    <?php if ($user_data['administrador_id']): ?>
+                                        <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Users', 'action' => 'delete', $aluno->user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $aluno->user->id)]) ?>
+                                    <?php endif; ?>
+                                </td>
+                                <td><?= $this->Html->link((string)$aluno->user->id, ['controller' => 'Users', 'action' => 'view', $aluno->user->id]) ?></td>
+                                <td><?= $aluno->user->email ? $this->Text->autoLinkEmails($aluno->user->email) : '' ?></td>
+                                <td><?= h($aluno->user->created) ?></td>
+                                <td><?= h($aluno->user->modified) ?></td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
-            </div>
+                <?php endif; ?>
             <?php endif; ?>
 
             <?php if (!empty($aluno->inscricoes)) : ?>

@@ -107,11 +107,8 @@ class AlunosController extends AppController
                     $user->aluno_id = $aluno->id;
                     $user->numero = $aluno->registro;
                     $this->fetchTable('Users')->save($user);
-                    // Then update user session with aluno_id and numero
-                    $user_session = $this->request->getAttribute('identity');
-                    $user_session->set('aluno_id', $aluno->id);
-                    $user_session->set('numero', $aluno->registro);
-                    $user_data = $user_session->getOriginalData();
+                    // Refresh the user identity in the session
+                    $this->Authentication->setIdentity($user);
                 }
                 // Go to aluno view page
                 return $this->redirect(['action' => 'view', $aluno->id]);

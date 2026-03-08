@@ -5,6 +5,9 @@
  * @var \Cake\Collection\CollectionInterface|string[] $estagiarios
  */
 declare(strict_types=1);
+$user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
+$user_session = $this->request->getAttribute('identity');
+if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
 <?php
 
@@ -48,7 +51,10 @@ if ($cress) {
 
     <aside>
         <div class="nav">
-            <?= $this->Html->link(__('Listar avaliações'), ['action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+            <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
+            <?php if ($user_data['categoria'] == '1' || ($user_data['categoria'] == '4' && $user_data['supervisor_id'] == $estagiario->supervisor_id)): ?>
+                <?= $this->Html->link(__('Listar avaliações'), ['action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+            <?php endif; ?>
         </div>
     </aside>
 
