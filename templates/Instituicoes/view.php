@@ -102,7 +102,7 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Expira') ?></th>
-                    <td><?= h($instituicao->expira) ?></td>
+                    <td><?= $instituicao->expira ? $instituicao->expira->format('d/m/Y') : '' ?></td>
                 </tr>
             </table>
             <div class="related">
@@ -239,8 +239,8 @@ if ($user_session) {
                                 ?>
                             </td>
                             <td><?= h($muralestagio->cargaHoraria) ?></td>
-                            <td><?= h($muralestagio->dataSelecao) ?></td>
-                            <td><?= h($muralestagio->dataInscricao) ?></td>
+                            <td><?= $muralestagio->dataSelecao ? $muralestagio->dataSelecao->format('d/m/Y') : '' ?></td>
+                            <td><?= $muralestagio->dataInscricao ? $muralestagio->dataInscricao->format('d/m/Y') : '' ?></td>
                         </tr>
                         <?php endforeach; ?>
                     </table>
@@ -272,7 +272,7 @@ if ($user_session) {
                                 <?php endif; ?>
                             </td>
                             <td><?= $this->Html->link($visita->id, ['action' => 'view', $visita->id]) ?></td>
-                            <td><?= h($visita->data) ?></td>
+                            <td><?= $visita->data ? $visita->data->format('d/m/Y') : '' ?></td>
                             <td><?= h($visita->motivo) ?></td>
                             <td><?= h($visita->responsavel) ?></td>
                             <td><?= h($visita->descricao) ?></td>

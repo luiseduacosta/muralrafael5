@@ -102,8 +102,8 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 							?>
 						</td>
                         <td><?= h($muralestagio->cargaHoraria) ?></td>
-                        <td><?= h($muralestagio->dataSelecao) ?></td>
-                        <td><?= h($muralestagio->dataInscricao) ?></td>
+                        <td><?= $muralestagio->dataSelecao ? $muralestagio->dataSelecao->format('d/m/Y') : '' ?></td>
+                        <td><?= $muralestagio->dataInscricao ? $muralestagio->dataInscricao->format('d/m/Y') : '' ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

@@ -641,6 +641,4 @@ class EstagiariosController extends AppController
         }
         return $nivel;
     }
-
-
 }

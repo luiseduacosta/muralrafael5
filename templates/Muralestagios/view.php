@@ -6,14 +6,30 @@
 
 declare(strict_types=1);
 
+use Cake\I18n\Date;
+
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $user_session->getOriginalData(); }
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
+}
+
+$hoje = Date::now();
+// Se não houver data de inscrição, assume que está aberto (amanhã) para fins de exibição
+$prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
 ?>
 
 <div>
     <div class="column-responsive column-80">
         <div class="muralestagios view content">
+
+            <?php if ($prazo->isFuture() || $prazo->isToday()): ?>
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    <?= __('Inscrições abertas até {0}', $prazo->format('d/m/Y')) ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
 		    <aside>
 		        <div class="nav">
 					<?= $this->Html->link(__('Mural estagios'), ['action' => 'index'], ['class' => 'button']) ?>
@@ -92,7 +108,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
                 <tr>
                     <th><?= __('Data de encerramento das inscrições') ?></th>
-                    <td><?= h($muralestagio->dataInscricao) ?></td>
+                    <td><?= $muralestagio->dataInscricao ? $muralestagio->dataInscricao->format('d/m/Y') : '' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Local da Seleção') ?></th>
@@ -100,7 +116,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
                 <tr>
                     <th><?= __('Data da Seleção') ?></th>
-                    <td><?= h($muralestagio->dataSelecao) ?></td>
+                    <td><?= $muralestagio->dataSelecao ? $muralestagio->dataSelecao->format('d/m/Y') : '' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Horário da Seleção') ?></th>
@@ -145,8 +161,8 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
             <?php elseif ($user_data['categoria'] == '2'): ?>
                 <!-- if dataInscricao is empty them let the close day of application open //-->
-                <?php if (empty($muralestagio->dataInscricao)) $muralestagio->dataInscricao = new \DateTime('tomorrow'); ?>
-                <?php if (new \DateTime() <= $muralestagio->dataInscricao): ?>
+                <?php if (empty($muralestagio->dataInscricao)) $muralestagio->dataInscricao = new \Cake\I18n\Date('tomorrow'); ?>
+                <?php if ($muralestagio->dataInscricao->isFuture() || $muralestagio->dataInscricao->isToday()): ?>
                     <!--
                     Se a inscricao eh na instituição também tem que fazer inscrição no mural
                     //-->

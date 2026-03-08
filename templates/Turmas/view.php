@@ -131,8 +131,8 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                             </td>
                             <td><?= h($muralestagios->vagas) ?></td>
                             <td><?= $muralestagios->professor ? $this->Html->link(h($muralestagios->professor->nome), ['controller' => 'professores', 'action' => 'view', $muralestagios->professor->id]) : '' ?></td>
-                            <td><?= h($muralestagios->dataSelecao) ?></td>
-                            <td><?= h($muralestagios->dataInscricao) ?></td>
+                            <td><?= $muralestagios->dataSelecao ? $muralestagios->dataSelecao->format('d/m/Y') : '' ?></td>
+                            <td><?= $muralestagios->dataInscricao ? $muralestagios->dataInscricao->format('d/m/Y') : '' ?></td>
                             <td><?= h($muralestagios->contato) ?></td>
                             <td><?= h($muralestagios->periodo) ?></td>
                         </tr>

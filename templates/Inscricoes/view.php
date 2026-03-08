@@ -45,11 +45,11 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
                 <tr>
                     <th><?= __('Data') ?></th>
-                    <td><?= $inscricao->data ? h($inscricao->data) : '' ?></td>
+                    <td><?= $inscricao->data ? $inscricao->data->format('d/m/Y') : '' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Timestamp') ?></th>
-                    <td><?= $inscricao->timestamp ? h($inscricao->timestamp) : '' ?></td>
+                    <td><?= $inscricao->timestamp ? $inscricao->timestamp->format('d/m/Y H:i') : '' ?></td>
                 </tr>
             </table>
         </div>
