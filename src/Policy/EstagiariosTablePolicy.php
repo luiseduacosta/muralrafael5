@@ -23,13 +23,7 @@ final class EstagiariosTablePolicy implements BeforePolicyInterface
         if ($identity) {
             $user_data = $identity->getOriginalData();
 
-            if (
-                $user_data
-                && (
-                    $user_data['categoria'] == '1'
-                    || $user_data['categoria'] == '3'
-                )
-            ) {
+            if ($user_data && $user_data['categoria'] == '1') {
                 return true;
             }
         }
@@ -44,7 +38,20 @@ final class EstagiariosTablePolicy implements BeforePolicyInterface
      */
     public function canIndex(IdentityInterface $userSession, EstagiariosTable $estagiariosTable): Result
     {
-        return new Result(false, 'Erro: estagiarios index policy not authorized');
+        return new Result(true);
+    }
+
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @return \Authorization\Policy\Result
+     */
+    public function canLancanota(IdentityInterface $userSession): Result
+    {
+        $user_data = $userSession->getOriginalData();
+        if ($user_data['categoria'] == '3') {
+            return new Result(true);
+        }
+        return new Result(false, 'Erro: lancanota policy not authorized');
     }
 
     /**

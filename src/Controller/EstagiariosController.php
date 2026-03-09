@@ -670,16 +670,18 @@ class EstagiariosController extends AppController
      */
     public function lancanota($id = null)
     {
-        $this->Authorization->skipAuthorization();
-        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
-        $user_session = $this->request->getAttribute('identity');
-        if ($user_session) {
-            $user_data = $user_session->getOriginalData();
-        }
-        
-        $professor_id = $this->request->getQuery("professor_id");
+        $this->Authorization->authorize($this->Estagiarios, 'lancanota');
 
-        if ($professor_id === null) {
+        $user_session = $this->request->getAttribute('identity');
+        $user_data = $user_session->getOriginalData();
+
+        if ($user_data['categoria'] == '3') {
+            $professor_id = $user_data['professor_id'];
+        } else {
+            $professor_id = (int)$this->request->getQuery("professor_id");
+        }
+
+        if (empty($professor_id)) {
             $this->Flash->error(
                 __(
                     "Sem parâmetro para localizar os estagiários do(a) professor(a).",
@@ -687,25 +689,29 @@ class EstagiariosController extends AppController
             );
             return $this->redirect(["action" => "index"]);
         }
-        
+
         $professor = $this->fetchTable('Professores')
             ->find()
             ->select(["id", "nome"])
             ->where(["id" => $professor_id])
             ->first();
 
+        if (!$professor) {
+            $this->Flash->error(__("Professor não encontrado."));
+            return $this->redirect(["action" => "index"]);
+        }
+
         $periodos = $this->Estagiarios->find("list", ["keyField" => "periodo", "valueField" => "periodo"])
-            ->contain(["Professores"])
-            ->where(["Professores.id" => $professor_id])
+            ->where(["Estagiarios.professor_id" => $professor_id])
             ->order(["Estagiarios.periodo" => "ASC"])
             ->toArray();
 
         $periodo = $this->request->getQuery("periodo");
         if ($periodo === null) {
-            $periodo = end($periodos);
+            $periodo = !empty($periodos) ? end($periodos) : null;
         }
 
-        $estagiarios = $this->Estagiarios->find()
+        $estagiariosQuery = $this->Estagiarios->find()
             ->contain([
                     "Alunos" => [
                         "fields" => ["id", "nome"],
@@ -716,18 +722,17 @@ class EstagiariosController extends AppController
                     "Instituicoes" => ["fields" => ["id", "instituicao"]],
                     "Avaliacoes" => ["fields" => ["id", "estagiario_id"]],
             ])
-            ->where(["Estagiarios.professor_id" => $professor_id, "Estagiarios.periodo" => $periodo]);
+            ->where(["Estagiarios.professor_id" => $professor_id]);
 
-        $this->Authorization->skipAuthorization();
-
-        if ($this->request->is(["patch", "post", "put"])) {
-            $data = $this->request->getData();
-
+        if ($periodo) {
+            $estagiariosQuery->where(["Estagiarios.periodo" => $periodo]);
         }
+
+        $estagiarios = $this->paginate($estagiariosQuery);
 
         $this->set("periodo", $periodo);
         $this->set("periodos", $periodos);
         $this->set("professor", $professor);
-        $this->set("estagiarios", $this->paginate($estagiarios));
+        $this->set("estagiarios", $estagiarios);
     }
 }

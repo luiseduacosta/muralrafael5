@@ -22,15 +22,7 @@ final class EstagiarioPolicy implements BeforePolicyInterface
         if ($identity) {
             $user_data = $identity->getOriginalData();
 
-            if (
-                $user_data
-                && (
-                    $user_data['categoria'] == '1' // Administrador pode ver todos os estagiários
-                    || $user_data['categoria'] == '2' // Aluno pode criar, editar e fazer termocompromisso
-                    || $user_data['categoria'] == '3' // Professor pode ver os estagiários da sua instituição
-                    || $user_data['categoria'] == '4' // Supervisor pode ver os estagiários da sua instituição
-                )
-            ) {
+            if ($user_data && $user_data['categoria'] == '1') {
                 return true;
             }
         }
@@ -39,11 +31,21 @@ final class EstagiarioPolicy implements BeforePolicyInterface
     }
 
     /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \Cake\ORM\Table $table
+     * @return \Authorization\Policy\Result
+     */
+    public function canIndex(IdentityInterface $userSession): Result
+    {
+        return new Result(true);
+    }
+
+    /**
      * @return \Authorization\Policy\Result
      */
     public function canAdd(): Result
     {
-        return new Result(false, 'Erro: estagiario add policy not authorized');
+        return new Result(true);
     }
 
     /**
@@ -53,7 +55,7 @@ final class EstagiarioPolicy implements BeforePolicyInterface
      */
     public function canView(IdentityInterface $userSession, Estagiario $estagiarioData): Result
     {
-        return $this->sameUser($userSession, $estagiarioData)
+        return $this->isProfessorOwned($userSession, $estagiarioData) || $this->sameUser($userSession, $estagiarioData)
             ? new Result(true)
             : new Result(false, 'Erro: estagiario view policy not authorized');
     }
@@ -65,7 +67,23 @@ final class EstagiarioPolicy implements BeforePolicyInterface
      */
     public function canEdit(IdentityInterface $userSession, Estagiario $estagiarioData): Result
     {
-        return new Result(false, 'Erro: estagiario edit policy not authorized');
+        return $this->isProfessorOwned($userSession, $estagiarioData) || $this->sameUser($userSession, $estagiarioData)
+            ? new Result(true)
+            : new Result(false, 'Erro: estagiario edit policy not authorized');
+    }
+
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Entity\Estagiario $estagiarioData
+     * @return \Authorization\Policy\Result
+     */
+    public function canLancanota(IdentityInterface $userSession): Result
+    {
+        $user_data = $userSession->getOriginalData();
+        if ($user_data['categoria'] == '3') {
+            return new Result(true);
+        }
+        return new Result(false, 'Erro: lancanota policy not authorized');
     }
 
     /**
@@ -96,6 +114,17 @@ final class EstagiarioPolicy implements BeforePolicyInterface
     public function canTermoCompromissopdf(IdentityInterface $userSession, Estagiario $estagiarioData): Result
     {
         return new Result(true);
+    }
+
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Entity\Estagiario $estagiarioData
+     * @return bool
+     */
+    protected function isProfessorOwned(IdentityInterface $userSession, Estagiario $estagiarioData): bool
+    {
+        $user_data = $userSession->getOriginalData();
+        return isset($user_data['professor_id']) && $user_data['professor_id'] === $estagiarioData->professor_id;
     }
 
     /**
