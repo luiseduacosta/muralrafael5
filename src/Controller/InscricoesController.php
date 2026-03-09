@@ -189,40 +189,4 @@ class InscricoesController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    /**
-     * Imprimir PDF com as inscrições para seleção do estagiário
-     *
-     * @param string|null $id Inscricao id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function imprimepdf($id = null)
-    {
-        $this->Authorization->skipAuthorization();
-        $muralestagio_id = $this->request->getQuery('muralestagio_id');
-        if (!$muralestagio_id) {
-            $this->Flash->error(__('Muralestagio id is required.'));
-            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
-        }
-
-        $inscricao = $this->fetchTable('Muralestagios')->find()
-            ->contain(['Inscricoes' => ['Alunos']])
-            ->where(['Muralestagios.id' => $muralestagio_id])
-            ->first();
-            
-        try {
-            $this->Authorization->authorize($inscricao);
-        } catch (ForbiddenException $error) {
-            $this->Flash->error('Authorization error: ' . $error->getMessage());
-            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
-        }
-        
-        $this->viewBuilder()->enableAutoLayout(false);
-        $this->viewBuilder()->setClassName("CakePdf.Pdf");
-        $this->viewBuilder()->setOption("pdfConfig", [
-            "orientation" => "portrait",
-        ]);
-
-        $this->set(compact('inscricao'));
-    }
 }

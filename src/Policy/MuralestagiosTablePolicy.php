@@ -50,4 +50,16 @@ final class MuralestagiosTablePolicy implements BeforePolicyInterface
     {
         return new Result(true);
     }
+
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Entity\Muralestagio $muralestagioData
+     * @return \Authorization\Policy\Result 
+     */
+    public function canImprimepdf(IdentityInterface $userSession, Muralestagio $muralestagioData): Result
+    {
+        return $this->sameUser($userSession, $muralestagioData)
+            ? new Result(true)
+            : new Result(false, 'Erro: muralestagios imprimir pdf policy not authorized');
+    }
 }
