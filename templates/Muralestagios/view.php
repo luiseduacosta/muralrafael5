@@ -37,7 +37,7 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
 			            <?= $this->Html->link(__('Editar estagio'), ['action' => 'edit', $muralestagio->id], ['class' => 'button']) ?>
 			            <?= $this->Form->postLink(__('Excluir estagio'), ['action' => 'delete', $muralestagio->id], ['confirm' => __('Are you sure you want to delete # {0}?', $muralestagio->id), 'class' => 'button']) ?>
 			            <?= $this->Html->link(__('Novo estagio'), ['action' => 'add'], ['class' => 'button']) ?>
-			            <?= $this->Html->link(__('Imprimir inscrições'), ['controller' => 'Inscricoes', 'action' => 'imprimepdf', '?' => ['muralestagio_id' => $muralestagio->id]], ['class' => 'button']) ?>
+			            <?= $this->Html->link(__('Imprimir inscrições'), ['controller' => 'Muralestagios', 'action' => 'imprimepdf', '?' => ['muralestagio_id' => $muralestagio->id]], ['class' => 'button']) ?>
                         <?php endif; ?>
 		        </div>
 		    </aside>

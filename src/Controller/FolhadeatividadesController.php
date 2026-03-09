@@ -327,7 +327,7 @@ class FolhadeatividadesController extends AppController
             ->where(["Estagiarios.id" => $estagiario_id])
             ->first();
 
-        $this->viewBuilder()->enableAutoLayout(false);
+        $this->viewBuilder()->setAutoLayout('pdf/default');
         $this->viewBuilder()->setClassName("CakePdf.Pdf");
         $this->viewBuilder()->setOption("pdfConfig", [
             "orientation" => "portrait",
@@ -376,7 +376,7 @@ class FolhadeatividadesController extends AppController
             return $this->redirect(['action' => 'index']);
         }
 
-        $this->viewBuilder()->enableAutoLayout(false);
+        $this->viewBuilder()->setAutoLayout('pdf/default');
         $this->viewBuilder()->setClassName('CakePdf.Pdf');
         $this->viewBuilder()->setOption(
             'pdfConfig',

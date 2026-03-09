@@ -339,7 +339,7 @@ class AlunosController extends AppController
         $id = $this->request->getQuery('id');
         $totalperiodos = $this->request->getQuery('totalperiodos');
 
-        if ($user_data && $user_data['categoria'] == 2) {
+        if ($user_data && $user_data['categoria'] == '2') {
             $id = $user_data['aluno_id'];
         }
 

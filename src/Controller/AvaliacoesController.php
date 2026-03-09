@@ -98,43 +98,7 @@ class AvaliacoesController extends AppController
 
         $this->set(compact('avaliacoes', 'estagiarios'));
     }
-
-    /**
-     * Supervisoravaliacao method
-     *
-     * @return Response|null|void Renders view
-     */
-    public function supervisoravaliacao($id = null)
-    {
-        $this->Authorization->authorize($this->Avaliacoes);
-
-        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
-        $user_session = $this->request->getAttribute('identity');
-        if ($user_session) {
-            $user_data = $user_session->getOriginalData();
-        }
-
-        if ($user_data['categoria'] == '4') {
-            $cress = $user_data['numero'];
-        }
-        if (empty($cress)) {
-            $cress = $this->getRequest()->getQuery('cress');
-        }
-
-        if (!$cress) {
-            $this->Flash->error(__('Selecionar estagiário, período e nível de estágio a ser avaliado'));
-            return $this->redirect('/alunos/index');
-        } else {
-            $estagiarios = $this->Avaliacoes->Estagiarios->find()
-                ->contain(['Supervisores', 'Alunos', 'Professores', 'Folhadeatividades'])
-                ->where(['Supervisores.cress' => $cress])
-                ->order(['periodo' => 'desc'])
-                ->all();
-
-                $this->set('estagiarios', $estagiarios);
-        }
-    }
-
+ 
     /**
      * View method
      *
@@ -292,6 +256,11 @@ class AvaliacoesController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+    /**
+     * Selecionaavaliacao method
+     *
+     * @return Response|null|void Renders view
+     */
     public function selecionaavaliacao($id = null)
     {
         $this->Authorization->authorize($this->Avaliacoes);
@@ -312,6 +281,47 @@ class AvaliacoesController extends AppController
         $this->set('estagiarios', $estagiarios);
     }
 
+   /**
+     * Supervisoravaliacao method
+     *
+     * @return Response|null|void Renders view
+     */
+    public function supervisoravaliacao($id = null)
+    {
+        $this->Authorization->authorize($this->Avaliacoes);
+
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
+        $user_session = $this->request->getAttribute('identity');
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
+
+        if ($user_data['categoria'] == '4') {
+            $cress = $user_data['numero'];
+        }
+        if (empty($cress)) {
+            $cress = $this->getRequest()->getQuery('cress');
+        }
+
+        if (!$cress) {
+            $this->Flash->error(__('Selecionar estagiário, período e nível de estágio a ser avaliado'));
+            return $this->redirect('/alunos/index');
+        } else {
+            $estagiarios = $this->Avaliacoes->Estagiarios->find()
+                ->contain(['Supervisores', 'Alunos', 'Professores', 'Folhadeatividades'])
+                ->where(['Supervisores.cress' => $cress])
+                ->order(['periodo' => 'desc'])
+                ->all();
+
+                $this->set('estagiarios', $estagiarios);
+        }
+    }
+
+    /**
+     * Imprimeavaliacaopdf method
+     *
+     * @return Response|null|void Renders view
+     */
     public function imprimeavaliacaopdf($id = null)
     {
         $this->Authorization->skipAuthorization();
@@ -339,7 +349,7 @@ class AvaliacoesController extends AppController
             return $this->redirect(['controller' => 'Avaliacoes', 'action' => 'avaliacaomanualpdf', '?' => ['estagiario_id' => $estagiario_id]]);
         }
 
-        $this->viewBuilder()->enableAutoLayout(false);
+        $this->viewBuilder()->setAutoLayout('pdf/default');
         $this->viewBuilder()->setClassName('CakePdf.Pdf');
         $this->viewBuilder()->setOption(
             'pdfConfig',
@@ -352,6 +362,11 @@ class AvaliacoesController extends AppController
         $this->set('avaliacao', $avaliacao);
     }
 
+    /**
+     * Avaliacaomanualpdf method
+     *
+     * @return Response|null|void Renders view
+     */
     public function avaliacaomanualpdf($id = null)
     {
         $this->Authorization->skipAuthorization();
@@ -370,7 +385,7 @@ class AvaliacoesController extends AppController
             return $this->redirect(['controller' => 'Estagiarios', 'action' => 'index']);
         }
 
-        $this->viewBuilder()->enableAutoLayout(false);
+        $this->viewBuilder()->setAutoLayout('pdf/default');
         $this->viewBuilder()->setClassName('CakePdf.Pdf');
         $this->viewBuilder()->setOption(
             'pdfConfig',

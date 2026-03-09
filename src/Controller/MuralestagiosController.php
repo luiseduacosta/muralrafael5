@@ -218,7 +218,7 @@ class MuralestagiosController extends AppController
     /**
      * Imprimir PDF com as inscrições para seleção do estagiário
      *
-     * @param string|null $id Inscricao id.
+     * @param string|null $id Muralestagio id.
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -243,7 +243,7 @@ class MuralestagiosController extends AppController
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
         
-        $this->viewBuilder()->enableAutoLayout(false);
+        $this->viewBuilder()->setAutoLayout('pdf/default');
         $this->viewBuilder()->setClassName("CakePdf.Pdf");
         $this->viewBuilder()->setOption("pdfConfig", [
             "orientation" => "portrait",

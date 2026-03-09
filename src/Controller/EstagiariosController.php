@@ -499,7 +499,7 @@ class EstagiariosController extends AppController
             ->where(['Configuracoes.id' => 1])
             ->first();
 
-        $this->viewBuilder()->enableAutoLayout(false);
+        $this->viewBuilder()->setAutoLayout('pdf/default');
         $this->viewBuilder()->setClassName('CakePdf.Pdf');
         $this->viewBuilder()->setOption('pdfConfig', [
             'orientation' => 'portrait',
@@ -578,7 +578,7 @@ class EstagiariosController extends AppController
             return $this->redirect("/estagiarios/view/" . $estagiario->id);
         }
 
-        $this->viewBuilder()->enableAutoLayout(false);
+        $this->viewBuilder()->setAutoLayout('pdf/default');
         $this->viewBuilder()->setClassName("CakePdf.Pdf");
         $this->viewBuilder()->setOption("pdfConfig", [
             "orientation" => "portrait",

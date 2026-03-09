@@ -1,16 +1,17 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Inscricao $inscricao
+ * @var \App\Model\Entity\Muralestagio $muralestagio
  */
 
 namespace App\View\PDF; 
 use Cake\I18n\I18n;
 use Cake\I18n\Timezone;
-use Cake\I18n\FrozenDate;
+use Cake\I18n\Date;
 
 I18n::setLocale('pt-BR');
-$hoje = FrozenDate::now('America/Sao_Paulo', 'pt_BR');
+
+$hoje = Date::now('America/Sao_Paulo', 'pt_BR');
 
 $dia = $hoje->i18nFormat('d');
 $mes = $hoje->i18nFormat('MMMM');
@@ -21,26 +22,35 @@ $this->assign('title', 'Lista de Inscrições');
 
 ?>
 
-<h1>Lista de Inscrições</h1>
+<div style="text-align: center;">
+<h1>Seleção de estágio para <?= $inscricao->instituicao ?><br />
+Lista de inscrições</h1>
+</div>
+
 <table>
     <tr>
-        <th>Nome do Aluno</th>
+        <th>Aluno(a)</th>
         <th>Matrícula</th>
         <th>Email</th>
-        <th>Telefone</th>
-        <th>Data de Inscrição</th>
+        <th>Celular</th>
+        <th>Data de inscrição</th>
     </tr>
     <?php foreach ($inscricao->inscricoes as $insc): ?>
     <tr>
         <td><?= $insc->aluno->nome ?></td>
         <td><?= $insc->aluno->registro ?></td>
         <td><?= $insc->aluno->email ?></td>
-        <td><?= $insc->aluno->telefone ?></td>
+        <td><?= $insc->aluno->celular ?></td>
         <td><?= $insc->timestamp->format('d/m/Y H:i:s') ?></td>
     </tr>
     <?php endforeach; ?>
 </table>
 
-<p>
-    Gerado em <?= $dia ?> de <?= $mes ?> de <?= $ano ?>
+<p style="text-align: right;">
+    Rio de Janeiro, <?= $dia ?> de <?= $mes ?> de <?= $ano ?>
+</p>
+
+<p style="text-align: center;">
+Coordenação de Estágio<br />
+ESS/UFRJ
 </p>
