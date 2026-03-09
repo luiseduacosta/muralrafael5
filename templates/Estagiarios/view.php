@@ -19,27 +19,30 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 	                    <?= $this->Form->postLink(__('Excluir Estagiario'), ['action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete estagiario #{0}?', $estagiario->id), 'class' => 'button']) ?>
 	                    <?= $this->Html->link(__('Novo Estagiario(a)'), ['action' => 'add'], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Declaração de estágio'), ['action' => 'declaracaodeestagiopdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Termo de compromisso'), ['action' => 'termocompromissopdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Atividades'), ['controller' => 'Folhadeatividades', 'action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
-                        <?= $this->Html->link(__('Avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Avaliação on-line'), ['controller' => 'Avaliacoes', 'action' => 'add', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Folha de avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                     <?php endif; ?>
                     <?php if ($user_data['categoria'] == '2' && $user_data['aluno_id'] == $estagiario->aluno_id): ?>
                         <?= $this->Html->link(__('<- Aluno(a)'), ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Declaração de estágio'), ['action' => 'declaracaodeestagiopdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Termo de compromisso'), ['action' => 'termocompromissopdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Atividades'), ['controller' => 'Folhadeatividades', 'action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
-                        <?= $this->Html->link(__('Avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Folha de avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                     <?php endif; ?>
                     <?php if ($user_data['categoria'] == '3' && $user_data['professor_id'] == $estagiario->professor_id): ?>
                         <?= $this->Html->link(__('<- Professor(a)'), ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Atividades'), ['controller' => 'Folhadeatividades', 'action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Avaliação on-line'), ['controller' => 'Avaliacoes', 'action' => 'add', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
-                        <?= $this->Html->link(__('Avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Folha de avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('CH e nota'), ['controller' => 'Estagiarios', 'action' => 'lancanota', '?' => ['professor_id' => $user_data['professor_id']]], ['class' => 'button']) ?>
                         <?php endif; ?>
                     <?php if ($user_data['categoria'] == '4' && $user_data['supervisor_id'] == $estagiario->supervisor_id): ?>
                         <?= $this->Html->link(__('<- Supervisor(a)'), ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Atividades'), ['controller' => 'Folhadeatividades', 'action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Avaliação on-line'), ['controller' => 'Avaliacoes', 'action' => 'add', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
-                        <?= $this->Html->link(__('Avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Folha de avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                     <?php endif; ?>
                 </div>
             </aside>

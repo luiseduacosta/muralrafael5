@@ -6,12 +6,11 @@
 
 namespace App\View\PDF; 
 use Cake\I18n\I18n;
-use Cake\I18n\Timezone;
 use Cake\I18n\Date;
 
 I18n::setLocale('pt-BR');
 
-$hoje = Date::now('America/Sao_Paulo', 'pt_BR');
+$hoje = Date::now('America/Sao_Paulo');
 
 $dia = $hoje->i18nFormat('d');
 $mes = $hoje->i18nFormat('MMMM');

@@ -288,7 +288,7 @@ class AvaliacoesController extends AppController
             return $this->redirect(['controller' => 'Avaliacoes', 'action' => 'avaliacaomanualpdf', '?' => ['estagiario_id' => $estagiario_id]]);
         }
 
-        $this->viewBuilder()->setAutoLayout('pdf/default');
+        $this->viewBuilder()->setLayout('pdf/default');
         $this->viewBuilder()->setClassName('CakePdf.Pdf');
         $this->viewBuilder()->setOption(
             'pdfConfig',
@@ -324,7 +324,7 @@ class AvaliacoesController extends AppController
             return $this->redirect(['controller' => 'Estagiarios', 'action' => 'index']);
         }
 
-        $this->viewBuilder()->setAutoLayout('pdf/default');
+        $this->viewBuilder()->setLayout('pdf/default');
         $this->viewBuilder()->setClassName('CakePdf.Pdf');
         $this->viewBuilder()->setOption(
             'pdfConfig',

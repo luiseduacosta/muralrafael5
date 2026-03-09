@@ -243,7 +243,7 @@ class MuralestagiosController extends AppController
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
         
-        $this->viewBuilder()->setAutoLayout('pdf/default');
+        $this->viewBuilder()->setLayout('pdf/default');
         $this->viewBuilder()->setClassName("CakePdf.Pdf");
         $this->viewBuilder()->setOption("pdfConfig", [
             "orientation" => "portrait",

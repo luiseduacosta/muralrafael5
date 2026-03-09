@@ -402,6 +402,8 @@ class EstagiariosController extends AppController
 
         $this->Authorization->skipAuthorization();
 
+        $aluno_id = $this->request->getQuery('aluno_id');
+
         if (isset($user_data) && $user_data['categoria'] == '2') {
             $aluno_id = $user_data['aluno_id'];
         }
@@ -474,10 +476,10 @@ class EstagiariosController extends AppController
             $user_data = $user_session->getOriginalData();
         }
 
-        if (empty($id)) {
-            if ($user_data['categoria'] == '2') {
-                $id = $user_data['aluno_id'];
-            }
+        $id = $this->request->getQuery('estagiario_id');
+
+        if ($user_data['categoria'] == '2') {
+            $id = $user_data['aluno_id'];
         }
 
         if (empty($id)) {
@@ -499,7 +501,7 @@ class EstagiariosController extends AppController
             ->where(['Configuracoes.id' => 1])
             ->first();
 
-        $this->viewBuilder()->setAutoLayout('pdf/default');
+        $this->viewBuilder()->setLayout('pdf/default');
         $this->viewBuilder()->setClassName('CakePdf.Pdf');
         $this->viewBuilder()->setOption('pdfConfig', [
             'orientation' => 'portrait',
@@ -525,10 +527,10 @@ class EstagiariosController extends AppController
             $user_data = $user_session->getOriginalData();
         }
 
-        if (empty($id)) {
-            if ($user_data['categoria'] == '2') {
-                $id = $user_data['aluno_id'];
-            }
+        $id = $this->request->getQuery('estagiario_id');
+
+        if ($user_data['categoria'] == '2') {
+            $id = $user_data['aluno_id'];
         }
 
         if (empty($id)) {
@@ -578,7 +580,7 @@ class EstagiariosController extends AppController
             return $this->redirect("/estagiarios/view/" . $estagiario->id);
         }
 
-        $this->viewBuilder()->setAutoLayout('pdf/default');
+        $this->viewBuilder()->setLayout('pdf/default');
         $this->viewBuilder()->setClassName("CakePdf.Pdf");
         $this->viewBuilder()->setOption("pdfConfig", [
             "orientation" => "portrait",
