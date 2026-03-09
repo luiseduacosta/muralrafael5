@@ -257,67 +257,6 @@ class AvaliacoesController extends AppController
     }
 
     /**
-     * Selecionaavaliacao method
-     *
-     * @return Response|null|void Renders view
-     */
-    public function selecionaavaliacao($id = null)
-    {
-        $this->Authorization->authorize($this->Avaliacoes);
-
-        /* No login foi capturado o id do estagiário */
-        $id = $this->getRequest()->getSession()->read('estagiario_id');
-        if (is_null($id)) {
-            $this->Flash->error(__('Selecionar o aluno estagiário'));
-            return $this->redirect('/alunos/index');
-        } else {
-            $estagiariostabela = $this->fetchTable('Estagiarios');
-            $estagiarios = $estagiariostabela->find()
-                ->contain(['Alunos', 'Supervisores', 'Instituicoes'])
-                ->where(['Estagiarios.registro' => $this->getRequest()->getSession()->read('registro')])
-                ->all();
-        }
-
-        $this->set('estagiarios', $estagiarios);
-    }
-
-   /**
-     * Supervisoravaliacao method
-     *
-     * @return Response|null|void Renders view
-     */
-    public function supervisoravaliacao($id = null)
-    {
-        $this->Authorization->authorize($this->Avaliacoes);
-
-        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
-        $user_session = $this->request->getAttribute('identity');
-        if ($user_session) {
-            $user_data = $user_session->getOriginalData();
-        }
-
-        if ($user_data['categoria'] == '4') {
-            $cress = $user_data['numero'];
-        }
-        if (empty($cress)) {
-            $cress = $this->getRequest()->getQuery('cress');
-        }
-
-        if (!$cress) {
-            $this->Flash->error(__('Selecionar estagiário, período e nível de estágio a ser avaliado'));
-            return $this->redirect('/alunos/index');
-        } else {
-            $estagiarios = $this->Avaliacoes->Estagiarios->find()
-                ->contain(['Supervisores', 'Alunos', 'Professores', 'Folhadeatividades'])
-                ->where(['Supervisores.cress' => $cress])
-                ->order(['periodo' => 'desc'])
-                ->all();
-
-                $this->set('estagiarios', $estagiarios);
-        }
-    }
-
-    /**
      * Imprimeavaliacaopdf method
      *
      * @return Response|null|void Renders view
