@@ -589,40 +589,6 @@ class EstagiariosController extends AppController
     }
 
     /**
-     * Selecionasupervisores method. It is used in add and edit method by AJAX.
-     * Seleciona os supervisores da instituicao_id
-     *
-     * @param string|null $id Estagiario id.
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     *
-     */
-    private function selecionasupervisores($instituicao_id = null)
-    {
-        $supervisoresinstituicao = null;
-        if ($instituicao_id) {
-            $supervisoresDaInstituicao = $this->Estagiarios->Instituicoes
-                ->find()
-                ->contain(["Supervisores"])
-                ->where(["Instituicoes.id" => $instituicao_id])
-                ->first();
-
-            if ($supervisoresDaInstituicao) {
-                foreach (
-                    $supervisoresDaInstituicao->supervisores
-                    as $supervisor
-                ) {
-                    $supervisoresinstituicao[$supervisor["id"]] =
-                        $supervisor["nome"];
-                }
-            } else {
-                $supervisoresinstituicao[0] = "Sem supervisor(a)";
-                $supervisoresinstituicao[0] = "Sem dados";
-            }
-        }
-        return $supervisoresinstituicao;
-    }
-
-    /**
      * Nivelestagio method
      *
      * Compara o periodoautal com o periodo de estagio do estagiario para definiar o nivel de estagio

@@ -32,6 +32,43 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <?php endif; ?>
                 </div>
             </aside>
+
+<script type="text/javascript">
+
+    function getsupervisores(id) {
+        $.ajax({
+            url: '<?= $this->Url->build(['controller' => 'Instituicoes', 'action' => 'selecionasupervisores']) ?>',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: id,
+                _csrfToken: '<?= $this->request->getAttribute('csrfToken') ?>'
+            },
+            success: function (response) {
+                let options = '<option value="">Selecione o supervisor</option>';
+                if (response && Object.keys(response).length > 0) {
+                    $.each(response, function (key, value) {
+                        options += '<option value="' + key + '">' + value + '</option>';
+                    });
+                } else {
+                    options = '<option value="">Nenhum supervisor encontrado</option>';
+                }
+                $('#supervisor-id').html(options);
+            },
+            error: function (xhr, status, error) {
+                console.error('Ajax error:', error);
+                $('#supervisor-id').html('<option value="">Erro ao carregar supervisores</option>');
+            }
+        });
+    }
+    $(document).ready(function () {
+        $('#instituicao-id').change(function () {
+            console.log('Instituicao ID changed:', $(this).val());
+            getsupervisores($(this).val());
+        });
+    });
+</script>
+
             <?= $this->Form->create($estagiario) ?>
             <fieldset>
                 <h3><?= __('Editando estagiario_' . $estagiario->id) ?></h3>

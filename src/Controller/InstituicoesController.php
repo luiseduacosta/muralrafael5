@@ -152,4 +152,40 @@ class InstituicoesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    /**
+     * selecionasupervisores method - Ajax
+     *
+     * @return \Cake\Http\Response|null|void
+     */
+    public function selecionasupervisores()
+    {
+        $this->Authorization->skipAuthorization();
+        if (!$this->request->is('post')) {
+            return $this->response->withStatus(400);
+        }
+
+        $instituicao_id = $this->request->getData('id');
+        try {
+            $supervisores = $this->fetchTable('Supervisores')->find('list', [
+                'keyField' => 'id',
+                'valueField' => 'nome',
+            ])
+            ->matching('Instituicoes', function ($q) use ($instituicao_id) {
+                return $q->where(['Instituicoes.id' => $instituicao_id]);
+            })
+            ->order(['Supervisores.nome' => 'ASC'])
+            ->toArray();
+
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode($supervisores));
+        } catch (Exception $e) {
+            return $this->response
+                ->withStatus(500)
+                ->withType('application/json')
+                ->withStringBody(json_encode(['error' => 'Erro ao buscar supervisores']));
+        }
+    }
+
 }
