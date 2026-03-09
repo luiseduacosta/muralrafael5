@@ -715,14 +715,14 @@ class EstagiariosController extends AppController
             ->contain([
                     "Alunos" => [
                         "fields" => ["id", "nome"],
-                        "sort" => ["nome"],
                     ],
                     "Professores" => ["fields" => ["id", "nome", "siape"]],
                     "Supervisores" => ["fields" => ["id", "nome"]],
                     "Instituicoes" => ["fields" => ["id", "instituicao"]],
                     "Avaliacoes" => ["fields" => ["id", "estagiario_id"]],
             ])
-            ->where(["Estagiarios.professor_id" => $professor_id]);
+            ->where(["Estagiarios.professor_id" => $professor_id])
+            ->order(["Alunos.nome" => "ASC"]);
 
         if ($periodo) {
             $estagiariosQuery->where(["Estagiarios.periodo" => $periodo]);
