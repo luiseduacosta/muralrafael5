@@ -45,7 +45,7 @@ final class EstagiariosTablePolicy implements BeforePolicyInterface
      * @param \Authorization\IdentityInterface $userSession
      * @return \Authorization\Policy\Result
      */
-    public function canLancanota(IdentityInterface $userSession): Result
+    public function canLancanotapdf(IdentityInterface $userSession): Result
     {
         $user_data = $userSession->getOriginalData();
         if ($user_data['categoria'] == '3') {

@@ -702,4 +702,75 @@ class EstagiariosController extends AppController
         $this->set("professor", $professor);
         $this->set("estagiarios", $estagiarios);
     }
+
+    /**
+     * Lancanotapdf method - PDF export of lancanota
+     *
+     * @return \Cake\Http\Response|null|void
+     */
+    public function lancanotapdf()
+    {
+        $this->Authorization->authorize($this->Estagiarios, 'lancanotapdf');
+
+        $user_session = $this->request->getAttribute('identity');
+        $user_data = $user_session->getOriginalData();
+
+        if ($user_data['categoria'] == '3') {
+            $professor_id = $user_data['professor_id'];
+        } else {
+            $professor_id = (int)$this->request->getQuery("professor_id");
+        }
+
+        if (empty($professor_id)) {
+            $this->Flash->error(
+                __(
+                    "Sem parâmetro para localizar os estagiários do(a) professor(a).",
+                ),
+            );
+            return $this->redirect(["action" => "index"]);
+        }
+
+        $professor = $this->fetchTable('Professores')
+            ->find()
+            ->select(["id", "nome"])
+            ->where(["id" => $professor_id])
+            ->first();
+
+        if (!$professor) {
+            $this->Flash->error(__("Professor não encontrado."));
+            return $this->redirect(["action" => "index"]);
+        }
+
+        $periodo = $this->request->getQuery("periodo");
+
+        $estagiariosQuery = $this->Estagiarios->find()
+            ->contain([
+                "Alunos" => [
+                    "fields" => ["id", "nome"],
+                ],
+                "Professores" => ["fields" => ["id", "nome", "siape"]],
+                "Supervisores" => ["fields" => ["id", "nome"]],
+                "Instituicoes" => ["fields" => ["id", "instituicao"]],
+                "Avaliacoes" => ["fields" => ["id", "estagiario_id"]],
+            ])
+            ->where(["Estagiarios.professor_id" => $professor_id])
+            ->order(["Alunos.nome" => "ASC"]);
+
+        if ($periodo) {
+            $estagiariosQuery->where(["Estagiarios.periodo" => $periodo]);
+        }
+
+        $estagiarios = $estagiariosQuery->all();
+
+        $this->viewBuilder()->setLayout('pdf/default');
+        $this->viewBuilder()->setClassName('CakePdf.Pdf');
+        $this->viewBuilder()->setOption('pdfConfig', [
+            'orientation' => 'portrait',
+        ]);
+
+        $this->set("periodo", $periodo);
+        $this->set("professor", $professor);
+        $this->set("estagiarios", $estagiarios);
+    }
+
 }

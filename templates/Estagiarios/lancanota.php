@@ -28,6 +28,14 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
     });
 </script>
 
+<div class="row justify-content-end">
+    <aside>
+        <div class="nav">
+            <?= $this->Html->link(__('Imprimir'), ['action' => 'lancanotapdf', '?' => ['periodo' => $periodo, 'professor_id' => $professor->id]], ['class' => 'button']) ?>
+        </div>
+    </aside>
+</div>
+
 <div class="row justify-content-center">
     <div class="col-auto">
         <?php if ($user_data['administrador_id']): ?>
