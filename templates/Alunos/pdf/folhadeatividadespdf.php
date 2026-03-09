@@ -1,14 +1,24 @@
 <?php
-
+/**
+ * Folha de Atividades PDF
+ * 
+ * @var \App\Model\Entity\Aluno $aluno
+ * @var int $totalperiodos
+ */
+namespace App\View\PDF; 
 use Cake\I18n\I18n;
-use Cake\I18n\DateTime;
+use Cake\I18n\Timezone;
+use Cake\I18n\FrozenDate;
 
 I18n::setLocale('pt-BR');
-$hoje = DateTime::now('America/Sao_Paulo', 'pt_BR');
+$hoje = FrozenDate::now('America/Sao_Paulo', 'pt_BR');
 
 $dia = $hoje->i18nFormat('d');
 $mes = $hoje->i18nFormat('MMMM');
 $ano = $hoje->i18nFormat('Y');
+
+$this->layout = 'default';
+$this->assign('title', 'Folha de Atividades');
 
 ?>
 

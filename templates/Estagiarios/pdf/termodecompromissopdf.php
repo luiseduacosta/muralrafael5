@@ -1,18 +1,23 @@
 <?php
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
+/**
+ * Termo de Compromisso PDF
+ * 
+ * @var \App\Model\Entity\Estagiario $estagiario
  */
+namespace App\View\PDF; 
 use Cake\I18n\I18n;
-use Cake\I18n\DateTime;
 use Cake\I18n\Timezone;
+use Cake\I18n\FrozenDate;
 
-$timeZone = new DateTimeZone('America/Sao_Paulo');
-$dataDeHoje = new DateTime(null, $timeZone);
+$timeZone = new Timezone('America/Sao_Paulo');
+$hoje = FrozenDate::now($timeZone, 'pt_BR');
 
-$dia = $dataDeHoje->i18nFormat('d');
-$mes = $dataDeHoje->i18nFormat('MMMM');
-$ano = $dataDeHoje->i18nFormat('Y');
+$dia = $hoje->i18nFormat('d');
+$mes = $hoje->i18nFormat('MMMM');
+$ano = $hoje->i18nFormat('Y');
+
+$this->layout = 'default';
+$this->assign('title', 'Termo de Compromisso');
 
 ?>
 

@@ -172,7 +172,7 @@ class EstagiariosController extends AppController
                 ->first();
 
             if ($ultimo_estagio) {
-                $this->Flash->success(
+                $this->Flash->info(
                     __(
                         'O aluno é estagiário ' .
                         $ultimo_estagio->nivel .
@@ -196,7 +196,7 @@ class EstagiariosController extends AppController
 
                 // Check period validity. Same periodo means a edit not a new step
                 if ($ultimo_estagio->periodo >= $periodoatual->mural_periodo_atual) {
-                    $this->Flash->error(
+                    $this->Flash->info(
                         __(
                             'O período de estágio do aluno tem que ser igual ou maior que o período atual ' . $periodoatual->mural_periodo_atual,
                         ),
@@ -209,7 +209,7 @@ class EstagiariosController extends AppController
                     ]);
                 }
             } else {
-                $this->Flash->success(__('O aluno ainda não é estagiário'));
+                $this->Flash->info(__('O aluno ainda não é estagiário'));
                 $nivel = 1;
             }
 
@@ -319,7 +319,6 @@ class EstagiariosController extends AppController
             $this->Flash->error(
                 __('Registro de estagiário não foi atualizado. Tente novamente.'),
             );
-
         }
 
         $alunos = $this->fetchTable("Alunos")->find("list");

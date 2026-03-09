@@ -1,20 +1,23 @@
 <?php
 /**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Avaliacao $avaliacao
- * @var \Cake\I18n\DateTime $hoje
+ * Folha de Atividades PDF
+ * 
+ * @var \App\Model\Entity\Estagiario $estagiario
  */
-
 namespace App\View\PDF; 
-use Cake\I18n\DateTime;
 use Cake\I18n\I18n;
+use Cake\I18n\Timezone;
+use Cake\I18n\FrozenDate;
 
 I18n::setLocale('pt-BR');
-$hoje = DateTime::now('America/Sao_Paulo', 'pt-BR');
+$hoje = FrozenDate::now('America/Sao_Paulo', 'pt-BR');
 
 $dia = $hoje->i18nFormat('d');
 $mes = $hoje->i18nFormat('MMMM');
 $ano = $hoje->i18nFormat('Y');
+
+$this->layout = 'default';
+$this->assign('title', 'Folha de Atividades');
 
 $supervisora = isset($estagiario->supervisor->nome);
 if ($supervisora) {

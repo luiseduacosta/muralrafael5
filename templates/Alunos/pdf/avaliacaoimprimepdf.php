@@ -1,5 +1,11 @@
 <?php
+/**
+ * @var \App\View\AppView $this
+ * @var \App\Model\Entity\Aluno $aluno
+ */
+namespace App\View\PDF; 
 use Cake\I18n\I18n;
+use Cake\I18n\Timezone;
 use Cake\I18n\DateTime;
 
 I18n::setLocale('pt-BR');
@@ -8,6 +14,10 @@ $hoje = DateTime::now('America/Sao_Paulo', 'pt_BR');
 $dia = $hoje->i18nFormat('d');
 $mes = $hoje->i18nFormat('MMMM');
 $ano = $hoje->i18nFormat('Y');
+
+$this->layout = 'default';
+$this->assign('title', 'Avaliação do Aluno');
+
 ?>
 
 <h2 style="text-align:center;">
