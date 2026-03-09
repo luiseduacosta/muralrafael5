@@ -3,6 +3,10 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Folhadeatividade[]|\Cake\Collection\CollectionInterface $folhadeatividades
  */
+declare(strict_types=1);
+$user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
+$user_session = $this->request->getAttribute('identity');
+if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
 $supervisora = isset($estagiario->supervisor->nome);
 if ($supervisora) {
@@ -30,10 +34,23 @@ if ($professora) {
 
     <aside>
         <div class="nav">
-        <?= $this->Html->link(__('Estagiario(a)'), ['controller' => 'Estagiarios','action' => 'view', $estagiario->id], ['class' => 'button']) ?>
-        <?= $this->Html->link(__('Nova atividade'), ['action' => 'add', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
-        <?= $this->Html->link(__('Imprime atividades'), ['action' => 'folhadeatividadespdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
-        <?= $this->Html->link(__('Imprime folha de atividades'), ['action' => 'atividadesmanualpdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+            <?php if ($user_data['categoria'] == '1'): ?>
+                <?= $this->Html->link(__('Estagiario(a)'), ['controller' => 'Estagiarios','action' => 'view', $estagiario->id], ['class' => 'button']) ?>
+                <?= $this->Html->link(__('Nova atividade'), ['action' => 'add', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                <?= $this->Html->link(__('Imprime atividades'), ['action' => 'folhadeatividadespdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                <?= $this->Html->link(__('Imprime folha de atividades'), ['action' => 'atividadesmanualpdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+            <?php endif; ?>
+            <?php if ($user_data['categoria'] == '3' && $user_data['professor_id'] == $estagiario->professor_id): ?>
+                <?= $this->Html->link(__('Atividades'), ['controller' => 'Folhadeatividades', 'action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                <?= $this->Html->link(__('Avaliação on-line'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                <?= $this->Html->link(__('Avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                <?= $this->Html->link(__('CH e nota'), ['controller' => 'Estagiarios', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+            <?php endif; ?>
+            <?php if ($user_data['categoria'] == '4' && $user_data['supervisor_id'] == $estagiario->supervisor_id): ?>
+                <?= $this->Html->link(__('Atividades'), ['controller' => 'Folhadeatividades', 'action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                <?= $this->Html->link(__('Avaliação on-line'), ['controller' => 'Avaliacoes', 'action' => 'add', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                <?= $this->Html->link(__('Avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+            <?php endif; ?>
     </div>
     </aside>
 
@@ -91,7 +108,7 @@ if ($professora) {
                         <td><?= h($folhadeatividade->atividade) ?></td>
                     </tr>
                     <?php
-                    list($hour, $minute, $second) = array_pad(explode(':', $folhadeatividade->horario), 3, null);
+                    list($hour, $minute, $second) = array_pad(explode(':', (string)$folhadeatividade->horario), 3, null);
                     $seconds += (int) $hour * 3600;
                     $seconds += (int) $minute * 60;
                     $seconds += (int) $second;

@@ -115,10 +115,14 @@ class AlunosController extends AppController
             }
             $this->Flash->error(__('Erro ao adicionar: não foi possível salvar os dados.'));
         }
-
-        $email = $user_data['email'];
-        $registro = $user_data['numero'];
-        $this->set(compact('aluno', 'email', 'registro'));
+        if ($user_data['categoria'] == '2') {   
+            $email = $user_data['email'];
+            $registro = $user_data['numero'];
+            $aluno->email = $email;
+            $aluno->registro = $registro;
+        }
+        $this->set(compact('aluno', 'email'));
+        
     }
 
     /**

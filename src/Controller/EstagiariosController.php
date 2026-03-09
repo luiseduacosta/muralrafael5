@@ -279,6 +279,12 @@ class EstagiariosController extends AppController
      */
     public function edit($id = null)
     {
+        
+        // Support AJAX POST with id in request body
+        if ($id === null && $this->request->is(['post', 'put', 'patch'])) {
+            $id = $this->request->getData('id');
+        }
+
         $estagiario = $this->Estagiarios->get($id);
 
         try {
@@ -293,13 +299,27 @@ class EstagiariosController extends AppController
                 $estagiario,
                 $this->request->getData(),
             );
+
             if ($this->Estagiarios->save($estagiario)) {
-                $this->Flash->success(__("The estagiario has been edited successfully."));
-                return $this->redirect(["action" => "view", $id]);
+                if ($this->request->is('ajax')) {
+                    return $this->response->withType('application/json')
+                        ->withStringBody(json_encode(['status' => 'success', 'data' => $estagiario]));
+                }
+                $this->Flash->success(__('Registro de estagiario atualizado.'));
+
+                return $this->redirect(['action' => 'view', $id]);
             }
+
+            if ($this->request->is('ajax')) {
+                 return $this->response->withStatus(400)
+                    ->withType('application/json')
+                    ->withStringBody(json_encode(['status' => 'error', 'errors' => $estagiario->getErrors()]));
+            }
+
             $this->Flash->error(
-                __("The estagiario could not be saved. Please, try again."),
+                __('Registro de estagiário não foi atualizado. Tente novamente.'),
             );
+
         }
 
         $alunos = $this->fetchTable("Alunos")->find("list");
@@ -640,5 +660,74 @@ class EstagiariosController extends AppController
             ]);
         }
         return $nivel;
+    }
+
+    /**
+     * lancanota method
+     *
+     * @param string|null $id Professor id.
+     * @return \Cake\Http\Response|null|void Renders view otherwise.
+     */
+    public function lancanota($id = null)
+    {
+        $this->Authorization->skipAuthorization();
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
+        $user_session = $this->request->getAttribute('identity');
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
+        
+        $professor_id = $this->request->getQuery("professor_id");
+
+        if ($professor_id === null) {
+            $this->Flash->error(
+                __(
+                    "Sem parâmetro para localizar os estagiários do(a) professor(a).",
+                ),
+            );
+            return $this->redirect(["action" => "index"]);
+        }
+        
+        $professor = $this->fetchTable('Professores')
+            ->find()
+            ->select(["id", "nome"])
+            ->where(["id" => $professor_id])
+            ->first();
+
+        $periodos = $this->Estagiarios->find("list", ["keyField" => "periodo", "valueField" => "periodo"])
+            ->contain(["Professores"])
+            ->where(["Professores.id" => $professor_id])
+            ->order(["Estagiarios.periodo" => "ASC"])
+            ->toArray();
+
+        $periodo = $this->request->getQuery("periodo");
+        if ($periodo === null) {
+            $periodo = end($periodos);
+        }
+
+        $estagiarios = $this->Estagiarios->find()
+            ->contain([
+                    "Alunos" => [
+                        "fields" => ["id", "nome"],
+                        "sort" => ["nome"],
+                    ],
+                    "Professores" => ["fields" => ["id", "nome", "siape"]],
+                    "Supervisores" => ["fields" => ["id", "nome"]],
+                    "Instituicoes" => ["fields" => ["id", "instituicao"]],
+                    "Avaliacoes" => ["fields" => ["id", "estagiario_id"]],
+            ])
+            ->where(["Estagiarios.professor_id" => $professor_id, "Estagiarios.periodo" => $periodo]);
+
+        $this->Authorization->skipAuthorization();
+
+        if ($this->request->is(["patch", "post", "put"])) {
+            $data = $this->request->getData();
+
+        }
+
+        $this->set("periodo", $periodo);
+        $this->set("periodos", $periodos);
+        $this->set("professor", $professor);
+        $this->set("estagiarios", $this->paginate($estagiarios));
     }
 }

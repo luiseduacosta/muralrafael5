@@ -46,7 +46,7 @@ class ProfessoresController extends AppController
     public function view(?string $id = null)
     {
         $professor = $this->Professores->get($id, [
-            'contain' => ['Users', 'Muralestagios' => ['Instituicoes']],
+            'contain' => ['Users', 'Estagiarios' => ['Instituicoes']],
         ]);
 
         try {
@@ -118,9 +118,14 @@ class ProfessoresController extends AppController
             }
             $this->Flash->error(__('The professor could not be saved. Please, try again.'));
         }
-        $email = $user_data['email'];
-        $siape = $user_data['numero'];
-        $this->set(compact('professor','email', 'siape'));
+
+        if ($user_data['categoria'] == '3') {
+            $email = $user_data['email'];
+            $siape = $user_data['numero'];
+            $professor->email = $email;
+            $professor->siape = $siape;
+        }
+        $this->set(compact('professor'));
     }
 
     /**

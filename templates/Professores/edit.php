@@ -25,7 +25,7 @@ $departamentos = [
             <aside>
                 <div class="nav">
                     <?= $this->Html->link(__('Listar Professores'), ['action' => 'index'], ['class' => 'button']) ?>
-                    <?php if ($user_data['administrador_id']): ?>
+                    <?php if ($user_data['categoria'] == '1'): ?>
                         <?= $this->Form->postLink(
                             __('Excluir'),
                             ['action' => 'delete', $professor->id],
@@ -36,44 +36,44 @@ $departamentos = [
             </aside>
             <?= $this->Form->create($professor) ?>
             <fieldset>
-                <h3><?= __('Editando Professor') ?></h3>
+                <h3><?= __('Editando Professor(a)') ?></h3>
                 <?php
-                    if ($user_data['administrador_id']):
+                    if ($user_data['categoria'] == '1'):
                        echo $this->Form->control('user_id', ['type' => 'number']); 
                     endif;
-                    echo $this->Form->control('nome');
-                    echo $this->Form->control('cpf');
-                    echo $this->Form->control('siape');
-                    echo $this->Form->control('datanascimento', ['empty' => true]);
-                    echo $this->Form->control('localnascimento');
-                    echo $this->Form->control('ddd_telefone');
-                    echo $this->Form->control('telefone');
-                    echo $this->Form->control('ddd_celular');
-                    echo $this->Form->control('celular');
-                    echo $this->Form->control('email');
-                    echo $this->Form->control('homepage');
-                    echo $this->Form->control('redesocial');
-                    echo $this->Form->control('curriculolattes');
-                    echo $this->Form->control('atualizacaolattes', ['empty' => true]);
-                    echo $this->Form->control('curriculosigma');
-                    echo $this->Form->control('pesquisadordgp');
-                    echo $this->Form->control('formacaoprofissional');
-                    echo $this->Form->control('universidadedegraduacao');
-                    echo $this->Form->control('anoformacao');
-                    echo $this->Form->control('mestradoarea');
-                    echo $this->Form->control('mestradouniversidade');
-                    echo $this->Form->control('mestradoanoconclusao');
-                    echo $this->Form->control('doutoradoarea');
-                    echo $this->Form->control('doutoradouniversidade');
-                    echo $this->Form->control('doutoradoanoconclusao');
-                    echo $this->Form->control('dataingresso', ['empty' => true]);
-                    echo $this->Form->control('formaingresso');
-                    echo $this->Form->control('tipocargo');
-                    echo $this->Form->control('regimetrabalho');
-                    echo $this->Form->control('departamento');
-                    echo $this->Form->control('dataegresso', ['empty' => true]);
-                    echo $this->Form->control('motivoegresso');
-                    echo $this->Form->control('observacoes');
+                    echo $this->Form->control('nome',['label' => 'Nome completo']);
+                    echo $this->Form->control('cpf',['label' => 'CPF']);
+                    echo $this->Form->control('siape',['label' => 'SIAPE']);
+                    echo $this->Form->control('datanascimento', ['empty' => true, 'label' => 'Data de nascimento']);
+                    echo $this->Form->control('localnascimento',['label' => 'Local de nascimento']);
+                    echo $this->Form->control('ddd_telefone',['label' => 'DDD telefone']);
+                    echo $this->Form->control('telefone',['label' => 'Telefone']);
+                    echo $this->Form->control('ddd_celular',['label' => 'DDD celular']);
+                    echo $this->Form->control('celular',['label' => 'Celular']);
+                    echo $this->Form->control('email',['label' => 'Email']);
+                    echo $this->Form->control('homepage',['label' => 'Homepage']);
+                    echo $this->Form->control('redesocial',['label' => 'Rede social']);
+                    echo $this->Form->control('curriculolattes',['label' => 'Curriculo Lattes']);
+                    echo $this->Form->control('atualizacaolattes', ['empty' => true, 'label' => 'Atualizacao Lattes']);
+                    echo $this->Form->control('curriculosigma',['label' => 'Curriculo Sigma']);
+                    echo $this->Form->control('pesquisadordgp',['label' => 'Pesquisa Dgp']);
+                    echo $this->Form->control('formacaoprofissional',['label' => 'Formacao Profissional']);
+                    echo $this->Form->control('universidadedegraduacao',['label' => 'Universidade de graduacao']);
+                    echo $this->Form->control('anoformacao',['label' => 'Ano de formacao']);
+                    echo $this->Form->control('mestradoarea',['label' => 'Area de mestrado']);
+                    echo $this->Form->control('mestradouniversidade',['label' => 'Universidade de mestrado']);
+                    echo $this->Form->control('mestradoanoconclusao',['label' => 'Ano de conclusao de mestrado']);
+                    echo $this->Form->control('doutoradoarea',['label' => 'Area de doutorado']);
+                    echo $this->Form->control('doutoradouniversidade',['label' => 'Universidade de doutorado']);
+                    echo $this->Form->control('doutoradoanoconclusao',['label' => 'Ano de conclusao de doutorado']);
+                    echo $this->Form->control('dataingresso', ['empty' => true, 'label' => 'Data de ingresso']);
+                    echo $this->Form->control('formaingresso',['label' => 'Forma de ingresso']);
+                    echo $this->Form->control('tipocargo',['label' => 'Tipo de cargo']);
+                    echo $this->Form->control('regimetrabalho',['label' => 'Regime de trabalho']);
+                    echo $this->Form->control('departamento',['label' => 'Departamento']);
+                    echo $this->Form->control('dataegresso', ['empty' => true, 'label' => 'Data de egresso']);
+                    echo $this->Form->control('motivoegresso',['label' => 'Motivo de egresso']);
+                    echo $this->Form->control('observacoes',['label' => 'Observações']);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Editar'), ['class' => 'button']) ?>

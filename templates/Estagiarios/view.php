@@ -28,6 +28,13 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <?= $this->Html->link(__('Atividades'), ['controller' => 'Folhadeatividades', 'action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                     <?php endif; ?>
+                    <?php if ($user_data['categoria'] == '3' && $user_data['professor_id'] == $estagiario->professor_id): ?>
+                        <?= $this->Html->link(__('<- Professor(a)'), ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Atividades'), ['controller' => 'Folhadeatividades', 'action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Avaliação on-line'), ['controller' => 'Avaliacoes', 'action' => 'add', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('CH e nota'), ['controller' => 'Estagiarios', 'action' => 'lancanota', '?' => ['professor_id' => $user_data['professor_id']]], ['class' => 'button']) ?>
+                        <?php endif; ?>
                     <?php if ($user_data['categoria'] == '4' && $user_data['supervisor_id'] == $estagiario->supervisor_id): ?>
                         <?= $this->Html->link(__('<- Supervisor(a)'), ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Atividades'), ['controller' => 'Folhadeatividades', 'action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
@@ -110,6 +117,8 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             </dl>
         </div>
         <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
-        <?= $this->Html->link('Editar', ['action' => 'edit', $estagiario->id], ['class' => 'button float-right']); ?>        
+        <?php if ($user_data['categoria'] == '1' || $user_data['categoria'] == '3' && ($user_data['professor_id'] == $estagiario->professor_id)): ?>
+            <?= $this->Html->link('Editar', ['action' => 'edit', $estagiario->id], ['class' => 'button float-right']); ?>
+        <?php endif; ?>
     </div>
 </div>

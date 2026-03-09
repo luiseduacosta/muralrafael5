@@ -1,5 +1,6 @@
 <?php 
 declare(strict_types=1);
+use Cake\I18n\Date;
 ?>
 
 <script type="text/javascript">
@@ -182,7 +183,7 @@ declare(strict_types=1);
                         <?php if (empty($estagiario->aluno->nascimento)): ?>
                             <?php echo "s/d"; ?>
                         <?php else: ?>
-                            <?php echo date('d-m-Y', strtotime($estagiario->aluno->nascimento)); ?>
+                            <?php echo $estagiario->aluno->nascimento->format('d-m-Y'); ?>
                         <?php endif; ?>
                     </td>
                     <td>

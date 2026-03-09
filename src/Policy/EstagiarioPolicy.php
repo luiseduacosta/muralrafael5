@@ -27,6 +27,7 @@ final class EstagiarioPolicy implements BeforePolicyInterface
                 && (
                     $user_data['categoria'] == '1' // Administrador pode ver todos os estagiários
                     || $user_data['categoria'] == '2' // Aluno pode criar, editar e fazer termocompromisso
+                    || $user_data['categoria'] == '3' // Professor pode ver os estagiários da sua instituição
                     || $user_data['categoria'] == '4' // Supervisor pode ver os estagiários da sua instituição
                 )
             ) {

@@ -5,6 +5,9 @@
  */
 declare(strict_types=1);
 
+use Cake\Utility\Inflector;
+use Cake\I18n\Date;
+
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
@@ -44,16 +47,16 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     echo $this->Form->control('supervisor_id', ['options' => $supervisores, 'required' => true, 'empty' => true, 'class' => 'form-control']);
                     echo $this->Form->control('professor_id', ['options' => $professores, 'required' => false, 'empty' => true, 'class' => 'form-control']);
                     echo $this->Form->control('periodo', ['label' => 'Periodo', 'required' => true]);
-                    if ($user_data['categoria'] == "1") {
-                        echo $this->Form->control('nota');
-                        echo $this->Form->control('ch');
-                    }
                     echo $this->Form->control('complemento_id', ['options' => $complementos, 'empty' => true, 'required' => false]);
                     echo $this->Form->control('turma_id', ['options' => $turmas, 'required' => false, 'empty' => true, 'class' => 'form-control']);
                     echo $this->Form->control('benetransporte', ['label' => 'Beneficio de transporte', 'options' => ['1' => 'Sim', '0' => 'Nao'], 'required' => false]);
                     echo $this->Form->control('benealimentacao', ['label' => 'Beneficio de alimentacao', 'options' => ['1' => 'Sim', '0' => 'Nao'], 'required' => false]);
                     echo $this->Form->control('benbolsa', ['label' => 'Beneficio de bolsa - valor em R$', 'required' => false, 'type' => 'text']);
-                    echo $this->Form->control('observacoes', ['label' => 'Observacoes', 'required' => false]);
+                    if ($user_data['categoria'] == "1" || $user_data['categoria'] == "3" && ($user_data['professor_id'] == $estagiario->professor_id)) {
+                        echo $this->Form->control('nota', ['label' => 'Nota', 'required' => false]);
+                        echo $this->Form->control('ch', ['label' => 'Carga horária', 'required' => false]);
+                    }
+                    echo $this->Form->control('observacoes', ['label' => 'Observações', 'required' => false]);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Salvar'), ['class' => 'button']) ?>

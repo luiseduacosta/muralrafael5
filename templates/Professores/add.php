@@ -39,14 +39,22 @@ $departamentos = [
                     endif;
                     echo $this->Form->control('nome', ['label' => 'Nome Completo', 'required' => true]);
                     echo $this->Form->control('cpf', ['label' => 'CPF', 'pattern' => '[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}', 'placeholder' => '000.000.000-00', 'required' => false]);
-                    echo $this->Form->control('siape', ['value' => $siape, 'required' => true, 'readonly' => true]);
+                    if ($professor->siape) {
+                        echo $this->Form->control('siape', ['value' => $professor->siape, 'required' => true, 'readonly' => true]);
+                    } else {
+                        echo $this->Form->control('siape', ['required' => true]);
+                    }
                     echo $this->Form->control('datanascimento', ['empty' => true, 'required' => false]);
                     echo $this->Form->control('localnascimento', ['label' => 'Local Nascimento', 'required' => false]);
                     echo $this->Form->control('ddd_telefone', ['label' => 'DDD Telefone', 'required' => false]);
-                    echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '[0-9]{4}\.[0-9]{4}', 'placeholder' => '0000.0000', 'required' => false]);
+                    echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)\s[0-9]{4}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'required' => false]);
                     echo $this->Form->control('ddd_celular', ['label' => 'DDD Celular', 'required' => false]);
-                    echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '[0-9]{4}\.[0-9]{4}', 'placeholder' => '0000.0000', 'required' => false]);
-                    echo $this->Form->control('email', ['type' => 'email', 'value' => $email, 'required' => true, 'readonly' => true]);
+                    echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 00000.0000', 'required' => false]);
+                    if ($professor->email) {
+                        echo $this->Form->control('email', ['type' => 'email', 'value' => $professor->email, 'required' => true, 'readonly' => true]);
+                    } else {
+                        echo $this->Form->control('email', ['type' => 'email', 'required' => true]);
+                    }
                     echo $this->Form->control('homepage', ['label' => 'Homepage', 'required' => false]);
                     echo $this->Form->control('redesocial', ['label' => 'Rede Social', 'required' => false]);
                     echo $this->Form->control('curriculolattes', ['label' => 'Curriculo Lattes', 'required' => false]);

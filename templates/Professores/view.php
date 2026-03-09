@@ -22,12 +22,18 @@ $departamentos = [
         <div class="professores view content">
             <aside>
                 <div class="nav">
-                    <?php if ($user_data['administrador_id']): ?>
-                        <?= $this->Html->link(__('Editar Professor'), ['action' => 'edit', $professor->id], ['class' => 'button']) ?>
-                        <?= $this->Form->postLink(__('Excluir Professor'), ['action' => 'delete', $professor->id], ['confirm' => __('Are you sure you want to delete {0}?', $professor->nome), 'class' => 'button']) ?>
-                        <?= $this->Html->link(__('Novo Professor'), ['action' => 'add'], ['class' => 'button']) ?>
-                    <?php endif; ?>
+                    <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
                     <?= $this->Html->link(__('Listar Professores'), ['action' => 'index'], ['class' => 'button']) ?>
+                    <?php if ($user_data['categoria'] == '1'): ?>
+                        <?= $this->Html->link(__('Editar Professor(a)'), ['action' => 'edit', $professor->id], ['class' => 'button']) ?>
+                        <?= $this->Form->postLink(__('Excluir Professor(a)'), ['action' => 'delete', $professor->id], ['confirm' => __('Are you sure you want to delete {0}?', $professor->nome), 'class' => 'button']) ?>
+                        <?= $this->Html->link(__('Novo(a) Professor(a)'), ['action' => 'add'], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('CH e nota'), ['controller' => 'Estagiarios', 'action' => 'lancanota', '?' => ['professor_id' => $professor->id]], ['class' => 'button']) ?>
+                    <?php endif; ?>
+                    <?php if ($user_data['categoria'] == '3' && ($professor->id == $user_data['professor_id'])): ?>
+                        <?= $this->Html->link(__('Editar Professor(a)'), ['action' => 'edit', $professor->id], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('CH e nota'), ['controller' => 'Estagiarios', 'action' => 'lancanota', '?' => ['professor_id' => $professor->id]], ['class' => 'button']) ?>
+                    <?php endif; ?>
                 </div>
             </aside>
             <h3>professor_<?= h($professor->id) ?></h3>
@@ -41,11 +47,11 @@ $departamentos = [
                     <td><?= h($professor->nome) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Cpf') ?></th>
+                    <th><?= __('CPF') ?></th>
                     <td><?= h($professor->cpf) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Localnascimento') ?></th>
+                    <th><?= __('Local de Nascimento') ?></th>
                     <td><?= h($professor->localnascimento) ?></td>
                 </tr>
                 <tr>
@@ -61,7 +67,7 @@ $departamentos = [
                     <td><?= $professor->email ? $this->Text->autoLinkEmails($professor->email) : '' ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Homepage') ?></th>
+                    <th><?= __('Home page') ?></th>
                     <td><?= h($professor->homepage) ?></td>
                 </tr>
                 <tr>
@@ -85,15 +91,15 @@ $departamentos = [
                     <td><?= h($professor->formacaoprofissional) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Graduacao Universidade') ?></th>
+                    <th><?= __('Graduação Universidade') ?></th>
                     <td><?= h($professor->universidadedegraduacao) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Ano de formacao') ?></th>
+                    <th><?= __('Ano de formação') ?></th>
                     <td><?= h($professor->anoformacao) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Mestrado area') ?></th>
+                    <th><?= __('Mestrado área') ?></th>
                     <td><?= h($professor->mestradoarea) ?></td>
                 </tr>
                 <tr>
@@ -125,7 +131,7 @@ $departamentos = [
                     <td><?= h($professor->tipocargo) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Regimetrabalho') ?></th>
+                    <th><?= __('Regime de trabalho') ?></th>
                     <td><?= h($professor->regimetrabalho) ?></td>
                 </tr>
                 <tr>
@@ -173,18 +179,20 @@ $departamentos = [
                             <th class="actions"><?= __('Actions') ?></th>
                             <th><?= __('Id') ?></th>
                             <th><?= __('Email') ?></th>
-                            <th><?= __('Registro') ?></th>
+                            <th><?= __('Número') ?></th>
                             <th><?= __('Timestamp') ?></th>
                         </tr>
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Users', 'action' => 'view', $professor->user->id]) ?>
-                                <?= $this->Html->link(__('Editar'), ['controller' => 'Users', 'action' => 'edit', $professor->user->id]) ?>
-                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Users', 'action' => 'delete', $professor->user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $professor->user->id)]) ?>
+                                <?php if ($user_data['categoria'] == '1'): ?>
+                                    <?= $this->Html->link(__('Editar'), ['controller' => 'Users', 'action' => 'edit', $professor->user->id]) ?>
+                                    <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Users', 'action' => 'delete', $professor->user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $professor->user->id)]) ?>
+                                <?php endif; ?>
                             </td>
                             <td><?= h($professor->user->id) ?></td>
                             <td><?= $professor->user->email ? $this->Text->autoLinkEmails($professor->user->email) : '' ?></td>
-                            <td><?= h($professor->user->registro) ?></td>
+                            <td><?= h($professor->user->numero) ?></td>
                             <td><?= $professor->user->timestamp ? h($professor->user->timestamp) : '' ?></td>
                         </tr>
                     </table>
@@ -221,8 +229,10 @@ $departamentos = [
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?>
-                                <?= $this->Html->link(__('Editar'), ['controller' => 'Estagiarios', 'action' => 'edit', $estagiario->id]) ?>
-                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete estagiario_{0}?', $estagiario->id)]) ?>
+                                <?php if ($user_data['categoria'] == '1'): ?>
+                                    <?= $this->Html->link(__('Editar'), ['controller' => 'Estagiarios', 'action' => 'edit', $estagiario->id]) ?>
+                                    <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete estagiario_{0}?', $estagiario->id)]) ?>
+                                <?php endif; ?>
                             </td>
                             <td><?= h($estagiario->id) ?></td>
                             <td><?= $estagiario->aluno ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>

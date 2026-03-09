@@ -61,12 +61,12 @@ if ($user_session)
             
             <menu class="toggle-dropdown">
                 
-                <li><?php echo $this->Html->link("Inscrições", ['controller' => 'Inscricoes', 'action' => 'index']); ?></li>
-                <li><?php echo $this->Html->link("Instituições", ['controller' => 'Instituicoes', 'action' => 'index']); ?></li>
-                <li><?php echo $this->Html->link("Estagiários", ['controller' => 'Estagiarios', 'action' => 'index']); ?></li>
                 <li><?php echo $this->Html->link("Alunos", ['controller' => 'Alunos', 'action' => 'index']); ?></li>
+                <li><?php echo $this->Html->link("Supervisores", ['controller' => 'Supervisores', 'action' => 'index']); ?></li>                
+                <li><?php echo $this->Html->link("Instituições", ['controller' => 'Instituicoes', 'action' => 'index']); ?></li>
+                <li><?php echo $this->Html->link("Inscrições", ['controller' => 'Inscricoes', 'action' => 'index']); ?></li>
+                <li><?php echo $this->Html->link("Estagiários", ['controller' => 'Estagiarios', 'action' => 'index']); ?></li>
                 <li><?php echo $this->Html->link("Professores", ['controller' => 'Professores', 'action' => 'index']); ?></li>
-                <li><?php echo $this->Html->link("Supervisores", ['controller' => 'Supervisores', 'action' => 'index']); ?></li>
         
             </menu>
         </li>

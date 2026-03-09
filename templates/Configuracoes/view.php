@@ -3,6 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Configuracao $configuracao
  */
+use Cake\I18n\Date;
 ?>
 <div>
     <div class="column-responsive column-80">
@@ -13,48 +14,26 @@
                 </div>
             </aside>
             <h3>Configurações</h3>
-            <table>
-                <tr>
-                    <th><?= __('Instituição') ?></th>
-                    <td><?= h($configuracao->instituicao) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Descrição') ?></th>
-                    <td><?= h($configuracao->descricao) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Mural Período Atual') ?></th>
-                    <td><?= h($configuracao->mural_periodo_atual) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Curso Turma Atual') ?></th>
-                    <td><?= h($configuracao->curso_turma_atual) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Curso Abertura Inscriçõees') ?></th>
-                    <td><?= h($configuracao->curso_abertura_inscricoes) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Curso Encerramento Inscrições') ?></th>
-                    <td><?= h($configuracao->curso_encerramento_inscricoes) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Termo Compromisso Período') ?></th>
-                    <td><?= h($configuracao->termo_compromisso_periodo) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Termo Compromisso Início') ?></th>
-                    <td><?= h($configuracao->termo_compromisso_inicio) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Termo Compromisso Final') ?></th>
-                    <td><?= h($configuracao->termo_compromisso_final) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Período Calendário AcadÇemico') ?></th>
-                    <td><?= h($configuracao->periodo_calendario_academico) ?></td>
-                </tr>
-            </table>
+            <dl>
+                <div class="row">
+                    <dt class="col-3"><?= __('Período Atual Mural') ?></dt>
+                    <dd class="col-9"><?= h($configuracao->mural_periodo_atual) ?></dd>
+                    <dt class="col-3"><?= __('Período Termo Compromisso') ?></dt>
+                    <dd class="col-9"><?= h($configuracao->termo_compromisso_periodo) ?></dd>
+                    <dt class="col-3"><?= __('Inicio Termo Compromisso') ?></dt>
+                    <dd class="col-9"><?= h($configuracao->termo_compromisso_inicio->format('d-m-Y')) ?></dd>
+                    <dt class="col-3"><?= __('Final Termo Compromisso') ?></dt>
+                    <dd class="col-9"><?= h($configuracao->termo_compromisso_final->format('d-m-Y')) ?></dd>
+                    <dt class="col-3"><?= __('Período Calendário Acadêmico') ?></dt>
+                    <dd class="col-9"><?= h($configuracao->periodo_calendario_academico) ?></dd>
+                    <dt class="col-3"><?= __('Curso Turma Atual') ?></dt>
+                    <dd class="col-9"><?= h($configuracao->curso_turma_atual) ?></dd>
+                    <dt class="col-3"><?= __('Curso Abertura Inscriçõees') ?></dt>
+                    <dd class="col-9"><?= $configuracao->curso_abertura_inscricoes ? h($configuracao->curso->abertura->inscricoes->format('d-m-Y')) : '' ?></dd>
+                    <dt class="col-3"><?= __('Curso Encerramento Inscrições') ?></dt>
+                    <dd class="col-9"><?= $configuracao->curso_encerramento_inscricoes ? h($configuracao->curso_encerramento_inscricoes->format('d-m-Y')) : '' ?></dd>
+                </div>
+            </dl>
         </div>
     </div>
 </div>
