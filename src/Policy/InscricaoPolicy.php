@@ -73,6 +73,18 @@ final class InscricaoPolicy implements BeforePolicyInterface
     /**
      * @param \Authorization\IdentityInterface $userSession
      * @param \App\Model\Entity\Inscricao $inscricaoData
+     * @return \Authorization\Policy\Result
+     */
+    public function canImprimepdf(IdentityInterface $userSession, Inscricao $inscricaoData): Result
+    {
+        return $this->sameUser($userSession, $inscricaoData)
+            ? new Result(true)
+            : new Result(false, 'Erro: inscricoes imprimir pdf policy not authorized');
+    }
+
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @param \App\Model\Entity\Inscricao $inscricaoData
      * @return bool
      */
     protected function sameUser(IdentityInterface $userSession, Inscricao $inscricaoData): bool

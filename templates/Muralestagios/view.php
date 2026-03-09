@@ -37,7 +37,8 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
 			            <?= $this->Html->link(__('Editar estagio'), ['action' => 'edit', $muralestagio->id], ['class' => 'button']) ?>
 			            <?= $this->Form->postLink(__('Excluir estagio'), ['action' => 'delete', $muralestagio->id], ['confirm' => __('Are you sure you want to delete # {0}?', $muralestagio->id), 'class' => 'button']) ?>
 			            <?= $this->Html->link(__('Novo estagio'), ['action' => 'add'], ['class' => 'button']) ?>
-                    <?php endif; ?>
+			            <?= $this->Html->link(__('Imprimir inscrições'), ['controller' => 'Inscricoes', 'action' => 'imprimepdf', '?' => ['muralestagio_id' => $muralestagio->id]], ['class' => 'button']) ?>
+                        <?php endif; ?>
 		        </div>
 		    </aside>
             <h3>estagio_<?= h($muralestagio->id) ?></h3>
@@ -191,7 +192,7 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
 
             <?php endif; ?>
 
-            <?php if ($user_data['administrador_id'] || $user_data['professor_id'] || $user_data['supervisor_id']): ?>
+            <?php if ($user_data['categoria'] == '1' || $user_data['categoria'] == '2' || $user_data['categoria'] == '3'): ?>
 	            <?php if (!empty($muralestagio->inscricoes)) : ?>
 	            <div class="related">
 	                <h4><?= __('Inscrições') ?></h4>

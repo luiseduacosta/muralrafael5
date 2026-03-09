@@ -76,6 +76,7 @@ class MuralestagiosController extends AppController
         $muralestagio = $this->Muralestagios->get($id, [
             'contain' => ['Instituicoes', 'Turmas', 'Professores', 'Inscricoes' => ['Alunos']],
         ]);
+
         if (empty($user_session)) {
             $this->Flash->error('Authorization error: User not authenticated.');
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);

@@ -29,7 +29,7 @@ $this->assign('title', 'Lista de Inscrições');
         <th>Telefone</th>
         <th>Data de Inscrição</th>
     </tr>
-    <?php foreach ($inscricao as $insc): ?>
+    <?php foreach ($inscricao->inscricoes as $insc): ?>
     <tr>
         <td><?= $insc->aluno->nome ?></td>
         <td><?= $insc->aluno->registro ?></td>
