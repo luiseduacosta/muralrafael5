@@ -9,7 +9,50 @@ $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'su
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
-<div">
+
+<script type="text/javascript">
+
+    function getsupervisores(id) {
+        // Se nenhuma instituição estiver selecionada, apenas redefine o campo de supervisor
+        if (!id) {
+            $('#supervisor-id').html('<option value=""><?= __('Selecione o supervisor') ?></option>');
+            return;
+        }
+
+        $.ajax({
+            url: '<?= $this->Url->build(['controller' => 'Instituicoes', 'action' => 'selecionasupervisores']) ?>',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: id,
+                _csrfToken: '<?= $this->request->getAttribute('csrfToken') ?>'
+            },
+            success: function (response) {
+                let options = '<option value=""><?= __('Selecione o supervisor') ?></option>';
+                if (response && Object.keys(response).length > 0) {
+                    $.each(response, function (key, value) {
+                        options += '<option value="' + key + '">' + value + '</option>';
+                    });
+                } else {
+                    options = '<option value=""><?= __('Nenhum supervisor encontrado') ?></option>';
+                }
+                $('#supervisor-id').html(options);
+            },
+            error: function (xhr, status, error) {
+                console.error('Ajax error:', error);
+                $('#supervisor-id').html('<option value=""><?= __('Erro ao carregar supervisores') ?></option>');
+            }
+        });
+    }
+    $(document).ready(function () {
+        $('#instituicao-id').change(function () {
+            console.log('Instituicao ID changed:', $(this).val());
+            getsupervisores($(this).val());
+        });
+    });
+</script>
+
+<div>
     <div class="column-responsive column-80">
         <div class="estagiarios form content">
             <aside>
@@ -17,6 +60,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <?= $this->Html->link(__('Listar Estagiarios'), ['action' => 'index'], ['class' => 'button']) ?>
                 </div>
             </aside>
+
             <?= $this->Form->create($estagiario) ?>
             <fieldset>
                 <h3><?= __('Adicionando Estagiario') ?></h3>

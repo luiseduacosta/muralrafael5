@@ -58,7 +58,7 @@ class AvaliacoesController extends AppController
             if ($estagiario_id) {
                 $query = $this->fetchTable('Estagiarios')->find()
                     ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Avaliacoes'])
-                    ->where(['Estagiarios.id' => $estagiario_id]);
+                    ->where(['Estagiarios.id' => $estagiario_id, 'Estagiarios.aluno_id' => $user_data['aluno_id']]);
                 if ($query->count() == 1) {
                     $estagiarios = $this->paginate($query, ['sortableFields' => ['id', 'Alunos.nome', 'periodo', 'nivel', 'Instituicoes.instituicao', 'Supervisores.nome', 'ch', 'nota']]);
                 } else {
@@ -66,7 +66,6 @@ class AvaliacoesController extends AppController
                     return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
                 }
             } else {
-                 // Fallback for students without estagiario_id in query
                  $query = $this->fetchTable('Estagiarios')->find()
                     ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Avaliacoes'])
                     ->where(['Estagiarios.aluno_id' => $user_data['aluno_id']]);
@@ -74,31 +73,21 @@ class AvaliacoesController extends AppController
             }
         } elseif ($categoria == '3') {
             $query = $this->fetchTable('Estagiarios')->find()
-                ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Avaliacoes']);
-            
-            if ($user_data['professor_id']) {
-                $query->where(['Estagiarios.professor_id' => $user_data['professor_id']]);
-            } elseif ($user_data['supervisor_id']) {
-                $query->where(['Estagiarios.supervisor_id' => $user_data['supervisor_id']]);
-            }
+                ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Avaliacoes'])
+                ->where(['Estagiarios.professor_id' => $user_data['professor_id']]);
+
+            $estagiarios = $this->paginate($query, ['sortableFields' => ['id', 'Alunos.nome', 'periodo', 'nivel', 'Instituicoes.instituicao', 'Supervisores.nome', 'ch', 'nota']]);
+        } elseif ($categoria == '4') {
+            $query = $this->fetchTable('Estagiarios')->find()
+                ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Avaliacoes'])
+                ->where(['Estagiarios.supervisor_id' => $user_data['supervisor_id']]);
 
             $estagiarios = $this->paginate($query, ['sortableFields' => ['id', 'Alunos.nome', 'periodo', 'nivel', 'Instituicoes.instituicao', 'Supervisores.nome', 'ch', 'nota']]);
         }
 
-        // Initialize empty paginated results if still null to prevent template crashes
-        if ($categoria == '1') {
-            if (is_null($avaliacoes)) {
-                $avaliacoes = $this->paginate($this->Avaliacoes);
-            }
-        } else {
-            if (is_null($estagiarios)) {
-                $estagiarios = $this->paginate($this->fetchTable('Estagiarios'));
-            }
-        }
-
         $this->set(compact('avaliacoes', 'estagiarios'));
     }
- 
+
     /**
      * View method
      *
@@ -152,43 +141,35 @@ class AvaliacoesController extends AppController
         }
 
         $estagiario_id = $this->getRequest()->getQuery('estagiario_id');
-        $avaliacaoexiste = null;
         
-        if ($estagiario_id) {
-            $avaliacaoexiste = $this->Avaliacoes->find()
-                ->where(['estagiario_id' => $estagiario_id])
-                ->first();
-        } elseif ($id) {
-            $avaliacaoexiste = $this->Avaliacoes->find()
-                ->where(['id' => $id])
-                ->first();
+        if (empty($estagiario_id)) {
+            $this->Flash->error(__('Parâmetro estagiário é obrigatório.'));
+            return $this->redirect(['action' => 'index']);
         }
 
+        $avaliacaoexiste = $this->Avaliacoes->find()
+            ->where(['estagiario_id' => $estagiario_id])
+            ->first();
+
         if ($avaliacaoexiste) {
-            $this->Flash->error(__('Estagiário já foi avaliado'));
+            $this->Flash->error(__('O(A) estagiário(a) já possui avaliação.'));
+            return $this->redirect(['action' => 'view', $avaliacaoexiste->id]);
         }
 
         $avaliacao = $this->Avaliacoes->newEmptyEntity();
         if ($this->request->is('post')) {
-            $avaliacaoresposta = $this->Avaliacoes->patchEntity($avaliacao, $this->request->getData());
-            if ($this->Avaliacoes->save($avaliacaoresposta)) {
-                $this->Flash->success(__('Avaliação registrada.'));
+            $avaliacao = $this->Avaliacoes->patchEntity($avaliacao, $this->request->getData());
+            if ($this->Avaliacoes->save($avaliacao)) {
+                $this->Flash->success(__('Avaliação registrada com sucesso.'));
 
-                return $this->redirect(['controller' => 'avaliacoes', 'action' => 'imprimeavaliacaopdf', $this->getRequest()->getData('estagiario_id')]);
+                return $this->redirect(['action' => 'view', $avaliacao->id]);
             }
-            $this->Flash->error(__('Avaliaçãoo no foi registrada. Tente novamente.'));
+            $this->Flash->error(__('Avaliação não foi registrada. Tente novamente.'));
         }
 
-        if ($estagiario_id) {
-            $estagiario = $this->Avaliacoes->Estagiarios->find()
-                ->contain(['Alunos'])
-                ->where(['Estagiarios.id' => $estagiario_id])
-                ->first();
-        } else {
-            $estagiario = $this->Avaliacoes->Estagiarios->find()
-            ->contain(['Alunos'])
-            ->first();
-        }
+        $estagiario = $this->fetchTable('Estagiarios')->get($estagiario_id, [
+            'contain' => ['Alunos']
+        ]);
         
         $this->set(compact('avaliacao', 'estagiario'));
     }
@@ -265,27 +246,19 @@ class AvaliacoesController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $estagiario_id = $this->request->getQuery('estagiario_id');
+        if (empty($id)) {
+            $id = $this->request->getQuery('estagiario_id');
+        }
 
-        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
-        $user_session = $this->request->getAttribute('identity');
-        if ($user_session) {
-            $user_data = $user_session->getOriginalData();
-        }
-        $this->layout = false;
-        if ($id == null) {
-            $this->Flash->info(__('Imprimir a folha de avaliação do estágio do aluno'));
-            return $this->redirect(['controller' => 'Avaliacoes', 'action' => 'avaliacaomanualpdf', '?' => ['estagiario_id' => $estagiario_id]]);
-        } else {
-            $avaliacao = $this->Avaliacoes->find()
-                ->contain(['Estagiarios' => ['Alunos', 'Supervisores', 'Professores', 'Instituicoes']])
-                ->where(['Avaliacoes.id' => $id])
-                ->first();
-        }
+        $avaliacao = $this->Avaliacoes->find()
+            ->contain(['Estagiarios' => ['Alunos', 'Supervisores', 'Professores', 'Instituicoes']])
+            ->where(['Avaliacoes.id' => $id])
+            ->orWhere(['Avaliacoes.estagiario_id' => $id])
+            ->first();
 
         if (empty($avaliacao)) {
             $this->Flash->error(__('Sem avaliação on-line'));
-            return $this->redirect(['controller' => 'Avaliacoes', 'action' => 'avaliacaomanualpdf', '?' => ['estagiario_id' => $estagiario_id]]);
+            return $this->redirect(['controller' => 'Avaliacoes', 'action' => 'avaliacaomanualpdf', '?' => ['estagiario_id' => $id]]);
         }
 
         $this->viewBuilder()->setLayout('pdf/default');
@@ -295,7 +268,7 @@ class AvaliacoesController extends AppController
             [
                 'orientation' => 'portrait',
                 'download' => true,
-                'filename' => 'avaliacao_discente_' . $id . '.pdf'
+                'filename' => 'avaliacao_discente_' . $avaliacao->id . '.pdf'
             ]
         );
         $this->set('avaliacao', $avaliacao);

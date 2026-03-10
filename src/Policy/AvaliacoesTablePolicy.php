@@ -25,7 +25,7 @@ final class AvaliacoesTablePolicy implements BeforePolicyInterface
                 $user_data
                 && (
                     $user_data['categoria'] == '1'
-                    || $user_data['categoria'] == '3'
+                    || $user_data['categoria'] == '4'
                 )
             ) {
                 return true;
@@ -38,9 +38,14 @@ final class AvaliacoesTablePolicy implements BeforePolicyInterface
     /**
      * @return \Authorization\Policy\Result
      */
-    public function canIndex(): Result
+    public function canIndex(IdentityInterface $userSession): Result
     {
-        return new Result(true);
+        $user_data = $userSession->getOriginalData();
+        // Everyone can see the index (filtered by role in controller)
+        if (in_array($user_data['categoria'], ['1', '2', '3', '4'])) {
+            return new Result(true);
+        }
+        return new Result(false);
     }
 
     /**

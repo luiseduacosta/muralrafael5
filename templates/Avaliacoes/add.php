@@ -58,7 +58,7 @@ if ($cress) {
         </div>
     </aside>
 
-    <h3><?= __('Adicionando avaliação') ?></h3>
+    <h3><?= __('Adicionando avaliação para: ') . h($estagiario->aluno->nome) ?></h3>
     
     <div>
         <?= $this->Form->create($avaliacao) ?>
@@ -72,7 +72,7 @@ if ($cress) {
         ]);
         ?>
 
-        <?= $this->Form->control('estagiario_id', ['options' => [$estagiario->id => $estagiario->aluno->nome]]); ?>
+        <?= $this->Form->hidden('estagiario_id', ['value' => $estagiario->id]); ?>
 
         <fieldset>
             <legend>

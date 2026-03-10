@@ -163,7 +163,7 @@ class EstagiariosController extends AppController
             return $this->redirect(['controller' => 'Alunos', 'action' => 'index']);
         }
 
-        // It is the first step of estagio (nivel 1) or a new step for this aluno
+        // Querying if is the first step of estagio (nivel 1) or a new step for this aluno
         if ($id) {
             $ultimo_estagio = $this->Estagiarios
                 ->find()
@@ -180,6 +180,7 @@ class EstagiariosController extends AppController
                             $ultimo_estagio->periodo,
                     ),
                 );
+                // Go to next nivel
                 $nivel = $ultimo_estagio->nivel + 1;
 
                 $ajuste2020 = $ultimo_estagio->ajuste2020;
@@ -194,8 +195,13 @@ class EstagiariosController extends AppController
                     }
                 }
 
-                // Check period validity. Same periodo means a edit not a new step
-                if ($ultimo_estagio->periodo >= $periodoatual->mural_periodo_atual) {
+                // Check period validity. Mesmo ou maior período significa edição, não um novo passo
+                $compare = $this->comparePeriodo(
+                    (string)$ultimo_estagio->periodo,
+                    (string)$periodoatual->mural_periodo_atual,
+                );
+
+                if ($compare >= 0) {
                     $this->Flash->info(
                         __(
                             'O período de estágio do aluno tem que ser igual ou maior que o período atual ' . $periodoatual->mural_periodo_atual,
@@ -438,18 +444,37 @@ class EstagiariosController extends AppController
                 ->first();
             $periodoatual = $configuracoes->mural_periodo_atual;
 
-            // Verifica se o periodo do estagiario eh o mesmo do periodo atual
-            if ($estagiario->periodo == $periodoatual) {
+            $compare = $this->comparePeriodo((string)$periodoatual, (string)$estagiario->periodo);
+
+            // Mesmo período: editar o estágio do período atual
+            if ($compare === 0) {
                 return $this->redirect([
                     'action' => 'edit',
                     $estagiario->id,
                 ]);
-            } else {
+            }
+
+            // Período atual (configurações) posterior ao último estágio: criar novo estágio
+            if ($compare === 1) {
                 return $this->redirect([
                     'action' => 'add',
                     '?' => ['aluno_id' => $aluno_id],
                 ]);
             }
+
+            // Período atual anterior ao último estágio: configurações desatualizadas / dados inconsistentes
+            $this->Flash->error(
+                __(
+                    'Período atual ({0}) não pode ser anterior ao último período de estágio ({1}).',
+                    (string)$periodoatual,
+                    (string)$estagiario->periodo,
+                ),
+            );
+
+            return $this->redirect([
+                'action' => 'edit',
+                $estagiario->id,
+            ]);
         } else {
             $this->Flash->success(__('O(a) aluno(a) ainda não é estagiário'));
 
@@ -458,6 +483,53 @@ class EstagiariosController extends AppController
                 '?' => ['aluno_id' => $aluno_id],
             ]);
         }
+    }
+
+    /**
+     * Converte um período no formato YYYY-1/2 para uma chave numérica comparável.
+     *
+     * @param string $periodo Ex.: "2025-1" ou "2025-2"
+     * @return int Chave comparável (ano * 10 + semestre). Retorna 0 se inválido.
+     */
+    private function periodoKey(string $periodo): int
+    {
+        $periodo = trim($periodo);
+        if ($periodo === '') {
+            return 0;
+        }
+
+        $parts = explode('-', $periodo, 2);
+        if (count($parts) !== 2) {
+            return 0;
+        }
+
+        $year = (int)trim($parts[0]);
+        $half = (int)trim($parts[1]);
+
+        if ($year <= 0 || ($half !== 1 && $half !== 2)) {
+            return 0;
+        }
+
+        return ($year * 10) + $half;
+    }
+
+    /**
+     * Compara dois períodos no formato YYYY-1/2.
+     *
+     * @param string $a Primeiro período
+     * @param string $b Segundo período
+     * @return int Retorna 1 se $a > $b, 0 se $a == $b, -1 se $a < $b
+     */
+    private function comparePeriodo(string $a, string $b): int
+    {
+        $ka = $this->periodoKey($a);
+        $kb = $this->periodoKey($b);
+
+        if ($ka === 0 || $kb === 0) {
+            return (strcmp(trim($a), trim($b)) <=> 0);
+        }
+
+        return ($ka <=> $kb);
     }
 
     /**

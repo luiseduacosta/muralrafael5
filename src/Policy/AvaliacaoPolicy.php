@@ -26,7 +26,7 @@ final class AvaliacaoPolicy implements BeforePolicyInterface
                 $user_data
                 && (
                     $user_data['categoria'] == '1'
-                    || $user_data['categoria'] == '3'
+                    || $user_data['categoria'] == '4'
                 )
             ) {
                 return true;
@@ -43,8 +43,19 @@ final class AvaliacaoPolicy implements BeforePolicyInterface
      */
     public function canView(IdentityInterface $user, Avaliacao $avaliacao): Result
     {
-        // Add ownership check if needed, but Table policy allowed viewing
-        return new Result(true);
+        $user_data = $user->getOriginalData();
+        
+        // Student can only view their own
+        if ($user_data['categoria'] == '2') {
+            return new Result($user_data['aluno_id'] == $avaliacao->estagiario->aluno_id);
+        }
+        
+        // Professor can view evaluations for their assigned students
+        if ($user_data['categoria'] == '3') {
+            return new Result($user_data['professor_id'] == $avaliacao->estagiario->professor_id);
+        }
+
+        return new Result(false);
     }
 
     /**
