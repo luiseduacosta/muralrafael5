@@ -45,6 +45,19 @@ final class EstagiariosTablePolicy implements BeforePolicyInterface
      * @param \Authorization\IdentityInterface $userSession
      * @return \Authorization\Policy\Result
      */
+    public function canLancanota(IdentityInterface $userSession): Result
+    {
+        $user_data = $userSession->getOriginalData();
+        if ($user_data['categoria'] == '1' || $user_data['categoria'] == '3') {
+            return new Result(true);
+        }
+        return new Result(false, 'Erro: lancanota policy not authorized');
+    }
+
+    /**
+     * @param \Authorization\IdentityInterface $userSession
+     * @return \Authorization\Policy\Result
+     */
     public function canLancanotapdf(IdentityInterface $userSession): Result
     {
         $user_data = $userSession->getOriginalData();

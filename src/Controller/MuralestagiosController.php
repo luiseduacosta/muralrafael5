@@ -224,32 +224,26 @@ class MuralestagiosController extends AppController
      */
     public function imprimepdf($id = null)
     {
-        $this->Authorization->skipAuthorization();
-        $muralestagio_id = $this->request->getQuery('muralestagio_id');
-        if (!$muralestagio_id) {
-            $this->Flash->error(__('Muralestagio id is required.'));
+        $muralestagio = $this->Muralestagios->find()
+            ->contain(['Inscricoes' => ['Alunos']])
+            ->where(['Muralestagios.id' => $id])
+            ->first();
+
+        try {
+            $this->Authorization->authorize($muralestagio);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
-        $inscricao = $this->Muralestagios->find()
-            ->contain(['Inscricoes' => ['Alunos']])
-            ->where(['Muralestagios.id' => $muralestagio_id])
-            ->first();
-            
-        try {
-            $this->Authorization->authorize($inscricao);
-        } catch (ForbiddenException $error) {
-            $this->Flash->error('Authorization error: ' . $error->getMessage());
-            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
-        }
-        
         $this->viewBuilder()->setLayout('pdf/default');
         $this->viewBuilder()->setClassName("CakePdf.Pdf");
         $this->viewBuilder()->setOption("pdfConfig", [
             "orientation" => "portrait",
         ]);
 
-        $this->set(compact('inscricao'));
+        $this->set(compact('muralestagio'));
     }
 
 }

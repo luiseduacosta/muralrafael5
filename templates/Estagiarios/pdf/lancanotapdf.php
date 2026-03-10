@@ -32,7 +32,6 @@ $this->assign('title', 'Declaração de Estágio');
 <h3>Estagiários - Lançamento de CH e Nota<br />
 Professor: <?= h($professor->nome) ?><br />
 Período: <?= h($periodo) ?></h3>
-</h3>
 
 <div style="text-align: right;">
 <p>Rio de Janeiro, <?= h($dia . ' de ' . $mes . ' de ' . $ano) ?></p>

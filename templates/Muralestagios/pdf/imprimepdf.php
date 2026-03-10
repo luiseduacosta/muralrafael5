@@ -22,7 +22,7 @@ $this->assign('title', 'Lista de Inscrições');
 ?>
 
 <div style="text-align: center;">
-<h1>Seleção de estágio para <?= $inscricao->instituicao ?><br />
+<h1>Seleção de estágio para <?= $muralestagio->instituicao ?><br />
 Lista de inscrições</h1>
 </div>
 
@@ -34,7 +34,7 @@ Lista de inscrições</h1>
         <th>Celular</th>
         <th>Data de inscrição</th>
     </tr>
-    <?php foreach ($inscricao->inscricoes as $insc): ?>
+    <?php foreach ($muralestagio->inscricoes as $insc): ?>
     <tr>
         <td><?= $insc->aluno->nome ?></td>
         <td><?= $insc->aluno->registro ?></td>

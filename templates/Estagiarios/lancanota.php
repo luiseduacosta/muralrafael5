@@ -17,9 +17,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 <script type="text/javascript">
     $(document).ready(function () {
         var url = "<?= $this->Html->Url->build(['controller' => 'estagiarios', 'action' => 'lancanota']); ?>";
-        var select= $("#estagiarioperiodo");
-		var pathname = location.pathname.split('/').filter(Boolean);
-		if (pathname[pathname.length - 2] == 'index') select.val(pathname[pathname.length - 1]);
+        var select = $("#periodo-select");
         select.change(function () {
             var periodo = $(this).val();
             var professor_id = "<?= $professor->id; ?>";
@@ -28,25 +26,28 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
     });
 </script>
 
-<div class="row justify-content-end">
-    <aside>
-        <div class="nav">
-            <?= $this->Html->link(__('Imprimir'), ['action' => 'lancanotapdf', '?' => ['periodo' => $periodo, 'professor_id' => $professor->id]], ['class' => 'button']) ?>
-        </div>
-    </aside>
+<div class="row justify-content-between mb-3">
+    <div class="col-auto">
+        <h1 class="h3 mb-0 text-gray-800">Alunos estagiários: <?= h($professor->nome); ?></h1>
+    </div>
+    <div class="col-auto">
+        <?= $this->Html->link(__('Imprimir'), ['action' => 'lancanotapdf', '?' => ['periodo' => $periodo, 'professor_id' => $professor->id]], ['class' => 'button']) ?>
+    </div>
 </div>
 
-<div class="row justify-content-center">
-    <div class="col-auto">
-        <?php if ($user_data['administrador_id']): ?>
-            <?= $this->Form->create($estagiarios, ['class' => 'form-inline']); ?>
-            <?php echo $this->Form->input('periodo', ['id' => 'Periodo', 'type' => 'select', 'label' => ['text' => 'Período ', 'style' => 'display: inline;'], 'options' => $periodos, 'empty' => [$periodo => $periodo]], ['class' => 'form-control']); ?>
-            <?php echo $this->Form->input('professor_id', ['type' => 'hidden', 'value' => $user_data['professor_id']]); ?>
-            <?= $this->Form->end(); ?>
-        <?php else: ?>
-            <h1 style="text-align: center;">Alunos estagiários professor(a):
-                <?=  $professor->nome; ?></h1>
-        <?php endif; ?>
+<div class="row mb-4">
+    <div class="col-md-4">
+        <?= $this->Form->create(null, ['type' => 'get', 'class' => 'form-inline']); ?>
+        <div class="form-group mb-2">
+            <label for="periodo-select" class="mr-2">Período: </label>
+            <?= $this->Form->select('periodo', $periodos, [
+                'val' => $periodo,
+                'id' => 'periodo-select',
+                'class' => 'form-control custom-select',
+                'empty' => false
+            ]); ?>
+        </div>
+        <?= $this->Form->end(); ?>
     </div>
 </div>
 
