@@ -58,103 +58,131 @@ use Cake\I18n\Date;
             <?php foreach ($seguro as $estagiario): ?>
                 <?php 
                 
-                // pr($estagiario);
-                // die();
-                
+                $ajuste2020 = (int)$estagiario->ajuste2020;
+                $semestre = explode('-', $estagiario->periodo);
+                $ano = (int)$semestre[0];
+                $indicasemestre = (int)$semestre[1];
+
                 if ($estagiario->nivel == 1) {
             
                     // Início
                     $inicio = $estagiario->periodo;
             
                     // Final
-                    $semestre = explode('-', $estagiario->periodo);
-                    $ano = $semestre[0];
-                    $indicasemestre = $semestre[1];
-            
-                    if ($indicasemestre == 1) {
+                    if ($ajuste2020 == 1) {
+                        // Needs 3 semesters: 1st, 2nd, 3rd.
+                        // If 1-1 -> 2-1
+                        // If 1-2 -> 2-2
                         $novoano = $ano + 1;
-                        $novoindicasemestre = $indicasemestre + 1;
-                        $final = $novoano . "-" . $novoindicasemestre;
-                    } elseif ($indicasemestre == 2) {
-                        $novoano = $ano + 2;
-                        $final = $novoano . "-" . 1;
+                        $final = $novoano . "-" . $indicasemestre;
+                    } else {
+                        // Needs 4 semesters: 1st, 2nd, 3rd, 4th.
+                        // If 1-1 -> 2-2
+                        // If 1-2 -> 3-1
+                        if ($indicasemestre == 1) {
+                            $novoano = $ano + 1;
+                            $final = $novoano . "-" . 2;
+                        } else {
+                            $novoano = $ano + 2;
+                            $final = $novoano . "-" . 1;
+                        }
                     }
                     
                 } elseif ($estagiario->nivel == 2) {
             
-                    $semestre = explode('-', $estagiario->periodo);
-                    $ano = $semestre[0];
-                    $indicasemestre = $semestre[1];
-            
                     // Início
+                    // Level 2 is always 2nd semester.
+                    // If 1-1 -> 1-1
+                    // If 1-2 -> 1-2
                     if ($indicasemestre == 1) {
-                        $novoano = $ano - 1;
-                        $inicio = $novoano . "-" . 2;
-                    } elseif ($indicasemestre == 2) {
-                        $inicio = $ano . "-" . "1";
+                        $inicio = $ano . "-" . 1;
+                    } else {
+                        $inicio = $ano . "-" . 2;
                     }
             
                     // Final
-                    if ($indicasemestre == 1) {
+                    if ($ajuste2020 == 1) {
+                        // Ends at level 3.
+                        // If 2-1 -> 2-2
+                        // If 2-2 -> 3-1
+                        if ($indicasemestre == 1) {
+                            $final = $ano . "-" . 2;
+                        } else {
+                            $novoano = $ano + 1;
+                            $final = $novoano . "-" . 1;
+                        }
+                    } else {
+                        // Ends at level 4.
+                        // If 2-1 -> 3-1
+                        // If 2-2 -> 3-2
                         $novoano = $ano + 1;
-                        $final = $novoano . "-" . 1;
-                    } elseif ($indicasemestre == 2) {
-                        $novoano = $ano + 1;
-                        $final = $novoano . "-" . "2";
+                        $final = $novoano . "-" . $indicasemestre;
                     }
                     
                 } elseif ($estagiario->nivel == 3) {
             
-                    $semestre = explode('-', $estagiario->periodo);
-                    $ano = $semestre[0];
-                    $indicasemestre = $semestre[1];
-            
                     // Início
-                    $novoano = $ano - 1;
-                    $inicio = $novoano . "-" . $indicasemestre;
+                    // Level 3 is always 3rd semester.
+                    if ($ajuste2020 == 1) {
+                        // Start was level 1 (2 semesters ago)
+                        // If 3-1 -> 2-1
+                        // If 3-2 -> 2-2
+                        $novoano = $ano - 1;
+                        $inicio = $novoano . "-" . $indicasemestre;
+                    } else {
+                        // Start was level 1 (2 semesters ago)
+                        // If 3-1 -> 2-1 (Wait, level 1 was 2 semesters before)
+                        // If 3-1 -> 2-1
+                        // If 3-2 -> 2-2
+                        $novoano = $ano - 1;
+                        $inicio = $novoano . "-" . $indicasemestre;
+                    }
             
                     // Final
-                    if ($indicasemestre == 1) {
-                        // $ano = $ano + 1;
-                        $final = $ano . "-" . 2;
-                    } elseif ($indicasemestre == 2) {
-                        $novoano = $ano + 1;
-                        $final = $novoano . "-" . 1;
+                    if ($ajuste2020 == 1) {
+                        // Ends now (level 3)
+                        $final = $estagiario->periodo;
+                    } else {
+                        // Ends at level 4.
+                        // If 3-1 -> 3-2
+                        // If 3-2 -> 4-1
+                        if ($indicasemestre == 1) {
+                            $final = $ano . "-" . 2;
+                        } else {
+                            $novoano = $ano + 1;
+                            $final = $novoano . "-" . 1;
+                        }
                     }
                     
                 } elseif ($estagiario->nivel == 4) {
             
-                    $semestre = explode('-', $estagiario->periodo);
-                    $ano = $semestre[0];
-                    $indicasemestre = $semestre[1];
-            
                     // Início
+                    // Level 4 is always 4th semester.
+                    // Start was level 1 (3 semesters ago)
+                    // If 4-1 -> 2-2
+                    // If 4-2 -> 3-1
                     if ($indicasemestre == 1) {
-                        $ano = $ano - 2;
-                        $inicio = $ano . "-" . 2;
-                    } elseif ($indicasemestre == 2) {
-                        $ano = $ano - 1;
-                        $inicio = $ano . "-" . 1;
+                        $novoano = $ano - 2;
+                        $inicio = $novoano . "-" . 2;
+                    } else {
+                        $novoano = $ano - 1;
+                        $inicio = $novoano . "-" . 1;
                     }
             
                     // Final
                     $final = $estagiario->periodo;
             
-                    // Estagio não obrigatório. Conto como estágio 5
-                    
                 } elseif ($estagiario->nivel == 9) {
             
-                    $semestre = explode('-', $estagiario->periodo);
-                    $ano = $semestre[0];
-                    $indicasemestre = $semestre[1];
-            
                     // Início
+                    // Assumed as level 5 or 4? The user said 4 or 3 semesters.
+                    // If we assume it as a "long" one or just use original logic:
                     if ($indicasemestre == 1) {
-                        $ano = $ano - 2;
-                        $inicio = $ano . "-" . 1;
-                    } elseif ($indicasemestre == 2) {
-                        $ano = $ano - 2;
-                        $inicio = $ano . "-" . 2;
+                        $novoano = $ano - 2;
+                        $inicio = $novoano . "-" . 1;
+                    } else {
+                        $novoano = $ano - 2;
+                        $inicio = $novoano . "-" . 2;
                     }
             
                     // Final

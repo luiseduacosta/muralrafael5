@@ -488,6 +488,7 @@ class AlunosController extends AppController
             'Alunos.registro',
             'Estagiarios.nivel',
             'Estagiarios.periodo',
+            'Estagiarios.ajuste2020',
             'Instituicoes.id',
             'Instituicoes.instituicao'
         ];
