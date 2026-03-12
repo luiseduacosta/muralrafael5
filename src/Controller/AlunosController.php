@@ -78,7 +78,7 @@ class AlunosController extends AppController
         }
 
         if ($user_data['aluno_id'] > 0) {
-            $this->Flash->warning(__('Aluno ja esta cadastrado.'));
+            $this->Flash->warning(__('Aluno já está cadastrado.'));
             return $this->redirect(['action' => 'view', $user_data['aluno_id']]);
         }
 
@@ -278,8 +278,7 @@ class AlunosController extends AppController
             return $this->redirect(['action' => 'view', $id]);
         }
 
-        $configuracoes = $this->fetchTable('Configuracoes')->find()->first();
-        $periodo_atual = $configuracoes->periodo_calendario_academico;
+        $periodo_atual = $this->configuracoes->periodo_calendario_academico;
 
         if ($novoperiodo) {
             $periodo_inicial = $novoperiodo;
@@ -406,7 +405,7 @@ class AlunosController extends AppController
             return $this->redirect('/');
         }
         
-        $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->fetchTable("Configuracoes")->find()->first()['mural_periodo_atual'];
+        $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->configuracoes->periodo_calendario_academico;
         $this->set('periodo', $periodo);
         
         /* lista de periodos */
@@ -462,7 +461,7 @@ class AlunosController extends AppController
             return $this->redirect('/');
         }
         
-        $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->fetchTable("Configuracoes")->find()->first()['mural_periodo_atual'];
+        $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->configuracoes->periodo_calendario_academico;
         $this->set('periodo', $periodo);
 
         $periodototal = $this->Alunos->Estagiarios->find('list', [
@@ -510,7 +509,7 @@ class AlunosController extends AppController
 
         $this->set('seguro', $this->paginate($seguro));
 
-        $instituicao = $this->fetchTable("Configuracoes")->find()->first()['instituicao'];
+        $instituicao = $this->configuracoes->instituicao;
         $this->set('instituicao', $instituicao);
     }
 }

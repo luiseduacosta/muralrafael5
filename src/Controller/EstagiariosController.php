@@ -40,9 +40,7 @@ class EstagiariosController extends AppController
     {
         $periodo = $this->getRequest()->getParam("pass")
             ? $this->request->getParam("pass")[0]
-            : $this->fetchTable("Configuracoes")->find()->first()[
-                "mural_periodo_atual"
-            ];
+            : $this->configuracoes->termo_compromisso_periodo;
         $this->set("periodo", $periodo);
 
         $contained = [
@@ -145,13 +143,7 @@ class EstagiariosController extends AppController
             return $this->redirect(["controller" => "Muralestagios", "action" => "index"]);
         }
 
-        $configuracoes = $this->fetchTable("Configuracoes");
-        $periodoatual = $configuracoes
-            ->find()
-            ->select(["mural_periodo_atual"])
-            ->first();
-
-        $periodo = $periodoatual->mural_periodo_atual;
+        $periodoatual = $this->configuracoes->termo_compromisso_periodo;
 
         $id = $this->request->getQuery('aluno_id');
         if (empty($id)) {
@@ -198,7 +190,7 @@ class EstagiariosController extends AppController
                 // Check period validity. Mesmo ou maior período significa edição, não um novo passo
                 $compare = $this->comparePeriodo(
                     (string)$ultimo_estagio->periodo,
-                    (string)$periodoatual->mural_periodo_atual,
+                    (string)$periodoatual,
                 );
 
                 if ($compare >= 0) {
@@ -223,14 +215,10 @@ class EstagiariosController extends AppController
 
             if ($this->request->is("post")) {
                 // Verifica se o estagiario já existe no periodo atual
-                $configuracoes = $this->fetchTable("Configuracoes")
-                    ->find()
-                    ->select(["mural_periodo_atual"])
-                    ->first();
-
+  
                 $estagiarioexiste = $this->Estagiarios->find()
                     ->where([
-                        "periodo" => $configuracoes->mural_periodo_atual,
+                        "periodo" => $periodoatual,
                         "aluno_id" => $this->request->getData("aluno_id"),
                     ])
                     ->first();
@@ -301,6 +289,12 @@ class EstagiariosController extends AppController
         }
 
         if ($this->request->is(["patch", "post", "put"])) {
+            // Check the format of the field nota and replace comma with dot
+            if (!empty($this->request->getData('nota'))) {
+                $nota = str_replace(',', '.', $this->request->getData('nota'));
+                $this->request = $this->request->withData('nota', $nota);
+            }
+
             $estagiario = $this->Estagiarios->patchEntity(
                 $estagiario,
                 $this->request->getData(),
@@ -438,11 +432,8 @@ class EstagiariosController extends AppController
         }
 
         if ($estagiario) {
-            $configuracoes = $this->fetchTable('Configuracoes')
-                ->find()
-                ->select('mural_periodo_atual')
-                ->first();
-            $periodoatual = $configuracoes->mural_periodo_atual;
+
+            $periodoatual = $this->configuracoes->termo_compromisso_periodo;
 
             $compare = $this->comparePeriodo((string)$periodoatual, (string)$estagiario->periodo);
 

@@ -29,13 +29,11 @@ class InscricoesController extends AppController
         }
         $periodo = $this->getRequest()->getQuery('periodo');
         if (empty($periodo)) {
-            $configuracao = $this->fetchTable('Configuracoes');
-            $configuracoes = $configuracao->find()->select(['mural_periodo_atual'])->first();
-            $periodo = $configuracoes->mural_periodo_atual;
+            $periodo = $this->configuracoes->mural_periodo_atual;
         }
         $periodos = $this->fetchTable('Estagiarios')->find()->select([
             'periodo'
-        ])->order(['periodo' => 'DESC'])->toArray();
+            ])->order(['periodo' => 'DESC'])->toArray();
         $periodos = array_merge($periodos, ['all' => 'Todos']);
 
         $query = $this->Inscricoes->find()
@@ -82,8 +80,7 @@ class InscricoesController extends AppController
 
         $dados = $this->request->getData();
 
-        $configuracoes = $this->fetchTable("Configuracoes")->find()->select(['mural_periodo_atual'])->first();
-        $periodo = $configuracoes->mural_periodo_atual;
+        $periodo = $this->configuracoes->mural_periodo_atual;
         $dados['periodo'] = $periodo;
         
         $muralestagio_id = $this->getRequest()->getQuery("muralestagio_id");
