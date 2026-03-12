@@ -32,7 +32,7 @@ class MuralestagiosController extends AppController
     public function index()
     {
         $this->Authorization->authorize($this->Muralestagios);
-        $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->fetchTable("Configuracoes")->find()->first()['mural_periodo_atual'];
+        $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->configuracoes->mural_periodo_atual;
         $this->set('periodo', $periodo);
 
         $contained = ['Instituicoes', 'Professores'];
@@ -98,7 +98,7 @@ class MuralestagiosController extends AppController
             return $this->redirect('/');
         }
 
-        $periodo = $this->fetchTable("Configuracoes")->find()->first()['mural_periodo_atual'];
+        $periodo = $this->configuracoes->mural_periodo_atual;
         
         $muralestagio = $this->Muralestagios->newEmptyEntity();
         if ($this->request->is('post')) {
