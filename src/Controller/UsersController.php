@@ -348,7 +348,8 @@ class UsersController extends AppController
     public function alternarusuario()
     {
         $this->Authorization->skipAuthorization();
-
+        // How to change the user administrador identity to another user like: aluno, professor or supervisor without needs to make loggin
+        // 
         // TODO: Implement user impersonation logic
         $this->Flash->warning(__('Funcionalidade não implementada.'));
         return $this->redirect(['action' => 'index']);
