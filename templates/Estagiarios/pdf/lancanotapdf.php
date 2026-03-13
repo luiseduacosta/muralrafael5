@@ -16,7 +16,7 @@ $mes = $hoje->i18nFormat('MMMM');
 $ano = $hoje->i18nFormat('Y');
 
 $this->layout = 'default';
-$this->assign('title', 'Declaração de Estágio');
+$this->assign('title', 'Nota e CH');
 ?>
 <style>
     table {
