@@ -190,8 +190,7 @@ use Cake\I18n\Date;
                 }
                 
                 $estagiario->curso = $instituicao;
-            
-                
+                            
                 if ($estagiario->nivel == 9):
                     $c_seguro['nivel'] = "Não obrigatório";
                 endif;
