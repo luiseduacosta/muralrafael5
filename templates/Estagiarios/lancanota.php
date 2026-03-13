@@ -80,7 +80,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <?php if ($user_data['categoria'] == '1'): ?>
                             <td><?= $estagiario->id ?></td>
                         <?php endif; ?>
-                        <td><?= $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario['aluno_id']]) ?>
+                        <td><?= $this->Html->link($estagiario->aluno->nome ?? 'S/d', ['controller' => 'Alunos', 'action' => 'view', $estagiario['aluno_id']]) ?>
                         </td>
                         <td><?= $estagiario['registro'] ?></td>
                         <td>
@@ -93,7 +93,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <td>
                             <?php 
                             if (isset($estagiario['supervisor_id'])) {
-                                echo $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario['supervisor_id']]); 
+                                echo $this->Html->link($estagiario->supervisor->nome ?? 'S/d', ['controller' => 'Supervisores', 'action' => 'view', $estagiario['supervisor_id']]); 
                             } else { 
                                 echo "Sem supervisor";
                             }

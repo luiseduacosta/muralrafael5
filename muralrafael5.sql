@@ -147,7 +147,8 @@ CREATE TABLE IF NOT EXISTS `complementos` (
 --
 
 CREATE TABLE IF NOT EXISTS `configuracoes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT, 
+  `instituicao` varchar(10) NOT NULL DEFAULT 'ESS/UFRJ',
   `mural_periodo_atual` char(6) NOT NULL,
   `curso_turma_atual` smallint(2) DEFAULT NULL,
   `curso_abertura_inscricoes` date DEFAULT NULL,
@@ -288,7 +289,7 @@ CREATE TABLE IF NOT EXISTS `mural_estagio` (
   `final_de_semana` char(1) NOT NULL COMMENT '0=Nao, 1=Sim, 2=Parcial',
   `cargaHoraria` tinyint(2) DEFAULT NULL,
   `requisitos` varchar(455) DEFAULT NULL,
-  `turmaestagio_id` tinyint(2) DEFAULT NULL COMMENT 'ID da tabela turmasestagio. Obsoleto',
+  `turmaestagio_id` tinyint(2) DEFAULT NULL COMMENT 'ID da tabela turmasestagio = turma_id. Obsoleto',
   `horario` char(1) DEFAULT NULL COMMENT 'D=Diurno, N=Noturno, A=Ambos',
   `professor_id` tinyint(3) DEFAULT NULL,
   `dataSelecao` date DEFAULT NULL,

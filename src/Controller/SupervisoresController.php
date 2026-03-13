@@ -45,7 +45,7 @@ class SupervisoresController extends AppController
     {
         $contained = [
             'Instituicoes' => ['Areas'],
-            'Estagiarios' => ['Alunos', 'Instituicoes', 'Supervisores', 'Professores', 'Turmas'],
+            'Estagiarios' => ['Alunos', 'Instituicoes', 'Supervisores', 'Professores'],
             'Users',
         ];
         $this->paginate = [

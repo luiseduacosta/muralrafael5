@@ -46,7 +46,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <?php endif; ?>
                 </div>
             </aside>
-            <h3>Estagiario(a): <?= h($estagiario->aluno->nome) ?></h3>
+            <h3>Estagiario(a): <?= h($estagiario->aluno->nome ?? 'S/d') ?></h3>
             <dl>
                 <div class="row">
                     <dt class="col-2"><?= __('Id') ?></dt>
@@ -59,7 +59,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </div>
                 <div class="row">
                     <dt class="col-2"><?= __('Registro') ?></dt>
-                    <dd><?= h($estagiario->registro) ?></dd>
+                    <dd><?= $estagiario->registro ? $this->Html->link((string)$estagiario->registro, ['controller' => 'Alunos', 'action' => 'view', '?' => ['registro' => $estagiario->registro]]) : '' ?></dd>
                 </div>                
                 <div class="row">
                     <dt class="col-2"><?= __('Instituicao') ?></dt>
@@ -72,10 +72,6 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 <div class="row">
                     <dt class="col-2"><?= __('Nivel') ?></dt>
                     <dd><?= h($estagiario->nivel) ?></dd>
-                </div>
-                <div class="row">
-                    <dt class="col-2"><?= __('Turno') ?></dt>
-                    <dd><?= $estagiario->turno_entidade ? h($estagiario->turno_entidade->turno) : '' ?></dd>
                 </div>
                 <div class="row">
                     <dt class="col-2"><?= __('Ajuste curricular') ?></dt>
@@ -96,10 +92,6 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 <div class="row">
                     <dt class="col-2"><?= __('Professor(a)') ?></dt>
                     <dd><?= $estagiario->professor ? $this->Html->link($estagiario->professor->nome, ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id]) : '' ?></dd>
-                </div>
-                <div class="row">
-                    <dt class="col-2"><?= __('Turma') ?></dt>
-                    <dd><?= $estagiario->turma ? $this->Html->link($estagiario->turma->turma, ['controller' => 'Turmas', 'action' => 'view', $estagiario->turma->id]) : '' ?></dd>
                 </div>
                 <div class="row">
                     <dt class="col-2"><?= __('Complemento (Periodo Especial)') ?></dt>

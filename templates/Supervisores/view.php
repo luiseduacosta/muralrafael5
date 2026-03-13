@@ -42,7 +42,7 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('CRESS') ?></th>
-                    <td><?= $this->Number->format($supervisor->cress) ?></td>
+                    <td><?= (string)$supervisor->cress ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Região') ?></th>
@@ -54,7 +54,11 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Telefone') ?></th>
-                    <td><?= h($supervisor->telefone) ?></td>
+                    <?php if ($supervisor->telefone && (strlen($supervisor->telefone < 10))): ?>
+                        <td><?= '(' . $supervisor->codigo_tel . ') '. $supervisor->telefone ?></td>
+                    <?php else: ?>
+                        <td><?= $supervisor->telefone ?>
+                    <?php endif ?>    
                 </tr>
                 <tr>
                     <th><?= __('Codigo Cel') ?></th>
@@ -62,7 +66,11 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Celular') ?></th>
-                    <td><?= h($supervisor->celular) ?></td>
+                    <?php if ($supervisor->telefone && (strlen($supervisor->celular < 10))): ?>
+                            <td><?= '(' . $supervisor->codigo_tel . ') '. $supervisor->telefone ?></td>
+                    <?php else: ?>        
+                        <td><?= h($supervisor->celular) ?></td>
+                    <?php endif ?>    
                 </tr>
                 <tr>
                     <th><?= __('Email') ?></th>
@@ -105,7 +113,7 @@ if ($user_session) {
                     <td><?= h($supervisor->endereco) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('EndereÇo') ?></th>
+                    <th><?= __('Endereço') ?></th>
                     <td><?= h($supervisor->endereco) ?></td>
                 </tr>
                 <tr>

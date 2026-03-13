@@ -15,7 +15,7 @@ if ($user_session) {
 	<?php if ($user_data['categoria'] == '1' OR $user_data['categoria'] == '2'): ?>
 	<aside>
 		<div class="nav">
-            <?php if ($user_data['administrador_id']): ?>
+            <?php if ($user_data['categoria'] == '1'): ?>
 				<?= $this->Html->link(__('Novo Aluno'), ['action' => 'add'], ['class' => 'button']) ?>
 				<?= $this->Html->link(__('Buscar Aluno'), ['action' => 'busca'], ['class' => 'button']) ?>
             <?php endif; ?>

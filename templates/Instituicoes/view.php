@@ -36,7 +36,7 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Área') ?></th>
-                    <td><?= $instituicao->area_id ? $this->Html->link(''.$instituicao->area_rel->area, ['controller' => 'Areas', 'action' => 'view', $instituicao->area_rel->id]) : '' ?></td>
+                    <td><?php $instituicao->area_rel ? $this->Html->link($instituicao->area_rel->area, ['controller' => 'Areas', 'action' => 'view', $instituicao->area_rel->id]) : '' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Natureza') ?></th>
@@ -86,7 +86,7 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Seguro') ?></th>
-                    <td><?= h($instituicao->seguro) ?></td>
+                    <td><?= h($instituicao->seguro) == '0' ? 'Não' : 'Sim' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Avaliação') ?></th>
@@ -98,7 +98,7 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Convênio') ?></th>
-                    <td><?= h($instituicao->convenio) ?></td>
+                    <td><?= h($instituicao->convenio) == '0' ? 'Não' : 'Sim' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Expira') ?></th>
@@ -157,9 +157,8 @@ if ($user_session) {
                             <th><?= __('Supervisor') ?></th>
                             <th><?= __('Professor') ?></th>
                             <th><?= __('Periodo') ?></th>
-                            <th><?= __('Turma estagio') ?></th>
                             <th><?= __('Nota') ?></th>
-                            <th><?= __('Ch') ?></th>
+                            <th><?= __('CH') ?></th>
                         </tr>
                         <?php foreach ($instituicao->estagiarios as $estagiario) : ?>
                         <tr>
@@ -177,10 +176,10 @@ if ($user_session) {
         						<?php
                                 $turno = '';
         						switch ( $estagiario->turno ) {
-        							case 'D': $turno = 'Diurno';   break;
-        							case 'N': $turno = 'Noturno';  break;
-        							case 'A': $turno = 'Ambos';    break;
-        		                    case 'I': $turno = 'Integral'; break;
+        							case 'D': $turno = 'Diurno';     break;
+        							case 'N': $turno = 'Noturno';    break;
+        							case 'A': $turno = 'Ambos';      break;
+        		                    case 'I': $turno = 'Indefinido'; break;
         						}
         						echo h($turno);
         						?>
@@ -189,7 +188,6 @@ if ($user_session) {
                             <td><?= $estagiario->supervisor ? $this->Html->link(h($estagiario->supervisor->nome), ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
                             <td><?= $estagiario->professor ? $this->Html->link(h($estagiario->professor->nome), ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id]) : '' ?></td>
                             <td><?= h($estagiario->periodo) ?></td>
-                            <td><?= $estagiario->turma ? $this->Html->link($estagiario->turma->turma, ['controller' => 'Turmas', 'action' => 'view', $estagiario->turma->id]) : '' ?></td>
                             <td><?= h($estagiario->nota) ?></td>
                             <td><?= h($estagiario->ch) ?></td>
                         </tr>

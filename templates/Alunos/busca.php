@@ -6,6 +6,12 @@
 
 declare(strict_types=1);
 
+$user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
+$user_session = $this->request->getAttribute('identity');
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
+}
+
 $nome = $this->getRequest()->getQuery('nome');
 $dre = $this->getRequest()->getQuery('dre');
 $cpf = $this->getRequest()->getQuery('cpf');
@@ -22,6 +28,7 @@ $email = $this->getRequest()->getQuery('email');
 
 <div class="alunos busca content">
     <div class="tabset">
+
         <input type="radio" name="tabs" id="tab_nome" <?= ($nome or (!$dre and !$cpf and !$email)) ? 'checked' : '' ?> >
         <label for="tab_nome">Busca por nome</label>
         <div class="tab-content">
@@ -30,6 +37,7 @@ $email = $this->getRequest()->getQuery('email');
             <?php echo $this->Form->submit('Buscar', ['type' => 'Submit', 'class' => 'button']); ?>
             <?php echo $this->Form->end(); ?>
         </div>
+
         <input type="radio" name="tabs" id="tab_dre" <?= ($dre) ? 'checked' : '' ?> >
         <label for="tab_dre">Busca por DRE</label>
         <div class="tab-content">
@@ -38,6 +46,7 @@ $email = $this->getRequest()->getQuery('email');
             <?php echo $this->Form->submit('Buscar', ['type' => 'Submit', 'class' => 'button']); ?>
             <?php echo $this->Form->end(); ?>
         </div>
+        
         <input type="radio" name="tabs" id="tab_cpf" <?= ($cpf) ? 'checked' : '' ?> >
         <label for="tab_cpf">Busca por CPF</label>
         <div class="tab-content">
@@ -46,6 +55,7 @@ $email = $this->getRequest()->getQuery('email');
             <?php echo $this->Form->submit('Buscar', ['type' => 'Submit', 'class' => 'button']); ?>
             <?php echo $this->Form->end(); ?>
         </div>
+        
         <input type="radio" name="tabs" id="tab_email" <?= ($email) ? 'checked' : '' ?> >
         <label for="tab_email">Busca por email</label>
         <div class="tab-content">

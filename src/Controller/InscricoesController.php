@@ -21,26 +21,60 @@ class InscricoesController extends AppController
      */
     public function index()
     {
-        try {
-            $this->Authorization->authorize($this->Inscricoes);
-        } catch (ForbiddenException $error) {
-            $this->Flash->error('Authorization error: ' . $error->getMessage());
-            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
-        }
-        $periodo = $this->getRequest()->getQuery('periodo');
+        $this->Authorization->skipAuthorization();
+
+        // Optimized periods query using distinct and list to save memory
+        $periodos = $this->Inscricoes->find('list', [
+            'keyField' => 'periodo',
+            'valueField' => 'periodo'
+        ])->distinct(['periodo'])->order(['periodo' => 'ASC'])->toArray();
+        $periodos = ['all' => 'Todos'] + $periodos;
+
+        $periodo = $this->request->getData('periodo');
+
         if (empty($periodo)) {
-            $periodo = $this->configuracoes->mural_periodo_atual;
+            $periodo = end($periodos);
         }
-        $periodos = $this->fetchTable('Estagiarios')->find()->select([
-            'periodo'
-            ])->order(['periodo' => 'DESC'])->toArray();
-        $periodos = array_merge($periodos, ['all' => 'Todos']);
 
         $query = $this->Inscricoes->find()
-                ->contain(['Alunos', 'Muralestagios' => ['Instituicoes']])
-                ->where(['Inscricoes.periodo' => $periodo]);
+            ->select([
+                'Inscricoes.id',
+                'Inscricoes.aluno_id',
+                'Inscricoes.registro',
+                'Inscricoes.muralestagio_id',
+                'Inscricoes.data',
+                'Inscricoes.periodo',
+                'Inscricoes.timestamp'
+            ])
+            ->contain([
+                'Alunos' => [
+                    'fields' => ['id', 'nome']
+                ],
+                'Muralestagios' => [
+                    'fields' => ['id', 'instituicao_id'],
+                    'Instituicoes' => [
+                        'fields' => ['id', 'instituicao']
+                    ]
+                ]
+            ]);
 
-        $inscricoes = $this->paginate($query);
+        if ($periodo !== 'all') {
+            $query->where(['Inscricoes.periodo' => $periodo]);
+        }
+
+        $inscricoes = $this->paginate($query, [
+            'sortableFields' => [
+                'id',
+                'aluno_id',
+                'registro',
+                'muralestagio_id',
+                'data',
+                'periodo',
+                'timestamp',
+                'Alunos.nome',
+                'Instituicoes.instituicao'
+            ]
+        ]);
 
         $this->set(compact('inscricoes', 'periodos', 'periodo'));
     }
@@ -80,7 +114,7 @@ class InscricoesController extends AppController
 
         $dados = $this->request->getData();
 
-        $periodo = $this->configuracoes->mural_periodo_atual;
+        $periodo = $this->configuracao->mural_periodo_atual;
         $dados['periodo'] = $periodo;
         
         $muralestagio_id = $this->getRequest()->getQuery("muralestagio_id");

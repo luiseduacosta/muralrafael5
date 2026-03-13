@@ -91,14 +91,6 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
                     <td><?= $muralestagio->requisitos ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Turma') ?></th>
-                    <td><?= $muralestagio->turma ? $this->Html->link($muralestagio->turma->turma, ['controller' => 'Turmas', 'action' => 'view', $muralestagio->turma->id]) : $muralestagio->turma_id ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Turno') ?></th>
-                    <td><?= $muralestagio->turno ? h($muralestagio->turno->turno ) : '' ?></td>
-                </tr>
-                <tr>
                     <th><?= __('Professor') ?></th>
                     <td><?= $muralestagio->professor ? $this->Html->link($muralestagio->professor->nome, ['controller' => 'Professores', 'action' => 'view', $muralestagio->professor->id]) : '' ?></td>
                 </tr>

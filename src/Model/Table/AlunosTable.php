@@ -130,7 +130,7 @@ class AlunosTable extends Table
 
         $validator
             ->scalar('orgao')
-            ->maxLength('orgao', 10)
+            ->maxLength('orgao', 30)
             ->allowEmptyString('orgao');
 
         $validator

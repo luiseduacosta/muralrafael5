@@ -8,6 +8,7 @@ $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
+
 <div class="inscricoes index content">
 	<aside>
         <?php if ($user_data['categoria'] == '1'): ?>
@@ -17,6 +18,22 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <?php endif; ?>
 	</aside>
     
+    <div class="row justify-content-center">
+	    <div class="col-auto">
+	        <?php echo $this->Form->create($inscricoes, ['class' => 'form-inline']); ?>
+				<?= $this->Form->label('periodo', 'Período'); ?>
+				<?= $this->Form->input('periodo', [
+					'label' => false,
+                    'type' => 'select',
+					'options' => $periodos,
+					'value' => $periodo,
+					'class' => 'form-control',
+					'onchange' => 'this.form.submit()'
+				]); ?>
+			<?php echo $this->Form->end(); ?>
+	    </div>
+    </div>
+
     <h3><?= __('Lista de inscrições') ?></h3>
 	
     <div class="paginator">
@@ -48,8 +65,8 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     </td>
                     <td><?= $this->Html->link((string)$inscricao->id, ['action' => 'view', $inscricao->id]) ?></td>
                     <td><?= $inscricao->aluno ? $this->Html->link($inscricao->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $inscricao->aluno->id]) : '' ?></td>
-                    <td><?= $this->Number->format($inscricao->registro) ?></td>
-                    <td><?= $this->Html->link($inscricao->muralestagio->instituicao_entidade->instituicao, ['controller' => 'Muralestagios', 'action' => 'view', $inscricao->muralestagio->id]) ?></td>
+                    <td><?= (string)$inscricao->registro ?></td>
+                    <td><?= $inscricao->muralestagio ? $this->Html->link($inscricao->muralestagio->instituicao_entidade->instituicao, ['controller' => 'Muralestagios', 'action' => 'view', $inscricao->muralestagio->id]) : '' ?></td>
                     <td><?= h($inscricao->data) ?></td>
                     <td><?= h($inscricao->periodo) ?></td>
                     <td><?= $inscricao->timestamp ? h($inscricao->timestamp) : '' ?></td>

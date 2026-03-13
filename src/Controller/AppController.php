@@ -55,7 +55,19 @@ class AppController extends Controller
          */
         //$this->loadComponent('FormProtection');
         // Configuração do site
-        $configuracao = $this->fetchTable('Configuracoes')->find()->first();
-        $this->set('configuracao', $configuracao);
+        $this->configuracao = $this->fetchTable('Configuracoes')->find()->first();
+        $this->set('configuracao', $this->configuracao);
+    }
+
+    /**
+     * Redirect back to the previous page with fallback
+     *
+     * @param array|string $fallback Fallback URL if no referer is available
+     * @return \Cake\Http\Response
+     */
+    protected function redirectBack($fallback = ['action' => 'index'])
+    {
+        $referer = $this->request->referer();
+        return $this->redirect($referer ?: $fallback);
     }
 }

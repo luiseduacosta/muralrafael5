@@ -36,11 +36,11 @@ Lista de inscrições</h1>
     </tr>
     <?php foreach ($muralestagio->inscricoes as $insc): ?>
     <tr>
-        <td><?= $insc->aluno->nome ?></td>
-        <td><?= $insc->aluno->registro ?></td>
-        <td><?= $insc->aluno->email ?></td>
-        <td><?= $insc->aluno->celular ?></td>
-        <td><?= $insc->timestamp->format('d/m/Y H:i:s') ?></td>
+        <td><?= $insc->aluno->nome ?? 'S/d' ?></td>
+        <td><?= $insc->aluno->registro  ?? 'S/d' ?></td>
+        <td><?= $insc->aluno->email ?? 'S/d' ?></td>
+        <td><?= $insc->aluno->celular ?? 'S/d' ?></td>
+        <td><?= $insc->timestamp->format('d/m/Y H:i:s') ?? 'S/d' ?></td>
     </tr>
     <?php endforeach; ?>
 </table>

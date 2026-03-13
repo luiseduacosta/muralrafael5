@@ -17,7 +17,6 @@ use Cake\ORM\Entity;
  * @property string|null $final_de_semana
  * @property int|null $cargaHoraria
  * @property string|null $requisitos
- * @property int|null $turmaestagio_id
  * @property string|null $horario
  * @property int|null $professor_id
  * @property \Cake\I18n\FrozenDate|null $dataSelecao
@@ -33,7 +32,6 @@ use Cake\ORM\Entity;
  * @property string|null $email
  *
  * @property \App\Model\Entity\Instituicao $instituicao_rel
- * @property \App\Model\Entity\Turma $turma
  * @property \App\Model\Entity\Professor $professor
  */
 
@@ -58,7 +56,6 @@ class Muralestagio extends Entity
         'final_de_semana' => true,
         'cargaHoraria' => true,
         'requisitos' => true,
-        'turmaestagio_id' => true,
         'horario' => true,
         'professor_id' => true,
         'dataSelecao' => true,
@@ -73,7 +70,6 @@ class Muralestagio extends Entity
         'localInscricao' => true,
         'email' => true,
         'instituicao_rel' => true,
-        'turma' => true,
         'professor' => true,
     ];
 }

@@ -28,7 +28,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 	
 	<div class="row justify-content-center">
 	    <div class="col-auto">
-	        <?php if ($user_data['administrador_id']): ?>
+	        <?php if ($user_data['categoria'] == '1'): ?>
 	            <?= $this->Form->create($muralestagios, ['class' => 'form-inline']); ?>
 					<?= $this->Form->label('periodo', 'Período'); ?>
 					<?= $this->Form->input('periodo', [
