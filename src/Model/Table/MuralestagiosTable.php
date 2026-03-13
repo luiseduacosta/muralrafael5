@@ -44,7 +44,7 @@ class MuralestagiosTable extends Table
 
         $this->setTable('mural_estagio');
         $this->setAlias('Muralestagios');
-        $this->setDisplayField('instituicao_id');
+        $this->setDisplayField('instituicao');
         $this->setPrimaryKey('id');
         $this->setEntityClass('Muralestagio');
 

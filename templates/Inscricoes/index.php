@@ -66,7 +66,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <td><?= $this->Html->link((string)$inscricao->id, ['action' => 'view', $inscricao->id]) ?></td>
                     <td><?= $inscricao->aluno ? $this->Html->link($inscricao->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $inscricao->aluno->id]) : '' ?></td>
                     <td><?= (string)$inscricao->registro ?></td>
-                    <td><?= $inscricao->muralestagio ? $this->Html->link($inscricao->muralestagio->instituicao_entidade->instituicao, ['controller' => 'Muralestagios', 'action' => 'view', $inscricao->muralestagio->id]) : '' ?></td>
+                    <td><?= $inscricao->muralestagio->instituicao_entidade ? $this->Html->link($inscricao->muralestagio->instituicao_entidade->instituicao, ['controller' => 'Muralestagios', 'action' => 'view', $inscricao->muralestagio->id]) : '' ?></td>
                     <td><?= h($inscricao->data) ?></td>
                     <td><?= h($inscricao->periodo) ?></td>
                     <td><?= $inscricao->timestamp ? h($inscricao->timestamp) : '' ?></td>
