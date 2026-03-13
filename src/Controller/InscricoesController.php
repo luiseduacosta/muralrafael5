@@ -121,7 +121,7 @@ class InscricoesController extends AppController
 
         if (!$muralestagio_id) {
             $this->Flash->info(__('Selecione no mural de estagios'));
-            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
+            return $this->redirectBack(['controller' => 'Muralestagios', 'action' => 'index']);
         } else {
             $muralestagio = $this->fetchTable('Muralestagios')->get($muralestagio_id);
             // $dados['muralestagio'] = $muralestagio;
@@ -130,7 +130,7 @@ class InscricoesController extends AppController
             /** Verifico o periodo do mural e comparo com o periodo da inscricao */
             if ($muralestagio->periodo != $periodo) {
                 $this->Flash->error(__('O periodo de inscricao nao coincide com o periodo do Mural.'));
-                return $this->redirect(['controller' => 'Muralestagios', 'action' => 'view', $muralestagio_id]);
+                return $this->redirectBack(['controller' => 'Muralestagios', 'action' => 'view', $muralestagio_id]);
             }
             $instituicao = $this->fetchTable('Instituicoes')->get($muralestagio->instituicao_id);
         }
@@ -142,7 +142,7 @@ class InscricoesController extends AppController
             $dados['aluno_id'] = $aluno->id;
         } else {
             $this->Flash->error(__('Selecione um aluno(a) para fazer a inscrição.'));
-            return $this->redirect(['controller' => 'Alunos', 'action' => 'index']);
+            return $this->redirectBack(['controller' => 'Alunos', 'action' => 'index']);
         }
         /** Verifico se já fez inscrição para não duplicar */
         $inscricao_duplicada = $this->Inscricoes->find()->where(['Inscricoes.aluno_id' => $aluno->id, 'Inscricoes.muralestagio_id' => $muralestagio->id])->first();
