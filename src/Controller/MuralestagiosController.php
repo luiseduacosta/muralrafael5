@@ -32,7 +32,7 @@ class MuralestagiosController extends AppController
     public function index()
     {
         $this->Authorization->authorize($this->Muralestagios);
-        $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->configuracoes->mural_periodo_atual;
+        $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->configuracao->mural_periodo_atual;
         $this->set('periodo', $periodo);
 
         $contained = ['Instituicoes', 'Professores'];
@@ -74,7 +74,7 @@ class MuralestagiosController extends AppController
         }
 
         $muralestagio = $this->Muralestagios->get($id, [
-            'contain' => ['Instituicoes', 'Turmas', 'Professores', 'Inscricoes' => ['Alunos']],
+            'contain' => ['Instituicoes', 'Professores', 'Inscricoes' => ['Alunos']],
         ]);
 
         if (empty($user_session)) {
@@ -98,7 +98,7 @@ class MuralestagiosController extends AppController
             return $this->redirect('/');
         }
 
-        $periodo = $this->configuracoes->mural_periodo_atual;
+        $periodo = $this->configuracao->mural_periodo_atual;
         
         $muralestagio = $this->Muralestagios->newEmptyEntity();
         if ($this->request->is('post')) {
@@ -176,10 +176,10 @@ class MuralestagiosController extends AppController
             $this->Flash->error(__('The muralestagio could not be saved. Please, try again.'));
         }
         $instituicoes = $this->fetchTable('Instituicoes')->find('list');
-        $turmas = $this->fetchTable('Turmas')->find('list');
-        $turnos = $this->fetchTable('Turnos')->find('list');
+        // $turmas = $this->fetchTable('Turmas')->find('list');
+        // $turnos = $this->fetchTable('Turnos')->find('list');
         $professores = $this->fetchTable('Professores')->find('list', ['limit' => 500]);
-        $this->set(compact('muralestagio', 'instituicoes', 'turmas', 'turnos', 'professores'));
+        $this->set(compact('muralestagio', 'instituicoes', 'professores'));
     }
 
     /**
@@ -225,7 +225,10 @@ class MuralestagiosController extends AppController
     public function imprimepdf($id = null)
     {
         $muralestagio = $this->Muralestagios->find()
-            ->contain(['Inscricoes' => ['Alunos']])
+            ->contain(['Inscricoes' => [
+                'sort' => ['Alunos.nome' => 'ASC'],
+                'Alunos',
+            ]])
             ->where(['Muralestagios.id' => $id])
             ->first();
 

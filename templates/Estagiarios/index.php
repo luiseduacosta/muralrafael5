@@ -28,7 +28,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 	
 	<div class="row justify-content-center">
 	    <div class="col-auto">
-	        <?php if ($user_data['administrador_id']): ?>
+	        <?php if ($user_data['categoria'] == '1'): ?>
 	            <?= $this->Form->create($estagiarios, ['class' => 'form-inline']); ?>
 					<?= $this->Form->label('estagiarioperiodo', 'Período'); ?>
 					<?= $this->Form->input('periodo', [
@@ -48,7 +48,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 	
 	<aside>
 		<div class="nav">
-	        <?php if ($user_data['administrador_id']): ?>
+	        <?php if ($user_data['categoria'] == '1'): ?>
 			    <?= $this->Html->link(__('Novo Estagiario'), ['action' => 'add'], ['class' => 'button']) ?>
 	        <?php endif; ?>
 		</div>
@@ -63,18 +63,16 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <table>
             <thead>
                 <tr>
-			        <?php if ($user_data['administrador_id']): ?>
+			        <?php if ($user_data['categoria'] == '1'): ?>
 	                    <th class="actions"><?= __('Actions') ?></th>
 					<?php endif; ?>
 	                <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('Alunos.nome', 'Aluno') ?></th>
                     <th><?= $this->Paginator->sort('Instituicoes.instituicao', 'Instituicao') ?></th>
                     <th><?= $this->Paginator->sort('periodo') ?></th>
-                    <th><?= $this->Paginator->sort('turno') ?></th>
                     <th><?= $this->Paginator->sort('nivel') ?></th>
                     <th><?= $this->Paginator->sort('Supervisores.nome', 'Supervisor') ?></th>
                     <th><?= $this->Paginator->sort('Professores.nome', 'Professor') ?></th>
-                    <th><?= $this->Paginator->sort('Turmas.turma', 'Turma') ?></th>
                     <th><?= $this->Paginator->sort('nota') ?></th>
                     <th><?= $this->Paginator->sort('ch') ?></th>
                 </tr>
@@ -82,7 +80,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <tbody>
                 <?php foreach ($estagiarios as $estagiario): ?>
                 <tr>
-					<?php if ($user_data['administrador_id']): ?>
+					<?php if ($user_data['categoria'] == '1'): ?>
 	                    <td class="actions">
 	                        <?= $this->Html->link(__('Ver'), ['action' => 'view', $estagiario->id]) ?>
 	                        <?= $this->Html->link(__('Editar'), ['action' => 'edit', $estagiario->id]) ?>
@@ -93,11 +91,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 					<td><?= $estagiario->aluno ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
                     <td><?= $estagiario->instituicao ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario->instituicao->id]) : '' ?></td>
 					<td><?= h($estagiario->periodo) ?></td>
-                    <td><?= $estagiario->turno_entidade ? h($estagiario->turno_entidade->turno) : '' ?></td>
                     <td><?= h($estagiario->nivel) ?></td>
                     <td><?= ($estagiario->supervisor and $estagiario->supervisor->nome) ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
                     <td><?= $estagiario->professor ? $this->Html->link($estagiario->professor->nome, ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id]) : '' ?></td>
-                    <td><?= $estagiario->turma ? $this->Html->link($estagiario->turma->turma, ['controller' => 'Turmas', 'action' => 'view', $estagiario->turma->id]) : '' ?></td>
                     <td><?= $estagiario->nota ? $this->Number->format($estagiario->nota) : '' ?></td>
                     <td><?= $estagiario->ch ? $this->Number->format($estagiario->ch) : '' ?></td>
                 </tr>

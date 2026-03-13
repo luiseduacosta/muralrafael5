@@ -28,7 +28,7 @@ class InstituicoesController extends AppController
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
-        $instituicoes = $this->paginate($this->Instituicoes->find()->contain(['Areas']));
+        $instituicoes = $this->paginate($this->Instituicoes->find()->order(['instituicao' => 'ASC'])->contain(['Areas']));
 
         $this->set(compact('instituicoes'));
     }
@@ -45,7 +45,7 @@ class InstituicoesController extends AppController
         $instituicao = $this->Instituicoes->find()->contain([
             'Areas',
             'Supervisores' => ['Users'],
-            'Estagiarios' => ['Alunos', 'Professores', 'Supervisores', 'Instituicoes', 'Turmas'],
+            'Estagiarios' => ['Alunos', 'Professores', 'Supervisores', 'Instituicoes'],
             'Muralestagios' => ['Instituicoes', 'Professores'],
             'Visitas'
         ])->where(['Instituicoes.id' => $id])->first();
@@ -84,8 +84,8 @@ class InstituicoesController extends AppController
             }
             $this->Flash->error(__('The instituicao could not be saved. Please, try again.'));
         }
-        $areas = $this->fetchTable('Areas')->find('list')->select(['id', 'area'])->all()->toArray();
-        $supervisores = $this->fetchTable('Supervisores')->find('list')->select(['id', 'nome'])->all()->toArray();
+        $areas = $this->fetchTable('Areas')->find('list')->order(['area' => 'ASC'])->select(['id', 'area'])->all()->toArray();
+        $supervisores = $this->fetchTable('Supervisores')->find('list')->order(['nome' => 'ASC'])->select(['id', 'nome'])->all()->toArray();
         $this->set(compact('instituicao', 'areas', 'supervisores'));
     }
 
@@ -114,8 +114,8 @@ class InstituicoesController extends AppController
             }
             $this->Flash->error(__('The instituicao could not be saved. Please, try again.'));
         }
-        $areas = $this->fetchTable('Areas')->find('list')->select(['id', 'area'])->all()->toArray();
-        $supervisores = $this->fetchTable('Supervisores')->find('list')->select(['id', 'nome'])->all()->toArray();
+        $areas = $this->fetchTable('Areas')->find('list')->order(['area' => 'ASC'])->select(['id', 'area'])->all()->toArray();
+        $supervisores = $this->fetchTable('Supervisores')->find('list')->order(['nome' => 'ASC'])->select(['id', 'nome'])->all()->toArray();
         $this->set(compact('instituicao', 'areas', 'supervisores'));
     }
 

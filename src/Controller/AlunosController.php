@@ -28,7 +28,11 @@ class AlunosController extends AppController
             $query = $this->Authorization->applyScope($this->Alunos->find('all')->contain(['Users']));
         }
         
-        $alunos = $this->paginate($query);
+        $alunos = $this->paginate($query, [
+            'sortableFields' => [
+                'id', 'nome', 'registro', 'email', 'telefone', 'celular', 'cpf', 'nascimento', 'ingresso', 'turno'
+            ]
+        ]);
         $this->set(compact('alunos'));
     }
 
@@ -48,19 +52,40 @@ class AlunosController extends AppController
         }
 
         $contained = [
-            'Estagiarios' => ['Instituicoes', 'Supervisores', 'Professores', 'Turmas'], 
+            'Estagiarios' => ['Instituicoes', 'Supervisores', 'Professores'], 
             'Inscricoes' => ['Muralestagios' => ['Instituicoes']], 
             'Users'
         ];
-        $aluno = $this->Alunos->get($id, [ 'contain' => $contained ]);
- 
+
+        if (empty($id)) {
+            // Give a chance with the registro
+            $registro = $this->request->getQuery('registro');
+            if ($registro) {
+                $aluno = $this->Alunos->find()->where(['Alunos.registro' => $registro])->first();
+                if ($aluno) {
+                    $id = $aluno->id;
+                }
+            }
+            if (empty($id)) {
+                $this->Flash->error(__('Sem parâmetros para localizar o(a) aluno(a)'));
+                return $this->redirectBack(['controller' => 'Alunos', 'action' => 'index']);
+            }
+        }
+
+        try {
+            $aluno = $this->Alunos->get($id, ['contain' => $contained]);
+        } catch (\Cake\Datasource\Exception\RecordNotFoundException $e) {
+            $this->Flash->error(__('Aluno não encontrado.'));
+            return $this->redirectBack(['action' => 'index']);
+        }
+
         try {
             $this->Authorization->authorize($aluno);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Erro de autorização: ' . $error->getMessage());
-            return $this->redirect('/');
+            return $this->redirectBack('/');
         }
-        
+
         $this->set(compact('aluno'));
     }
 
@@ -140,7 +165,7 @@ class AlunosController extends AppController
             $this->Authorization->authorize($aluno);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Erro de autorização: ' . $error->getMessage());
-            return $this->redirect('/');
+            return $this->redirectBack('/');
         }
         
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -203,7 +228,9 @@ class AlunosController extends AppController
         if ($nome) {
             $condition = ['Alunos.nome LIKE' => '%' . $nome . '%'];
             $busca = $this->Alunos->find('all',  ['conditions' => $condition ])->contain(['Users']);
-            $alunos = $this->paginate($busca);
+            $alunos = $this->paginate($busca, [
+                'sortableFields' => ['registro', 'nome', 'cpf', 'email']
+            ]);
             $this->set(compact('alunos'));
             return;
         }
@@ -212,7 +239,9 @@ class AlunosController extends AppController
         if ($dre) {
             $condition = ['Alunos.registro' => $dre];
             $busca = $this->Alunos->find('all',  ['conditions' => $condition ])->contain(['Users']);
-            $alunos = $this->paginate($busca);
+            $alunos = $this->paginate($busca, [
+                'sortableFields' => ['registro', 'nome', 'cpf', 'email']
+            ]);
             $this->set(compact('alunos'));
             return;
         }
@@ -221,7 +250,9 @@ class AlunosController extends AppController
         if ($cpf) {
             $condition = ['Alunos.cpf' => $cpf];
             $busca = $this->Alunos->find('all',  ['conditions' => $condition ])->contain(['Users']);
-            $alunos = $this->paginate($busca);
+            $alunos = $this->paginate($busca, [
+                'sortableFields' => ['registro', 'nome', 'cpf', 'email']
+            ]);
             $this->set(compact('alunos'));
             return;
         }
@@ -230,7 +261,9 @@ class AlunosController extends AppController
         if ($email) {
             $condition = ['Users.email' => $email];
             $busca = $this->Alunos->find('all',  ['conditions' => $condition ])->contain(['Users']);
-            $alunos = $this->paginate($busca);
+            $alunos = $this->paginate($busca, [
+                'sortableFields' => ['registro', 'nome', 'cpf', 'email']
+            ]);
             $this->set(compact('alunos'));
             return;
         }
@@ -278,7 +311,7 @@ class AlunosController extends AppController
             return $this->redirect(['action' => 'view', $id]);
         }
 
-        $periodo_atual = $this->configuracoes->periodo_calendario_academico;
+        $periodo_atual = $this->configuracao->periodo_calendario_academico;
 
         if ($novoperiodo) {
             $periodo_inicial = $novoperiodo;
@@ -381,12 +414,14 @@ class AlunosController extends AppController
             $this->Authorization->authorize($this->Alunos);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Erro de autorização: ' . $error->getMessage());
-            return $this->redirect('/');
+            return $this->redirectBack('/');
         }
         
         $alunos = $this->Alunos->find()->contain(['Estagiarios']);
 
-        $this->set('alunos', $this->paginate($alunos));
+        $this->set('alunos', $this->paginate($alunos, [
+            'sortableFields' => ['nome', 'registro']
+        ]));
     }
     
     /**
@@ -402,10 +437,10 @@ class AlunosController extends AppController
             $this->Authorization->authorize($this->Alunos);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Erro de autorização: ' . $error->getMessage());
-            return $this->redirect('/');
+            return $this->redirectBack('/');
         }
         
-        $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->configuracoes->periodo_calendario_academico;
+        $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->configuracao->periodo_calendario_academico;
         $this->set('periodo', $periodo);
         
         /* lista de periodos */
@@ -427,22 +462,26 @@ class AlunosController extends AppController
         
         $selected = ['Estagiarios.periodo', 'Alunos.id', 'Alunos.nome', 'Instituicoes.id', 'Instituicoes.instituicao', 'Instituicoes.cep', 'Instituicoes.endereco', 'Instituicoes.bairro', 'Supervisores.nome', 'Supervisores.cress', 'Professores.nome'];
 
-        $ordered = ['Alunos.nome'];
-        
         if ($periodo === 'all') {
             $cress = $this->Alunos->Estagiarios->find()
                     ->contain($contained)
-                    ->select($selected)
-                    ->order($ordered);
+                    ->select($selected);
         } else {
             $cress = $this->Alunos->Estagiarios->find()
                     ->contain($contained)
                     ->select($selected)
-                    ->where(['Estagiarios.periodo' => $periodo])
-                    ->order($ordered);
+                    ->where(['Estagiarios.periodo' => $periodo]);
         }
 
-        $this->set('cress', $this->paginate($cress));
+        $this->set('cress', $this->paginate($cress, [
+            'sortableFields' => [
+                'Alunos.nome',
+                'Instituicoes.instituicao',
+                'Supervisores.nome',
+                'Professores.nome'
+            ],
+            'order' => ['Alunos.nome' => 'asc']
+        ]));
     }
 
     /**
@@ -461,7 +500,7 @@ class AlunosController extends AppController
             return $this->redirect('/');
         }
         
-        $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->configuracoes->periodo_calendario_academico;
+        $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->configuracao->termo_compromisso_periodo;
         $this->set('periodo', $periodo);
 
         $periodototal = $this->Alunos->Estagiarios->find('list', [
@@ -492,24 +531,33 @@ class AlunosController extends AppController
             'Instituicoes.instituicao'
         ];
 
-        $ordered = ['Estagiarios.nivel'];
-
         if ($periodo === 'all') {
             $seguro = $this->Alunos->Estagiarios->find()
                 ->contain($contained)
-                ->select($selected)
-                ->order($ordered);
+                ->select($selected);
         } else {
             $seguro = $this->Alunos->Estagiarios->find()
                 ->contain($contained)
                 ->where(['Estagiarios.periodo' => $periodo])
-                ->select($selected)
-                ->order($ordered);
+                ->select($selected);
         }
 
-        $this->set('seguro', $this->paginate($seguro));
+        $this->set('seguro', $this->paginate($seguro, [
+            'sortableFields' => [
+                'Alunos.nome',
+                'Alunos.cpf',
+                'Alunos.nascimento',
+                'Alunos.registro',
+                'nivel',
+                'periodo',
+                'Instituicoes.instituicao'
+            ],
+            'order' => ['nivel' => 'asc']
+        ]));
 
-        $instituicao = $this->configuracoes->instituicao;
+        $instituicao = $this->fetchTable("Configuracoes")->find()->first()['instituicao'];
+        if (empty($instituicao)) { $instituicao = 'ESS/UFRJ'; }
         $this->set('instituicao', $instituicao);
+    
     }
 }

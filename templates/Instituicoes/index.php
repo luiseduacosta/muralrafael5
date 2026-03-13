@@ -58,7 +58,7 @@ if ($user_session) {
                     <td><?= $instituicao->area_rel ? $this->Html->link($instituicao->area_rel->area, ['controller' => 'Areas', 'action' => 'view', $instituicao->area_rel->id]) : '' ?></td>
                     <td><?= h($instituicao->natureza) ?></td>
                     <td><?= h($instituicao->cnpj) ?></td>
-                    <td><?= h($instituicao->convenio) ?></td>
+                    <td><?= h($instituicao->convenio) == '0' ? 'Não' : 'Sim' ?></td>
                     <td><?= h($instituicao->expira) ?></td>
                     <td><?= $instituicao->email ? $this->Text->autoLinkEmails($instituicao->email) : '' ?></td>
 

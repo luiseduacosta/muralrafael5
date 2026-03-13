@@ -68,9 +68,8 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     echo $this->Form->hidden('aluno_id', ['value' => $aluno->id]);
                     echo $this->Form->control('aluno_nome', ['label' => 'Aluno', 'value' => $aluno->nome, 'readonly' => true]);
                     echo $this->Form->control('registro', ['value' => $aluno->registro, 'readonly']);
-                    echo $this->Form->control('turno', ['options' => ['d' => 'Diurno', 'n' => 'Noturno', 'i' => 'Indeterminado'], 'value' => $aluno->turno, 'readonly']);
                     echo $this->Form->control('nivel', ['value' => $estagiario->nivel, 'readonly' => true, 'required' => true]);
-                    echo $this->Form->control('ajuste2020', ['options' => ['1' => 'Sim (3 semestres)', '0' => 'Nao (4 semestres)'], 'value' => $aluno->ajuste2020, 'readonly']);
+                    echo $this->Form->control('ajuste2020', ['options' => ['1' => 'Sim (3 semestres)', '0' => 'Não (4 semestres)'], 'value' => $aluno->ajuste2020, 'readonly']);
                     echo $this->Form->control('tc', ['label' => 'Termo de compromisso assinado S/N', 'options' => ['1' => 'Sim', '0' => 'Nao'], 'default' => '0','required' => false]);
                     echo $this->Form->control('tc_solicitacao', ['label' => 'Data de Solicitação', 'value' => \Cake\I18n\DateTime::now()->format('Y-m-d'), 'readonly' => true]);
                     echo $this->Form->control('instituicao_id', ['options' => $instituicoes, 'class' => 'form-control']);
@@ -82,7 +81,6 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         echo $this->Form->control('ch', ['required' => false, 'readonly' => true, 'label' => 'CH']);
                     }
                     echo $this->Form->control('complemento_id', ['type' => 'hidden', 'default' => null, 'required' => false]); // Used only during the Covid-19
-                    echo $this->Form->control('turma_id', ['options' => $turmas, 'empty' => true, 'required' => false]);        
                     echo $this->Form->control('benetransporte', ['label' => 'Transporte', 'required' => false, 'empty' => true, 'default' => null]);
                     echo $this->Form->control('benealimentacao', ['label' => 'Alimentação', 'required' => false, 'empty' => true, 'default' => null]);
                     echo $this->Form->control('benebolsa', ['label' => 'Valor do benefício de Bolsa']);

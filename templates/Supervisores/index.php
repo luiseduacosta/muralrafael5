@@ -20,10 +20,9 @@
                     <th class="actions"><?= __('Actions') ?></th>
                     <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('nome') ?></th>
-                    <th><?= $this->Paginator->sort('cpf') ?></th>
+                    <th><?= $this->Paginator->sort('cpf', 'CPF') ?></th>
                     <th><?= $this->Paginator->sort('email') ?></th>
-                    <th><?= $this->Paginator->sort('escola') ?></th>
-                    <th><?= $this->Paginator->sort('ano_formatura') ?></th>
+                    <th><?= $this->Paginator->sort('cress', 'CRESS') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -38,8 +37,7 @@
                     <td><?= $this->Html->link($supervisor->nome, ['action' => 'view', $supervisor->id]) ?></td>
                     <td><?= h($supervisor->cpf) ?></td>
                     <td><?= ($supervisor->user and $supervisor->user->email) ? $this->Text->autoLinkEmails($supervisor->user->email) : '' ?></td>
-                    <td><?= h($supervisor->escola) ?></td>
-                    <td><?= h($supervisor->ano_formatura) ?></td>
+                    <td><?= h($supervisor->cress) ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

@@ -40,7 +40,7 @@ class EstagiariosController extends AppController
     {
         $periodo = $this->getRequest()->getParam("pass")
             ? $this->request->getParam("pass")[0]
-            : $this->configuracoes->termo_compromisso_periodo;
+            : $this->configuracao->termo_compromisso_periodo;
         $this->set("periodo", $periodo);
 
         $contained = [
@@ -48,7 +48,6 @@ class EstagiariosController extends AppController
             "Professores",
             "Supervisores",
             "Instituicoes",
-            "Turmas",
         ];
 
         $conditions = ["conditions" => ["Estagiarios.periodo" => $periodo]];
@@ -106,7 +105,6 @@ class EstagiariosController extends AppController
                 "Instituicoes",
                 "Supervisores",
                 "Professores",
-                "Turmas",
                 "Complementos",
             ],
         ]);
@@ -143,7 +141,7 @@ class EstagiariosController extends AppController
             return $this->redirect(["controller" => "Muralestagios", "action" => "index"]);
         }
 
-        $periodoatual = $this->configuracoes->termo_compromisso_periodo;
+        $periodoatual = $this->configuracao->termo_compromisso_periodo;
 
         $id = $this->request->getQuery('aluno_id');
         if (empty($id)) {
@@ -152,7 +150,7 @@ class EstagiariosController extends AppController
 
         if (empty($id)) {
             $this->Flash->error(__('Sem parámetros para localizar o(a) aluno(a)'));
-            return $this->redirect(['controller' => 'Alunos', 'action' => 'index']);
+            return $this->redirectBack(['controller' => 'Alunos', 'action' => 'index']);
         }
 
         // Querying if is the first step of estagio (nivel 1) or a new step for this aluno
@@ -238,17 +236,16 @@ class EstagiariosController extends AppController
             }
 
             $aluno = $this->fetchTable("Alunos")->find()->where(['id' => $id])->first();
-            $instituicoes = $this->fetchTable("Instituicoes")->find("list");
+            $instituicoes = $this->fetchTable("Instituicoes")->find("list")->order(['instituicao' => 'ASC']);
 
             if (!empty($estagiario->instituicao_id)) {
                 $supervisores = $this->fetchTable("Supervisores")->find("list")->matching('Instituicoes', function ($q) use ($estagiario) {
                     return $q->where(['Instituicoes.id' => $estagiario->instituicao_id]);
                 });
             } else {
-                $supervisores = $this->fetchTable("Supervisores")->find("list");
+                $supervisores = $this->fetchTable("Supervisores")->find("list")->order(['nome' => 'ASC']);
             }
             $professores = $this->fetchTable("Professores")->find("list");
-            $turmas = $this->fetchTable("Turmas")->find("list");
 
             $this->set(
                 compact(
@@ -258,7 +255,6 @@ class EstagiariosController extends AppController
                     "instituicoes",
                     "supervisores",
                     "professores",
-                    "turmas",
                 ),
             );
         }
@@ -321,17 +317,16 @@ class EstagiariosController extends AppController
             );
         }
 
-        $alunos = $this->fetchTable("Alunos")->find("list");
-        $instituicoes = $this->fetchTable("Instituicoes")->find("list");
+        $alunos = $this->fetchTable("Alunos")->find("list")->order(['nome' => 'ASC']);
+        $instituicoes = $this->fetchTable("Instituicoes")->find("list")->order(['instituicao' => 'ASC']);
         if (!empty($estagiario->instituicao_id)) {
             $supervisores = $this->fetchTable("Supervisores")->find("list")->matching('Instituicoes', function ($q) use ($estagiario) {
                 return $q->where(['Instituicoes.id' => $estagiario->instituicao_id]);
             });
         } else {
-            $supervisores = $this->fetchTable("Supervisores")->find("list");
+            $supervisores = $this->fetchTable("Supervisores")->find("list")->order(['nome' => 'ASC']);
         }
-        $professores = $this->fetchTable("Professores")->find("list");
-        $turmas = $this->fetchTable("Turmas")->find("list");
+        $professores = $this->fetchTable("Professores")->find("list")->order(['nome' => 'ASC']);
         $complementos = $this->fetchTable("Complementos")->find("list");
         $this->set(
             compact(
@@ -340,7 +335,6 @@ class EstagiariosController extends AppController
                 "instituicoes",
                 "supervisores",
                 "professores",
-                "turmas",
                 "complementos",
             ),
         );
@@ -433,7 +427,7 @@ class EstagiariosController extends AppController
 
         if ($estagiario) {
 
-            $periodoatual = $this->configuracoes->termo_compromisso_periodo;
+            $periodoatual = $this->configuracao->termo_compromisso_periodo;
 
             $compare = $this->comparePeriodo((string)$periodoatual, (string)$estagiario->periodo);
 
@@ -547,7 +541,7 @@ class EstagiariosController extends AppController
 
         if (empty($id)) {
             $this->Flash->error(__('Sem parâmetros para localizar o estagiário'));
-            return $this->redirect(['action' => 'index']);
+            return $this->redirectBack(['action' => 'index']);
         }
 
         try {
@@ -556,13 +550,8 @@ class EstagiariosController extends AppController
             ]);
         } catch (RecordNotFoundException $e) {
             $this->Flash->error(__('Estagiário não encontrado.'));
-            return $this->redirect(['action' => 'index']);
+            return $this->redirectBack(['action' => 'index']);
         }
-
-        $configuracao = $this->fetchTable('Configuracoes')
-            ->find()
-            ->where(['Configuracoes.id' => 1])
-            ->first();
 
         $this->viewBuilder()->setLayout('pdf/default');
         $this->viewBuilder()->setClassName('CakePdf.Pdf');
@@ -571,7 +560,7 @@ class EstagiariosController extends AppController
             'download' => true,
             'filename' => 'termo_de_compromisso_' . $id . '.pdf',
         ]);
-        $this->set('configuracao', $configuracao);
+        $this->set('configuracao', $this->configuracao);
         $this->set('estagiario', $estagiario);
     }
 
@@ -598,7 +587,7 @@ class EstagiariosController extends AppController
 
         if (empty($id)) {
             $this->Flash->error(__('Sem parâmetros para localizar o estagiário'));
-            return $this->redirect(['action' => 'index']);
+            return $this->redirectBack(['action' => 'index']);
         }
 
         $estagiario = $this->Estagiarios
@@ -609,7 +598,7 @@ class EstagiariosController extends AppController
 
         if (!$estagiario) {
             $this->Flash->error(__("Sem estagio cadastrado."));
-            return $this->redirect([
+            return $this->redirectBack([
                 "controller" => "estagiarios",
                 "action" => "view",
                 $id,
@@ -717,7 +706,7 @@ class EstagiariosController extends AppController
                     "Sem parâmetro para localizar os estagiários do(a) professor(a).",
                 ),
             );
-            return $this->redirect(["action" => "index"]);
+            return $this->redirectBack(["action" => "index"]);
         }
 
         $professor = $this->fetchTable('Professores')
@@ -728,7 +717,7 @@ class EstagiariosController extends AppController
 
         if (!$professor) {
             $this->Flash->error(__("Professor não encontrado."));
-            return $this->redirect(["action" => "index"]);
+            return $this->redirectBack(["action" => "index"]);
         }
 
         $periodos = $this->Estagiarios->find("list", ["keyField" => "periodo", "valueField" => "periodo"])
@@ -790,7 +779,7 @@ class EstagiariosController extends AppController
                     "Sem parâmetro para localizar os estagiários do(a) professor(a).",
                 ),
             );
-            return $this->redirect(["action" => "index"]);
+            return $this->redirectBack(["action" => "index"]);
         }
 
         $professor = $this->fetchTable('Professores')
@@ -801,7 +790,7 @@ class EstagiariosController extends AppController
 
         if (!$professor) {
             $this->Flash->error(__("Professor não encontrado."));
-            return $this->redirect(["action" => "index"]);
+            return $this->redirectBack(["action" => "index"]);
         }
 
         $periodo = $this->request->getQuery("periodo");

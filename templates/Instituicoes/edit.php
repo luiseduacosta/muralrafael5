@@ -22,7 +22,7 @@
                 <h3><?= __('Editando instituição_') . $instituicao->id ?></h3>
                 <?php
                     echo $this->Form->control('instituicao');
-                    echo $this->Form->control('area_id', ['options' => $areas, 'class' => 'form-control']);
+                    echo $this->Form->control('area_id', ['label' => 'Área', 'options' => $areas, 'class' => 'form-control']);
                     echo $this->Form->control('natureza');
                     echo $this->Form->control('cnpj', ['label' => 'CNPJ', 'pattern' => '[0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}\-[0-9]{2}', 'placeholder' => '00.000.000/0000-00']);
                     echo $this->Form->control('email', ['label' => 'Email']);

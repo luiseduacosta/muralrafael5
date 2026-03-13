@@ -252,8 +252,7 @@ class AvaliacoesController extends AppController
 
         $avaliacao = $this->Avaliacoes->find()
             ->contain(['Estagiarios' => ['Alunos', 'Supervisores', 'Professores', 'Instituicoes']])
-            ->where(['Avaliacoes.id' => $id])
-            ->orWhere(['Avaliacoes.estagiario_id' => $id])
+            ->where(['Avaliacoes.estagiario_id' => $id])
             ->first();
 
         if (empty($avaliacao)) {

@@ -37,7 +37,7 @@ class AreasTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('areas');
+        $this->setTable('area_instituicoes');
         $this->setAlias('Areas');
         $this->setDisplayField('area');
         $this->setPrimaryKey('id');

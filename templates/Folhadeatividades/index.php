@@ -54,7 +54,7 @@ if ($professora) {
     </div>
     </aside>
 
-    <h3><?= __('Folha de atividades da(o) estagiária(o) ' . $estagiario->aluno->nome) ?></h3>
+    <h3><?= __('Folha de atividades da(o) estagiária(o) ' . ($estagiario->aluno->nome ?? ' S/d')) ?></h3>
 
     <div class="table_wrap">
         <table>

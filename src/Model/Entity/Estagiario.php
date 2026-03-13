@@ -19,7 +19,7 @@ use Cake\ORM\Entity;
  * @property int|null $supervisor_id
  * @property int|null $professor_id
  * @property string $periodo
- * @property int $turmaestagio_id
+ * @property int $turma_id
  * @property int $turno_id
  * @property string|null $nota
  * @property int|null $ch
@@ -63,7 +63,6 @@ class Estagiario extends Entity
         'supervisor_id' => true,
         'professor_id' => true,
         'periodo' => true,
-        'turmaestagio_id' => true,
         'turno_id' => true,
         'nota' => true,
         'ch' => true,

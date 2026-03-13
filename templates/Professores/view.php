@@ -50,18 +50,26 @@ $departamentos = [
                     <th><?= __('CPF') ?></th>
                     <td><?= h($professor->cpf) ?></td>
                 </tr>
-                <tr>
+                <tr> 
                     <th><?= __('Local de Nascimento') ?></th>
                     <td><?= h($professor->localnascimento) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Telefone') ?></th>
-                    <td><?= $professor->telefone ? h('(' . $professor->ddd_telefone . ') ' . $professor->telefone) : '' ?></td>
+                    <?php if (strlen($professor->telefone) < 10): ?>
+                        <td><?= $professor->telefone ? h('(' . $professor->ddd_telefone . ') ' . $professor->telefone) : '' ?></td>
+                    <?php else: ?>
+                        <td><?= $professor->telefone ?></td>
+                    <?php endif ?>    
                 </tr>
                 <tr>
                     <th><?= __('Celular') ?></th>
-                    <td><?= $professor->celular ? h('(' . $professor->ddd_celular . ') ' . $professor->celular) : '' ?></td>
-                </tr>
+                    <?php if (strlen($professor->celular) < 10): ?>
+                        <td><?= $professor->celular ? h('(' . $professor->ddd_celular . ') ' . $professor->celular) : '' ?></td>
+                    <?php else: ?>
+                        <td><?= $professor->celular ?></td>
+                    <?php endif ?>    
+                    </tr>
                 <tr>
                     <th><?= __('Email') ?></th>
                     <td><?= $professor->email ? $this->Text->autoLinkEmails($professor->email) : '' ?></td>
@@ -220,7 +228,6 @@ $departamentos = [
                             <th><?= __('Instituicao') ?></th>
                             <th><?= __('Supervisor') ?></th>
                             <th><?= __('Periodo') ?></th>
-                            <th><?= __('Turma') ?></th>
                             <th><?= __('Nota') ?></th>
                             <th><?= __('Ch') ?></th>
                         </tr>
@@ -241,10 +248,10 @@ $departamentos = [
         						<?php
                                 $turno = '';
         						switch ( $estagiario->turno ) {
-        							case 'D': $turno = 'Diurno';   break;
-        							case 'N': $turno = 'Noturno';  break;
-        							case 'A': $turno = 'Ambos';    break;
-        		                    case 'I': $turno = 'Integral'; break;
+        							case 'D': $turno = 'Diurno';     break;
+        							case 'N': $turno = 'Noturno';    break;
+        							case 'A': $turno = 'Ambos';      break;
+        		                    case 'I': $turno = 'Indefinido'; break;
         						}
         						echo h($turno);
         						?>
@@ -255,7 +262,6 @@ $departamentos = [
                             <td><?= $estagiario->instituicao ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario->instituicao->id]) : '' ?></td>
                             <td><?= $estagiario->supervisor ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
                             <td><?= h($estagiario->periodo) ?></td>
-                            <td><?= $estagiario->turma ? $this->Html->link($estagiario->turma->turma, ['controller' => 'Turmas', 'action' => 'view', $estagiario->turma->id]) : '' ?></td>
                             <td><?= h($estagiario->nota) ?></td>
                             <td><?= h($estagiario->ch) ?></td>
                         </tr>

@@ -47,14 +47,15 @@ use Cake\I18n\Date;
                 <th><?= $this->Paginator->sort('Alunos.cpf', 'CPF') ?></th>
                 <th><?= $this->Paginator->sort('Alunos.nascimento', 'Nascimento') ?></th>
                 <th><?= $this->Paginator->sort('Alunos.registro', 'Registro') ?></th>
-                <th><?= $this->Paginator->sort('curso') ?></th>
-                <th><?= $this->Paginator->sort('nivel') ?></th>
-                <th><?= $this->Paginator->sort('periodo') ?></th>
+                <th><?= $this->Paginator->sort('curso', 'Curso') ?></th>
+                <th><?= $this->Paginator->sort('nivel', 'Nível') ?></th>
+                <th><?= $this->Paginator->sort('periodo', 'Período') ?></th>
                 <th>Início</th>
                 <th>Final</th>
-                <th>Instituição</th>
+                <th><?= $this->Paginator->sort('Instituicoes.instituicao', 'Instituição') ?></th>
             </tr>
             </thead>
+            <tbody>
             <?php foreach ($seguro as $estagiario): ?>
                 <?php 
                 
@@ -201,10 +202,10 @@ use Cake\I18n\Date;
                 ?>
                 <tr>
                     <td>
-                        <?php echo $estagiario->aluno ? $this->Html->link($estagiario->aluno->nome , ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id ]) : ''; ?>
+                        <?php echo $estagiario->aluno ? $this->Html->link($estagiario->aluno->nome , ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id ]) : $estagiario->id; ?>
                     </td>
                     <td>
-                        <?php echo $estagiario->aluno->cpf; ?>
+                        <?php echo $estagiario->aluno->cpf ?? 'N/A'; ?>
                     </td>
                     <td>
                         <?php if (empty($estagiario->aluno->nascimento)): ?>
@@ -214,7 +215,7 @@ use Cake\I18n\Date;
                         <?php endif; ?>
                     </td>
                     <td>
-                        <?php echo $estagiario->aluno->registro; ?>
+                        <?php echo $estagiario->aluno->registro ?? 'N/A'; ?>
                     </td>
                     <td>
                         <?php echo $estagiario->curso; ?>
@@ -236,6 +237,7 @@ use Cake\I18n\Date;
                     </td>
                 </tr>
             <?php endforeach; ?>
+            </tbody>
         </table>
     </div>
     <div class="paginator">
@@ -243,3 +245,54 @@ use Cake\I18n\Date;
         <?= $this->element('paginator_count'); ?>
     </div>
 </div>
+
+<script type="text/javascript">
+
+// Generate and download Markdown report
+$(document).ready(function() {
+  $("#btn-report-md").on("click", function () {
+    const table = document.getElementById("sortableTable");
+    if (!table) return;
+    
+    const tbody = table.tBodies[0];
+    if (!tbody || tbody.rows.length === 0) {
+      alert("Não há dados para exportar.");
+      return;
+    }
+    
+    const periodo = $("#periodo").val() || '<?= $periodoselecionado ?>';
+
+    let markdown = `# Relatório de Seguro de Vida - Período: ${periodo}\n\n`;
+    markdown += `| Nome | CPF | Nascimento | DRE | Curso | Nível | Ajuste 2020 | Período | Início | Final | Instituição |\n`;
+    markdown += `| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n`;
+
+    Array.from(tbody.rows).forEach(row => {
+      const cells = row.cells;
+      const nome = cells[0]?.textContent.trim() || "-";
+      const cpf = cells[1]?.textContent.trim() || "-";
+      const nascimento = cells[2]?.textContent.trim() || "-";
+      const dre = cells[3]?.textContent.trim() || "-";
+      const curso = cells[4]?.textContent.trim() || "-";
+      const nivel = cells[5]?.textContent.trim() || "-";
+      const ajuste2020 = cells[6]?.textContent.trim() || "-";
+      const periodo = cells[7]?.textContent.trim() || "-";
+      const inicio = cells[8]?.textContent.trim() || "-";
+      const final = cells[9]?.textContent.trim() || "-";
+      const instituicao = cells[10]?.textContent.trim() || "-";
+
+      markdown += `| ${nome} | ${cpf} | ${nascimento} | ${dre} | ${curso} | ${nivel} | ${ajuste2020} | ${periodo} | ${inicio} | ${final} | ${instituicao} |\n`;
+    });
+
+    const blob = new Blob([markdown], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `relatorio_estagiarios_${periodo.replace(/\//g, '-')}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+});
+
+</script>

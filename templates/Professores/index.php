@@ -33,7 +33,7 @@ $departamentos = [
                     <th class="actions"><?= __('Actions') ?></th>
                     <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('nome') ?></th>
-                    <th><?= $this->Paginator->sort('telefone') ?></th>
+                    <th><?= $this->Paginator->sort('siape', 'SIAPE') ?></th>
                     <th><?= $this->Paginator->sort('celular') ?></th>
                     <th><?= $this->Paginator->sort('email') ?></th>
                     <th><?= $this->Paginator->sort('curriculolattes') ?></th>
@@ -50,7 +50,7 @@ $departamentos = [
                     </td>
                     <td><?= $this->Html->link((string)$professor->id, ['action' => 'view', $professor->id]) ?></td>
                     <td><?= $this->Html->link(h($professor->nome), ['action' => 'view', $professor->id]) ?></td>
-                    <td><?= $professor->telefone ? '(' . h($professor->ddd_telefone) . ')' . h($professor->telefone) : '' ?></td>
+                    <td><?= (string)$professor->siape ? $professor->siape : 'S/d' ?></td>
                     <td><?= $professor->celular ? '(' . h($professor->ddd_celular) . ')' . h($professor->celular) : '' ?></td>
                     <td><?= ($professor->user and $professor->user->email) ? $this->Text->autoLinkEmails($professor->user->email) : '' ?></td>
                     <td><?= $professor->curriculolattes ? $this->Html->link('http://lattes.cnpq.br/' . h($professor->curriculolattes)) : '' ?></td>

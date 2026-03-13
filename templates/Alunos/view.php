@@ -180,7 +180,6 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                             <th><?= __('Turno') ?></th>
                             <th><?= __('Supervisor(a)') ?></th>
                             <th><?= __('Professor(a)') ?></th>
-                            <th><?= __('Turma') ?></th>
                             <th><?= __('Nivel') ?></th>
                             <th><?= __('Nota') ?></th>
                             <th><?= __('CH') ?></th>
@@ -209,7 +208,6 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                             </td>
                             <td><?= ($estagiario->supervisor and $estagiario->supervisor->nome) ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
                             <td><?= $estagiario->professor ? $this->Html->link($estagiario->professor->nome, ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id]) : '' ?></td>
-                            <td><?= $estagiario->turma ? $this->Html->link($estagiario->turma->turma, ['controller' => 'Turmas', 'action' => 'view', $estagiario->turma->id]) : '' ?></td>
                             <td><?= h($estagiario->nivel) ?></td>
                             <td><?= h($estagiario->nota) ?></td>
                             <td><?= h($estagiario->ch) ?></td>

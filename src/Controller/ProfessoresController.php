@@ -32,6 +32,7 @@ class ProfessoresController extends AppController
 
         $professores = $this->paginate($this->Professores->find('all', [
             'contain' => ['Users'],
+            'order' => ['nome' => 'ASC']
         ]));
         $this->set(compact('professores'));
     }
@@ -62,7 +63,7 @@ class ProfessoresController extends AppController
         ];
 
         $estagiarios = $this->paginate($this->Professores->Estagiarios->find('all', [
-            'contain' => ['Alunos', 'Instituicoes', 'Supervisores', 'Turmas'],
+            'contain' => ['Alunos', 'Instituicoes', 'Supervisores'],
         ])->innerJoinWith('Professores', function (Query $query) use ($professor) {
             return $query->where([
                 'professor_id' => $professor->id,
