@@ -335,6 +335,9 @@ class UsersController extends AppController
         // authorize all users to access logout
         $this->Authorization->skipAuthorization();
         
+        // Clear impersonation data if logging out
+        $this->request->getSession()->delete('Auth.impersonating');
+        
         $this->Authentication->logout();
         
         $this->Flash->warning(__('Usuario desconectado.'));
@@ -345,13 +348,45 @@ class UsersController extends AppController
      * Alternarusuario method
      * https://book.cakephp.org/authentication/3/en/impersonation.html
      */
-    public function alternarusuario()
+    public function alternarusuario($id = null)
     {
         $this->Authorization->skipAuthorization();
-        // How to change the user administrador identity to another user like: aluno, professor or supervisor without needs to make loggin
-        // 
-        // TODO: Implement user impersonation logic
-        $this->Flash->warning(__('Funcionalidade não implementada.'));
+        
+        $identity = $this->Authentication->getIdentity();
+        $user_data = $identity->getOriginalData();
+
+        // Only administrators can impersonate
+        if ($user_data['categoria'] != '1' && !$this->request->getSession()->check('Auth.impersonating')) {
+            $this->Flash->error(__('Acesso negado. Apenas administradores podem alternar usuários.'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        if ($id) {
+            // Start impersonating
+            $targetUser = $this->Users->get($id);
+            
+            // Store original admin ID if not already impersonating
+            if (!$this->request->getSession()->check('Auth.impersonating')) {
+                $this->request->getSession()->write('Auth.impersonating', $user_data['id']);
+            }
+
+            $this->Authentication->impersonate($targetUser);
+            $this->Flash->success(__('Você agora está acessando como ' . $targetUser->email));
+            return $this->redirect('/');
+        } else {
+            // Stop impersonating if no ID is provided and we are currently impersonating
+            if ($this->request->getSession()->check('Auth.impersonating')) {
+                $originalId = $this->request->getSession()->read('Auth.impersonating');
+                $originalUser = $this->Users->get($originalId);
+                
+                $this->Authentication->impersonate($originalUser);
+                $this->request->getSession()->delete('Auth.impersonating');
+                
+                $this->Flash->success(__('Identidade restaurada para administrador.'));
+                return $this->redirect(['action' => 'index']);
+            }
+        }
+
         return $this->redirect(['action' => 'index']);
     }
     

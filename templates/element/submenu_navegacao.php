@@ -112,6 +112,9 @@ if ($user_session)
             <menu class="toggle-dropdown">
                 
                 <?php if ($user_session): ?>
+                    <?php if ($this->request->getSession()->check('Auth.impersonating')): ?>
+                        <li><?php echo $this->Html->link('Retornar ao Administrador', ['controller' => 'Users', 'action' => 'alternarusuario'], ['style' => 'color: #ffc107; font-weight: bold;']); ?></li>
+                    <?php endif; ?>
                     <li><?php echo $this->Html->link("Minha conta", ['controller' => 'Users', 'action' => 'view', $user_session->id]); ?></li>
                     <li><?php echo $this->Html->link('Sair (' . $user_session->get('email') . ')', ['controller' => 'Users', 'action' => 'logout']); ?></li>
                 <?php else: ?>

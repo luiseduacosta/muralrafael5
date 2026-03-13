@@ -41,6 +41,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <?php if ($user_data['categoria'] == '1'): ?>
                             <?= $this->Html->link(__('Ver'), ['action' => 'view', $user->id]) ?>
                             <?= $this->Html->link(__('Editar'), ['action' => 'edit', $user->id]) ?>
+                            <?php if ($user->id !== $user_session->id): ?>
+                                <?= $this->Html->link(__('Alternar'), ['action' => 'alternarusuario', $user->id]) ?>
+                            <?php endif; ?>
                             <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $user->id)]) ?>
                         <?php endif; ?>
                     </td>
