@@ -43,6 +43,12 @@ class SupervisoresController extends AppController
      */
     public function view(?string $id = null)
     {
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
+        $user_session = $this->request->getAttribute('identity');
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
+
         $contained = [
             'Instituicoes' => ['Areas'],
             'Estagiarios' => ['Alunos', 'Instituicoes', 'Supervisores', 'Professores'],
@@ -51,6 +57,18 @@ class SupervisoresController extends AppController
         $this->paginate = [
             'contain' => $contained,
         ];
+
+        if (!$id) {
+            $this->Flash->info(__('Invalid supervisor id.'));
+            if ($user_data['categoria'] == '4') {
+                $id = $user_data['supervisor_id'];
+            }
+        }
+
+        if (!$id) {
+            $this->Flash->error(__('Invalid supervisor id.'));
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
+        }
 
         $supervisor = $this->Supervisores->get($id, [
             'contain' => $contained,
@@ -119,7 +137,7 @@ class SupervisoresController extends AppController
             $supervisor->email = $email;
             $supervisor->cress = $cress;
         }
-        $instituicoes = $this->Supervisores->Instituicoes->find('list');
+        $instituicoes = $this->Supervisores->Instituicoes->find('list')->order(['Instituicoes.instituicao' => 'ASC']);
         $this->set(compact('supervisor', 'instituicoes'));
     }
 
@@ -153,7 +171,7 @@ class SupervisoresController extends AppController
             }
             $this->Flash->error(__('The supervisor could not be saved. Please, try again.'));
         }
-        $instituicoes = $this->Supervisores->Instituicoes->find('list');
+        $instituicoes = $this->Supervisores->Instituicoes->find('list')->order(['Instituicoes.instituicao' => 'ASC']);
         $this->set(compact('supervisor', 'instituicoes'));
     }
 

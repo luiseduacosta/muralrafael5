@@ -157,21 +157,23 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                             <th class="actions"><?= __('Actions') ?></th>
                             <th><?= __('Id') ?></th>
                             <th><?= __('Nome') ?></th>
-                            <th><?= __('Cpf') ?></th>
-                            <th><?= __('Escola') ?></th>
-                            <th><?= __('Ano de formatura') ?></th>
+                            <th><?= __('CPF') ?></th>
+                            <th><?= __('CRESS') ?></th>
+                            <th><?= __('Região') ?></th>
                         </tr>
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'supervisores', 'action' => 'view', $user->supervisor->id]) ?>
                                 <?= $this->Html->link(__('Editar'), ['controller' => 'supervisores', 'action' => 'edit', $user->supervisor->id]) ?>
-                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'supervisores', 'action' => 'delete', $user->supervisor->id], ['confirm' => __('Are you sure you want to delete supervisor_{0}?', $user->supervisor->id)]) ?>
+                                <?php if ($user_data['categoria'] == '1') : ?>
+                                    <?= $this->Form->postLink(__('Excluir'), ['controller' => 'supervisores', 'action' => 'delete', $user->supervisor->id], ['confirm' => __('Are you sure you want to delete supervisor_{0}?', $user->supervisor->id)]) ?>
+                                <?php endif; ?>
                             </td>
                             <td><?= $this->Html->link((string)$user->supervisor->id, ['action' => 'view', $user->supervisor->id]) ?></td>
                             <td><?= $this->Html->link($user->supervisor->nome, ['action' => 'view', $user->supervisor->id]) ?></td>
                             <td><?= h($user->supervisor->cpf) ?></td>
-                            <td><?= h($user->supervisor->escola) ?></td>
-                            <td><?= h($user->supervisor->ano_formatura) ?></td>
+                            <td><?= h($user->supervisor->cress) ?></td>
+                            <td><?= h($user->supervisor->regiao) ?></td>
                         </tr>
                     </table>
                 </div>

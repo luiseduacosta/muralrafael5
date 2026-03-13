@@ -270,19 +270,52 @@ class UsersController extends AppController
                 case '2': // Aluno
                     $aluno = $this->fetchTable('Alunos')->findByRegistro($user['numero'])->first();
                     if ($aluno) {
-                        return $this->redirect(['controller' => 'Alunos', 'action' => 'view', $aluno->id]);
+                        if ($aluno->user_id == $user['id']) {
+                            return $this->redirect(['controller' => 'Alunos', 'action' => 'view', $aluno->id]);
+                        } else {
+                            // Update user->aluno_id with the aluno->id
+                            $user->aluno_id = $aluno->id;
+                            $this->Users->save($user);
+                            // Update aluno with the user->id
+                            $aluno->user_id = $user['id'];
+                            $this->fetchTable('Alunos')->save($aluno);
+                            $this->Flash->success(__('Aluno e usuário associados.'));
+                            return $this->redirect(['controller' => 'Alunos', 'action' => 'view', $aluno->id]);
+                        }
                     }
                     return $this->redirect(['controller' => 'Alunos', 'action' => 'add']);
                 case '3': // Professor
                     $professor = $this->fetchTable('Professores')->findBySiape($user['numero'])->first();
                     if ($professor) {
-                        return $this->redirect(['controller' => 'Professores', 'action' => 'view', $professor->id]);
+                        if ($professor->user_id == $user['id']) {
+                            return $this->redirect(['controller' => 'Professores', 'action' => 'view', $professor->id]);
+                        } else {
+                            // Update user->professor_id with the professor->id
+                            $user->professor_id = $professor->id;
+                            $this->Users->save($user);
+                            // Update professor with the user->id
+                            $professor->user_id = $user['id'];
+                            $this->fetchTable('Professores')->save($professor);
+                            $this->Flash->success(__('Professor e usuário associados.'));
+                            return $this->redirect(['controller' => 'Professores', 'action' => 'view', $professor->id]);
+                        }
                     }
                     return $this->redirect(['controller' => 'Professores', 'action' => 'add']);
                 case '4': // Supervisor
                     $supervisor = $this->fetchTable('Supervisores')->findByCress($user['numero'])->first();
                     if ($supervisor) {
-                        return $this->redirect(['controller' => 'Supervisores', 'action' => 'view', $supervisor->id]);
+                        if ($supervisor->user_id == $user['id']) {
+                            return $this->redirect(['controller' => 'Supervisores', 'action' => 'view', $supervisor->id]);
+                        } else {
+                            // Update user->supervisor_id with the supervisor->id
+                            $user->supervisor_id = $supervisor->id;
+                            $this->Users->save($user);
+                            // Update supervisor with the user->id
+                            $supervisor->user_id = $user['id'];
+                            $this->fetchTable('Supervisores')->save($supervisor);
+                            $this->Flash->success(__('Supervisor e usuário associados.'));
+                            return $this->redirect(['controller' => 'Supervisores', 'action' => 'view', $supervisor->id]);
+                        }
                     }
                     return $this->redirect(['controller' => 'Supervisores', 'action' => 'add']);
                 default:
@@ -293,7 +326,6 @@ class UsersController extends AppController
             $this->Flash->error('Invalid username or password');
         }
     }
-
 
     /*
      * Logout method
@@ -308,7 +340,6 @@ class UsersController extends AppController
         $this->Flash->warning(__('Usuario desconectado.'));
         return $this->redirect('/');
     }
-
 
     /*
      * Alternarusuario method

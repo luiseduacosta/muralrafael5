@@ -116,8 +116,8 @@ class AvaliacoesTable extends Table
         $validator
                 ->scalar('avaliacao9_1')
                 ->maxLength('avaliacao9_1', 256)
-                ->requirePresence('avaliacao9_1', 'create')
-                ->notEmptyString('avaliacao9_1');
+                ->allowEmptyString('avaliacao9_1', 'create')
+                ->allowEmptyString('avaliacao9_1');
 
         $validator
                 ->scalar('avaliacao10')
@@ -128,8 +128,8 @@ class AvaliacoesTable extends Table
         $validator
                 ->scalar('avaliacao10_1')
                 ->maxLength('avaliacao10_1', 256)
-                ->requirePresence('avaliacao10_1', 'create')
-                ->notEmptyString('avaliacao10_1');
+                ->allowEmptyString('avaliacao10_1', 'create')
+                ->allowEmptyString('avaliacao10_1');
 
         $validator
                 ->scalar('avaliacao11')
@@ -140,8 +140,8 @@ class AvaliacoesTable extends Table
          $validator
                 ->scalar('avaliacao11_1')
                 ->maxLength('avaliacao11_1', 256)
-                ->requirePresence('avaliacao11_1', 'create')
-                ->notEmptyString('avaliacao11_1');
+                ->allowEmptyString('avaliacao11_1', 'create')
+                ->allowEmptyString('avaliacao11_1');
 
         $validator
                 ->scalar('avaliacao12')
@@ -152,8 +152,8 @@ class AvaliacoesTable extends Table
         $validator
                 ->scalar('avaliacao12_1')
                 ->maxLength('avaliacao12_1', 256)
-                ->requirePresence('avaliacao12_1', 'create')
-                ->notEmptyString('avaliacao12_1');
+                ->allowEmptyString('avaliacao12_1', 'create')
+                ->allowEmptyString('avaliacao12_1');
 
         $validator
                 ->scalar('avaliacao13')
@@ -164,20 +164,20 @@ class AvaliacoesTable extends Table
         $validator
                 ->scalar('avaliacao13_1')
                 ->maxLength('avaliacao13_1', 256)
-                ->requirePresence('avaliacao13_1', 'create')
-                ->notEmptyString('avaliacao13_1');
+                ->allowEmptyString('avaliacao13_1', 'create')
+                ->allowEmptyString('avaliacao13_1');
 
         $validator
                 ->scalar('avaliacao14')
-                ->maxLength('avaliacao14', 1)
-                ->requirePresence('avaliacao14', 'create')
-                ->notEmptyString('avaliacao14');
+                ->maxLength('avaliacao14', 256)
+                ->allowEmptyString('avaliacao14', 'create')
+                ->allowEmptyString('avaliacao14');
 
          $validator
                 ->scalar('observacoes')
                 ->maxLength('observacoes', 256)
-                ->requirePresence('observacoes', 'create')
-                ->notEmptyString('observacoes');
+                ->allowEmptyString('observacoes', 'create')
+                ->allowEmptyString('observacoes');
 
         $validator
                 ->dateTime('criado_em')

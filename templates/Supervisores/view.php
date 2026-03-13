@@ -54,7 +54,7 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Telefone') ?></th>
-                    <?php if ($supervisor->telefone && (strlen($supervisor->telefone < 10))): ?>
+                    <?php if ($supervisor->telefone && (strlen($supervisor->telefone) < 8)): ?>
                         <td><?= '(' . $supervisor->codigo_tel . ') '. $supervisor->telefone ?></td>
                     <?php else: ?>
                         <td><?= $supervisor->telefone ?>
@@ -66,8 +66,8 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Celular') ?></th>
-                    <?php if ($supervisor->telefone && (strlen($supervisor->celular < 10))): ?>
-                            <td><?= '(' . $supervisor->codigo_tel . ') '. $supervisor->telefone ?></td>
+                    <?php if ($supervisor->celular && (strlen($supervisor->celular) < 8)): ?>
+                            <td><?= '(' . $supervisor->codigo_cel . ') '. $supervisor->celular ?></td>
                     <?php else: ?>        
                         <td><?= h($supervisor->celular) ?></td>
                     <?php endif ?>    
@@ -110,7 +110,7 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('CEP') ?></th>
-                    <td><?= h($supervisor->endereco) ?></td>
+                    <td><?= h($supervisor->cep) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Endereço') ?></th>
@@ -176,7 +176,7 @@ if ($user_session) {
                                 <th><?= __('CNPJ') ?></th>
                                 <th><?= __('Email') ?></th>
                                 <th><?= __('URL') ?></th>
-                                <th><?= __('Avaliação') ?></th>
+                                <th><?= __('Convênio') ?></th>
                             </tr>
                             <?php foreach ($supervisor->instituicoes as $instituicao) : ?>
                                 <tr>
@@ -189,12 +189,12 @@ if ($user_session) {
                                     </td>
                                     <td><?= h($instituicao->id) ?></td>
                                     <td><?= $this->Html->link($instituicao->instituicao, ['controller' => 'instituicoes', 'action' => 'view', $instituicao->id]) ?></td>
-                                    <td><?= $instituicao->area ? $this->Html->link(h($instituicao->area->area), ['controller' => 'Areas', 'action' => 'view', $instituicao->area->id]) : '' ?></td>
+                                    <td><?= $instituicao->area_rel ? $this->Html->link(h($instituicao->area_rel->area), ['controller' => 'Areas', 'action' => 'view', $instituicao->area_rel->id]) : '' ?></td>
                                     <td><?= h($instituicao->natureza) ?></td>
                                     <td><?= h($instituicao->cnpj) ?></td>
                                     <td><?= $this->Text->autoLinkEmails($instituicao->email) ?></td>
                                     <td><?= $instituicao->url ? $this->Html->link($instituicao->url) : '' ?></td>
-                                    <td><?= h($instituicao->avaliacao) ?></td>
+                                    <td><?= h($instituicao->convenio) == '1' ? __('Sim') : __('Não') ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </table>
@@ -248,8 +248,8 @@ if ($user_session) {
                                     ?>
                                 </td>
                                 <td><?= h($estagiario->nivel) ?></td>
-                                <td><?= h($estagiario->tc) ?></td>
-                                <td><?= h($estagiario->tc_solicitacao) ?></td>
+                                <td><?= h($estagiario->tc_assinado) == '1' ? __('Sim') : __('Não') ?></td>
+                                <td><?= $estagiario->tc_solicitacao ? $estagiario->tc_solicitacao->format('d/m/Y') : '' ?></td>
                                 <td><?= $estagiario->instituicao ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario->instituicao->id]) : '' ?></td>
                                 <td><?= ($estagiario->supervisor and $estagiario->supervisor->nome) ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
                                 <td><?= $estagiario->professor ? $this->Html->link($estagiario->professor->nome, ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id]) : '' ?></td>

@@ -22,7 +22,10 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <?= $this->Html->link(__('Listar avaliações'), ['action' => 'index'], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Nova avaliação'), ['action' => 'add'], ['class' => 'button']) ?>
                     <?php endif; ?>
-                    <?= $this->Html->link(__('Imprimir avaliação'), ['action' => 'imprimeavaliacaopdf', $avaliacao->id], ['class' => 'button']) ?>
+                    <?= $this->Html->link(__('Imprimir folha de avaliação'), ['action' => 'avaliacaomanualpdf', '?' => ['estagiario_id' => $avaliacao->estagiario_id]], ['class' => 'button']) ?>
+                    <?php if ($user_data['categoria'] == '1' || $user_data['categoria'] == '2' || $user_data['categoria'] == '4'): ?>
+                        <?= $this->Html->link(__('Imprimir avaliação'), ['action' => 'imprimeavaliacaopdf', $avaliacao->id], ['class' => 'button']) ?>
+                    <?php endif; ?>    
                 </div>
             </aside>
             <div>

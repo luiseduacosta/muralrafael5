@@ -55,6 +55,13 @@ final class EstagiarioPolicy implements BeforePolicyInterface
      */
     public function canView(IdentityInterface $userSession, Estagiario $estagiarioData): Result
     {
+        // Supervisor pode ver estagiarios
+        if ($userSession->getOriginalData()['categoria'] == '4') {
+            if ($estagiarioData->supervisor_id == $userSession->getOriginalData()['supervisor_id']) {
+                return new Result(true);
+            }
+        }
+
         return $this->isProfessorOwned($userSession, $estagiarioData) || $this->sameUser($userSession, $estagiarioData)
             ? new Result(true)
             : new Result(false, 'Erro: estagiario view policy not authorized');

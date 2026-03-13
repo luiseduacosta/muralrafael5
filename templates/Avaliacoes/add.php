@@ -121,7 +121,7 @@ if ($cress) {
             <?= $this->Form->control('avaliacao9', ['type' => 'radio', 'options' => [0 => 'Sim', 1 => 'Não'], 'class' => 'form-check-input', 'label' => false]); ?>
 
             <legend>Fundamente se achar necessário:</legend>
-            <?= $this->Form->input('avaliacao9-1', ['type' => 'textarea', 'label' => false, 'class' => 'form-control', 'rows' => 5, 'cols' => 100]); ?>
+            <?= $this->Form->input('avaliacao9-1', ['type' => 'textarea', 'label' => false, 'required' => false, 'class' => 'form-control', 'rows' => 5, 'cols' => 100]); ?>
 
             <legend>
                 <?= ('10) O desempenho das atividades desenvolvidas pelo(a) estagiário(a) e o processo de supervisão foram afetados pelas condições de trabalho no campo de estágio e, em particular, pelas condições estabelecidas pelo estágio remoto?') ?>
@@ -129,7 +129,7 @@ if ($cress) {
             <?= $this->Form->control('avaliacao10', ['type' => 'radio', 'options' => [0 => 'Sim', 1 => 'Não'], 'class' => 'form-check-input', 'label' => false]); ?>
 
             <legend>Justifique a resposta se achar necessário:</legend>
-            <?= $this->Form->input('avaliacao10-1', ['type' => 'textarea', 'label' => false, 'class' => 'form-control', 'rows' => 5, 'cols' => 60]); ?>
+            <?= $this->Form->input('avaliacao10-1', ['type' => 'textarea', 'label' => false, 'required' => false, 'class' => 'form-control', 'rows' => 5, 'cols' => 60]); ?>
 
             <legend>
                 <?= ('11) Quanto à integração Disciplina de OTP/Coordenação de Estágio da ESS/Campo de Estágio: houve algum tipo de interlocução entre os 3 segmentos: aluno(a), professor(a) e supervisor(a)?') ?>
@@ -137,7 +137,7 @@ if ($cress) {
             <?= $this->Form->control('avaliacao11', ['type' => 'radio', 'options' => [0 => 'Sim', 1 => 'Não'], 'class' => 'form-check-input', 'label' => false]); ?>
 
             <legend>Como você avalia esta interação? (Responda se achar necessário)</legend>
-            <?= $this->Form->input('avaliacao11-1', ['type' => 'textarea', 'label' => false, 'class' => 'form-control', 'rows' => 5, 'cols' => 60]); ?>
+            <?= $this->Form->input('avaliacao11-1', ['type' => 'textarea', 'label' => false, 'required' => false, 'class' => 'form-control', 'rows' => 5, 'cols' => 60]); ?>
 
             <legend>
                 <?= ('12) Você recebeu e acompanhou o programa da Disciplina OTP?') ?>
@@ -145,7 +145,7 @@ if ($cress) {
             <?= $this->Form->control('avaliacao12', ['type' => 'radio', 'options' => [0 => 'Sim', 1 => 'Não'], 'class' => 'form-check-input', 'label' => false]); ?>
 
             <legend>Sugestões ao que foi desenvolvido?</legend>
-            <?= $this->Form->input('avaliacao12-1', ['type' => 'textarea', 'label' => false, 'class' => 'form-control', 'rows' => 5, 'cols' => 60]); ?>
+            <?= $this->Form->input('avaliacao12-1', ['type' => 'textarea', 'label' => false, 'required' => false, 'class' => 'form-control', 'rows' => 5, 'cols' => 60]); ?>
 
             <legend>
                 <?= ('13) Há questões que você considera que devam ser mais enfatizadas na disciplina de OTP?') ?>
@@ -155,17 +155,17 @@ if ($cress) {
             <legend>
                 <?= ('Se sim, quais?') ?>
             </legend>
-            <?= $this->Form->input('avaliacao13-1', ['type' => 'textarea', 'label' => false, 'class' => 'form-control', 'rows' => 5, 'cols' => 60]); ?>
+            <?= $this->Form->input('avaliacao13-1', ['type' => 'textarea', 'label' => false, 'required' => false, 'class' => 'form-control', 'rows' => 5, 'cols' => 60]); ?>
 
             <legend>
                 <?= ('14) Como avalia a experiência do estágio remoto neste semestre? Será possível a continuidade do estágio na modalidade remota no próximo semestre?') ?>
             </legend>
-            <?= $this->Form->input('avaliacao14', ['type' => 'textarea', 'label' => false, 'class' => 'form-control', 'rows' => 5, 'cols' => 60]); ?>
+            <?= $this->Form->input('avaliacao14', ['type' => 'textarea', 'label' => false, 'required' => false, 'class' => 'form-control', 'rows' => 5, 'cols' => 60]); ?>
 
             <legend>
                 <?= ('15) Sugestões e observações:') ?>
             </legend>
-            <?= $this->Form->input('observacoes', ['type' => 'textarea', 'label' => false, 'class' => 'form-control', 'rows' => 5, 'cols' => 60]); ?>
+            <?= $this->Form->input('observacoes', ['type' => 'textarea', 'label' => false, 'required' => false, 'class' => 'form-control', 'rows' => 5, 'cols' => 60]); ?>
         </fieldset>
 
         <?= $this->Form->button(__('Adicionar'), ['class' => 'button']) ?>

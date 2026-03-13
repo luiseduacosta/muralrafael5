@@ -44,6 +44,13 @@ final class AlunoPolicy implements BeforePolicyInterface
      */
     public function canView(IdentityInterface $userSession, Aluno $alunoData): Result
     {
+        // Supervisor pode ver alunos estagiarios
+        if ($userSession->getOriginalData()['categoria'] == '4') {
+            if ($alunoData->estagiarios->supervisores->id == $userSession->getOriginalData()['supervisor_id']) {
+                return new Result(true);
+            }
+        }
+
         return $this->sameUser($userSession, $alunoData)
             ? new Result(true)
             : new Result(false, 'Erro: aluno view policy not authorized');

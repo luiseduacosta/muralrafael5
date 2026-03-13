@@ -247,12 +247,13 @@ class AvaliacoesController extends AppController
         $this->Authorization->skipAuthorization();
 
         if (empty($id)) {
-            $id = $this->request->getQuery('estagiario_id');
+            $this->Flash->error(__('Parâmetro estagiário é obrigatório.'));
+            return $this->redirectBack(['action' => 'index']);
         }
 
         $avaliacao = $this->Avaliacoes->find()
             ->contain(['Estagiarios' => ['Alunos', 'Supervisores', 'Professores', 'Instituicoes']])
-            ->where(['Avaliacoes.estagiario_id' => $id])
+            ->where(['Avaliacoes.id' => $id])
             ->first();
 
         if (empty($avaliacao)) {
