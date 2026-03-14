@@ -157,7 +157,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                             </td>
                             <td><?= $this->Html->link(h((string)$inscricao->id), ['controller' => 'Inscricoes', 'action' => 'view', $inscricao->id]) ?></td>
         					<td><?= $inscricao->muralestagio->instituicao_entidade ? $this->Html->link($inscricao->muralestagio->instituicao_entidade->instituicao, ['controller' => 'Muralestagios', 'action' => 'view', $inscricao->muralestagio->id]) : $inscricao->muralestagio_id ?></td>
-                            <td><?= h($inscricao->data) ?></td>
+                            <td><?= h($inscricao->data?->format('d/m/Y')) ?></td>
                             <td><?= h($inscricao->periodo) ?></td>
                             <td><?= h($inscricao->timestamp) ? h($inscricao->timestamp) : '' ?></td>
                         </tr>
