@@ -25,7 +25,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <h3><?= __('Adicionando usuário') ?></h3>
         <?php
             echo $this->Form->control('categoria', ['options' => ['0' => 'Selecione', '2' => 'Aluno', '3' => 'Professor', '4' => 'Supervisor']]);
-            echo $this->Form->control('numero', ['label' => 'DRE, Siape ou CRESS', 'required' => true]);
+            echo $this->Form->control('registro', ['label' => 'DRE, Siape ou CRESS', 'required' => true]);
             echo $this->Form->control('email', ['required' => true, 'autocomplete' => 'username']);
             echo $this->Form->control('password', ['label' => 'Senha', 'required' => true, 'autocomplete' => 'new-password', 'id' => 'password' ]);
             echo $this->element('show_password');

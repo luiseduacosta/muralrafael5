@@ -104,15 +104,15 @@ class UsersController extends AppController
         
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData(), [
-                'fields' => ['categoria', 'numero', 'password', 'email'],
+                'fields' => ['categoria', 'registro', 'password', 'email'],
                 'accessibleFields' => ['password' => true]
             ]);
  
-            // Verify is numero has a valid value set. It is mandatory for all of the new users except admin
+            // Verify is registro has a valid value set. It is mandatory for all of the new users except admin
             if ($this->request->getData('categoria') != '1') {
-                $numero = $this->request->getData('numero');
-                if (empty($numero)) {
-                    $this->Flash->error(__('O número é obrigatório para o tipo de usuário selecionado.'));
+                $registro = $this->request->getData('registro');
+                if (empty($registro)) {
+                    $this->Flash->error(__('O registro é obrigatório para o tipo de usuário selecionado.'));
                     return $this->redirect(['action' => 'add']);
                 }
             }
@@ -260,7 +260,6 @@ class UsersController extends AppController
         if ($result->isValid()) {
             $user = $result->getData();
             $this->Flash->success(__('Usuário logado.'));
-
             // Redirect based on category
             switch ($user['categoria']) {
                 case '1': // Admin
@@ -282,9 +281,16 @@ class UsersController extends AppController
                     return $this->redirect(['controller' => 'Administradores', 'action' => 'add']);
                 case '2': // Aluno: two ways to pair the user with an aluno: aluno_id or numero
                     if ($user['aluno_id']) {
-                        $aluno = $this->fetchTable('Alunos')->get($user['aluno_id']);
+                        try {
+                            $aluno = $this->fetchTable('Alunos')->get($user['aluno_id']);
+                        } catch (\Cake\Datasource\Exception\RecordNotFoundException $error) {
+                            $this->Flash->error(__( 'Record not found: ' . $error->getMessage() ));
+                            return $this->redirect([ 'controller' => 'Alunos', 'action' => 'add']);
+                        }
                         if ($aluno) {
-                            if ($aluno->user_id != $user['id']) {
+                            // pr($aluno->user_id . ' ' . $user['id'] . ' ' . $aluno->registro);
+                            // pr($user['aluno_id'] . ' ' . $aluno->id . ' ' . $user->registro);
+                            if ($aluno->user_id != $user['id'] || $user['aluno_id'] != $aluno->id || $user['registro'] != $aluno->registro) {
                                 // Update user->aluno_id with the aluno->id
                                 $user->aluno_id = $aluno->id;
                                 $user->registro = $aluno->registro;
@@ -298,7 +304,12 @@ class UsersController extends AppController
                         }
                     }
                     if ($user['registro']) {
-                        $aluno = $this->fetchTable('Alunos')->findByRegistro($user['registro'])->first();
+                        try {
+                            $aluno = $this->fetchTable('Alunos')->findByRegistro($user['registro'])->first();
+                        } catch (\Cake\Datasource\Exception\RecordNotFoundException $error) {
+                            $this->Flash->error(__( 'Record not found: ' . $error->getMessage() ));
+                            return $this->redirect([ 'controller' => 'Alunos', 'action' => 'add']);
+                        }
                         if ($aluno) {
                             if ($aluno->user_id != $user['id']) {
                                 // Update user->aluno_id with the aluno->id
@@ -317,9 +328,14 @@ class UsersController extends AppController
 
                 case '3': // Professor: two ways to pair the user with a professor: professor_id or siape
                     if ($user['professor_id']) {
-                        $professor = $this->fetchTable('Professores')->get($user['professor_id']);
+                        try {
+                            $professor = $this->fetchTable('Professores')->get($user['professor_id']);
+                        } catch (\Cake\Datasource\Exception\RecordNotFoundException $error) {
+                            $this->Flash->error(__( 'Record not found: ' . $error->getMessage() ));
+                            return $this->redirect([ 'controller' => 'Professores', 'action' => 'add']);
+                        }
                         if ($professor) {
-                            if ($professor->user_id != $user['id']) {
+                            if ($professor->user_id != $user['id'] || $user['professor_id'] != $professor->id || $user['registro'] != $professor->siape) {
                                 // Update user->professor_id with the professor->id
                                 $user->professor_id = $professor->id;
                                 $user->registro = $professor->siape;
@@ -333,7 +349,12 @@ class UsersController extends AppController
                         }               
                     }
                     if ($user['registro']) {
-                        $professor = $this->fetchTable('Professores')->findBySiape($user['registro'])->first();
+                        try {
+                            $professor = $this->fetchTable('Professores')->findBySiape($user['registro'])->first();
+                        } catch (\Cake\Datasource\Exception\RecordNotFoundException $error) {
+                            $this->Flash->error(__( 'Record not found: ' . $error->getMessage() ));
+                            return $this->redirect([ 'controller' => 'Professores', 'action' => 'add']);
+                        }
                         if ($professor) {
                             // Update user->professor_id with the professor->id
                             $user->professor_id = $professor->id;
@@ -349,9 +370,14 @@ class UsersController extends AppController
                     return $this->redirect(['controller' => 'Professores', 'action' => 'add']);
                 case '4': // Supervisor: two ways to pair the user with a supervisor: supervisor_id or cress
                     if ($user['supervisor_id']) {
-                        $supervisor = $this->fetchTable('Supervisores')->get($user['supervisor_id']);
+                        try {
+                            $supervisor = $this->fetchTable('Supervisores')->get($user['supervisor_id']);
+                        } catch (\Cake\Datasource\Exception\RecordNotFoundException $error) {
+                            $this->Flash->error(__( 'Record not found: ' . $error->getMessage() ));
+                            return $this->redirect([ 'controller' => 'Supervisores', 'action' => 'add']);
+                        }
                         if ($supervisor) {
-                            if ($supervisor->user_id != $user['id']) {
+                            if ($supervisor->user_id != $user['id'] || $user['supervisor_id'] != $supervisor->id || $user['registro'] != $supervisor->cress) {
                                 // Update user->supervisor_id with the supervisor->id
                                 $user->supervisor_id = $supervisor->id;
                                 $user->registro = $supervisor->cress;
@@ -365,7 +391,12 @@ class UsersController extends AppController
                         }
                     }
                     if ($user['registro']) {
-                        $supervisor = $this->fetchTable('Supervisores')->findByCress($user['registro'])->first();
+                        try {
+                            $supervisor = $this->fetchTable('Supervisores')->findByCress($user['registro'])->first();
+                        } catch (\Cake\Datasource\Exception\RecordNotFoundException $error) {
+                            $this->Flash->error(__( 'Record not found: ' . $error->getMessage() ));
+                            return $this->redirect([ 'controller' => 'Supervisores', 'action' => 'add']);
+                        }
                         if ($supervisor) {
                             if ($supervisor->user_id != $user['id']) {
                                 // Update user->supervisor_id with the supervisor->id

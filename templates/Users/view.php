@@ -42,7 +42,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <td><?= $user->email ? $this->Text->autoLinkEmails($user->email) : '' ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Número (DRE, Siape ou CRESS)') ?></th>
+                    <th><?= __('Registro (DRE, Siape ou CRESS)') ?></th>
                     <td><?= h($user->registro) ?></td>
                 </tr>
                 <tr>
@@ -160,9 +160,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 <p><?= $this->Html->link('Adicionar professor', ['controller' => 'professores', 'action' => 'add'], ['class' => 'button btn-info']) ?></p>
             <?php endif; ?>
 
-            <?php if ($user->categoria == '4') : ?>
+            <?php if ($user->categoria == '4' && !empty($user->supervisor->id)) : ?>
             <div class="related">
-                <h4><?= __('Supervisor') ?></h4>
+                <h4><?= __('Supervisor ' . $user->supervisor_id) ?></h4>
                 <div class="table_wrap">
                     <table>
                         <tr>

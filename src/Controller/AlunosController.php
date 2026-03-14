@@ -118,7 +118,6 @@ class AlunosController extends AppController
         
         if ($this->request->is('post')) {
             $aluno = $this->Alunos->patchEntity($aluno, $this->request->getData());
-            
             if (!$aluno->user_id) { 
                 $user = $this->Authentication->getIdentity();
                 $aluno->user_id = $user->get('id'); 

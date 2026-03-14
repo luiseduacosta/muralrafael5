@@ -67,7 +67,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 	                    <th class="actions"><?= __('Actions') ?></th>
 	                    <th><?= $this->Paginator->sort('id') ?></th>
 			        <?php endif; ?>
-                    <th><?= $this->Paginator->sort('Instituicao.instituicao', 'Instituição') ?></th>
+                    <th><?= $this->Paginator->sort('instituicao', 'Instituição') ?></th>
                     <th><?= $this->Paginator->sort('vagas') ?></th>
                     <th><?= $this->Paginator->sort('beneficios') ?></th>
                     <th><?= $this->Paginator->sort('fim_de_semana', 'Fim de semana') ?></th>

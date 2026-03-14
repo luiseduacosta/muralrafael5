@@ -45,7 +45,18 @@ class MuralestagiosController extends AppController
             ->contain($contained);
         }
 
-        $this->set('muralestagios', $this->paginate($muralestagios));
+        $this->set('muralestagios', $this->paginate($muralestagios, [
+            'sortableFields' => [
+                'instituicao', 
+                'vagas', 
+                'beneficios', 
+                'final_de_semana', 
+                'cargaHoraria', 
+                'dataInscricao', 
+                'dataSelecao'
+            ],
+            'order' => ['dataInscricao' => 'desc'],
+        ]));
 
         $periodototal = $this->Muralestagios->find('list', [
             'keyField' => 'periodo',
