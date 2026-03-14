@@ -20,14 +20,15 @@ class EstagiariosController extends AppController
      */
     protected array $paginate = [
         "sortableFields" => [
-            "id",
+            "Estagiarios.id",
             "Alunos.nome",
-            "registro",
-            "Turnos.turno",
-            "nivel",
+            "Estagiarios.registro",
             "Instituicoes.instituicao",
             "Supervisores.nome",
-            "Professores.nome",
+            "Estagiarios.periodo",
+            "Estagiarios.nivel",
+            "Estagiarios.nota",
+            "Estagiarios.ch",
         ],
     ];
 
@@ -740,14 +741,26 @@ class EstagiariosController extends AppController
                     "Instituicoes" => ["fields" => ["id", "instituicao"]],
                     "Avaliacoes" => ["fields" => ["id", "estagiario_id"]],
             ])
-            ->where(["Estagiarios.professor_id" => $professor_id])
-            ->order(["Alunos.nome" => "ASC"]);
+            ->where(["Estagiarios.professor_id" => $professor_id]);
 
         if ($periodo) {
             $estagiariosQuery->where(["Estagiarios.periodo" => $periodo]);
         }
 
-        $estagiarios = $this->paginate($estagiariosQuery);
+        $estagiarios = $this->paginate($estagiariosQuery, [
+            "sortableFields" => [
+                "Estagiarios.id",
+                "Alunos.nome",
+                "Estagiarios.registro",
+                "Instituicoes.instituicao",
+                "Supervisores.nome",
+                "Estagiarios.periodo",
+                "Estagiarios.nivel",
+                "Estagiarios.nota",
+                "Estagiarios.ch",
+            ],
+            "order" => ["Alunos.nome" => "ASC"],
+        ]);
 
         $this->set("periodo", $periodo);
         $this->set("periodos", $periodos);

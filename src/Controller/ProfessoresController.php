@@ -30,10 +30,22 @@ class ProfessoresController extends AppController
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
-        $professores = $this->paginate($this->Professores->find('all', [
-            'contain' => ['Users'],
-            'order' => ['nome' => 'ASC']
-        ]));
+        $query = $this->Professores->find()->contain(['Users']);
+
+        $professores = $this->paginate($query, [
+            'order' => ['Professores.nome' => 'ASC'],
+            'sortableFields' => [
+                'id',
+                'Professores.nome',
+                'cpf',
+                'siape',
+                'email',
+                'celular',
+                'curriculolattes',
+                'departamento',
+            ],
+        ]);
+
         $this->set(compact('professores'));
     }
 
@@ -92,6 +104,11 @@ class ProfessoresController extends AppController
             $this->Flash->error('Authorization error: ' . $error->getMessage());
 
             return $this->redirect('/');
+        }
+
+        if ($user_data['professor_id'] > 0) {
+            $this->Flash->warning(__('Professor já está cadastrado.'));
+            return $this->redirect(['action' => 'view', $user_data['professor_id']]);
         }
 
         $professor = $this->Professores->newEmptyEntity();

@@ -20,15 +20,15 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             </aside>
             <?= $this->Form->create($administrador) ?>
             <fieldset>
-                <h3><?= __('Editando administrador_' . $administrador->id) ?></h3>
+                <h3><?= __('Adicionar administrador') ?></h3>
                 <?php
-                    if ($user_data['administrador_id']):
-                       echo $this->Form->control('user_id', ['type' => 'number', 'value' => $administrador->user_id, 'readonly' => true]); 
+                    if ($user_data['categoria'] == '1'):
+                       echo $this->Form->control('user_id', ['type' => 'number', 'label' => 'Usuario', 'value' => $user_session['id'], 'readonly' => true]); 
                     endif;
-                    echo $this->Form->control('nome');
+                    echo $this->Form->control('nome', ['label' => 'Nome']);
                 ?>
             </fieldset>
-            <?= $this->Form->button(__('Editar'), ['class' => 'button']) ?>
+            <?= $this->Form->button(__('Adicionar'), ['class' => 'button']) ?>
             <?= $this->Form->end() ?>
         </div>
     </div>

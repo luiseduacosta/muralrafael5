@@ -188,7 +188,7 @@ $departamentos = [
                             <th><?= __('Id') ?></th>
                             <th><?= __('Email') ?></th>
                             <th><?= __('Número') ?></th>
-                            <th><?= __('Timestamp') ?></th>
+                            <th><?= __('Atualização') ?></th>
                         </tr>
                         <tr>
                             <td class="actions">
@@ -217,19 +217,19 @@ $departamentos = [
                 <div class="table_wrap">
                     <table>
                         <tr>
-                            <th class="actions"><?= __('Actions') ?></th>
+                            <th class="actions"><?= __('Ações') ?></th>
                             <th><?= __('Id') ?></th>
-                            <th><?= __('Aluno') ?></th>
+                            <th><?= __('Aluno(a)') ?></th>
                             <th><?= __('Registro') ?></th>
                             <th><?= __('Turno') ?></th>
-                            <th><?= __('Nivel') ?></th>
-                            <th><?= __('Tc') ?></th>
-                            <th><?= __('Tc Solicitacao') ?></th>
-                            <th><?= __('Instituicao') ?></th>
-                            <th><?= __('Supervisor') ?></th>
-                            <th><?= __('Periodo') ?></th>
+                            <th><?= __('Nível') ?></th>
+                            <th><?= __('Tc assinado') ?></th>
+                            <th><?= __('Tc Solicitação') ?></th>
+                            <th><?= __('Instituição') ?></th>
+                            <th><?= __('Supervisor(a)') ?></th>
+                            <th><?= __('Período') ?></th>
                             <th><?= __('Nota') ?></th>
-                            <th><?= __('Ch') ?></th>
+                            <th><?= __('CH') ?></th>
                         </tr>
 
                         <?php foreach ($estagiarios as $estagiario) : ?>
@@ -257,8 +257,8 @@ $departamentos = [
         						?>
                             </td>
                             <td><?= h($estagiario->nivel) ?></td>
-                            <td><?= h($estagiario->tc) ?></td>
-                            <td><?= h($estagiario->tc_solicitacao) ?></td>
+                            <td><?= h($estagiario->tc == '1' ? 'Sim' : 'Não') ?></td>
+                            <td><?= h($estagiario->tc_solicitacao?->format('d/m/Y')) ?></td>
                             <td><?= $estagiario->instituicao ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario->instituicao->id]) : '' ?></td>
                             <td><?= $estagiario->supervisor ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
                             <td><?= h($estagiario->periodo) ?></td>

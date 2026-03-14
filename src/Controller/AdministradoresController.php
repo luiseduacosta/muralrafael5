@@ -51,16 +51,39 @@ class AdministradoresController extends AppController
      */
     public function view(?string $id = null)
     {
-        $administrador = $this->Administradores->get($id, [
-            'contain' => ['Users'],
-        ]);
 
         try {
-            $this->Authorization->authorize($administrador);
+            $this->Authorization->authorize($this->Administradores);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
-
             return $this->redirect('/');
+        }
+
+        if ($id) {
+            try {
+                $administrador = $this->Administradores->get($id);
+            } catch (\Exception $error) {
+                $this->Flash->error('Error: ' . $error->getMessage());
+                return $this->redirect('/');
+            }
+        }
+
+        $user_id = $this->request->getQuery('user_id');
+        if ($user_id) {
+            try {
+                $administrador = $this->Administradores->find('all', [
+                    'conditions' => ['Administradores.user_id' => $user_id],
+                    'contain' => ['Users'],
+                ])->first();
+            } catch (\Exception $error) {
+                $this->Flash->error('Error: ' . $error->getMessage());
+                return $this->redirect('/');
+            }
+        }
+
+        if (!$administrador) {
+            $this->Flash->error('Administrador not found');
+            return $this->redirect(['action' => 'index']);
         }
 
         $this->set(compact('administrador'));
@@ -96,4 +119,26 @@ class AdministradoresController extends AppController
         }
         $this->set(compact('administrador'));
     }
+
+    /**
+     * Add method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     */
+    public function add()
+    {
+        $administrador = $this->Administradores->newEmptyEntity();
+        if ($this->request->is('post')) {
+            $administrador = $this->Administradores->patchEntity($administrador, $this->request->getData());
+
+            if ($this->Administradores->save($administrador)) {
+                $this->Flash->success(__('The administrador has been saved.'));
+
+                return $this->redirect(['action' => 'view', $administrador->id]);
+            }
+            $this->Flash->error(__('The administrador could not be saved. Please, try again.'));
+        }
+        $this->set(compact('administrador'));
+    }
+    
 }

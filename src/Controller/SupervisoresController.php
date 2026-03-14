@@ -28,9 +28,20 @@ class SupervisoresController extends AppController
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
-        $supervisores = $this->paginate($this->Supervisores->find('all', [
-            'contain' => ['Users'],
-        ]));
+        $query = $this->Supervisores->find()->contain(['Users']);
+
+        $supervisores = $this->paginate($query, [
+            'order' => ['Supervisores.nome' => 'ASC'],
+            'sortableFields' => [
+                'id',
+                'nome',
+                'cpf',
+                'cress',
+                'email',
+                'Users.email',
+            ],
+        ]);
+
         $this->set(compact('supervisores'));
     }
 
@@ -104,6 +115,11 @@ class SupervisoresController extends AppController
             $this->Flash->error('Authorization error: ' . $error->getMessage());
 
             return $this->redirect('/');
+        }
+
+        if ($user_data['supervisor_id'] > 0) {
+            $this->Flash->warning(__('Supervisor já está cadastrado.'));
+            return $this->redirect(['action' => 'view', $user_data['supervisor_id']]);
         }
 
         $supervisor = $this->Supervisores->newEmptyEntity();

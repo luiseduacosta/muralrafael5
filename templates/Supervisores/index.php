@@ -21,7 +21,7 @@
                     <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('nome') ?></th>
                     <th><?= $this->Paginator->sort('cpf', 'CPF') ?></th>
-                    <th><?= $this->Paginator->sort('email') ?></th>
+                    <th><?= $this->Paginator->sort('Users.email', 'Email') ?></th>
                     <th><?= $this->Paginator->sort('cress', 'CRESS') ?></th>
                 </tr>
             </thead>

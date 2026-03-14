@@ -28,7 +28,21 @@ class InstituicoesController extends AppController
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
-        $instituicoes = $this->paginate($this->Instituicoes->find()->order(['instituicao' => 'ASC'])->contain(['Areas']));
+        $query = $this->Instituicoes->find()->contain(['Areas']);
+
+        $instituicoes = $this->paginate($query, [
+            'order' => ['Instituicoes.instituicao' => 'ASC'],
+            'sortableFields' => [
+                'id',
+                'Instituicoes.instituicao',
+                'natureza',
+                'cnpj',
+                'convenio',
+                'expira',
+                'email',
+                'Areas.area',
+            ],
+        ]);
 
         $this->set(compact('instituicoes'));
     }

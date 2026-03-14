@@ -78,7 +78,7 @@ class UsersController extends AppController
             $this->Flash->error('Authorization error: ' . $error->getMessage());
             return $this->redirect(['action' => 'view', $user_session->id]);
         }
-        
+
         $this->set(compact('user'));
     }
 
@@ -108,59 +108,57 @@ class UsersController extends AppController
                 'accessibleFields' => ['password' => true]
             ]);
  
-            // Verfify is numero has a valid value set. It is mandatory for all of the new users except admin
+            // Verify is numero has a valid value set. It is mandatory for all of the new users except admin
             if ($this->request->getData('categoria') != '1') {
                 $numero = $this->request->getData('numero');
                 if (empty($numero)) {
                     $this->Flash->error(__('O número é obrigatório para o tipo de usuário selecionado.'));
-                } else {
-                    if ($this->request->getData('categoria') == '2') {
-                        $aluno = $this->fetchTable('Alunos')->findByRegistro($numero)->first();
-                        if ($aluno) {
-                            $user->aluno_id = $aluno->id;
-                            $user->numero = $aluno->registro;
-                        } else {
-                            $user->numero = $numero;
-                        }
-                    } elseif ($this->request->getData('categoria') == '3') {
-                        $professor = $this->fetchTable('Professores')->findBySiape($numero)->first();
-                        if ($professor) {
-                            $user->professor_id = $professor->id;
-                            $user->numero = $professor->siape;
-                        }
-                    } elseif ($this->request->getData('categoria') == '4') {
-                        $supervisor = $this->fetchTable('Supervisores')->findByCress($numero)->first();
-                        if ($supervisor) {
-                            $user->supervisor_id = $supervisor->id;
-                            $user->numero = $supervisor->cress;
-                        }
-                    }
+                    return $this->redirect(['action' => 'add']);
                 }
             }
 
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
-                // Update the entity with the user id
+                // Update the entities with the user id and the user id with the entity id
                 if ($user->categoria == '2') {
-                    $aluno = $this->fetchTable('Alunos')->findByRegistro($user->numero)->first();
+                    $aluno = $this->fetchTable('Alunos')->findByRegistro($user->registro)->first();
                     if ($aluno) {
                         $this->fetchTable('Alunos')->updateAll(['user_id' => $user->id], ['id' => $aluno->id]);
+                        $this->fetchTable('Users')->updateAll(['aluno_id' => $aluno->id], ['id' => $user->id]);
+                    } else {
+                        $this->Flash->error(__('Aluno(a) não cadastrado(a).'));
+                        return $this->redirect(['controller' => 'Alunos', 'action' => 'add']);
                     }
                 } else if ($user->categoria == '3') {
-                    $professor = $this->fetchTable('Professores')->findBySiape($user->numero)->first();
+                    $professor = $this->fetchTable('Professores')->findBySiape($user->registro)->first();
                     if ($professor) {
                         $this->fetchTable('Professores')->updateAll(['user_id' => $user->id], ['id' => $professor->id]);
+                        $this->fetchTable('Users')->updateAll(['professor_id' => $professor->id], ['id' => $user->id]);
+                    } else {
+                        $this->Flash->error(__('Professor(a) não cadastrado(a).'));
+                        return $this->redirect(['controller' => 'Professores', 'action' => 'add']);
                     }
                 } else if ($user->categoria == '4') {
-                    $supervisor = $this->fetchTable('Supervisores')->findByCress($user->numero)->first();
+                    $supervisor = $this->fetchTable('Supervisores')->findByCress($user->registro)->first();
                     if ($supervisor) {
                         $this->fetchTable('Supervisores')->updateAll(['user_id' => $user->id], ['id' => $supervisor->id]);
+                        $this->fetchTable('Users')->updateAll(['supervisor_id' => $supervisor->id], ['id' => $user->id]);
+                    } else {
+                        $this->Flash->error(__('Supervisor(a) não cadastrado(a).'));
+                        return $this->redirect(['controller' => 'Supervisores', 'action' => 'add']);
+                    }
+                } elseif ($user->categoria == '1') {
+                    $administrador = $this->fetchTable('Administradores')->findByEmail($user->email)->first();
+                    if ($administrador) {
+                        $this->fetchTable('Administradores')->updateAll(['user_id' => $user->id], ['id' => $administrador->id]);
+                        $this->fetchTable('Users')->updateAll(['administrador_id' => $administrador->id], ['id' => $user->id]);
+                    } else {
+                        $this->Flash->error(__('Administrador(a) não cadastrado(a).'));
+                        return $this->redirect(['controller' => 'Administradores', 'action' => 'add']);
                     }
                 }
-
                 return $this->redirect(['action' => 'view', $user->id]);
             }
-            
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         
@@ -266,32 +264,80 @@ class UsersController extends AppController
             // Redirect based on category
             switch ($user['categoria']) {
                 case '1': // Admin
-                    return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
-                case '2': // Aluno
-                    $aluno = $this->fetchTable('Alunos')->findByRegistro($user['numero'])->first();
-                    if ($aluno) {
-                        if ($aluno->user_id == $user['id']) {
-                            return $this->redirect(['controller' => 'Alunos', 'action' => 'view', $aluno->id]);
+                    $administrador = $this->fetchTable('Administradores')->findByUserId($user['id'])->first();
+                    if ($administrador) {
+                        if ($administrador->user_id == $user['id']) {
+                            return $this->redirect(['controller' => 'Administradores', 'action' => 'view', $administrador->id]);
                         } else {
-                            // Update user->aluno_id with the aluno->id
-                            $user->aluno_id = $aluno->id;
+                            // Update user->administrador_id with the administrador->id
+                            $user->administrador_id = $administrador->id;
                             $this->Users->save($user);
-                            // Update aluno with the user->id
-                            $aluno->user_id = $user['id'];
-                            $this->fetchTable('Alunos')->save($aluno);
-                            $this->Flash->success(__('Aluno e usuário associados.'));
+                            // Update administrador with the user->id
+                            $administrador->user_id = $user['id'];
+                            $this->fetchTable('Administradores')->save($administrador);
+                            $this->Flash->success(__('Administrador e usuário associados.'));
+                            return $this->redirect(['controller' => 'Administradores', 'action' => 'view', $administrador->id]);
+                        }
+                    }
+                    return $this->redirect(['controller' => 'Administradores', 'action' => 'add']);
+                case '2': // Aluno: two ways to pair the user with an aluno: aluno_id or numero
+                    if ($user['aluno_id']) {
+                        $aluno = $this->fetchTable('Alunos')->get($user['aluno_id']);
+                        if ($aluno) {
+                            if ($aluno->user_id != $user['id']) {
+                                // Update user->aluno_id with the aluno->id
+                                $user->aluno_id = $aluno->id;
+                                $user->registro = $aluno->registro;
+                                $this->Users->save($user);
+                                // Update aluno with the user->id
+                                $aluno->user_id = $user['id'];
+                                $this->fetchTable('Alunos')->save($aluno);
+                                $this->Flash->success(__('Aluno e usuário associados.'));
+                            }
+                            return $this->redirect(['controller' => 'Alunos', 'action' => 'view', $aluno->id]);
+                        }
+                    }
+                    if ($user['registro']) {
+                        $aluno = $this->fetchTable('Alunos')->findByRegistro($user['registro'])->first();
+                        if ($aluno) {
+                            if ($aluno->user_id != $user['id']) {
+                                // Update user->aluno_id with the aluno->id
+                                $user->aluno_id = $aluno->id;
+                                $user->registro = $aluno->registro;
+                                $this->Users->save($user);
+                                // Update aluno with the user->id
+                                $aluno->user_id = $user['id'];
+                                $this->fetchTable('Alunos')->save($aluno);
+                                $this->Flash->success(__('Aluno e usuário associados.'));
+                            }
                             return $this->redirect(['controller' => 'Alunos', 'action' => 'view', $aluno->id]);
                         }
                     }
                     return $this->redirect(['controller' => 'Alunos', 'action' => 'add']);
-                case '3': // Professor
-                    $professor = $this->fetchTable('Professores')->findBySiape($user['numero'])->first();
-                    if ($professor) {
-                        if ($professor->user_id == $user['id']) {
+
+                case '3': // Professor: two ways to pair the user with a professor: professor_id or siape
+                    if ($user['professor_id']) {
+                        $professor = $this->fetchTable('Professores')->get($user['professor_id']);
+                        if ($professor) {
+                            if ($professor->user_id != $user['id']) {
+                                // Update user->professor_id with the professor->id
+                                $user->professor_id = $professor->id;
+                                $user->registro = $professor->siape;
+                                $this->Users->save($user);
+                                // Update professor with the user->id
+                                $professor->user_id = $user['id'];
+                                $this->fetchTable('Professores')->save($professor);
+                                $this->Flash->success(__('Professor e usuário associados.'));
+                            }
                             return $this->redirect(['controller' => 'Professores', 'action' => 'view', $professor->id]);
-                        } else {
+                        }               
+                    }
+                    if ($user['registro']) {
+                        $professor = $this->fetchTable('Professores')->findBySiape($user['registro'])->first();
+                        if ($professor) {
                             // Update user->professor_id with the professor->id
                             $user->professor_id = $professor->id;
+                            $user->registro = $professor->siape;
                             $this->Users->save($user);
                             // Update professor with the user->id
                             $professor->user_id = $user['id'];
@@ -301,19 +347,36 @@ class UsersController extends AppController
                         }
                     }
                     return $this->redirect(['controller' => 'Professores', 'action' => 'add']);
-                case '4': // Supervisor
-                    $supervisor = $this->fetchTable('Supervisores')->findByCress($user['numero'])->first();
-                    if ($supervisor) {
-                        if ($supervisor->user_id == $user['id']) {
+                case '4': // Supervisor: two ways to pair the user with a supervisor: supervisor_id or cress
+                    if ($user['supervisor_id']) {
+                        $supervisor = $this->fetchTable('Supervisores')->get($user['supervisor_id']);
+                        if ($supervisor) {
+                            if ($supervisor->user_id != $user['id']) {
+                                // Update user->supervisor_id with the supervisor->id
+                                $user->supervisor_id = $supervisor->id;
+                                $user->registro = $supervisor->cress;
+                                $this->Users->save($user);
+                                // Update supervisor with the user->id
+                                $supervisor->user_id = $user['id'];
+                                $this->fetchTable('Supervisores')->save($supervisor);
+                                $this->Flash->success(__('Supervisor e usuário associados.'));
+                            }
                             return $this->redirect(['controller' => 'Supervisores', 'action' => 'view', $supervisor->id]);
-                        } else {
-                            // Update user->supervisor_id with the supervisor->id
-                            $user->supervisor_id = $supervisor->id;
-                            $this->Users->save($user);
-                            // Update supervisor with the user->id
-                            $supervisor->user_id = $user['id'];
-                            $this->fetchTable('Supervisores')->save($supervisor);
-                            $this->Flash->success(__('Supervisor e usuário associados.'));
+                        }
+                    }
+                    if ($user['registro']) {
+                        $supervisor = $this->fetchTable('Supervisores')->findByCress($user['registro'])->first();
+                        if ($supervisor) {
+                            if ($supervisor->user_id != $user['id']) {
+                                // Update user->supervisor_id with the supervisor->id
+                                $user->supervisor_id = $supervisor->id;
+                                $user->registro = $supervisor->cress;
+                                $this->Users->save($user);
+                                // Update supervisor with the user->id
+                                $supervisor->user_id = $user['id'];
+                                $this->fetchTable('Supervisores')->save($supervisor);
+                                $this->Flash->success(__('Supervisor e usuário associados.'));
+                            }
                             return $this->redirect(['controller' => 'Supervisores', 'action' => 'view', $supervisor->id]);
                         }
                     }

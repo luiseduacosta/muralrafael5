@@ -119,6 +119,9 @@ class MuralestagiosController extends AppController
             $dados = $this->request->getData();
             $dados['instituicao'] = $instituicao->instituicao;
 
+            // Horario de seleção has only 5 digits
+            $dados['horarioSelecao'] = substr($dados['horarioSelecao'], 0, 5);
+
             $muralestagio = $this->Muralestagios->patchEntity($muralestagio, $dados);
 
             if ($this->Muralestagios->save($muralestagio)) {
@@ -166,6 +169,9 @@ class MuralestagiosController extends AppController
             // Put the instituicao name in the data
             $dados = $this->request->getData();
             $dados['instituicao'] = $instituicao->instituicao;
+
+            // Horario de seleção has only 5 digits
+            $dados['horarioSelecao'] = substr($dados['horarioSelecao'], 0, 5);
 
             $muralestagio = $this->Muralestagios->patchEntity($muralestagio, $dados);
 

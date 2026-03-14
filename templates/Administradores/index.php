@@ -11,6 +11,11 @@
     <div class="paginator">
         <?= $this->element('paginator'); ?>
     </div>
+
+    <aside>
+        <?= $this->Html->link(__('Novo Administrador'), ['action' => 'add'], ['class' => 'button']) ?>
+    </aside>
+
     <div class="table_wrap">
         <table>
             <thead>

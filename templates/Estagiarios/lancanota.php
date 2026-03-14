@@ -10,10 +10,6 @@ $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
 
-<?php
-// pr($estagiarios); 
-// die();
-?>
 <script type="text/javascript">
     $(document).ready(function () {
         var url = "<?= $this->Html->Url->build(['controller' => 'estagiarios', 'action' => 'lancanota']); ?>";
@@ -58,18 +54,18 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <thead>
                 <tr id="table-estagiarios-header">
                     <?php if ($user_data['categoria'] == '1' || $user_data['categoria'] == '3'): ?>
-                        <th><?= $this->Paginator->sort('id') ?></th>
+                        <th><?= $this->Paginator->sort('Estagiarios.id', 'Id') ?></th>
                     <?php endif; ?>
-                    <th><?= $this->Paginator->sort('Alunos.nome', 'Aluno') ?></th>
-                    <th><?= $this->Paginator->sort('registro') ?></th>
-                    <th><?= $this->Paginator->sort('Instituicoes.instituicao', 'Instituicoes') ?></th>
-                    <th><?= $this->Paginator->sort('Supervisores.nome', 'Supervisor') ?></th>
-                    <th><?= $this->Paginator->sort('periodo', 'Período') ?></th>
-                    <th><?= $this->Paginator->sort('nivel', 'Nível') ?></th>
-                    <th><?= $this->Paginator->sort('nota') ?></th>
-                    <th><?= $this->Paginator->sort('ch', 'CH') ?></th>
-                    <th><?= $this->Paginator->sort('folhadeatividades', 'Atividades') ?></th>
-                    <th><?= $this->Paginator->sort('avaliacao', 'Avaliação discente') ?></th>
+                    <th><?= $this->Paginator->sort('Alunos.nome', 'Aluno(a)') ?></th>
+                    <th><?= $this->Paginator->sort('Estagiarios.registro', 'Registro') ?></th>
+                    <th><?= $this->Paginator->sort('Instituicoes.instituicao', 'Instituição') ?></th>
+                    <th><?= $this->Paginator->sort('Supervisores.nome', 'Supervisor(a)') ?></th>
+                    <th><?= $this->Paginator->sort('Estagiarios.periodo', 'Período') ?></th>
+                    <th><?= $this->Paginator->sort('Estagiarios.nivel', 'Nível') ?></th>
+                    <th><?= $this->Paginator->sort('Estagiarios.nota', 'Nota') ?></th>
+                    <th><?= $this->Paginator->sort('Estagiarios.ch', 'CH') ?></th>
+                    <th><?= __('Atividades') ?></th>
+                    <th><?= __('Avaliação discente') ?></th>
                     <th class="actions"><?= __('Ações') ?></th>
                 </tr>
             </thead>
@@ -77,7 +73,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 <?php foreach ($estagiarios as $estagiario): ?>
                     <?php // pr($estagiario); die(); ?>
                     <tr data-id="<?= $estagiario->id ?>">
-                        <?php if ($user_data['categoria'] == '1'): ?>
+                        <?php if ($user_data['categoria'] == '1' || $user_data['categoria'] == '3'): ?>
                             <td><?= $estagiario->id ?></td>
                         <?php endif; ?>
                         <td><?= $this->Html->link($estagiario->aluno->nome ?? 'S/d', ['controller' => 'Alunos', 'action' => 'view', $estagiario['aluno_id']]) ?>

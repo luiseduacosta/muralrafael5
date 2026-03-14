@@ -66,15 +66,15 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 			        <?php if ($user_data['categoria'] == '1'): ?>
 	                    <th class="actions"><?= __('Actions') ?></th>
 					<?php endif; ?>
-	                <th><?= $this->Paginator->sort('id') ?></th>
+	                <th><?= $this->Paginator->sort('Estagiarios.id', 'Id') ?></th>
                     <th><?= $this->Paginator->sort('Alunos.nome', 'Aluno') ?></th>
                     <th><?= $this->Paginator->sort('Instituicoes.instituicao', 'Instituicao') ?></th>
-                    <th><?= $this->Paginator->sort('periodo') ?></th>
-                    <th><?= $this->Paginator->sort('nivel') ?></th>
+                    <th><?= $this->Paginator->sort('Estagiarios.periodo', 'Período') ?></th>
+                    <th><?= $this->Paginator->sort('Estagiarios.nivel', 'Nível') ?></th>
                     <th><?= $this->Paginator->sort('Supervisores.nome', 'Supervisor') ?></th>
                     <th><?= $this->Paginator->sort('Professores.nome', 'Professor') ?></th>
-                    <th><?= $this->Paginator->sort('nota') ?></th>
-                    <th><?= $this->Paginator->sort('ch') ?></th>
+                    <th><?= $this->Paginator->sort('Estagiarios.nota', 'Nota') ?></th>
+                    <th><?= $this->Paginator->sort('Estagiarios.ch', 'CH') ?></th>
                 </tr>
             </thead>
             <tbody>

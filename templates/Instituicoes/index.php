@@ -34,8 +34,8 @@ if ($user_session) {
                         <th class="actions"><?= __('Actions') ?></th>
                         <th><?= $this->Paginator->sort('id') ?></th>
                     <?php endif; ?>
-                    <th><?= $this->Paginator->sort('instituicao', 'Instituição') ?></th>
-                    <th><?= $this->Paginator->sort('Area.area', 'Área') ?></th>
+                    <th><?= $this->Paginator->sort('Instituicoes.instituicao', 'Instituição') ?></th>
+                    <th><?= $this->Paginator->sort('Areas.area', 'Área') ?></th>
                     <th><?= $this->Paginator->sort('natureza') ?></th>
                     <th><?= $this->Paginator->sort('cnpj', 'CNPJ') ?></th>
                     <th><?= $this->Paginator->sort('convenio', 'Convênio') ?></th>

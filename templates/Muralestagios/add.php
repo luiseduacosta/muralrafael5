@@ -5,19 +5,6 @@
  */
 ?>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<script type="text/javascript">
-// Put the text of $instituicoes selected on the select with id 'instituicao_id' on the input with id 'instituicao'
-$(document).ready(function() {
-    $('#instituicao-id').change(function() {
-        var value = $(this).find('option:selected').text();
-        console.log(value);
-        $('#instituicao').val(value);
-    });
-});
-</script>
-
 <div>
     <div class="column-responsive column-80">
         <div class="muralestagios form content">
@@ -31,7 +18,6 @@ $(document).ready(function() {
                 <h3><?= __('Adicionar vagas de estagio') ?></h3>
                 <?php
                     echo $this->Form->control('instituicao_id', ['options' => $instituicoes, 'empty' => true, 'class' => 'form-control']);
-                    echo $this->Form->control('instituicao', ['type' => 'hidden', 'label' => 'Instituição', 'id' => 'instituicao', 'class' => 'form-control']);
                     echo $this->Form->control('email', ['label' => 'E-mail']);
                     echo $this->Form->control('convenio', ['type' => 'select', 'options' => [1 => 'Sim', 0 => 'Não'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
                     echo $this->Form->control('vagas', ['label' => 'Número de vagas', 'default' => '1']);

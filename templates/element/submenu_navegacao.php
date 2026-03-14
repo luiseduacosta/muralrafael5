@@ -101,7 +101,7 @@ if ($user_session)
                 </menu>
             </li>
         <?php else: ?>
-            <li><?php echo $this->Html->link('Fale conosco', 'mailto:estagio@ess.ufrj.br'); ?></li>
+            <li><?php echo $this->Html->link('Fale conosco', 'mailto:[EMAIL_ADDRESS]'); ?></li>
         <?php endif; ?>
 
         <li class="menu-user">

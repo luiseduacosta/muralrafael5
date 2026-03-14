@@ -9,6 +9,7 @@ declare(strict_types=1);
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
+
 ?>
 <div>
     <div class="column-responsive column-80">
@@ -29,6 +30,10 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <h3>user_<?= h($user->id) ?></h3>
             <table>
                 <tr>
+                    <th><?= __('Categoria') ?></th>
+                    <td><?= h($user->categoria) ?></td>
+                </tr>
+                <tr>
                     <th><?= __('Id') ?></th>
                     <td><?= h($user->id) ?></td>
                 </tr>
@@ -38,21 +43,21 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
                 <tr>
                     <th><?= __('Número (DRE, Siape ou CRESS)') ?></th>
-                    <td><?= h($user->numero) ?></td>
+                    <td><?= h($user->registro) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Criado') ?></th>
-                    <td><?= h($user->timestamp) ?></td>
+                    <td><?= h($user->timestamp?->format('d/m/Y H:i:s')) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Modificado') ?></th>
-                    <td><?= h($user->modified) ?></td>
+                    <td><?= h($user->modified?->format('d/m/Y H:i:s')) ?></td>
                 </tr>
             </table>
 
             <?php if ($user->categoria == '1') : ?>
             <div class="related">
-                <h4><?= __('Related Administrador') ?></h4>
+                <h4><?= __('Administrador') ?></h4>
                 <div class="table_wrap">
                     <table>
                         <tr>
@@ -62,19 +67,18 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         </tr>
                         <tr>
                             <td class="actions">
-                                <?= $this->Html->link(__('Ver'), ['controller' => 'administradores', 'action' => 'view', $user->administrador->id]) ?>
-                                <?= $this->Html->link(__('Editar'), ['controller' => 'administradores', 'action' => 'edit', $user->administrador->id]) ?>
-                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'administradores', 'action' => 'delete', $user->administrador->id], ['confirm' => __('Are you sure you want to delete administrador_{0}?', $user->administrador->id)]) ?>
+                                <?= $this->Html->link(__('Editar'), ['controller' => 'administradores', 'action' => 'edit', $user->id]) ?>
+                                <?= $this->Form->postLink(__('Excluir'), ['controller' => 'administradores', 'action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete administrador_{0}?', $user->id)]) ?>
                             </td>
-                            <td><?= $this->Html->link((string)$user->administrador->id, ['controller' => 'administradores', 'action' => 'view', $user->administrador->id]) ?></td>
-                            <td><?= h($user->administrador->nome) ?></td>
+                            <td><?= $this->Html->link((string)$user->id, ['controller' => 'administradores', 'action' => 'view', '?' => ['user_id' => $user->id]]) ?></td>
+                            <td><?= h($user->administrador->nome ?? 'Não informado') ?></td>
                         </tr>
                     </table>
                 </div>
             </div>
             <?php endif; ?>
             
-            <?php if (($user->categoria == '2' && $user_data['aluno_id'] == $user->id) || ($user_data['categoria'] == '1' )) : ?>
+            <?php if (($user->categoria == '2' && $user_data['aluno_id'] == $user->id)) : ?>
             <div class="related">
                 <h4><?= __('Aluno') ?></h4>
                 <div class="table_wrap">
@@ -87,7 +91,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                             <th><?= __('Ingresso') ?></th>
                             <th><?= __('Telefone') ?></th>
                             <th><?= __('Celular') ?></th>
-                            <th><?= __('CFP') ?></th>
+                            <th><?= __('CPF') ?></th>
                             <th><?= __('Nascimento') ?></th>
                         </tr>
                         <tr>
@@ -114,16 +118,16 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 <p><?= $this->Html->link('Adicionar aluno', ['controller' => 'alunos', 'action' => 'add'], ['class' => 'button btn-info']) ?></p>
             <?php endif; ?>
 
-            <?php if ($user->categoria == '3') : ?>
+            <?php if ($user->categoria == '3' && !empty($user->professor->id)) : ?>
             <div class="related">
-                <h4><?= __('Professor') ?></h4>
+                <h4><?= __('Professor ' . $user->professor_id) ?></h4>
                 <div class="table_wrap">
                     <table>
                         <tr>
                             <th class="actions"><?= __('Actions') ?></th>
                             <th><?= __('Id') ?></th>
                             <th><?= __('Nome') ?></th>
-                            <th><?= __('Telefone') ?></th>
+                            <th><?= __('Siape') ?></th>
                             <th><?= __('Celular') ?></th>
                             <th><?= __('Lattes') ?></th>
                             <th><?= __('Departamento') ?></th>
@@ -135,11 +139,19 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                                 <?= $this->Form->postLink(__('Excluir'), ['controller' => 'professores', 'action' => 'delete', $user->professor->id], ['confirm' => __('Are you sure you want to delete professor_{0}?', $user->professor->id)]) ?>
                             </td>
                             <td><?= $this->Html->link((string)$user->professor->id, ['controller' => 'professores', 'action' => 'view', $user->professor->id]) ?></td>
-                            <td><?= $this->Html->link(h($user->professor->nome), ['action' => 'view', $user->professor->id]) ?></td>
-                            <td><?= $user->professor->telefone ? '(' . h($user->professor->ddd_telefone) . ')' . h($user->professor->telefone) : '' ?></td>
-                            <td><?= $user->professor->celular ? '(' . h($user->professor->ddd_celular) . ')' . h($user->professor->celular) : '' ?></td>
+                            <td><?= $this->Html->link(h($user->professor->nome ?? 'Não informado'), ['controller' => 'professores', 'action' => 'view', $user->professor->id]) ?></td>
+                            <td><?= $user->professor->siape ?></td>
+                            <td>
+                                <?php
+                                if (strlen($user->professor->celular) < 9) {
+                                    echo '(' . h($user->professor->ddd_celular) . ') ' . h($user->professor->celular);
+                                } else {
+                                    echo $user->professor->celular;
+                                } 
+                                ?>
+                            </td>
                             <td><?= $user->professor->curriculolattes ? $this->Html->link('http://lattes.cnpq.br/' . h($user->professor->curriculolattes)) : '' ?></td>
-                            <td><?= h($user->professor->departamento) ?></td>
+                            <td><?= h($user->professor->departamento ?? 'Não informado') ?></td>
                         </tr>
                     </table>
                 </div>
@@ -147,7 +159,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <?php elseif ($user->categoria == '1') : ?>
                 <p><?= $this->Html->link('Adicionar professor', ['controller' => 'professores', 'action' => 'add'], ['class' => 'button btn-info']) ?></p>
             <?php endif; ?>
-            
+
             <?php if ($user->categoria == '4') : ?>
             <div class="related">
                 <h4><?= __('Supervisor') ?></h4>
