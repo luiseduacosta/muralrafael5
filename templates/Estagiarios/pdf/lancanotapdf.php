@@ -51,12 +51,12 @@ Período: <?= h($periodo) ?></h3>
     <tbody>
 <?php foreach ($estagiarios as $estagiario): ?>
         <tr>
-            <td><?= h($estagiario->aluno->nome) ?></td>
-            <td><?= h($estagiario->supervisor->nome) ?></td>
-            <td><?= h($estagiario->instituicao->instituicao) ?></td>
-            <td><?= h($estagiario->nivel) ?></td>
-            <td><?= h($estagiario->nota) ?></td>
-            <td><?= h($estagiario->ch) ?></td>
+            <td><?= h($estagiario->aluno->nome ?? '') ?></td>
+            <td><?= h($estagiario->supervisor->nome ?? '') ?></td>
+            <td><?= h($estagiario->instituicao->instituicao ?? '') ?></td>
+            <td><?= h($estagiario->nivel ?? '') ?></td>
+            <td><?= h($estagiario->nota ?? '') ?></td>
+            <td><?= h($estagiario->ch ?? '') ?></td>
         </tr>
 <?php endforeach; ?>
 </table>
