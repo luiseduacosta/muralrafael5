@@ -118,9 +118,8 @@ class AlunosController extends AppController
         
         if ($this->request->is('post')) {
             $aluno = $this->Alunos->patchEntity($aluno, $this->request->getData());
-            if (!$aluno->user_id) { 
-                $user = $this->Authentication->getIdentity();
-                $aluno->user_id = $user->get('id'); 
+            if ($user_data['categoria'] == '2') {
+                $aluno->user_id = $user_data['id'];
             }
             
             if ($this->Alunos->save($aluno)) {
@@ -139,13 +138,14 @@ class AlunosController extends AppController
             }
             $this->Flash->error(__('Erro ao adicionar: não foi possível salvar os dados.'));
         }
+        
         if ($user_data['categoria'] == '2') {   
             $email = $user_data['email'];
             $registro = $user_data['numero'];
             $aluno->email = $email;
             $aluno->registro = $registro;
         }
-        $this->set(compact('aluno', 'email'));
+        $this->set(compact('aluno'));
         
     }
 

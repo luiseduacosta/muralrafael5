@@ -41,7 +41,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
                 <tr>
                     <th><?= __('Registro') ?></th>
-                    <td><?= $this->Number->format($inscricao->registro) ?></td>
+                    <td><?= h($inscricao->registro) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Data') ?></th>

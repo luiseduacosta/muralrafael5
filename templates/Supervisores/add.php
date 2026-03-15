@@ -10,6 +10,25 @@ $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'su
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
+
+<?= $this->Html->script("jquery.mask.min"); ?>
+<script>
+    $(document).ready(function () {
+        $('#cpf').mask('000.000.000-00');
+        $('#cep').mask('00000-000');
+        $('#telefone').mask('(00) 0000.0000');
+        var mask = function (val) {
+            return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+        },
+        opcoes = {
+            onKeyPress: function (val, e, field, options) {
+                field.mask(mask.apply({}, arguments), options);
+            }
+        };
+        $("#celular").mask(mask, opcoes);
+   });
+</script>
+
 <div>
     <div class="column-responsive column-80">
         <div class="supervisores form content">
@@ -22,14 +41,25 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <fieldset>
                 <h3><?= __('Adicionando Supervisor(a)') ?></h3>
                 <?php
-                    if ($user_data['administrador_id']):
+                    if ($user_data['categoria'] == '1'):
                         $val = $this->request->getParam('pass') ? $this->request->getParam('pass')[0] : '';
-                        echo $this->Form->control('user_id', ['type' => 'number', 'value' => $val ]); 
-                    else:
-                        echo $this->Form->control('user_id', ['type' => 'number', 'value' => $user_session->get('id'), 'hidden' => true ]); 
+                        echo $this->Form->control('user_id', ['type' => 'number', 'hidden' => true, 'label' => false, 'value' => $val ]); 
+                    elseif ($user_data['categoria'] == '4'):
+                        echo $this->Form->control('user_id', ['type' => 'number', 'hidden' => true, 'label' => false, 'value' => $user_session->get('id')]); 
                     endif;
                     echo $this->Form->control('nome', ['required' => true]);
                     echo $this->Form->control('cpf', ['label' => 'CPF', 'pattern' => '[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}', 'placeholder' => '000.000.000-00', 'required' => false]);
+                    if ($supervisor->cress) {
+                        echo $this->Form->control('cress', ['label' => 'CRESS', 'value' => $supervisor->cress, 'readonly' => true, 'required' => true]);
+                    } else {
+                        echo $this->Form->control('cress', ['label' => 'CRESS', 'required' => true]);
+                    }
+                    echo $this->Form->control('regiao', ['label' => 'Região', 'default' => '7', 'required' => false]);
+                    if ($supervisor->email) {
+                        echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'value' => $supervisor->email, 'readonly' => true, 'required' => true]);
+                    } else {
+                        echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'required' => true]);
+                    }
                     echo $this->Form->control('cep', ['label' => 'CEP', 'pattern' => '[0-9]{5}\-[0-9]{3}', 'placeholder' => '00000-000',  'required' => false]);
                     echo $this->Form->control('endereco', ['required' => false]);
                     echo $this->Form->control('bairro', ['required' => false]);
@@ -38,19 +68,8 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     echo $this->Form->control('telefone', ['pattern' => '\([0-9]{2}\)[\s][0-9]{4}\.[0-9]{4}', 'placeholder' => '(00) 0000-0000', 'label' => 'Telefone', 'required' => false]);
                     echo $this->Form->control('codigo_cel', ['label' => 'DDD', 'required' => false]);
                     echo $this->Form->control('celular', ['pattern' => '\([0-9]{2}\)[\s][0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 00000-0000', 'label' => 'Celular', 'required' => false]);
-                    if ($supervisor->email) {
-                        echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'value' => $supervisor->email, 'readonly' => true, 'required' => true]);
-                    } else {
-                        echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'required' => true]);
-                    }
                     echo $this->Form->control('escola', ['label' => 'Instituição de Ensino', 'default' => null, 'required' => false]);
                     echo $this->Form->control('ano_formatura', ['required' => false, 'default' => null]);
-                    if ($supervisor->cress) {
-                        echo $this->Form->control('cress', ['label' => 'CRESS', 'value' => $supervisor->cress, 'readonly' => true, 'required' => true]);
-                    } else {
-                        echo $this->Form->control('cress', ['label' => 'CRESS', 'required' => true]);
-                    }
-                    echo $this->Form->control('regiao', ['label' => 'Região', 'default' => '7', 'required' => false]);
                     echo $this->Form->control('outros_estudos', ['required' => false, 'default' => null]);
                     echo $this->Form->control('area_curso', ['required' => false, 'default' => null]);
                     echo $this->Form->control('ano_curso', ['required' => false, 'default' => null]);

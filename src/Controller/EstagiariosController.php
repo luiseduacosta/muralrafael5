@@ -39,10 +39,10 @@ class EstagiariosController extends AppController
      */
     public function index()
     {
-        $periodo = $this->getRequest()->getParam("pass")
-            ? $this->request->getParam("pass")[0]
-            : $this->configuracao->termo_compromisso_periodo;
-        $this->set("periodo", $periodo);
+        $periodo = $this->request->getData('periodo')
+            ?? ($this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : null)
+            ?? $this->configuracao->termo_compromisso_periodo;
+        $this->set('periodo', $periodo);
 
         $contained = [
             "Alunos",

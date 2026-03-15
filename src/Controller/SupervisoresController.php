@@ -126,9 +126,9 @@ class SupervisoresController extends AppController
         if ($this->request->is('post')) {
             $supervisor = $this->Supervisores->patchEntity($supervisor, $this->request->getData());
 
-            if (!$supervisor->user_id) {
-                $user = $this->Authentication->getIdentity();
-                $supervisor->user_id = $user->get('id');
+            if ($user_data['categoria'] == '4') {
+                $user = $this->fetchTable('Users')->get($supervisor->user_id);
+                $supervisor->user_id = $user->id;
             }
 
             if ($this->Supervisores->save($supervisor)) {

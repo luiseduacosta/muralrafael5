@@ -14,18 +14,18 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <div class="alunos view content">
             <aside>
                 <div class="nav">
-                    <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
+                    <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
         	        <?php if ($user_data['categoria'] == '1'): ?>
-                        <?= $this->Form->postLink(__('Excluir Aluno(a)'), ['action' => 'delete', $aluno->id], ['confirm' => __('Are you sure you want to delete {0}?', $aluno->nome), 'class' => 'button']) ?>
-                        <?= $this->Html->link(__('Novo Aluno(a)'), ['action' => 'add'], ['class' => 'button']) ?>
-                        <?= $this->Html->link(__('Listar Alunos(as)'), ['action' => 'index'], ['class' => 'button']) ?>
-                        <?= $this->Html->link(__('Editar Aluno(a)'), ['action' => 'edit', $aluno->id], ['class' => 'button']) ?>
-                        <?= $this->Html->link(__('Declaração de período'), ['controller' => 'Alunos', 'action' => 'declaracaoperiodo', $aluno->id], ['class' => 'button']) ?>
-                        <?= $this->Html->link(__('Termo de compromisso'), ['controller' => 'Estagiarios', 'action' => 'termocompromisso', '?' => ['aluno_id' => $aluno->id]], ['class' => 'button']) ?>
+                        <?= $this->Form->postLink(__('Excluir Aluno(a)'), ['action' => 'delete', $aluno->id], ['confirm' => __('Are you sure you want to delete {0}?', $aluno->nome), 'class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
+                        <?= $this->Html->link(__('Novo Aluno(a)'), ['action' => 'add'], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
+                        <?= $this->Html->link(__('Listar Alunos(as)'), ['action' => 'index'], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
+                        <?= $this->Html->link(__('Editar Aluno(a)'), ['action' => 'edit', $aluno->id], ['class' => 'button' , 'style' => 'width: 20%;']) ?>
+                        <?= $this->Html->link(__('Declaração de período'), ['controller' => 'Alunos', 'action' => 'declaracaoperiodo', $aluno->id], ['class' => 'button' , 'style' => 'width: 20%;']) ?>
+                        <?= $this->Html->link(__('Termo de compromisso'), ['controller' => 'Estagiarios', 'action' => 'termocompromisso', '?' => ['aluno_id' => $aluno->id]], ['class' => 'button' , 'style' => 'width: 20%;']) ?>
                     <?php elseif ($user_data['categoria'] == '2' && ($user_data['aluno_id'] == $aluno->id)): ?>
-                        <?= $this->Html->link(__('Editar Aluno(a)'), ['action' => 'edit', $aluno->id], ['class' => 'button']) ?>
-                        <?= $this->Html->link(__('Declaração de período'), ['controller' => 'Alunos', 'action' => 'declaracaoperiodo', $aluno->id], ['class' => 'button']) ?>
-                        <?= $this->Html->link(__('Termo de compromisso'), ['controller' => 'Estagiarios', 'action' => 'termocompromisso', '?' => ['aluno_id' => $aluno->id]], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Editar Aluno(a)'), ['action' => 'edit', $aluno->id], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
+                        <?= $this->Html->link(__('Declaração de período'), ['controller' => 'Alunos', 'action' => 'declaracaoperiodo', $aluno->id], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
+                        <?= $this->Html->link(__('Termo de compromisso'), ['controller' => 'Estagiarios', 'action' => 'termocompromisso', '?' => ['aluno_id' => $aluno->id]], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
         	        <?php endif; ?>
                 </div>
             </aside>
@@ -42,6 +42,10 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 <tr>
                     <th><?= __('Nome Social') ?></th>
                     <td><?= h($aluno->nomesocial) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Data de Nascimento') ?></th>
+                    <td><?= h($aluno->nascimento) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Registro') ?></th>
@@ -68,6 +72,10 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <td><?= h($aluno->orgao) ?></td>
                 </tr>
                 <tr>
+                    <th><?= __('E-mail') ?></th>
+                    <td><?= h($aluno->email) ?></td>
+                </tr>
+                <tr>
                     <th><?= __('Telefone') ?></th>
                     <?php if (!empty($aluno->telefone) && strlen($aluno->telefone) < 10): ?>
                     <td><?= '(' . h($aluno->codigo_telefone) . ') ' . h($aluno->telefone) ?></td>
@@ -86,10 +94,6 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 <tr>
                     <th><?= __('Endereço') ?></th>
                     <td><?= h($aluno->endereco . ' - ' . $aluno->bairro . ' - ' . $aluno->municipio . ' - ' . $aluno->cep) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Nascimento') ?></th>
-                    <td><?= h($aluno->nascimento) ?></td>
                 </tr>
             </table>
             <?php if (!empty($aluno->observacoes)) : ?>

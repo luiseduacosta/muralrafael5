@@ -11,19 +11,6 @@ $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        var url = "<?= $this->Url->build(['controller' => 'Estagiarios']); ?>";
-        var select= $("#estagiarioperiodo");
-		var pathname = location.pathname.split('/').filter(Boolean);
-		if (pathname[pathname.length - 2] == 'index') select.val(pathname[pathname.length - 1]);
-        select.change(function () {
-            var periodo = $(this).val();
-            window.location = url + '/index/' + periodo;
-        });
-    });
-</script>
-
 <div class="estagiarios index content">
 	
 	<div class="row justify-content-center">
@@ -32,11 +19,12 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 	            <?= $this->Form->create($estagiarios, ['class' => 'form-inline']); ?>
 					<?= $this->Form->label('estagiarioperiodo', 'Período'); ?>
 					<?= $this->Form->input('periodo', [
-							'default'=> $periodo ? $periodo : $configuracao['mural_periodo_atual'],
+							'default'=> $periodo ?? $configuracao->termo_compromisso_periodo,
 							'id' => 'estagiarioperiodo', 
 							'type' => 'select', 
 							'options' => $periodos, 
-							'class' => 'form-control'
+							'class' => 'form-control',
+                            'onChange' => 'this.form.submit();'
 						]); 
 					?>
 	            <?= $this->Form->end(); ?>

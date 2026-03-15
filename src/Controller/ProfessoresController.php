@@ -115,7 +115,7 @@ class ProfessoresController extends AppController
         if ($this->request->is('post')) {
             $professor = $this->Professores->patchEntity($professor, $this->request->getData());
 
-            if (!$professor->user_id) {
+            if ($user_data['categoria'] == '3') {
                 $user = $this->Authentication->getIdentity();
                 $professor->user_id = $user->get('id');
             }

@@ -39,18 +39,18 @@ $departamentos = [
                 <h3><?= __('Editando Professor(a)') ?></h3>
                 <?php
                     if ($user_data['categoria'] == '1'):
-                       echo $this->Form->control('user_id', ['type' => 'number']); 
+                       echo $this->Form->control('user_id', ['type' => 'number', 'label' => false, 'hidden' => true]); 
                     endif;
                     echo $this->Form->control('nome',['label' => 'Nome completo']);
                     echo $this->Form->control('cpf',['label' => 'CPF']);
                     echo $this->Form->control('siape',['label' => 'SIAPE']);
+                    echo $this->Form->control('email',['label' => 'Email']);
                     echo $this->Form->control('datanascimento', ['empty' => true, 'label' => 'Data de nascimento']);
                     echo $this->Form->control('localnascimento',['label' => 'Local de nascimento']);
                     echo $this->Form->control('ddd_telefone',['label' => 'DDD telefone']);
                     echo $this->Form->control('telefone',['label' => 'Telefone']);
                     echo $this->Form->control('ddd_celular',['label' => 'DDD celular']);
                     echo $this->Form->control('celular',['label' => 'Celular']);
-                    echo $this->Form->control('email',['label' => 'Email']);
                     echo $this->Form->control('homepage',['label' => 'Homepage']);
                     echo $this->Form->control('redesocial',['label' => 'Rede social']);
                     echo $this->Form->control('curriculolattes',['label' => 'Curriculo Lattes']);

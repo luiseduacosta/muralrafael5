@@ -14,14 +14,14 @@ if ($user_session) {
         <div class="instituicoes view content">
             <aside>
                 <div class="nav">
-                    <?php if ($user_data['categoria'] == '1'): ?>
-                        <?= $this->Html->link(__('Listar Instituições'), ['action' => 'index'], ['class' => 'button']) ?>
-                        <?= $this->Html->link(__('Editar Instituição'), ['action' => 'edit', $instituicao->id], ['class' => 'button']) ?>
-                        <?= $this->Form->postLink(__('Excluir Instituição'), ['action' => 'delete', $instituicao->id], ['confirm' => __('Are you sure you want to delete {0}?', $instituicao->instituicao), 'class' => 'button']) ?>
-                        <?= $this->Html->link(__('Nova Instituição'), ['action' => 'add'], ['class' => 'button']) ?>
-			            <?= $this->Html->link(__('Visita'), ['controller' => 'Visitas', 'action' => 'view', '?' => ['instituicao_id' => $instituicao->id]], ['class' => 'button']) ?>
-                        <?php endif; ?>
                         <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
+                        <?php if ($user_data['categoria'] == '1'): ?>
+                            <?= $this->Html->link(__('Listar Instituições'), ['action' => 'index'], ['class' => 'button']) ?>
+                            <?= $this->Html->link(__('Editar Instituição'), ['action' => 'edit', $instituicao->id], ['class' => 'button']) ?>
+                            <?= $this->Form->postLink(__('Excluir Instituição'), ['action' => 'delete', $instituicao->id], ['confirm' => __('Are you sure you want to delete {0}?', $instituicao->instituicao), 'class' => 'button']) ?>
+                            <?= $this->Html->link(__('Nova Instituição'), ['action' => 'add'], ['class' => 'button']) ?>
+                            <?= $this->Html->link(__('Visita'), ['controller' => 'Visitas', 'action' => 'view', '?' => ['instituicao_id' => $instituicao->id]], ['class' => 'button']) ?>
+                        <?php endif; ?>
                 </div>
             </aside>
             <h3>instituicao_<?= h($instituicao->instituicao) ?></h3>

@@ -18,6 +18,7 @@ $cpf = $this->getRequest()->getQuery('cpf');
 $email = $this->getRequest()->getQuery('email');
 ?>
 
+
 <?= $this->Html->script("jquery.mask.min"); ?>
 <script>
     $(document).ready(function () {

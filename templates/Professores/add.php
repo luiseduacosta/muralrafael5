@@ -11,6 +11,15 @@ $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
 
+<?= $this->Html->script("jquery.mask.min"); ?>
+<script>
+    $(document).ready(function () {
+        $('#cpf').mask('000.000.000-00');
+        $('#telefone').mask('0000-0000');
+        $('#celular').mask('00000-0000');
+    });
+</script>
+
 <?php
 // May be this is a temporary solution. Put into de Configuracoes table in json data format is a better solution
 $departamentos = [
@@ -31,11 +40,11 @@ $departamentos = [
             <fieldset>
                 <h3><?= __('Adicionando Professor') ?></h3>
                 <?php
-                    if ($user_data['administrador_id']):
+                    if ($user_data['categoria'] == '1'):
                         $val = $this->request->getParam('pass') ? $this->request->getParam('pass')[0] : '';
-                        echo $this->Form->control('user_id', ['type' => 'number', 'value' => $val ]); 
-                    else:
-                        echo $this->Form->control('user_id', ['type' => 'number', 'value' => $user_session->get('id'), 'hidden' => true ]); 
+                        echo $this->Form->control('user_id', ['type' => 'number', 'value' => $val, 'hidden' => true, 'label' => false ]); 
+                    elseif ($user_data['categoria'] == '3'):
+                        echo $this->Form->control('user_id', ['type' => 'number', 'value' => $user_session->get('id'), 'hidden' => true, 'label' => false ]); 
                     endif;
                     echo $this->Form->control('nome', ['label' => 'Nome Completo', 'required' => true]);
                     echo $this->Form->control('cpf', ['label' => 'CPF', 'pattern' => '[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}', 'placeholder' => '000.000.000-00', 'required' => false]);
@@ -44,17 +53,17 @@ $departamentos = [
                     } else {
                         echo $this->Form->control('siape', ['required' => true]);
                     }
+                    if ($professor->email) {
+                        echo $this->Form->control('email', ['type' => 'email', 'value' => $professor->email, 'required' => true, 'readonly' => true]);
+                    } else {
+                        echo $this->Form->control('email', ['type' => 'email', 'required' => true]);
+                    }
                     echo $this->Form->control('datanascimento', ['empty' => true, 'required' => false]);
                     echo $this->Form->control('localnascimento', ['label' => 'Local Nascimento', 'required' => false]);
                     echo $this->Form->control('ddd_telefone', ['label' => 'DDD Telefone', 'required' => false]);
                     echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)\s[0-9]{4}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'required' => false]);
                     echo $this->Form->control('ddd_celular', ['label' => 'DDD Celular', 'required' => false]);
                     echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 00000.0000', 'required' => false]);
-                    if ($professor->email) {
-                        echo $this->Form->control('email', ['type' => 'email', 'value' => $professor->email, 'required' => true, 'readonly' => true]);
-                    } else {
-                        echo $this->Form->control('email', ['type' => 'email', 'required' => true]);
-                    }
                     echo $this->Form->control('homepage', ['label' => 'Homepage', 'required' => false]);
                     echo $this->Form->control('redesocial', ['label' => 'Rede Social', 'required' => false]);
                     echo $this->Form->control('curriculolattes', ['label' => 'Curriculo Lattes', 'required' => false]);
@@ -63,11 +72,11 @@ $departamentos = [
                     echo $this->Form->control('pesquisadordgp', ['label' => 'Pesquisa Dord GP', 'required' => false]);
                     echo $this->Form->control('formacaoprofissional', ['label' => 'Formacao Profissional', 'required' => false]);
                     echo $this->Form->control('universidadedegraduacao', ['label' => 'Universidade de Graduacao', 'required' => false]);
-                    echo $this->Form->control('anoformacao', ['label' => 'Ano de Formacao', 'required' => false]);
-                    echo $this->Form->control('mestradoarea', ['label' => 'Mestrado Area', 'required' => false]);
+                    echo $this->Form->control('anoformacao', ['label' => 'Ano de Formação', 'required' => false]);
+                    echo $this->Form->control('mestradoarea', ['label' => 'Mestrado Área', 'required' => false]);
                     echo $this->Form->control('mestradouniversidade', ['label' => 'Mestrado Universidade', 'required' => false]);
-                    echo $this->Form->control('mestradoanoconclusao', ['label' => 'Mestrado Ano Conclussão', 'required' => false]);
-                    echo $this->Form->control('doutoradoarea', ['label' => 'Doutorado Area', 'required' => false]);
+                    echo $this->Form->control('mestradoanoconclusao', ['label' => 'Mestrado Ano Conclusão', 'required' => false]);
+                    echo $this->Form->control('doutoradoarea', ['label' => 'Doutorado Área', 'required' => false]);
                     echo $this->Form->control('doutoradouniversidade', ['label' => 'Doutorado Universidade', 'required' => false]);
                     echo $this->Form->control('doutoradoanoconclusao', ['label' => 'Doutorado Ano Conclussão', 'required' => false]);
                     echo $this->Form->control('dataingresso', ['empty' => true, 'required' => false]);
@@ -77,7 +86,7 @@ $departamentos = [
                     echo $this->Form->control('departamento', ['label' => 'Departamento', 'options' => $departamentos, 'required' => true]);
                     echo $this->Form->control('dataegresso', ['empty' => true, 'required' => false]);
                     echo $this->Form->control('motivoegresso', ['label' => 'Motivo Egresso', 'required' => false]);
-                    echo $this->Form->control('observacoes', ['label' => 'Observacoes', 'required' => false]);
+                    echo $this->Form->control('observacoes', ['label' => 'Observaçoes', 'required' => false]);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Adicionar'), ['class' => 'button']) ?>

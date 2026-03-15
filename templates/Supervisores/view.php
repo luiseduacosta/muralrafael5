@@ -17,9 +17,9 @@ if ($user_session) {
                     <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
                     <?php if ($user_data['categoria'] == '1'): ?>
                         <?= $this->Html->link(__('Listar Supervisores'), ['action' => 'index'], ['class' => 'button']) ?>
-                        <?= $this->Html->link(__('Editar Supervisor'), ['action' => 'edit', $supervisor->id], ['class' => 'button']) ?>
-                        <?= $this->Form->postLink(__('Excluir Supervisor'), ['action' => 'delete', $supervisor->id], ['confirm' => __('Are you sure you want to delete {0}?', $supervisor->nome), 'class' => 'button']) ?>
-                        <?= $this->Html->link(__('Novo Supervisor'), ['action' => 'add'], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Editar Supervisor(a)'), ['action' => 'edit', $supervisor->id], ['class' => 'button']) ?>
+                        <?= $this->Form->postLink(__('Excluir Supervisor(a)'), ['action' => 'delete', $supervisor->id], ['confirm' => __('Are you sure you want to delete {0}?', $supervisor->nome), 'class' => 'button']) ?>
+                        <?= $this->Html->link(__('Novo Supervisor(a)'), ['action' => 'add'], ['class' => 'button']) ?>
                     <?php endif; ?>
                     <?php if ($user_data['categoria'] == '4' && $user_data['supervisor_id'] == $supervisor->id): ?>
                         <?= $this->Html->link(__('Editar'), ['action' => 'edit', $supervisor->id], ['class' => 'button']) ?>
@@ -164,7 +164,7 @@ if ($user_session) {
             
             <?php if (!empty($supervisor->instituicoes)) : ?>
             <div class="related">
-                <h4><?= __('Instituicoes') ?></h4>
+                <h4><?= __('Instituições') ?></h4>
                     <div class="table_wrap">
                         <table>
                             <tr>
@@ -266,4 +266,4 @@ if ($user_session) {
         </div>            
     </div>
 </div>
-</div>
+

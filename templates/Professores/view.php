@@ -22,17 +22,17 @@ $departamentos = [
         <div class="professores view content">
             <aside>
                 <div class="nav">
-                    <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
-                    <?= $this->Html->link(__('Listar Professores'), ['action' => 'index'], ['class' => 'button']) ?>
+                    <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
+                    <?= $this->Html->link(__('Listar Professores'), ['action' => 'index'], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                     <?php if ($user_data['categoria'] == '1'): ?>
-                        <?= $this->Html->link(__('Editar Professor(a)'), ['action' => 'edit', $professor->id], ['class' => 'button']) ?>
-                        <?= $this->Form->postLink(__('Excluir Professor(a)'), ['action' => 'delete', $professor->id], ['confirm' => __('Are you sure you want to delete {0}?', $professor->nome), 'class' => 'button']) ?>
-                        <?= $this->Html->link(__('Novo(a) Professor(a)'), ['action' => 'add'], ['class' => 'button']) ?>
-                        <?= $this->Html->link(__('CH e nota'), ['controller' => 'Estagiarios', 'action' => 'lancanota', '?' => ['professor_id' => $professor->id]], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Editar Professor(a)'), ['action' => 'edit', $professor->id], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
+                        <?= $this->Form->postLink(__('Excluir Professor(a)'), ['action' => 'delete', $professor->id], ['confirm' => __('Are you sure you want to delete {0}?', $professor->nome), 'class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
+                        <?= $this->Html->link(__('Novo(a) Professor(a)'), ['action' => 'add'], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
+                        <?= $this->Html->link(__('CH e nota'), ['controller' => 'Estagiarios', 'action' => 'lancanota', '?' => ['professor_id' => $professor->id]], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                     <?php endif; ?>
                     <?php if ($user_data['categoria'] == '3' && ($professor->id == $user_data['professor_id'])): ?>
-                        <?= $this->Html->link(__('Editar Professor(a)'), ['action' => 'edit', $professor->id], ['class' => 'button']) ?>
-                        <?= $this->Html->link(__('CH e nota'), ['controller' => 'Estagiarios', 'action' => 'lancanota', '?' => ['professor_id' => $professor->id]], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Editar Professor(a)'), ['action' => 'edit', $professor->id], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
+                        <?= $this->Html->link(__('CH e nota'), ['controller' => 'Estagiarios', 'action' => 'lancanota', '?' => ['professor_id' => $professor->id]], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                     <?php endif; ?>
                 </div>
             </aside>
