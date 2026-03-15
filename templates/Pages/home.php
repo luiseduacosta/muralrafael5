@@ -100,13 +100,13 @@ $user_session = $this->request->getAttribute('identity');
                         </h2>
                     </div>   
                     <div class="col">
-                        <p>Prezadas(os) usuárias(os),</p>
-                        <p>O Mural de Estágio tem a função de: <br />permitir a consulta e inscrição em vagas de estágio; <br />retirar o Termo de Compromisso, folha de atividades, avaliação do/a supervisor/a, declaração de estágio, dentre outros.</p>
-                        <p>É a sua primeira vez por aqui? <br />Faça o cadastro com dados completos, não abrevie seu nome.</p>
-                        <p>Vai retirar o Termo de Compromisso? <br />Preencha os dados da supervisão de campo e do/a docente de OTP.</p>
-                        <p>Supervisores e docentes também podem fazer o cadastro e contribuir para mantermos atualizados os dados das instituições, assim como seus dados profissionais, incluindo e-mail e telefone.</p>
-                        <p>Ficou alguma dúvida? <br />Escreva um e-mail detalhado para: <?= $this->Text->autoLinkEmails('estagio@ess.ufrj.br') ?>.</p>
-                        <p>Estamos à disposição.</p>
+                        <p class="text-justify">Prezadas(os) usuárias(os),</p>
+                        <p class="text-justify">O Mural de Estágio tem a função de permitir a consulta e inscrição em vagas de estágio; retirar o Termo de Compromisso, folha de atividades, avaliação do/a supervisor/a, declaração de estágio, dentre outros.</p>
+                        <p class="text-justify">É a sua primeira vez por aqui? Faça o cadastro com dados completos, não abrevie seu nome.</p>
+                        <p class="text-justify">Vai retirar o Termo de Compromisso? Preencha os dados da instituição, a supervisão de campo e do/a docente de OTP.</p>
+                        <p class="text-justify">Supervisores e docentes também podem fazer o cadastro e contribuir para mantermos atualizados os dados das instituições, assim como seus dados profissionais, incluindo e-mail e telefone.</p>
+                        <p class="text-justify">Ficou alguma dúvida? Escreva um e-mail detalhado para: <?= $this->Text->autoLinkEmails('estagio@ess.ufrj.br') ?>.</p>
+                        <p class="text-justify">Estamos à disposição.</p>
                     </div>
                 </div>
             </div>
@@ -140,14 +140,14 @@ $user_session = $this->request->getAttribute('identity');
                         <a href="./administradores">administradores</a> | <a href="./administradores/view/1">view</a> | <a href="./administradores/edit/1">edit</a><br />
                         <a href="./alunos">alunos</a> | <a href="./alunos/view/1">view</a> | <a href="./alunos/edit/1">edit</a> | <a href="./alunos/add">add</a> | <a href="./alunos/busca">busca</a> | <a href="./alunos/planilhacress">planilhacress</a> | <a href="./alunos/planilhaseguro">planilhaseguro</a> | <a href="./alunos/cargahoraria">cargahoraria</a> | <a href="./alunos/declaracaoperiodo/1">declaracaoperiodo</a><br />
                         <a href="./areas">areas</a> | <a href="./areas/view/1">view</a> | <a href="./areas/edit/1">edit</a> | <a href="./areas/add">add</a><br />
-                        <a href="./avaliacoes">avaliacoes</a> | <a href="./avaliacoes/view/1">view</a> | <a href="./avaliacoes/edit/1">edit</a> | <a href="./avaliacoes/add">add</a><br />
+                        <a href="./avaliacoes">avaliacoes</a> | <a href="./avaliacoes/view/1">view</a> | <a href="./avaliacoes/edit/1">edit</a> | <a href="./avaliacoes/add">add</a> | <a href="./avaliacoes/imprimeavaliacaopdf/1">imprimeavaliacaopdf</a> | <a href="./avaliacoes/avaliacaomanualpdf">avaliacaomanualpdf</a><br />
                         <a href="./complementos">complementos</a> | <a href="./complementos/view/1">view</a> | <a href="./complementos/edit/1">edit</a> | <a href="./complementos/add">add</a><br />
                         <a href="./configuracoes">configuracoes</a> | <a href="./configuracoes/edit/1">edit</a><br />
-                        <a href="./estagiarios">estagiarios</a> | <a href="./estagiarios/view/1">view</a> | <a href="./estagiarios/edit/1">edit</a> | <a href="./estagiarios/add">add</a> | <a href="./estagiarios/termodecompromisso/1">termodecompromisso</a> | <a href="./estagiarios/declaracaodeestagiopdf/1">declaracaodeestagio</a><br />
+                        <a href="./estagiarios">estagiarios</a> | <a href="./estagiarios/view/1">view</a> | <a href="./estagiarios/edit/1">edit</a> | <a href="./estagiarios/add">add</a> | <a href="./estagiarios/lancanota/1">lancanota</a> | <a href="./estagiarios/termodecompromisso/1">termodecompromisso</a> | <a href="./estagiarios/declaracaodeestagiopdf/1">declaracaodeestagio</a> | <a href="./estagiarios/lancanotapdf/1">lancanotapdf</a> <br />
                         <a href="./folhadeatividades">folhadeatividades</a> | <a href="./folhadeatividades/view/1">view</a> | <a href="./folhadeatividades/edit/1">edit</a> | <a href="./folhadeatividades/add">add</a> | <a href="./folhadeatividades/folhadeatividadespdf/1">folhadeatividadespdf</a><br />
                         <a href="./inscricoes">inscricoes</a> | <a href="./inscricoes/view/1">view</a> | <a href="./inscricoes/edit/1">edit</a> | <a href="./inscricoes/add">add</a><br />
                         <a href="./instituicoes">instituicoes</a> | <a href="./instituicoes/view/1">view</a> | <a href="./instituicoes/edit/1">edit</a> | <a href="./instituicoes/add">add</a><br />
-                        <a href="./muralestagios">muralestagios</a> | <a href="./muralestagios/view/1">view</a> | <a href="./muralestagios/edit/1">edit</a> | <a href="./muralestagios/add">add</a><br />
+                        <a href="./muralestagios">muralestagios</a> | <a href="./muralestagios/view/1">view</a> | <a href="./muralestagios/edit/1">edit</a> | <a href="./muralestagios/add">add</a> | <a href="./muralestagios/imprimepdf">imprimepdf</a> <br />
                         <a href="./professores">professores</a> | <a href="./professores/view/1">view</a> | <a href="./professores/edit/1">edit</a> | <a href="./professores/add">add</a><br />
                         <a href="./supervisores">supervisores</a> | <a href="./supervisores/view/1">view</a> | <a href="./supervisores/edit/1">edit</a> | <a href="./supervisores/add">add</a><br />
                         <a href="./turmas">turmas</a> | <a href="./turmas/view/1">view</a> | <a href="./turmas/edit/1">edit</a> | <a href="./turmas/add">add</a><br />
