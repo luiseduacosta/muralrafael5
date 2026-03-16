@@ -27,7 +27,9 @@ use Cake\I18n\Date;
 	                    'id' => 'periodo', 
 	                    'type' => 'select', 
 	                    'options' => $periodos,
-	                    'class' => 'form-control'
+	                    'class' => 'form-control',
+                        'label' => false,
+                        'onchange' => 'window.location = "/alunos/planilhaseguro/" + this.value'
 	                ]); 
             ?>
             <?= $this->Form->end(); ?>

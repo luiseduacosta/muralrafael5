@@ -209,9 +209,9 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
 	                            <td><?= h($inscricao->id) ?></td>
 	                            <td><?= $inscricao->aluno ? h($inscricao->aluno->registro) : '' ?></td>
 	                            <td><?= $inscricao->aluno ? $this->Html->link($inscricao->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $inscricao->aluno->id])  : '' ?></td>
-	                            <td><?= h($inscricao->data) ?></td>
+	                            <td><?= h($inscricao->data ? $inscricao->data->format('d/m/Y') : '') ?></td>
 	                            <td><?= h($inscricao->periodo) ?></td>
-	                            <td><?= $inscricao->timestamp ? h($inscricao->timestamp) : '' ?></td>
+	                            <td><?= h($inscricao->timestamp ? $inscricao->timestamp->format('d/m/Y H:i:s') : '') ?></td>
 	                        </tr>
 	                        <?php endforeach; ?>
 	                    </table>

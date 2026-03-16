@@ -438,8 +438,8 @@ class AlunosController extends AppController
             $this->Flash->error('Erro de autorização: ' . $error->getMessage());
             return $this->redirectBack('/');
         }
-        
-        $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->configuracao->periodo_calendario_academico;
+    
+        $periodo = $this->request->getQuery('periodo') ?? $this->request->getData('periodo') ?? $this->configuracao->periodo_calendario_academico;
         $this->set('periodo', $periodo);
         
         /* lista de periodos */

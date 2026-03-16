@@ -29,16 +29,16 @@ if ($user_session) {
             <h3>supervisor_<?= h($supervisor->id) ?></h3>
             <table>
                 <tr>
+                    <th><?= __('Id') ?></th>
+                    <td><?= h($supervisor->id) ?></td>
+                </tr>
+                <tr>
                     <th><?= __('Nome') ?></th>
                     <td><?= h($supervisor->nome) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('CPF') ?></th>
                     <td><?= h($supervisor->cpf) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= h($supervisor->id) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('CRESS') ?></th>
@@ -77,6 +77,10 @@ if ($user_session) {
                     <td><?= $supervisor->email ? $this->Text->autoLinkEmails($supervisor->email) : '' ?></td>
                 </tr>
                 <tr>
+                    <th><?= __('Cargo na instituição') ?></th>
+                    <td><?= h($supervisor->cargo) ?></td>
+                </tr>
+                <tr>
                     <th><?= __('Escola') ?></th>
                     <td><?= h($supervisor->escola) ?></td>
                 </tr>
@@ -93,20 +97,8 @@ if ($user_session) {
                     <td><?= h($supervisor->area_curso) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Ano de conclusao') ?></th>
+                    <th><?= __('Ano de conclusão') ?></th>
                     <td><?= h($supervisor->ano_curso) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Cargo na instituição') ?></th>
-                    <td><?= h($supervisor->cargo) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Turma do curso de supervisores') ?></th>
-                    <td><?= h($supervisor->curso_turma) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Num de Inscricao no curso de supervisores') ?></th>
-                    <td><?= $supervisor->num_inscrica ? $this->Number->format($supervisor->num_inscricao) : '' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('CEP') ?></th>
@@ -123,6 +115,14 @@ if ($user_session) {
                 <tr>
                     <th><?= __('Município') ?></th>
                     <td><?= h($supervisor->municipio) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Turma do curso de supervisores') ?></th>
+                    <td><?= h($supervisor->curso_turma) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Num de inscrição no curso de supervisores') ?></th>
+                    <td><?= $supervisor->num_inscricao ? $this->Number->format($supervisor->num_inscricao) : '' ?></td>
                 </tr>
             </table>
             <div class="text">
@@ -266,4 +266,3 @@ if ($user_session) {
         </div>            
     </div>
 </div>
-

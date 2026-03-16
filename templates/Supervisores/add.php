@@ -18,7 +18,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         $('#cep').mask('00000-000');
         $('#telefone').mask('(00) 0000.0000');
         var mask = function (val) {
-            return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+            return val.replace(/\D/g, '').length === 11 ? '(00) 00000.0000' : '(00) 0000.0000';
         },
         opcoes = {
             onKeyPress: function (val, e, field, options) {
@@ -60,23 +60,23 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     } else {
                         echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'required' => true]);
                     }
+                    echo $this->Form->control('cargo', ['label' => 'Cargo na instituição', 'required' => false, 'default' => null]);
                     echo $this->Form->control('cep', ['label' => 'CEP', 'pattern' => '[0-9]{5}\-[0-9]{3}', 'placeholder' => '00000-000',  'required' => false]);
                     echo $this->Form->control('endereco', ['required' => false]);
                     echo $this->Form->control('bairro', ['required' => false]);
                     echo $this->Form->control('municipio', ['required' => false]);
                     echo $this->Form->control('codigo_tel', ['label' => 'DDD', 'required' => false]);
-                    echo $this->Form->control('telefone', ['pattern' => '\([0-9]{2}\)[\s][0-9]{4}\.[0-9]{4}', 'placeholder' => '(00) 0000-0000', 'label' => 'Telefone', 'required' => false]);
+                    echo $this->Form->control('telefone', ['pattern' => '\([0-9]{2}\)[\s][0-9]{4}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'label' => 'Telefone', 'required' => false]);
                     echo $this->Form->control('codigo_cel', ['label' => 'DDD', 'required' => false]);
-                    echo $this->Form->control('celular', ['pattern' => '\([0-9]{2}\)[\s][0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 00000-0000', 'label' => 'Celular', 'required' => false]);
+                    echo $this->Form->control('celular', ['pattern' => '\([0-9]{2}\)[\s][0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 00000.0000', 'label' => 'Celular', 'required' => false]);
                     echo $this->Form->control('escola', ['label' => 'Instituição de Ensino', 'default' => null, 'required' => false]);
                     echo $this->Form->control('ano_formatura', ['required' => false, 'default' => null]);
                     echo $this->Form->control('outros_estudos', ['required' => false, 'default' => null]);
                     echo $this->Form->control('area_curso', ['required' => false, 'default' => null]);
                     echo $this->Form->control('ano_curso', ['required' => false, 'default' => null]);
-                    echo $this->Form->control('cargo', ['label' => 'Cargo na instituição', 'required' => false, 'default' => null]);
                     echo $this->Form->control('num_inscricao', ['label' => 'Número de Inscrição no curso de supervisores', 'required' => false, 'default' => null]);
                     echo $this->Form->control('curso_turma', ['label' => 'Turma de Curso de Supervisores', 'required' => false, 'default' => null]);
-                    echo $this->Form->control('observacoes', ['required' => false, 'default' => null]);
+                    echo $this->Form->control('observacoes', ['label' => 'Observações', 'required' => false, 'default' => null]);
                     echo $this->Form->control('instituicoes._ids', ['options' => $instituicoes]);
                 ?>
             </fieldset>

@@ -4,6 +4,15 @@
  * @var \App\Model\Entity\Instituicao $instituicao
  */
 ?>
+
+<?= $this->Html->script("jquery.mask.min"); ?>
+<script>
+    $(document).ready(function () {
+        $('#cnpj').mask('00.000.000/0000-00', {placeholder: '00.000.000/0000-00'});
+        $('#cep').mask('00000-000', {placeholder: '00000-000'});
+    });
+</script>
+
 <div>
     <div class="column-responsive column-80">
         <div class="instituicoes form content">
@@ -24,17 +33,17 @@
                     echo $this->Form->control('instituicao');
                     echo $this->Form->control('area_id', ['label' => 'Área', 'options' => $areas, 'class' => 'form-control']);
                     echo $this->Form->control('natureza');
-                    echo $this->Form->control('cnpj', ['label' => 'CNPJ', 'pattern' => '[0-9]{2}\.[0-9]{3}\.[0-9]{3}\/[0-9]{4}\-[0-9]{2}', 'placeholder' => '00.000.000/0000-00']);
+                    echo $this->Form->control('cnpj', ['label' => 'CNPJ']);
                     echo $this->Form->control('email', ['label' => 'Email']);
                     echo $this->Form->control('url', ['label' => 'Site da instituição', 'placeholder' => 'http://www.site.com']);
                     echo $this->Form->control('endereco', ['label' => 'Endereço']);
                     echo $this->Form->control('bairro', ['label' => 'Bairro']);
                     echo $this->Form->control('municipio', ['label' => 'Município']);
-                    echo $this->Form->control('cep', ['label' => 'CEP', 'pattern' => '[0-9]{5}\-[0-9]{3}', 'placeholder' => '00000-000']);
+                    echo $this->Form->control('cep', ['label' => 'CEP']);
                     echo $this->Form->control('telefone', ['label' => 'Telefone', 'required' => false]);
                     echo $this->Form->control('beneficio', ['label' => 'Benefício', 'required' => false]);
                     echo $this->Form->control('fim_de_semana', ['label' => 'Fim de semana', 'options' => ['1' => 'Sim', '0' => 'Nao', '2' => 'Parcial'], 'required' => false]);
-                    echo $this->Form->control('local_inscricao', ['label' => 'Local de inscrição', 'options' => ['1' => 'Coordenacao de Estagios', '0' => 'Instituicao']]);
+                    echo $this->Form->control('local_inscricao', ['label' => 'Local de inscrição', 'options' => ['1' => 'Coordenação de Estágio/ESS/UFRJ', '0' => 'Instituicao']]);
                     echo $this->Form->control('convenio', ['label' => 'Nº do convênio na UFRJ', 'required' => false]);
                     echo $this->Form->control('expira', ['label' => 'Data de expiração', 'empty' => true]);
                     echo $this->Form->control('seguro', ['options' => ['1' => 'Sim', '0' => 'Nao'], 'default' => '0']);

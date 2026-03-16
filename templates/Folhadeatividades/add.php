@@ -3,7 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Folhadeatividade $folhadeatividade
  */
-// pr($folhadeatividades);
 ?>
 
 <div class="folhadeatividades add content">
@@ -34,7 +33,6 @@
                     <?php foreach ($folhadeatividades as $folhadeatividade): ?>
                         <tr>
                             <?php if ($i > $ultimos): ?>
-                                <?php // pr($folhadeatividade) ?>
                                 <td><?= $folhadeatividade->id ?></td>
                                 <td><?= $folhadeatividade->dia ?></td>
                                 <td><?= $folhadeatividade->inicio ?></td>

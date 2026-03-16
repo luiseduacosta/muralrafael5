@@ -10,6 +10,26 @@ $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'su
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
+<?= $this->Html->script("jquery.mask.min"); ?>
+
+<script>
+    $(document).ready(function () {
+        $('#cpf').mask('000.000.000-00');
+        $('#cep').mask('00000-000');
+        $('#ingresso').mask('0000-S', { translation: { 'S': { pattern: '[12]', optional: false } } }); // last digit is only 1 or 2
+        $('#telefone').mask('(00) 0000.0000');
+        var mask = function (val) {
+            return val.replace(/\D/g, '').length === 11 ? '(00) 00000.0000' : '(00) 00000.0000';
+        },
+        opcoes = {
+            onKeyPress: function (val, e, field, options) {
+                field.mask(mask.apply({}, arguments), options);
+            }
+        };
+        $("#celular").mask(mask, opcoes);
+    });
+</script>   
+
 <div>
     <div class="column-responsive column-80">
         <div class="alunos form content">
@@ -36,7 +56,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     echo $this->Form->control('nomesocial', ['label' => 'Nome Social', 'required' => false]);
                     echo $this->Form->control('registro', ['label' => 'Registro', 'required' => true]);
                     echo $this->Form->control('codigo_telefone', ['label' => 'Código Telefone', 'required' => false]);
-                    echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)[\s][0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'required' => false]);
+                    echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)[\s][0-9]{4}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'required' => false]);
                     echo $this->Form->control('codigo_celular', ['label' => 'Código Celular', 'required' => false]);
                     echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '\([0-9]{2}\)[\s][0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'required' => false]);
                     echo $this->Form->control('cpf', ['label' => 'CPF', 'pattern' => '[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}', 'placeholder' => '000.000.000-00', 'required' => true]);

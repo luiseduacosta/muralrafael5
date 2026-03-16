@@ -19,6 +19,23 @@ $departamentos = [
 ]
 ?>
 
+<?= $this->Html->script("jquery.mask.min"); ?>
+<script>
+    $(document).ready(function () {
+        $('#cpf').mask('000.000.000-00');
+        $('#telefone').mask('(00) 0000.0000');
+        var mask = function (val) {
+            return val.replace(/\D/g, '').length === 11 ? '(00) 00000.0000' : '(00) 0000.0000';
+        },
+        opcoes = {
+            onKeyPress: function (val, e, field, options) {
+                field.mask(mask.apply({}, arguments), options);
+            }
+        };
+        $('#celular').mask(mask, opcoes);
+    });
+</script>
+
 <div>
     <div class="column-responsive column-80">
         <div class="professores form content">
@@ -43,8 +60,18 @@ $departamentos = [
                     endif;
                     echo $this->Form->control('nome',['label' => 'Nome completo']);
                     echo $this->Form->control('cpf',['label' => 'CPF']);
-                    echo $this->Form->control('siape',['label' => 'SIAPE']);
-                    echo $this->Form->control('email',['label' => 'Email']);
+                    echo $this->Form->control('cress',['label' => 'CRESS']);
+                    echo $this->Form->control('regiao',['label' => 'Região']);
+                    if ($professor->siape) {
+                        echo $this->Form->control('siape', ['value' => $professor->siape, 'required' => true, 'readonly' => true]);
+                    } else {
+                        echo $this->Form->control('siape', ['required' => true]);
+                    }
+                    if ($professor->email) {
+                        echo $this->Form->control('email', ['type' => 'email', 'value' => $professor->email, 'required' => true, 'readonly' => true]);
+                    } else {
+                        echo $this->Form->control('email', ['type' => 'email', 'required' => true]);
+                    }
                     echo $this->Form->control('datanascimento', ['empty' => true, 'label' => 'Data de nascimento']);
                     echo $this->Form->control('localnascimento',['label' => 'Local de nascimento']);
                     echo $this->Form->control('ddd_telefone',['label' => 'DDD telefone']);

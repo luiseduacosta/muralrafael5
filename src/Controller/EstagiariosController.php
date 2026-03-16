@@ -698,7 +698,7 @@ class EstagiariosController extends AppController
         if ($user_data['categoria'] == '3') {
             $professor_id = $user_data['professor_id'];
         } else {
-            $professor_id = (int)$this->request->getQuery("professor_id");
+            $professor_id = (int)$this->request->getQuery("professor_id") ?? $this->request->getData("professor_id");
         }
 
         if (empty($professor_id)) {
@@ -726,7 +726,8 @@ class EstagiariosController extends AppController
             ->order(["Estagiarios.periodo" => "ASC"])
             ->toArray();
 
-        $periodo = $this->request->getQuery("periodo");
+        $periodo = $this->request->getQuery("periodo") ?? $this->request->getData("periodo");
+    
         if ($periodo === null) {
             $periodo = !empty($periodos) ? end($periodos) : null;
         }

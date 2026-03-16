@@ -8,19 +8,8 @@ declare(strict_types=1);
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
-?>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        var url = "<?= $this->Html->Url->build(['controller' => 'estagiarios', 'action' => 'lancanota']); ?>";
-        var select = $("#periodo-select");
-        select.change(function () {
-            var periodo = $(this).val();
-            var professor_id = "<?= $professor->id; ?>";
-            window.location = url + '?periodo=' + periodo + '&professor_id=' + professor_id;
-        });
-    });
-</script>
+?>
 
 <div class="row justify-content-between mb-3">
     <div class="col-auto">
@@ -31,16 +20,21 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
     </div>
 </div>
 
-<div class="row mb-4">
-    <div class="col-md-4">
-        <?= $this->Form->create(null, ['type' => 'get', 'class' => 'form-inline']); ?>
+<div class="estagiarios index content">
+    <div class="row justify-content-center">
+        <?= $this->Form->create($estagiarios, ['type' => 'get', 'class' => 'form-inline']); ?>
         <div class="form-group mb-2">
-            <label for="periodo-select" class="mr-2">Período: </label>
-            <?= $this->Form->select('periodo', $periodos, [
-                'val' => $periodo,
+            <?= $this->Form->control('professor_id', [
+                'default' => $professor->id,
+                'type' => 'hidden',
+            ]); ?>
+            <?= $this->Form->control('periodo', [
+                'default' => $periodo ?? $configuracao->termo_compromisso_periodo,
                 'id' => 'periodo-select',
-                'class' => 'form-control custom-select',
-                'empty' => false
+                'type' => 'select',
+                'class' => 'form-control',
+                'empty' => false,
+                'onChange' => 'this.form.submit();'
             ]); ?>
         </div>
         <?= $this->Form->end(); ?>
@@ -76,12 +70,12 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <?php if ($user_data['categoria'] == '1' || $user_data['categoria'] == '3'): ?>
                             <td><?= $estagiario->id ?></td>
                         <?php endif; ?>
-                        <td><?= $this->Html->link($estagiario->aluno->nome ?? 'S/d', ['controller' => 'Alunos', 'action' => 'view', $estagiario['aluno_id']]) ?>
+                        <td><?= !empty($estagiario->aluno->nome) ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario['aluno_id']]) : "Sem aluno"; ?>
                         </td>
                         <td><?= $estagiario['registro'] ?></td>
                         <td>
                             <?php if (isset($estagiario['instituicao_id'])): ?>
-                                <?= $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario['instituicao_id']]) ?>
+                                <?= !empty($estagiario->instituicao->instituicao) ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario['instituicao_id']]) : "Sem instituicao"; ?>
                             <?php else: ?>
                                <?= "Sem instituicao"; ?>
                             <?php endif; ?>
@@ -89,7 +83,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <td>
                             <?php 
                             if (isset($estagiario['supervisor_id'])) {
-                                echo $this->Html->link($estagiario->supervisor->nome ?? 'S/d', ['controller' => 'Supervisores', 'action' => 'view', $estagiario['supervisor_id']]); 
+                                echo !empty($estagiario->supervisor->nome) ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario['supervisor_id']]) : "Sem supervisor";
                             } else { 
                                 echo "Sem supervisor";
                             }
@@ -152,7 +146,7 @@ function makeRowEditable(row) {
     const cells = row.querySelectorAll('.editable-field');
     cells.forEach(cell => {
         const text = cell.textContent.trim() === '' ? '' : cell.textContent.trim();
-        cell.innerHTML = `<input class="form-control form-control-sm" type="text" value="${text}">`;
+        cell.innerHTML = `<input class="form-control" type="text" value="${text}">`;
     });
 
     // Toggle buttons

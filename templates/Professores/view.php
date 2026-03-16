@@ -36,8 +36,24 @@ $departamentos = [
                     <?php endif; ?>
                 </div>
             </aside>
-            <h3>professor_<?= h($professor->id) ?></h3>
-            <table>
+
+            <h3><?= __('Professor(a)') ?> <?= h($professor->nome) ?></h3>
+
+            <ul class='nav nav-tabs mb-3' id='professorTabs' role='tablist'>
+                <li class='nav-item' role='presentation'>
+                    <a class='nav-link active' id='pessoais-tab' data-toggle='tab' href='#tab-1' role='tab' aria-controls='tab-1' aria-selected='true'>Dados Pessoais</a>
+                </li>
+                <li class='nav-item' role='presentation'>
+                    <a class='nav-link' id='academicos-tab' data-toggle='tab' href='#tab-2' role='tab' aria-controls='tab-2' aria-selected='false'>Dados Acadêmicos</a>
+                </li>
+                <li class='nav-item' role='presentation'>
+                    <a class='nav-link' id='funcionais-tab' data-toggle='tab' href='#tab-3' role='tab' aria-controls='tab-3' aria-selected='false'>Dados Funcionais</a>
+                </li>
+            </ul>
+
+            <div class='tab-content' id='professorTabsContent'> 
+                <div id='tab-1' class='tab-pane fade show active' role='tabpanel' aria-labelledby='pessoais-tab'>
+                <table>
                 <tr>
                     <th><?= __('Id') ?></th>
                     <td><?= h($professor->id) ?></td>
@@ -50,8 +66,20 @@ $departamentos = [
                     <th><?= __('CPF') ?></th>
                     <td><?= h($professor->cpf) ?></td>
                 </tr>
+                <tr>
+                    <th><?= __('CRESS') ?></th>
+                    <td><?= h($professor->cress) . ' ' . $professor->regiao . ' região' ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Siape') ?></th>
+                    <td><?= h($professor->siape) ?></td>
+                </tr>
+               <tr>
+                    <th><?= __('Data de nascimento') ?></th>
+                    <td><?= h($professor->datanascimento) ?></td>
+                </tr>
                 <tr> 
-                    <th><?= __('Local de Nascimento') ?></th>
+                    <th><?= __('Local de nascimento') ?></th>
                     <td><?= h($professor->localnascimento) ?></td>
                 </tr>
                 <tr>
@@ -87,6 +115,10 @@ $departamentos = [
                     <td><?= $professor->curriculolattes ? $this->Html->link('http://lattes.cnpq.br/' . h($professor->curriculolattes)) : '' ?></td>
                 </tr>
                 <tr>
+                    <th><?= __('Atualização lattes') ?></th>
+                    <td><?= h($professor->atualizacaolattes ? $professor->atualizacaolattes->format('d/m/Y') : '') ?></td>
+                </tr>
+                <tr>
                     <th><?= __('Curriculo sigma') ?></th>
                     <td><?= h($professor->curriculosigma) ?></td>
                 </tr>
@@ -94,6 +126,11 @@ $departamentos = [
                     <th><?= __('Pesquisador DGP') ?></th>
                     <td><?= h($professor->pesquisadordgp) ?></td>
                 </tr>
+                </table>
+                </div>
+
+                <div id='tab-2' class='tab-pane fade' role='tabpanel' aria-labelledby='academicos-tab'>
+                <table>
                 <tr>
                     <th><?= __('Formacao profissional') ?></th>
                     <td><?= h($professor->formacaoprofissional) ?></td>
@@ -115,11 +152,11 @@ $departamentos = [
                     <td><?= h($professor->mestradouniversidade) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Ano de conclusao do Mestrado') ?></th>
+                    <th><?= __('Ano de conclusão do Mestrado') ?></th>
                     <td><?= h($professor->mestradoanoconclusao) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Doutorado area') ?></th>
+                    <th><?= __('Doutorado área') ?></th>
                     <td><?= h($professor->doutoradoarea) ?></td>
                 </tr>
                 <tr>
@@ -127,8 +164,21 @@ $departamentos = [
                     <td><?= h($professor->doutoradouniversidade) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Ano de conclusao do Doutorado') ?></th>
+                    <th><?= __('Ano de conclusão do Doutorado') ?></th>
                     <td><?= h($professor->doutoradoanoconclusao) ?></td>
+                </tr>
+                </table>
+                </div>
+                
+                <div id='tab-3' class='tab-pane fade' role='tabpanel' aria-labelledby='funcionais-tab'>
+                <table>
+                <tr>
+                    <th><?= __('Departamento') ?></th>
+                    <td><?= h($professor->departamento) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Data de ingresso') ?></th>
+                    <td><?= h($professor->dataingresso ? $professor->dataingresso->format('d/m/Y') : '') ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Forma de ingresso') ?></th>
@@ -143,41 +193,23 @@ $departamentos = [
                     <td><?= h($professor->regimetrabalho) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Departamento') ?></th>
-                    <td><?= h($professor->departamento) ?></td>
+                    <th><?= __('Data de egresso') ?></th>
+                    <td><?= h($professor->dataegresso ? $professor->dataegresso->format('d/m/Y') : '') ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Motivo egresso') ?></th>
                     <td><?= h($professor->motivoegresso) ?></td>
                 </tr>
-                <tr>
-                    <th><?= __('Siape') ?></th>
-                    <td><?= h($professor->siape) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Data de nascimento') ?></th>
-                    <td><?= h($professor->datanascimento) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Atualizacao lattes') ?></th>
-                    <td><?= h($professor->atualizacaolattes) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Data ingresso') ?></th>
-                    <td><?= h($professor->dataingresso) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Data egresso') ?></th>
-                    <td><?= h($professor->dataegresso) ?></td>
-                </tr>
-            </table>
-            <div class="text">
-                <strong><?= __('Observacoes') ?></strong>
-                <blockquote>
-                    <?= $this->Text->autoParagraph(h($professor->observacoes)); ?>
-                </blockquote>
+                </table>
+                    <div class="text">
+                        <strong><?= __('Observações') ?></strong>
+                        <blockquote>
+                            <?= $this->Text->autoParagraph(h($professor->observacoes)); ?>
+                        </blockquote>
+                    </div>
+                </div>    
             </div>
-            
+    
             <?php if (!empty($professor->user)) : ?>
             <div class="related">
                 <h4><?= __('User') ?></h4>

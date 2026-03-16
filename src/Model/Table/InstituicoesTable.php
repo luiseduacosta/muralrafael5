@@ -100,8 +100,7 @@ class InstituicoesTable extends Table
 
         $validator
             ->email('email')
-            ->requirePresence('email', 'create')
-            ->notEmptyString('email');
+            ->allowEmptyString('email');
 
         $validator
             ->scalar('url')

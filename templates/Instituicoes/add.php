@@ -9,6 +9,15 @@ $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'su
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
+
+<?= $this->Html->script("jquery.mask.min"); ?>
+<script>
+    $(document).ready(function () {
+        $('#cnpj').mask('00.000.000/0000-00', {placeholder: '00.000.000/0000-00'});
+        $('#cep').mask('00000-000', {placeholder: '00000-000'});
+    });
+</script>
+
 <div>
     <div class="column-responsive column-80">
         <div class="instituicoes form content">
@@ -34,9 +43,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     echo $this->Form->control('municipio', ['label' => 'Município']);
                     echo $this->Form->control('beneficio', ['label' => 'Benefícios oferecido pela instituição', 'required' => false]);
                     echo $this->Form->control('fim_de_semana', ['label' => 'Estágio no fim de semana', 'options' => ['1' => 'Sim', '0' => 'Nao', '2' => 'Parcial']]);
-                    echo $this->Form->control('local_inscricao', ['label' => 'Local de inscrição', 'options' => ['1' => 'Coordenacao de Estagios', '0' => 'Instituicao']]);
+                    echo $this->Form->control('local_inscricao', ['label' => 'Local de inscrição', 'options' => ['1' => 'Coordenação de Estágio/ESS/UFRJ', '0' => 'Instituição']]);
                     echo $this->Form->control('convenio', ['label' => 'Nº do convênio na UFRJ', 'required' => false]);
-                    echo $this->Form->control('expira', ['label' => 'Data de expiração do convênio']);
+                    echo $this->Form->control('expira', ['label' => 'Data de expiração do convênio', 'empty' => true]);
                     echo $this->Form->control('seguro', ['label' => 'Seguro (S/N)', 'options' => ['1' => 'Sim', '0' => 'Nao'], 'default' => '0']);
                     echo $this->Form->control('avaliacao', ['label' => 'Avaliação', 'options' => ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5'], 'default' => '3']);
                     echo $this->Form->control('observacoes', ['label' => 'Observações']);

@@ -45,7 +45,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
                 <tr>
                     <th><?= __('Data de Nascimento') ?></th>
-                    <td><?= h($aluno->nascimento) ?></td>
+                    <td><?= h($aluno->nascimento ? $aluno->nascimento->format('d/m/Y') : '') ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Registro') ?></th>
@@ -128,8 +128,8 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                                 </td>
                                 <td><?= $this->Html->link((string)$aluno->user->id, ['controller' => 'Users', 'action' => 'view', $aluno->user->id]) ?></td>
                                 <td><?= $aluno->user->email ? $this->Text->autoLinkEmails($aluno->user->email) : '' ?></td>
-                                <td><?= h($aluno->user->created) ?></td>
-                                <td><?= h($aluno->user->modified) ?></td>
+                                <td><?= h($aluno->user->created ? $aluno->user->created->format('d/m/Y H:i:s') : '') ?></td>
+                                <td><?= h($aluno->user->modified ? $aluno->user->modified->format('d/m/Y H:i:s') : '') ?></td>
                             </tr>
                         </table>
                     </div>
@@ -161,9 +161,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                             </td>
                             <td><?= $this->Html->link(h((string)$inscricao->id), ['controller' => 'Inscricoes', 'action' => 'view', $inscricao->id]) ?></td>
         					<td><?= $inscricao->muralestagio->instituicao_entidade ? $this->Html->link($inscricao->muralestagio->instituicao_entidade->instituicao, ['controller' => 'Muralestagios', 'action' => 'view', $inscricao->muralestagio->id]) : $inscricao->muralestagio_id ?></td>
-                            <td><?= h($inscricao->data?->format('d/m/Y')) ?></td>
+                            <td><?= h($inscricao->data ? $inscricao->data->format('d/m/Y') : '') ?></td>
                             <td><?= h($inscricao->periodo) ?></td>
-                            <td><?= h($inscricao->timestamp) ? h($inscricao->timestamp) : '' ?></td>
+                            <td><?= h($inscricao->timestamp ? $inscricao->timestamp->format('d/m/Y H:i:s') : '') ?></td>
                         </tr>
                         <?php endforeach; ?>
                     </table>
