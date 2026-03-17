@@ -56,9 +56,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     }
                     echo $this->Form->control('regiao', ['label' => 'Região', 'default' => '7', 'required' => false]);
                     if ($supervisor->email) {
-                        echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'value' => $supervisor->email, 'readonly' => true, 'required' => true]);
+                        echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'value' => $supervisor->email, 'readonly' => true, 'required' => false]);
                     } else {
-                        echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'required' => true]);
+                        echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'required' => false]);
                     }
                     echo $this->Form->control('cargo', ['label' => 'Cargo na instituição', 'required' => false, 'default' => null]);
                     echo $this->Form->control('cep', ['label' => 'CEP', 'pattern' => '[0-9]{5}\-[0-9]{3}', 'placeholder' => '00000-000',  'required' => false]);

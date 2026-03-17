@@ -167,15 +167,6 @@ class ProfessoresController extends AppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
 
-            // Dado não obrigatório
-            if ($this->request->getData('telefone') || strlen($this->request->getData('telefone')) < 9) {
-                $this->Flash->error('Número de telefone errado.');
-            }
-            // Dado não obrigatório
-            if ($this->request->getData('celular') || strlen($this->request->getData('celular')) < 9) {
-                $this->Flash->error('Número de celular errado.');
-            }
-
             $professor = $this->Professores->patchEntity($professor, $this->request->getData());
             if ($this->Professores->save($professor)) {
                 $this->Flash->success(__('The professor has been saved.'));

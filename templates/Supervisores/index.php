@@ -21,7 +21,7 @@
                     <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('nome') ?></th>
                     <th><?= $this->Paginator->sort('cpf', 'CPF') ?></th>
-                    <th><?= $this->Paginator->sort('Users.email', 'Email') ?></th>
+                    <th><?= $this->Paginator->sort('email', 'Email') ?></th>
                     <th><?= $this->Paginator->sort('cress', 'CRESS') ?></th>
                 </tr>
             </thead>
@@ -36,7 +36,7 @@
                     <td><?= $this->Html->link((string)$supervisor->id, ['action' => 'view', $supervisor->id]) ?></td>
                     <td><?= $this->Html->link($supervisor->nome, ['action' => 'view', $supervisor->id]) ?></td>
                     <td><?= h($supervisor->cpf) ?></td>
-                    <td><?= ($supervisor->user and $supervisor->user->email) ? $this->Text->autoLinkEmails($supervisor->user->email) : '' ?></td>
+                    <td><?= ($supervisor->email) ? $this->Text->autoLinkEmails($supervisor->email) : '' ?></td>
                     <td><?= h($supervisor->cress) ?></td>
                 </tr>
                 <?php endforeach; ?>

@@ -31,7 +31,7 @@ class SupervisoresController extends AppController
         $query = $this->Supervisores->find()->contain(['Users']);
 
         $supervisores = $this->paginate($query, [
-            'order' => ['Supervisores.nome' => 'ASC'],
+            'order' => ['nome' => 'ASC'],
             'sortableFields' => [
                 'id',
                 'nome',

@@ -55,7 +55,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     echo $this->Form->control('cpf', ['label' => 'CPF', 'pattern' => '[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}', 'placeholder' => '000.000.000-00', 'required' => false]);
                     echo $this->Form->control('cress', ['label' => 'CRESS', 'required' => true]);
                     echo $this->Form->control('regiao', ['required' => false]);
-                    echo $this->Form->control('email', ['required' => true]);
+                    echo $this->Form->control('email', ['required' => false]);
                     echo $this->Form->control('cargo', ['label' => 'Cargo na instituição', 'required' => false, 'default' => null]);
                     echo $this->Form->control('cep', ['label' => 'CEP', 'pattern' => '[0-9]{5}-[0-9]{3}', 'placeholder' => '00000-000',  'required' => false]);
                     echo $this->Form->control('endereco', ['label' => 'Endereço', 'required' => false]);
