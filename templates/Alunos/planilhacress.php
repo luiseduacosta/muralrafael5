@@ -5,7 +5,7 @@ declare(strict_types=1);
 <div class='alunos planilhacress content'>
     <div class="row justify-content-center">
         <div class="col-auto">
-            <?= $this->Form->create(null, ['url' => ['controller' => 'alunos', 'action' => 'planilhacress'], 'class' => 'form-inline']) ?>
+            <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Alunos', 'action' => 'planilhacress'], 'class' => 'form-inline']) ?>
             <?= $this->Form->label('periodo', 'Período') ?>
             <?= $this->Form->input('periodo', [
                     'default'=> $periodo ? $periodo : $configuracao['mural_periodo_atual'],

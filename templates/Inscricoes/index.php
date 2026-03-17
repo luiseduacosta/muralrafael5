@@ -20,7 +20,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
     
     <div class="row justify-content-center">
 	    <div class="col-auto">
-	        <?php echo $this->Form->create($inscricoes, ['class' => 'form-inline']); ?>
+	        <?php echo $this->Form->create($inscricoes, ['type' => 'get', 'url' => ['controller' => 'Inscricoes', 'action' => 'index'], 'class' => 'form-inline']); ?>
 				<?= $this->Form->label('periodo', 'Período'); ?>
 				<?= $this->Form->input('periodo', [
 					'label' => false,
@@ -67,9 +67,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <td><?= $inscricao->aluno ? $this->Html->link($inscricao->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $inscricao->aluno->id]) : '' ?></td>
                     <td><?= (string)$inscricao->registro ?></td>
                     <td><?= $inscricao->muralestagio->instituicao_entidade ? $this->Html->link($inscricao->muralestagio->instituicao_entidade->instituicao, ['controller' => 'Muralestagios', 'action' => 'view', $inscricao->muralestagio->id]) : '' ?></td>
-                    <td><?= h($inscricao->data) ?></td>
+                    <td><?= $inscricao->data ? $inscricao->data->format('d/m/Y') : '' ?></td>
                     <td><?= h($inscricao->periodo) ?></td>
-                    <td><?= $inscricao->timestamp ? h($inscricao->timestamp) : '' ?></td>
+                    <td><?= $inscricao->timestamp ? $inscricao->timestamp->format('d/m/Y H:i:s') : '' ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

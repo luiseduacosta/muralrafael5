@@ -16,7 +16,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 	<div class="row justify-content-center">
 	    <div class="col-auto">
 	        <?php if ($user_data['categoria'] == '1'): ?>
-	            <?= $this->Form->create($estagiarios, ['class' => 'form-inline']); ?>
+	            <?= $this->Form->create($estagiarios, ['type' => 'get', 'url' => ['controller' => 'Estagiarios', 'action' => 'index'], 'class' => 'form-inline']); ?>
 					<?= $this->Form->label('estagiarioperiodo', 'Período'); ?>
 					<?= $this->Form->input('periodo', [
 							'default'=> $periodo ?? $configuracao->termo_compromisso_periodo,

@@ -39,9 +39,10 @@ class EstagiariosController extends AppController
      */
     public function index()
     {
-        $periodo = $this->request->getData('periodo')
-            ?? ($this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : null)
-            ?? $this->configuracao->termo_compromisso_periodo;
+        $periodo = $this->request->getQuery('periodo') ?? $this->request->getData('periodo');
+        if (empty($periodo)) {
+            $periodo = $this->configuracao->termo_compromisso_periodo;
+        }
         $this->set('periodo', $periodo);
 
         $contained = [
@@ -727,7 +728,6 @@ class EstagiariosController extends AppController
             ->toArray();
 
         $periodo = $this->request->getQuery("periodo") ?? $this->request->getData("periodo");
-    
         if ($periodo === null) {
             $periodo = !empty($periodos) ? end($periodos) : null;
         }

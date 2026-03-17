@@ -30,8 +30,7 @@ class InscricoesController extends AppController
         ])->distinct(['periodo'])->order(['periodo' => 'ASC'])->toArray();
         $periodos = ['all' => 'Todos'] + $periodos;
 
-        $periodo = $this->request->getData('periodo');
-
+        $periodo = $this->request->getQuery('periodo') ?? $this->request->getData('periodo');
         if (empty($periodo)) {
             $periodo = end($periodos);
         }

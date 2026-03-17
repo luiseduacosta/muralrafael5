@@ -3,24 +3,10 @@ declare(strict_types=1);
 use Cake\I18n\Date;
 ?>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        var base_url = "<?= $this->Html->Url->build(['controller' => 'Alunos', 'action' => 'planilhaseguro']); ?>";
-        var select = $("#periodo");
-		var pathname = location.pathname.split('/').filter(Boolean);
-		if (pathname[pathname.length - 2] == 'planilhaseguro') select.val(pathname[pathname.length - 1]);
-
-        select.on('change', function () {
-            var periodo = $(this).val();
-            window.location = base_url + "/" + periodo;
-        })
-    });
-</script>
-
 <div class="alunos planilhaseguro content">
 	<div class="row justify-content-center">
 	    <div class="col-auto">
-            <?= $this->Form->create(null, ['url' => 'index'], ['class' => 'form-inline']); ?>
+            <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Alunos', 'action' => 'planilhaseguro'], 'class' => 'form-inline']); ?>
 	    		<?= $this->Form->label('periodo', 'Período'); ?>
 	            <?= $this->Form->input('periodo', [
 	    				'default'=> $periodo ? $periodo : $configuracao['mural_periodo_atual'],
@@ -29,7 +15,7 @@ use Cake\I18n\Date;
 	                    'options' => $periodos,
 	                    'class' => 'form-control',
                         'label' => false,
-                        'onchange' => 'window.location = "/alunos/planilhaseguro/" + this.value'
+                        'onchange' => 'this.form.submit()'
 	                ]); 
             ?>
             <?= $this->Form->end(); ?>
@@ -262,7 +248,7 @@ $(document).ready(function() {
       return;
     }
     
-    const periodo = $("#periodo").val() || '<?= $periodoselecionado ?>';
+    const periodo = $("#periodo").val() || '<?= $periodo ?>';
 
     let markdown = `# Relatório de Seguro de Vida - Período: ${periodo}\n\n`;
     markdown += `| Nome | CPF | Nascimento | DRE | Curso | Nível | Ajuste 2020 | Período | Início | Final | Instituição |\n`;

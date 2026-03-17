@@ -499,9 +499,6 @@ class AlunosController extends AppController
             return $this->redirect('/');
         }
         
-        $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->configuracao->termo_compromisso_periodo;
-        $this->set('periodo', $periodo);
-
         $periodototal = $this->Alunos->Estagiarios->find('list', [
             'keyField' => 'periodo',
             'valueField' => 'periodo'
@@ -511,9 +508,11 @@ class AlunosController extends AppController
         $periodos = array_reverse($periodos);
         $this->set('periodos', $periodos);
 
+        $periodo = $this->request->getQuery('periodo') ?? $this->request->getData('periodo') ?? $this->configuracao->termo_compromisso_periodo;
         if (empty($periodo)) {
             $periodo = end($periodos);
         }
+        $this->set('periodo', $periodo);
 
         $contained = ['Alunos', 'Instituicoes'];
 
