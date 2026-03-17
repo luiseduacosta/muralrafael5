@@ -10,6 +10,8 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $area
+ * 
+ * @property \App\Model\Entity\Instituicao[] $instituicoes
  */
 class Area extends Entity
 {
@@ -24,5 +26,6 @@ class Area extends Entity
      */
     protected array $_accessible = [
         'area' => true,
+        'instituicoes' => true,
     ];
 }

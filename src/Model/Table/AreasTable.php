@@ -8,9 +8,9 @@ use Cake\Validation\Validator;
 
 /**
  * Areas Model
- *
- * @property \App\Model\Table\EstagiariosTable&\Cake\ORM\Association\HasMany $Estagiarios
- * @property \App\Model\Table\MuralestagiosTable&\Cake\ORM\Association\HasMany $Muralestagios
+ * 
+ * @property \App\Model\Table\InstituicoesTable&\Cake\ORM\Association\BelongsTo $area_id
+ * 
  * @method \App\Model\Entity\Area newEmptyEntity()
  * @method \App\Model\Entity\Area newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Area[] newEntities(array $data, array $options = [])
