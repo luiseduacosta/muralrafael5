@@ -22,7 +22,7 @@ final class EstagiarioPolicy implements BeforePolicyInterface
         if ($identity) {
             $user_data = $identity->getOriginalData();
 
-            if ($user_data && $user_data['categoria'] == '1') {
+            if ($user_data && $user_data['administrador_id']) {
                 return true;
             }
         }
@@ -87,7 +87,7 @@ final class EstagiarioPolicy implements BeforePolicyInterface
     public function canLancanota(IdentityInterface $userSession): Result
     {
         $user_data = $userSession->getOriginalData();
-        if ($user_data['categoria'] == '3') {
+        if ($user_data['professor_id']) {
             return new Result(true);
         }
         return new Result(false, 'Erro: lancanota policy not authorized');

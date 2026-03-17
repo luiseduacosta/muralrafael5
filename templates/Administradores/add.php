@@ -22,7 +22,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <fieldset>
                 <h3><?= __('Adicionar administrador') ?></h3>
                 <?php
-                    if ($user_data['categoria'] == '1'):
+                    if ($user_data['administrador_id']):
                        echo $this->Form->control('user_id', ['type' => 'number', 'label' => 'Usuario', 'value' => $user_session['id'], 'readonly' => true]); 
                     endif;
                     echo $this->Form->control('nome', ['label' => 'Nome']);

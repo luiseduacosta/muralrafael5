@@ -13,6 +13,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
 <div class="row justify-content-between mb-3">
     <div class="col-auto">
+        <?= $this->Html->link('Voltar', 'javascript:history.back()', ['class' => 'button']); ?>
+    </div>    
+    <div class="col-auto">
         <h1 class="h3 mb-0 text-gray-800">Alunos estagiários: <?= h($professor->nome); ?></h1>
     </div>
     <div class="col-auto">
@@ -47,7 +50,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <table class="table table-striped table-hover table-responsive" id="table-estagiarios">
             <thead>
                 <tr id="table-estagiarios-header">
-                    <?php if ($user_data['categoria'] == '1' || $user_data['categoria'] == '3'): ?>
+                    <?php if ($user_data['administrador_id'] || $user_data['professor_id']): ?>
                         <th><?= $this->Paginator->sort('Estagiarios.id', 'Id') ?></th>
                     <?php endif; ?>
                     <th><?= $this->Paginator->sort('Alunos.nome', 'Aluno(a)') ?></th>
@@ -67,7 +70,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 <?php foreach ($estagiarios as $estagiario): ?>
                     <?php // pr($estagiario); die(); ?>
                     <tr data-id="<?= $estagiario->id ?>">
-                        <?php if ($user_data['categoria'] == '1' || $user_data['categoria'] == '3'): ?>
+                        <?php if ($user_data['administrador_id'] || $user_data['professor_id']): ?>
                             <td><?= $estagiario->id ?></td>
                         <?php endif; ?>
                         <td><?= !empty($estagiario->aluno->nome) ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario['aluno_id']]) : "Sem aluno"; ?>
@@ -107,7 +110,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <?php endif; ?>
                         <td class="actions">
                             <?= $this->Html->link(__('Ver'), ['action' => 'view', $estagiario['id']]) ?>
-                            <?php if ($user_data['categoria'] == '1' || $user_data['categoria'] == '3' && ($user_data['professor_id'] == $estagiario->professor_id)): ?>
+                            <?php if ($user_data['administrador_id'] || $user_data['professor_id'] && ($user_data['professor_id'] == $estagiario->professor_id)): ?>
                                 <button type="button" class="btn btn-sm btn-warning btn-edit"><?= __('Editar') ?></button>
                                 <button type="button" class="btn btn-sm btn-primary btn-save" style="display:none">Salvar</button>
                                 <button type="button" class="btn btn-sm btn-secondary btn-cancel" style="display:none">Cancelar</button>

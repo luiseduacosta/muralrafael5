@@ -11,7 +11,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
     <aside>
 		<div class="nav">
             <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
-            <?php if ($user_data['categoria'] == '1'): ?>
+            <?php if ($user_data['administrador_id']): ?>
                 <?= $this->Html->link(__('Nova Área'), ['action' => 'add'], ['class' => 'button']) ?>
             <?php endif; ?>
         </div>
@@ -37,7 +37,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 <tr>
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $area->id]) ?>
-                        <?php if ($user_data['categoria'] == '1'): ?>
+                        <?php if ($user_data['administrador_id']): ?>
                             <?= $this->Html->link(__('Editar'), ['action' => 'edit', $area->id]) ?>
                             <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $area->id], ['confirm' => __('Are you sure you want to delete {0}?', $area->area)]) ?>
                         <?php endif; ?>

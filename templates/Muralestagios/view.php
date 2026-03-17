@@ -32,7 +32,7 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
 		    <aside>
 		        <div class="nav">
 					<?= $this->Html->link(__('Mural estagios'), ['action' => 'index'], ['class' => 'button']) ?>
-                    <?php if ($user_data['categoria'] == '1'): ?>
+                    <?php if ($user_data['administrador_id']): ?>
 			            <?= $this->Html->link(__('Editar estagio'), ['action' => 'edit', $muralestagio->id], ['class' => 'button']) ?>
 			            <?= $this->Form->postLink(__('Excluir estagio'), ['action' => 'delete', $muralestagio->id], ['confirm' => __('Are you sure you want to delete # {0}?', $muralestagio->id), 'class' => 'button']) ?>
 			            <?= $this->Html->link(__('Novo estagio'), ['action' => 'add'], ['class' => 'button']) ?>
@@ -145,13 +145,13 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
                 </blockquote>
             </div>
 
-			<?php if ($user_data['categoria'] == '1'): ?>
+			<?php if ($user_data['administrador_id']): ?>
                 <tr>
                     <td colspan = '2' class="text-center">
                         <?php echo $this->Html->link('Admin inscrição', ['controller' => 'Inscricoes', 'action' => 'add', '?' => ['muralestagio_id' => $muralestagio->id]], ['role' => 'button', 'class' => ' button btn-primary']); ?>
                     </td>
                 </tr>
-            <?php elseif ($user_data['categoria'] == '2'): ?>
+            <?php elseif ($user_data['aluno_id']): ?>
                 <!-- if dataInscricao is empty them let the close day of application open //-->
                 <?php if (empty($muralestagio->dataInscricao)) $muralestagio->dataInscricao = new \Cake\I18n\Date('tomorrow'); ?>
                 <?php if ($muralestagio->dataInscricao->isFuture() || $muralestagio->dataInscricao->isToday()): ?>
@@ -183,7 +183,7 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
 
             <?php endif; ?>
 
-            <?php if ($user_data['categoria'] == '1' || $user_data['categoria'] == '2' || $user_data['categoria'] == '3'): ?>
+            <?php if ($user_data['administrador_id'] || $user_data['aluno_id'] || $user_data['professor_id']): ?>
 	            <?php if (!empty($muralestagio->inscricoes)) : ?>
 	            <div class="related">
 	                <h4><?= __('Inscrições') ?></h4>
@@ -202,7 +202,7 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
 	                        <tr>
 								<td class="actions">
 	                                <?= $this->Html->link(__('Ver'), ['controller' => 'Inscricoes', 'action' => 'view', $inscricao->id]) ?>
-                                        <?php if ($user_data['categoria'] == '1'): ?>
+                                        <?php if ($user_data['administrador_id']): ?>
                                         <?= $this->Html->link(__('Editar'), ['controller' => 'Inscricoes', 'action' => 'edit', $inscricao->id]) ?>
                                     <?php endif; ?>
                                 </td>

@@ -10,7 +10,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
 <div class="visitas index content">
 	<aside>
-		<?php if ($user_data['categoria'] == '1'): ?>
+		<?php if ($user_data['administrador_id']): ?>
             <div class="nav">
                 <?php if (isset($instituicao_id)): ?>
                     <?= $this->Html->link(__('Nova Visita'), ['action' => 'add', '?' => ['instituicao_id' => $instituicao_id]], ['class' => 'button']) ?>

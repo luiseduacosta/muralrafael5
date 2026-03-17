@@ -15,14 +15,14 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <aside>
                 <div class="nav">
                     <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
-        	        <?php if ($user_data['categoria'] == '1'): ?>
+        	        <?php if ($user_data['administrador_id']): ?>
                         <?= $this->Form->postLink(__('Excluir Aluno(a)'), ['action' => 'delete', $aluno->id], ['confirm' => __('Are you sure you want to delete {0}?', $aluno->nome), 'class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Novo Aluno(a)'), ['action' => 'add'], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Listar Alunos(as)'), ['action' => 'index'], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Editar Aluno(a)'), ['action' => 'edit', $aluno->id], ['class' => 'button' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Declaração de período'), ['controller' => 'Alunos', 'action' => 'declaracaoperiodo', $aluno->id], ['class' => 'button' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Termo de compromisso'), ['controller' => 'Estagiarios', 'action' => 'termocompromisso', '?' => ['aluno_id' => $aluno->id]], ['class' => 'button' , 'style' => 'width: 20%;']) ?>
-                    <?php elseif ($user_data['categoria'] == '2' && ($user_data['aluno_id'] == $aluno->id)): ?>
+                    <?php elseif ($user_data['aluno_id'] && ($user_data['aluno_id'] == $aluno->id)): ?>
                         <?= $this->Html->link(__('Editar Aluno(a)'), ['action' => 'edit', $aluno->id], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Declaração de período'), ['controller' => 'Alunos', 'action' => 'declaracaoperiodo', $aluno->id], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Termo de compromisso'), ['controller' => 'Estagiarios', 'action' => 'termocompromisso', '?' => ['aluno_id' => $aluno->id]], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
@@ -105,7 +105,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             </div>
             <?php endif; ?>
             
-            <?php if ($user_data['categoria'] == '1'): ?>
+            <?php if ($user_data['administrador_id']): ?>
                 <?php if (!empty($aluno->user)) : ?>
                 <div class="related">
                     <h4><?= __('Usuário') ?></h4>
@@ -192,7 +192,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?>
-                                <?php if ($user_data['categoria'] == '1'): ?>
+                                <?php if ($user_data['administrador_id']): ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete {0}?', $estagiario->id)]) ?>
                                 <?php endif; ?>
                             </td>

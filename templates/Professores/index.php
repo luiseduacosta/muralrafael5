@@ -42,7 +42,7 @@ $departamentos = [
                     <th><?= $this->Paginator->sort('siape', 'SIAPE') ?></th>
                     <th><?= $this->Paginator->sort('celular') ?></th>
                     <th><?= $this->Paginator->sort('email', 'Email') ?></th>
-                    <th><?= $this->Paginator->sort('curriculolattes') ?></th>
+                    <th><?= $this->Paginator->sort('curriculolattes', 'Lattes') ?></th>
                     <th><?= $this->Paginator->sort('departamento') ?></th>
                 </tr>
             </thead>
@@ -52,7 +52,7 @@ $departamentos = [
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $professor->id]) ?>
                         <?= $this->Html->link(__('Editar'), ['action' => 'edit', $professor->id]) ?>
-                        <?php if ($user_data['categoria'] == '1'): ?>
+                        <?php if ($user_data['administrador_id']): ?>
                             <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $professor->id], ['confirm' => __('Are you sure you want to delete {0}?', $professor->nome)]) ?>
                         <?php endif; ?>
                     </td>

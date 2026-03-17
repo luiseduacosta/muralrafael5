@@ -10,6 +10,7 @@ use Cake\Validation\Validator;
  * Administradores Model
  *
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * 
  * @method \App\Model\Entity\Administrador newEmptyEntity()
  * @method \App\Model\Entity\Administrador newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Administrador[] newEntities(array $data, array $options = [])

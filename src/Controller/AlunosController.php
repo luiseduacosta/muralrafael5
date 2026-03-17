@@ -118,14 +118,14 @@ class AlunosController extends AppController
         
         if ($this->request->is('post')) {
             $aluno = $this->Alunos->patchEntity($aluno, $this->request->getData());
-            if ($user_data['categoria'] == '2') {
+            if ($user_data['aluno_id']) {
                 $aluno->user_id = $user_data['id'];
             }
             
             if ($this->Alunos->save($aluno)) {
                 $this->Flash->success(__('O aluno foi adicionado com sucesso.'));
                 // Update user record with aluno_id and numero only if the user is a aluno
-                if ($user_data['categoria'] == '2') {
+                if ($user_data['aluno_id']) {
                     $user = $this->fetchTable('Users')->get($aluno->user_id);
                     $user->aluno_id = $aluno->id;
                     $user->numero = $aluno->registro;
@@ -139,7 +139,7 @@ class AlunosController extends AppController
             $this->Flash->error(__('Erro ao adicionar: não foi possível salvar os dados.'));
         }
         
-        if ($user_data['categoria'] == '2') {   
+        if ($user_data['aluno_id']) {   
             $email = $user_data['email'];
             $registro = $user_data['numero'];
             $aluno->email = $email;
@@ -286,7 +286,7 @@ class AlunosController extends AppController
         $totalperiodos = $this->request->getQuery('totalperiodos');
         $novoperiodo = $this->request->getQuery('novoperiodo');
 
-        if ($user_data && $user_data['categoria'] == 2) {
+        if ($user_data && $user_data['aluno_id']) {
             $id = $user_data['aluno_id'];
         }
 
@@ -370,7 +370,7 @@ class AlunosController extends AppController
         $id = $this->request->getQuery('id');
         $totalperiodos = $this->request->getQuery('totalperiodos');
 
-        if ($user_data && $user_data['categoria'] == '2') {
+        if ($user_data && $user_data['aluno_id']) {
             $id = $user_data['aluno_id'];
         }
 

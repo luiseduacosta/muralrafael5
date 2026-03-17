@@ -15,7 +15,7 @@ if ($user_session) {
             <aside>
                 <div class="nav">
                         <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
-                        <?php if ($user_data['categoria'] == '1'): ?>
+                        <?php if ($user_data['administrador_id']): ?>
                             <?= $this->Html->link(__('Listar Instituições'), ['action' => 'index'], ['class' => 'button']) ?>
                             <?= $this->Html->link(__('Editar Instituição'), ['action' => 'edit', $instituicao->id], ['class' => 'button']) ?>
                             <?= $this->Form->postLink(__('Excluir Instituição'), ['action' => 'delete', $instituicao->id], ['confirm' => __('Are you sure you want to delete {0}?', $instituicao->instituicao), 'class' => 'button']) ?>
@@ -51,7 +51,7 @@ if ($user_session) {
                     <td><?= $instituicao->email ? $this->Text->autoLinkEmails($instituicao->email) : '' ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Url') ?></th>
+                    <th><?= __('Site') ?></th>
                     <td><?= $instituicao->url ? $this->Html->link($instituicao->url) : '' ?></td>
                 </tr>
                 <tr>
@@ -93,16 +93,16 @@ if ($user_session) {
                     <td><?= h($instituicao->avaliacao) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Observações') ?></th>
-                    <td><?= h($instituicao->observacoes) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Convênio') ?></th>
-                    <td><?= h($instituicao->convenio) == '0' ? 'Não' : 'Sim' ?></td>
+                    <th><?= __('Nº de convênio') ?></th>
+                    <td><?= $instituicao->convenio ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Expira') ?></th>
                     <td><?= $instituicao->expira ? $instituicao->expira->format('d/m/Y') : '' ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Observações') ?></th>
+                    <td><?= h($instituicao->observacoes) ?></td>
                 </tr>
             </table>
             <div class="related">
@@ -124,7 +124,7 @@ if ($user_session) {
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Supervisores', 'action' => 'view', $supervisores->id]) ?>
-                                <?php if ($user_data['categoria'] == '1'): ?>
+                                <?php if ($user_data['administrador_id']): ?>
                                     <?= $this->Html->link(__('Editar'), ['controller' => 'Supervisores', 'action' => 'edit', $supervisores->id]) ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Supervisores', 'action' => 'delete', $supervisores->id], ['confirm' => __('Are you sure you want to delete # {0}?', $supervisores->id)]) ?>
                                 <?php endif; ?>
@@ -164,7 +164,7 @@ if ($user_session) {
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?>
-                                <?php if ($user_data['categoria'] == '1'): ?>
+                                <?php if ($user_data['administrador_id']): ?>
                                     <?= $this->Html->link(__('Editar'), ['controller' => 'Estagiarios', 'action' => 'edit', $estagiario->id]) ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete # {0}?', $estagiario->id)]) ?>
                                 <?php endif; ?>
@@ -216,7 +216,7 @@ if ($user_session) {
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Muralestagios', 'action' => 'view', $muralestagio->id]) ?>
-                                <?php if ($user_data['categoria'] == '1'): ?>
+                                <?php if ($user_data['administrador_id']): ?>
                                     <?= $this->Html->link(__('Editar'), ['controller' => 'Muralestagios', 'action' => 'edit', $muralestagio->id]) ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Muralestagios', 'action' => 'delete', $muralestagio->id], ['confirm' => __('Are you sure you want to delete # {0}?', $muralestagio->id)]) ?>
                                 <?php endif; ?>
@@ -264,7 +264,7 @@ if ($user_session) {
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Visitas', 'action' => 'view', $visita->id]) ?>
-                                <?php if ($user_data['categoria'] == '1'): ?>
+                                <?php if ($user_data['administrador_id']): ?>
                                     <?= $this->Html->link(__('Editar'), ['controller' => 'Visitas', 'action' => 'edit', $visita->id]) ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Visitas', 'action' => 'delete', $visita->id], ['confirm' => __('Are you sure you want to delete visita_{0}?', $visita->id)]) ?>
                                 <?php endif; ?>

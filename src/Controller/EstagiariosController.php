@@ -22,9 +22,11 @@ class EstagiariosController extends AppController
         "sortableFields" => [
             "Estagiarios.id",
             "Alunos.nome",
+            "Estagiarios.periodo",
             "Estagiarios.registro",
             "Instituicoes.instituicao",
             "Supervisores.nome",
+            "Professores.nome",
             "Estagiarios.periodo",
             "Estagiarios.nivel",
             "Estagiarios.nota",
@@ -400,7 +402,7 @@ class EstagiariosController extends AppController
 
         $aluno_id = $this->request->getQuery('aluno_id');
 
-        if (isset($user_data) && $user_data['categoria'] == '2') {
+        if (isset($user_data) && $user_data['aluno_id']) {
             $aluno_id = $user_data['aluno_id'];
         }
 
@@ -537,7 +539,7 @@ class EstagiariosController extends AppController
 
         $id = $this->request->getQuery('estagiario_id');
 
-        if ($user_data['categoria'] == '2') {
+        if ($user_data['aluno_id']) {
             $id = $user_data['aluno_id'];
         }
 
@@ -583,7 +585,7 @@ class EstagiariosController extends AppController
 
         $id = $this->request->getQuery('estagiario_id');
 
-        if ($user_data['categoria'] == '2') {
+        if ($user_data['aluno_id']) {
             $id = $user_data['aluno_id'];
         }
 
@@ -696,7 +698,7 @@ class EstagiariosController extends AppController
         $user_session = $this->request->getAttribute('identity');
         $user_data = $user_session->getOriginalData();
 
-        if ($user_data['categoria'] == '3') {
+        if ($user_data['professor_id']) {
             $professor_id = $user_data['professor_id'];
         } else {
             $professor_id = (int)$this->request->getQuery("professor_id") ?? $this->request->getData("professor_id");
@@ -781,7 +783,7 @@ class EstagiariosController extends AppController
         $user_session = $this->request->getAttribute('identity');
         $user_data = $user_session->getOriginalData();
 
-        if ($user_data['categoria'] == '3') {
+        if ($user_data['professor_id']) {
             $professor_id = $user_data['professor_id'];
         } else {
             $professor_id = (int)$this->request->getQuery("professor_id");

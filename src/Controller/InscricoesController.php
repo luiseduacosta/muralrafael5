@@ -135,7 +135,7 @@ class InscricoesController extends AppController
         }
 
         // Admin não pode fazer inscrição de aluno? Corrigir
-        if ($user_data['categoria'] == '2') {
+        if ($user_data['aluno_id']) {
             $aluno = $this->fetchTable('Alunos')->get($user_data['aluno_id']);
             $dados['registro'] = $aluno->registro;
             $dados['aluno_id'] = $aluno->id;

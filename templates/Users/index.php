@@ -10,7 +10,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 ?>
 <div class="users index content">
 	<aside>
-        <?php if ($user_data['categoria'] == '1'): ?>
+        <?php if ($user_data['administrador_id']): ?>
             <div class="nav">
                 <?= $this->Html->link(__('Novo usuário'), ['action' => 'add'], ['class' => 'button']) ?>
             </div>
@@ -38,7 +38,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 <?php foreach ($users as $user): ?>
                 <tr>
                     <td class="actions">
-                        <?php if ($user_data['categoria'] == '1'): ?>
+                        <?php if ($user_data['administrador_id']): ?>
                             <?= $this->Html->link(__('Ver'), ['action' => 'view', $user->id]) ?>
                             <?= $this->Html->link(__('Editar'), ['action' => 'edit', $user->id]) ?>
                             <?php if ($user->id !== $user_session->id): ?>

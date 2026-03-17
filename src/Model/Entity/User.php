@@ -25,6 +25,13 @@ use Cake\ORM\TableRegistry;
  * @property int|null $professor_id
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
+ *
+ * @property \App\Model\Entity\Aluno $aluno
+ * @property \App\Model\Entity\Supervisor $supervisor
+ * @property \App\Model\Entity\Professor $professor
+ * @property \App\Model\Entity\Administrador $administrador
+ * @property \App\Model\Entity\Categoria $categoria
+ * 
  */
 class User extends Entity implements AuthorizationIdentity, AuthenticationIdentity
 {
@@ -52,6 +59,11 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
         'professor_id' => true,
         'created' => true,
         'modified' => true,
+        'aluno' => true,
+        'supervisor' => true,
+        'professor' => true,
+        'administrador' => true,
+        'role' => true, // Changed from 'categoria' to 'role'
     ];
 
     /**
@@ -105,7 +117,12 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
         }
 
         $administradores = TableRegistry::getTableLocator()->get('Administradores');
-        $administrador = $administradores->find('all', ['conditions' => ['Administradores.user_id' => $this->id] ])->first();
+        $administrador = $administradores->find('all', [
+            'conditions' => [
+                'Administradores.user_id' => $this->id
+                ], 
+            ])
+            ->first();
         $this->administrador_id = false;
         if (!empty($administrador)) {
             $this->administrador_id = $administrador->id;

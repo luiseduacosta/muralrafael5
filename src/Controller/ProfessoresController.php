@@ -115,7 +115,7 @@ class ProfessoresController extends AppController
         if ($this->request->is('post')) {
             $professor = $this->Professores->patchEntity($professor, $this->request->getData());
 
-            if ($user_data['categoria'] == '3') {
+            if ($user_data['professor_id']) {
                 $user = $this->Authentication->getIdentity();
                 $professor->user_id = $user->get('id');
             }
@@ -123,7 +123,7 @@ class ProfessoresController extends AppController
             if ($this->Professores->save($professor)) {
                 $this->Flash->success(__('The professor has been saved.'));
                 // Update the user with the professor_id if the atual user is professor
-                if ($user_data['categoria'] == '3') {
+                if ($user_data['professor_id']) {
                     $user = $this->fetchTable('Users')->get($professor->user_id);
                     $user->professor_id = $professor->id;
                     $user->numero = $professor->siape;
@@ -137,7 +137,7 @@ class ProfessoresController extends AppController
             $this->Flash->error(__('The professor could not be saved. Please, try again.'));
         }
 
-        if ($user_data['categoria'] == '3') {
+        if ($user_data['professor_id']) {
             $email = $user_data['email'];
             $siape = $user_data['numero'];
             $professor->email = $email;
@@ -166,6 +166,16 @@ class ProfessoresController extends AppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
+
+            // Dado não obrigatório
+            if ($this->request->getData('telefone') || strlen($this->request->getData('telefone')) < 9) {
+                $this->Flash->error('Número de telefone errado.');
+            }
+            // Dado não obrigatório
+            if ($this->request->getData('celular') || strlen($this->request->getData('celular')) < 9) {
+                $this->Flash->error('Número de celular errado.');
+            }
+
             $professor = $this->Professores->patchEntity($professor, $this->request->getData());
             if ($this->Professores->save($professor)) {
                 $this->Flash->success(__('The professor has been saved.'));

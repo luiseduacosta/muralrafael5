@@ -12,10 +12,10 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <div class="inscricoes view content">
             <aside>
                 <div class="nav">
-                    <?php if ($user_data['categoria'] == '2' && ($user_data['aluno_id'] == $inscricao->aluno_id)): ?>
+                    <?php if ($user_data['aluno_id'] && ($user_data['aluno_id'] == $inscricao->aluno_id)): ?>
                         <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Excluir Inscrição'), ['action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete inscricao_{0}?', $inscricao->id), 'class' => 'button']) ?>
-                    <?php elseif ($user_data['categoria'] == '1'): ?>
+                    <?php elseif ($user_data['administrador_id']): ?>
                         <?= $this->Html->link(__('Listar Inscricões'), ['controller' => 'Muralestagios', 'action' => 'view', $inscricao->muralestagio_id], ['class' => 'button btn-secondary']) ?>
                         <?= $this->Form->postLink(__('Excluir Inscrição'), ['action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete inscricao_{0}?', $inscricao->id), 'class' => 'button']) ?>
                     <?php endif ?>

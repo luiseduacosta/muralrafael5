@@ -25,8 +25,8 @@ final class MuralestagioPolicy implements BeforePolicyInterface
             if (
                 $user_data
                 && (
-                    $user_data['categoria'] == '1'
-                    || $user_data['categoria'] == '3'
+                    $user_data['administrador_id']
+                    || $user_data['professor_id']
                 )
             ) {
                 return true;

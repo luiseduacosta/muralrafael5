@@ -24,13 +24,13 @@ $departamentos = [
                 <div class="nav">
                     <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                     <?= $this->Html->link(__('Listar Professores'), ['action' => 'index'], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
-                    <?php if ($user_data['categoria'] == '1'): ?>
+                    <?php if ($user_data['administrador_id']): ?>
                         <?= $this->Html->link(__('Editar Professor(a)'), ['action' => 'edit', $professor->id], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Form->postLink(__('Excluir Professor(a)'), ['action' => 'delete', $professor->id], ['confirm' => __('Are you sure you want to delete {0}?', $professor->nome), 'class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Novo(a) Professor(a)'), ['action' => 'add'], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('CH e nota'), ['controller' => 'Estagiarios', 'action' => 'lancanota', '?' => ['professor_id' => $professor->id]], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                     <?php endif; ?>
-                    <?php if ($user_data['categoria'] == '3' && ($professor->id == $user_data['professor_id'])): ?>
+                    <?php if ($user_data['professor_id'] && ($professor->id == $user_data['professor_id'])): ?>
                         <?= $this->Html->link(__('Editar Professor(a)'), ['action' => 'edit', $professor->id], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('CH e nota'), ['controller' => 'Estagiarios', 'action' => 'lancanota', '?' => ['professor_id' => $professor->id]], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                     <?php endif; ?>
@@ -225,7 +225,7 @@ $departamentos = [
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Users', 'action' => 'view', $professor->user->id]) ?>
-                                <?php if ($user_data['categoria'] == '1'): ?>
+                                <?php if ($user_data['administrador_id']): ?>
                                     <?= $this->Html->link(__('Editar'), ['controller' => 'Users', 'action' => 'edit', $professor->user->id]) ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Users', 'action' => 'delete', $professor->user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $professor->user->id)]) ?>
                                 <?php endif; ?>
@@ -268,7 +268,7 @@ $departamentos = [
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?>
-                                <?php if ($user_data['categoria'] == '1'): ?>
+                                <?php if ($user_data['administrador_id']): ?>
                                     <?= $this->Html->link(__('Editar'), ['controller' => 'Estagiarios', 'action' => 'edit', $estagiario->id]) ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete estagiario_{0}?', $estagiario->id)]) ?>
                                 <?php endif; ?>

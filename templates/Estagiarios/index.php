@@ -15,7 +15,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 	
 	<div class="row justify-content-center">
 	    <div class="col-auto">
-	        <?php if ($user_data['categoria'] == '1'): ?>
+	        <?php if ($user_data['administrador_id']): ?>
 	            <?= $this->Form->create($estagiarios, ['type' => 'get', 'url' => ['controller' => 'Estagiarios', 'action' => 'index'], 'class' => 'form-inline']); ?>
 					<?= $this->Form->label('estagiarioperiodo', 'Período'); ?>
 					<?= $this->Form->input('periodo', [
@@ -36,7 +36,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 	
 	<aside>
 		<div class="nav">
-	        <?php if ($user_data['categoria'] == '1'): ?>
+	        <?php if ($user_data['administrador_id']): ?>
 			    <?= $this->Html->link(__('Novo Estagiario'), ['action' => 'add'], ['class' => 'button']) ?>
 	        <?php endif; ?>
 		</div>
@@ -51,7 +51,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <table>
             <thead>
                 <tr>
-			        <?php if ($user_data['categoria'] == '1'): ?>
+			        <?php if ($user_data['administrador_id']): ?>
 	                    <th class="actions"><?= __('Actions') ?></th>
 					<?php endif; ?>
 	                <th><?= $this->Paginator->sort('Estagiarios.id', 'Id') ?></th>
@@ -68,7 +68,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <tbody>
                 <?php foreach ($estagiarios as $estagiario): ?>
                 <tr>
-					<?php if ($user_data['categoria'] == '1'): ?>
+					<?php if ($user_data['administrador_id']): ?>
 	                    <td class="actions">
 	                        <?= $this->Html->link(__('Ver'), ['action' => 'view', $estagiario->id]) ?>
 	                        <?= $this->Html->link(__('Editar'), ['action' => 'edit', $estagiario->id]) ?>

@@ -11,7 +11,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
 <div class="inscricoes index content">
 	<aside>
-        <?php if ($user_data['categoria'] == '1'): ?>
+        <?php if ($user_data['administrador_id']): ?>
             <div class="nav">
                 <?= $this->Html->link(__('Nova Inscricao'), ['action' => 'add'], ['class' => 'button']) ?>
             </div>
@@ -58,7 +58,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 <tr>
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $inscricao->id]) ?>
-                        <?php if ($user_data['categoria'] == '1'): ?>
+                        <?php if ($user_data['administrador_id']): ?>
                             <?= $this->Html->link(__('Editar'), ['action' => 'edit', $inscricao->id]) ?>
                             <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete # {0}?', $inscricao->id)]) ?>
                         <?php endif; ?>

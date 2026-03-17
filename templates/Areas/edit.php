@@ -13,7 +13,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
     <aside>
         <div class="nav">
             <?= $this->Html->link(__('Listar Áreas'), ['action' => 'index'], ['class' => 'button']) ?>
-            <?php if ($user_data['categoria'] == '1'): ?>
+            <?php if ($user_data['administrador_id']): ?>
             <?= $this->Form->postLink(
                 __('Excluir'),
                 ['action' => 'delete', $area->id],

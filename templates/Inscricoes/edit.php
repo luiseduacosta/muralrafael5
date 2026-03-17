@@ -14,7 +14,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <div class="inscricoes form content">
             <aside>
                 <div class="side-nav">
-                    <?php if ($user_data['categoria'] == '1'): ?>
+                    <?php if ($user_data['administrador_id']): ?>
                         <?= $this->Form->postLink(
                             __('Excluir'),
                             ['action' => 'delete', $inscricao->id],

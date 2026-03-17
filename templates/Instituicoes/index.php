@@ -14,7 +14,7 @@ if ($user_session) {
 <div class="instituicoes index content">
 	<aside>
 		<div class="nav">    
-        	<?php if ($user_data['categoria'] == '1'): ?>
+        	<?php if ($user_data['administrador_id']): ?>
                 <?= $this->Html->link(__('Nova Instituição'), ['action' => 'add'], ['class' => 'button']) ?>
                 <?= $this->Html->link(__('Áreas'), ['controller' => 'Areas', 'action' => 'index'], ['class' => 'button']) ?>
             <?php endif; ?>
@@ -38,7 +38,7 @@ if ($user_session) {
                     <th><?= $this->Paginator->sort('Areas.area', 'Área') ?></th>
                     <th><?= $this->Paginator->sort('natureza') ?></th>
                     <th><?= $this->Paginator->sort('cnpj', 'CNPJ') ?></th>
-                    <th><?= $this->Paginator->sort('convenio', 'Convênio') ?></th>
+                    <th><?= $this->Paginator->sort('convenio', 'Nº de convênio') ?></th>
                     <th><?= $this->Paginator->sort('expira', 'Expira') ?></th>
                     <th><?= $this->Paginator->sort('email') ?></th>
                 </tr>

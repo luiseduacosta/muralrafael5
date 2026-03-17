@@ -48,10 +48,10 @@ $departamentos = [
             <fieldset>
                 <h3><?= __('Adicionando Professor') ?></h3>
                 <?php
-                    if ($user_data['categoria'] == '1'):
+                    if ($user_data['administrador_id']):
                         $val = $this->request->getParam('pass') ? $this->request->getParam('pass')[0] : '';
                         echo $this->Form->control('user_id', ['type' => 'number', 'value' => $val, 'hidden' => true, 'label' => false ]); 
-                    elseif ($user_data['categoria'] == '3'):
+                    elseif ($user_data['professor_id']):
                         echo $this->Form->control('user_id', ['type' => 'number', 'value' => $user_session->get('id'), 'hidden' => true, 'label' => false ]); 
                     endif;
                     echo $this->Form->control('nome', ['label' => 'Nome Completo', 'required' => true]);

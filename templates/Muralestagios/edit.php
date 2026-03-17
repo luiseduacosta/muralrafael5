@@ -16,7 +16,7 @@ if ($user_session) {
             <aside>
                 <div class="nav">
                     <?= $this->Html->link(__('Mural estagios'), ['action' => 'index'], ['class' => 'button']) ?>
-                    <?php if ($user_data['categoria'] == '1'): ?>
+                    <?php if ($user_data['administrador_id']): ?>
                         <?= $this->Form->postLink(
                             __('Excluir'),
                             ['action' => 'delete', $muralestagio->id],

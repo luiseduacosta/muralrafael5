@@ -9,6 +9,7 @@ declare(strict_types=1);
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) { $user_data = $user_session->getOriginalData(); }
+pr($user);
 
 ?>
 <div>
@@ -19,7 +20,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
                     <?= $this->Html->link(__('Editar Email'), ['action' => 'edit', $user->id], ['class' => 'button']) ?>
                     <?= $this->Html->link(__('Editar Senha'), ['action' => 'editpassword', $user->id], ['class' => 'button']) ?> 
-                    <?php if ($user_data['categoria'] == '1'): ?>
+                    <?php if ($user_data['administrador_id']): ?>
                         <?= $this->Html->link(__('Listar Usuários'), ['action' => 'index'], ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Excluir Usuário'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete {0}?', $user->email), 'class' => 'button']) ?>
                         <?= $this->Html->link(__('Novo Usuário'), ['action' => 'add'], ['class' => 'button']) ?>
@@ -31,7 +32,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <table>
                 <tr>
                     <th><?= __('Categoria') ?></th>
-                    <td><?= h($user->categoria) ?></td>
+                    <td><?= h($user->role->categoria) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Id') ?></th>
@@ -98,7 +99,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'alunos', 'action' => 'view', $user->aluno->id]) ?>
                                 <?= $this->Html->link(__('Editar'), ['controller' => 'alunos', 'action' => 'edit', $user->aluno->id]) ?>
-                                <?php if ($user_data['categoria'] == '1') : ?>
+                                <?php if ($user_data['administrador_id']) : ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'alunos', 'action' => 'delete', $user->aluno->id], ['confirm' => __('Are you sure you want to delete aluno_{0}?', $user->aluno->id)]) ?>
                                 <?php endif; ?>
                             </td>
@@ -177,7 +178,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'supervisores', 'action' => 'view', $user->supervisor->id]) ?>
                                 <?= $this->Html->link(__('Editar'), ['controller' => 'supervisores', 'action' => 'edit', $user->supervisor->id]) ?>
-                                <?php if ($user_data['categoria'] == '1') : ?>
+                                <?php if ($user_data['administrador_id']) : ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'supervisores', 'action' => 'delete', $user->supervisor->id], ['confirm' => __('Are you sure you want to delete supervisor_{0}?', $user->supervisor->id)]) ?>
                                 <?php endif; ?>
                             </td>

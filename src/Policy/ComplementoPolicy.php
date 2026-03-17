@@ -22,7 +22,7 @@ final class ComplementoPolicy implements BeforePolicyInterface
         if ($identity) {
             $user_data = $identity->getOriginalData();
 
-            if ($user_data && $user_data['categoria'] == '1') {
+            if ($user_data && $user_data['administrador_id']) {
                 return true;
             }
         }

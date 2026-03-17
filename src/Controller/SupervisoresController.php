@@ -71,7 +71,7 @@ class SupervisoresController extends AppController
 
         if (!$id) {
             $this->Flash->info(__('Invalid supervisor id.'));
-            if ($user_data['categoria'] == '4') {
+            if ($user_data['supervisor_id']) {
                 $id = $user_data['supervisor_id'];
             }
         }
@@ -126,7 +126,7 @@ class SupervisoresController extends AppController
         if ($this->request->is('post')) {
             $supervisor = $this->Supervisores->patchEntity($supervisor, $this->request->getData());
 
-            if ($user_data['categoria'] == '4') {
+            if ($user_data['supervisor_id']) {
                 $user = $this->fetchTable('Users')->get($supervisor->user_id);
                 $supervisor->user_id = $user->id;
             }
@@ -134,7 +134,7 @@ class SupervisoresController extends AppController
             if ($this->Supervisores->save($supervisor)) {
                 $this->Flash->success(__('The supervisor has been saved.'));
                 // Update the user with the supervisor id only if the atual user is supervisor
-                if ($user_data['categoria'] == '4') {
+                if ($user_data['supervisor_id']) {
                     $user = $this->fetchTable('Users')->get($supervisor->user_id);
                     $user->supervisor_id = $supervisor->id;
                     $user->numero = $supervisor->cress;
@@ -147,7 +147,7 @@ class SupervisoresController extends AppController
             }
             $this->Flash->error(__('The supervisor could not be saved. Please, try again.'));
         }
-        if ($user_data['categoria'] == '4') {
+        if ($user_data['supervisor_id']) {
             $email = $user_data['email'];
             $cress = $user_data['numero'];
             $supervisor->email = $email;

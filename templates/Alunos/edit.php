@@ -49,7 +49,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <fieldset>
                 <h3><?= __('Editando aluno(a) ' . $aluno->id) ?></h3>
                 <?php
-                    if ($user_data['categoria'] == '1'):
+                    if ($user_data['administrador_id']):
                        echo $this->Form->control('user_id', ['type' => 'number', 'hidden' => true, 'label' => false]); 
                     endif;
                     echo $this->Form->control('nome', ['label' => 'Nome Completo', 'required' => true]);

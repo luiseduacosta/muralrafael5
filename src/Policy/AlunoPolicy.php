@@ -25,9 +25,9 @@ final class AlunoPolicy implements BeforePolicyInterface
             if (
                 $user_data
                 && (
-                    $user_data['categoria'] == '1'
-                    || $user_data['categoria'] == '3'
-                    || $user_data['categoria'] == '4'
+                    $user_data['administrador_id']
+                    || $user_data['professor_id']
+                    || $user_data['supervisor_id']
                 )
             ) {
                 return true;

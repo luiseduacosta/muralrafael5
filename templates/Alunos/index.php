@@ -12,10 +12,10 @@ if ($user_session) {
 }
 ?>
 <div class="alunos index content">
-	<?php if ($user_data['categoria'] == '1' OR $user_data['categoria'] == '2'): ?>
+	<?php if ($user_data['administrador_id'] OR $user_data['aluno_id']): ?>
 	<aside>
 		<div class="nav">
-            <?php if ($user_data['categoria'] == '1'): ?>
+            <?php if ($user_data['administrador_id']): ?>
 				<?= $this->Html->link(__('Novo Aluno'), ['action' => 'add'], ['class' => 'button']) ?>
 				<?= $this->Html->link(__('Buscar Aluno'), ['action' => 'busca'], ['class' => 'button']) ?>
             <?php endif; ?>
@@ -70,7 +70,7 @@ if ($user_session) {
                         <td><?= h($aluno->celular) ?></td>
                     <?php endif; ?>
                     <td><?= h($aluno->cpf) ?></td>
-                    <td><?= h($aluno->nascimento) ?></td>
+                    <td><?= $aluno->nascimento ? $aluno->nascimento->format('d/m/Y') : '' ?></td>
                     <td><?= h($aluno->ingresso) ?></td>
                     <td><?= h($aluno->turno) ?></td>
                 </tr>

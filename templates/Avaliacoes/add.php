@@ -52,7 +52,7 @@ if ($cress) {
     <aside>
         <div class="nav">
             <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
-            <?php if ($user_data['categoria'] == '1' || ($user_data['categoria'] == '4' && $user_data['supervisor_id'] == $estagiario->supervisor_id)): ?>
+            <?php if ($user_data['administrador_id'] || ($user_data['supervisor_id'] && $user_data['supervisor_id'] == $estagiario->supervisor_id)): ?>
                 <?= $this->Html->link(__('Listar avaliações'), ['action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
             <?php endif; ?>
         </div>

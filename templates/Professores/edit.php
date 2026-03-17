@@ -42,7 +42,7 @@ $departamentos = [
             <aside>
                 <div class="nav">
                     <?= $this->Html->link(__('Listar Professores'), ['action' => 'index'], ['class' => 'button']) ?>
-                    <?php if ($user_data['categoria'] == '1'): ?>
+                    <?php if ($user_data['administrador_id']): ?>
                         <?= $this->Form->postLink(
                             __('Excluir'),
                             ['action' => 'delete', $professor->id],
@@ -55,7 +55,7 @@ $departamentos = [
             <fieldset>
                 <h3><?= __('Editando Professor(a)') ?></h3>
                 <?php
-                    if ($user_data['categoria'] == '1'):
+                    if ($user_data['administrador_id']):
                        echo $this->Form->control('user_id', ['type' => 'number', 'label' => false, 'hidden' => true]); 
                     endif;
                     echo $this->Form->control('nome',['label' => 'Nome completo']);

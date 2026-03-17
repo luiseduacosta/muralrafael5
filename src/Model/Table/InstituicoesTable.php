@@ -165,7 +165,7 @@ class InstituicoesTable extends Table
 
         $validator
             ->scalar('avaliacao')
-            ->notEmptyString('avaliacao');
+            ->allowEmptyString('avaliacao');
 
         $validator
             ->scalar('observacoes')

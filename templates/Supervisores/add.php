@@ -41,10 +41,10 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <fieldset>
                 <h3><?= __('Adicionando Supervisor(a)') ?></h3>
                 <?php
-                    if ($user_data['categoria'] == '1'):
+                    if ($user_data['administrador_id']):
                         $val = $this->request->getParam('pass') ? $this->request->getParam('pass')[0] : '';
                         echo $this->Form->control('user_id', ['type' => 'number', 'hidden' => true, 'label' => false, 'value' => $val ]); 
-                    elseif ($user_data['categoria'] == '4'):
+                    elseif ($user_data['supervisor_id']):
                         echo $this->Form->control('user_id', ['type' => 'number', 'hidden' => true, 'label' => false, 'value' => $user_session->get('id')]); 
                     endif;
                     echo $this->Form->control('nome', ['required' => true]);

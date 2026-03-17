@@ -70,7 +70,6 @@ class UsersController extends AppController
         $contained = ['Administradores', 'Alunos', 'Supervisores', 'Professores'];
         
         $user = $this->Users->get($id, [ 'contain' =>  $contained ]);
-        
         try {
             $this->Authorization->authorize($user);
         } catch (ForbiddenException $error) {
@@ -120,7 +119,7 @@ class UsersController extends AppController
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 // Update the entities with the user id and the user id with the entity id
-                if ($user->categoria == '2') {
+                if ($user->aluno_id) {
                     $aluno = $this->fetchTable('Alunos')->findByRegistro($user->registro)->first();
                     if ($aluno) {
                         $this->fetchTable('Alunos')->updateAll(['user_id' => $user->id], ['id' => $aluno->id]);
@@ -129,7 +128,7 @@ class UsersController extends AppController
                         $this->Flash->error(__('Aluno(a) não cadastrado(a).'));
                         return $this->redirect(['controller' => 'Alunos', 'action' => 'add']);
                     }
-                } else if ($user->categoria == '3') {
+                } else if ($user->professor_id) {
                     $professor = $this->fetchTable('Professores')->findBySiape($user->registro)->first();
                     if ($professor) {
                         $this->fetchTable('Professores')->updateAll(['user_id' => $user->id], ['id' => $professor->id]);
@@ -138,7 +137,7 @@ class UsersController extends AppController
                         $this->Flash->error(__('Professor(a) não cadastrado(a).'));
                         return $this->redirect(['controller' => 'Professores', 'action' => 'add']);
                     }
-                } else if ($user->categoria == '4') {
+                } else if ($user->supervisor_id) {
                     $supervisor = $this->fetchTable('Supervisores')->findByCress($user->registro)->first();
                     if ($supervisor) {
                         $this->fetchTable('Supervisores')->updateAll(['user_id' => $user->id], ['id' => $supervisor->id]);
@@ -147,7 +146,7 @@ class UsersController extends AppController
                         $this->Flash->error(__('Supervisor(a) não cadastrado(a).'));
                         return $this->redirect(['controller' => 'Supervisores', 'action' => 'add']);
                     }
-                } elseif ($user->categoria == '1') {
+                } elseif ($user->administrador_id) {
                     $administrador = $this->fetchTable('Administradores')->findByEmail($user->email)->first();
                     if ($administrador) {
                         $this->fetchTable('Administradores')->updateAll(['user_id' => $user->id], ['id' => $administrador->id]);
@@ -288,8 +287,6 @@ class UsersController extends AppController
                             return $this->redirect([ 'controller' => 'Alunos', 'action' => 'add']);
                         }
                         if ($aluno) {
-                            // pr($aluno->user_id . ' ' . $user['id'] . ' ' . $aluno->registro);
-                            // pr($user['aluno_id'] . ' ' . $aluno->id . ' ' . $user->registro);
                             if ($aluno->user_id != $user['id'] || $user['aluno_id'] != $aluno->id || $user['registro'] != $aluno->registro) {
                                 // Update user->aluno_id with the aluno->id
                                 $user->aluno_id = $aluno->id;
