@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `complementos` (
 
 CREATE TABLE IF NOT EXISTS `configuracoes` (
   `id` int(11) NOT NULL AUTO_INCREMENT, 
-  `instituicao` varchar(10) NOT NULL DEFAULT 'ESS/UFRJ',
+  `instituicao_curso` varchar(10) NOT NULL DEFAULT 'ESS/UFRJ',
   `mural_periodo_atual` char(6) NOT NULL,
   `curso_turma_atual` smallint(2) DEFAULT NULL,
   `curso_abertura_inscricoes` date DEFAULT NULL,
