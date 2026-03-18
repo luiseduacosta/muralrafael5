@@ -27,7 +27,7 @@
             
             <?php if (!empty($administrador->user)) : ?>
             <div class="related">
-                <h4><?= __('Related User') ?></h4>
+                <h4><?= __('User') ?></h4>
                 <div class="table_wrap">
                     <table>
                         <tr>

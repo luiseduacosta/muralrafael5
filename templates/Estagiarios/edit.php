@@ -89,7 +89,6 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     echo $this->Form->control('supervisor_id', ['options' => $supervisores, 'required' => true, 'empty' => true, 'class' => 'form-control']);
                     echo $this->Form->control('professor_id', ['options' => $professores, 'required' => false, 'empty' => true, 'class' => 'form-control']);
                     echo $this->Form->control('periodo', ['label' => 'Periodo', 'required' => true]);
-                    echo $this->Form->control('complemento_id', ['options' => $complementos, 'empty' => true, 'required' => false]);
                     echo $this->Form->control('benetransporte', ['label' => 'Beneficio de transporte', 'options' => ['1' => 'Sim', '0' => 'Nao'], 'required' => false]);
                     echo $this->Form->control('benealimentacao', ['label' => 'Beneficio de alimentacao', 'options' => ['1' => 'Sim', '0' => 'Nao'], 'required' => false]);
                     echo $this->Form->control('benbolsa', ['label' => 'Beneficio de bolsa - valor em R$', 'required' => false, 'type' => 'text']);

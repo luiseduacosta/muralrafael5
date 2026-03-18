@@ -3,6 +3,7 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\User[]|\Cake\Collection\CollectionInterface $users
  */
+
 declare(strict_types=1);
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
@@ -29,7 +30,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <th class="actions"><?= __('Actions') ?></th>
                     <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('email') ?></th>
-                    <!--th><?= h('Categorias') ?></th-->
+                    <th><?= $this->Paginator->sort('categoria', 'Categorias') ?></th>
                     <th><?= $this->Paginator->sort('created', 'Criado') ?></th>
                     <th><?= $this->Paginator->sort('modified', 'Modificado') ?></th>
                 </tr>
@@ -49,18 +50,19 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     </td>
                     <td><?= $this->Html->link((string)$user->id, ['action' => 'view', $user->id]) ?></td>
                     <td><?= $user->email ? $this->Text->autoLinkEmails($user->email) : '' ?></td>
-                    <!--td>
-                    <?php 
-                        $categorias = [];
-                        if ($user->administrador) $categorias[] = 'administrador';
-                        if ($user->aluno) $categorias[] = 'aluno';
-                        if ($user->professor) $categorias[] = 'professor';
-                        if ($user->supervisor) $categorias[] = 'supervisor';
-                        echo implode(', ', $categorias);
+                    <td>
+                    <?php
+                        $categorias = [
+                            '1' => 'Administrador',
+                            '2' => 'Aluno',
+                            '3' => 'Professor',
+                            '4' => 'Supervisor'
+                        ];
+                        echo isset($categorias[$user->categoria]) ? $categorias[$user->categoria] : $user->categoria;
                     ?>
-                    </td-->
-                    <td><?= $user->created ? h($user->created) : '' ?></td>
-                    <td><?= $user->modified ? h($user->modified) : '' ?></td>
+                    </td>
+                    <td><?= $user->created ? h($user->created->format('d/m/Y H:i:s')) : '' ?></td>
+                    <td><?= $user->modified ? h($user->modified->format('d/m/Y H:i:s')) : '' ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

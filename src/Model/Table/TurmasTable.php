@@ -9,8 +9,6 @@ use Cake\Validation\Validator;
 /**
  * Turmas Model
  *
- * @property \App\Model\Table\EstagiariosTable&\Cake\ORM\Association\HasMany $Estagiarios
- * @property \App\Model\Table\MuralestagiosTable&\Cake\ORM\Association\HasMany $Muralestagios
  * @method \App\Model\Entity\Turma newEmptyEntity()
  * @method \App\Model\Entity\Turma newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Turma[] newEntities(array $data, array $options = [])
@@ -42,12 +40,6 @@ class TurmasTable extends Table
         $this->setDisplayField('turma');
         $this->setPrimaryKey('id');
 
-        $this->hasMany('Estagiarios', [
-            'foreignKey' => 'turma_id',
-        ]);
-        $this->hasMany('Muralestagios', [
-            'foreignKey' => 'turma_id',
-        ]);
     }
 
     /**

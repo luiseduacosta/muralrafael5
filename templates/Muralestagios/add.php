@@ -26,9 +26,6 @@
                     echo $this->Form->control('fim_de_semana', ['type' => 'select', 'options' => [2 => 'Parcialmente', 1 => 'Sim', 0 => 'Não'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
                     echo $this->Form->control('cargaHoraria', ['placeholder' => '12']);
                     echo $this->Form->control('requisitos', ['placeholder' => 'Ética aprovada']);
-                    // echo $this->Form->control('turma', ['options' => $turmas, 'label' => 'Turma', 'empty' => true, 'class' => 'form-control']);
-                    // echo $this->Form->control('turno_id', ['type' => 'select', 'options' => $turnos, 'empty' => true, 'class' => 'form-control']);
-                    // echo $this->Form->control('professor_id', ['options' => $professores, 'empty' => true, 'class' => 'form-control']);
                     echo $this->Form->control('localInscricao', ['type' => 'select', 'options' => [1 => 'Inscrição somente no mural da Coordenação de Estágio da ESS', 0 => 'Inscrição na Instituição e no mural da Coordenação de Estágio da ESS'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
                     echo $this->Form->control('dataInscricao', ['type' => 'date', 'empty' => true, 'label' => 'Data de encerramento das inscrições']);
                     echo $this->Form->control('localSelecao', ['placeholder' => 'Fique atento(a). Será informado oportunamente.', 'label' => 'Local de seleção']);

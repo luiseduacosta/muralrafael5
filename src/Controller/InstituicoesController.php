@@ -60,7 +60,7 @@ class InstituicoesController extends AppController
             'Areas',
             'Supervisores' => ['Users'],
             'Estagiarios' => ['Alunos', 'Professores', 'Supervisores', 'Instituicoes'],
-            'Muralestagios' => ['Instituicoes', 'Professores'],
+            'Muralestagios' => ['Instituicoes'],
             'Visitas'
         ])->where(['Instituicoes.id' => $id])->first();
 

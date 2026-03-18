@@ -14,8 +14,6 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\InstituicoesTable&\Cake\ORM\Association\BelongsTo $Instituicoes
  * @property \App\Model\Table\SupervisoresTable&\Cake\ORM\Association\BelongsTo $Supervisores
  * @property \App\Model\Table\ProfessoresTable&\Cake\ORM\Association\BelongsTo $Professores
- * @property \App\Model\Table\TurnosTable&\Cake\ORM\Association\BelongsTo $Turnos
- * @property \App\Model\Table\ComplementosTable&\Cake\ORM\Association\BelongsTo $Complementos
  * @property \App\Model\Table\FolhadeatividadesTable&\Cake\ORM\Association\HasMany $Folhadeatividades
  * @property \App\Model\Table\AvaliacoesTable&\Cake\ORM\Association\HasOne $Avaliacoes
  * 
@@ -61,13 +59,6 @@ class EstagiariosTable extends Table
         ]);
         $this->belongsTo('Professores', [
             'foreignKey' => 'professor_id',
-        ]);
-        $this->belongsTo('Turnos', [
-            'foreignKey' => 'turno_id',
-            'propertyName' => 'turno_entidade', // para evitar conflito com o campo turno
-        ]);
-        $this->belongsTo('Complementos', [
-            'foreignKey' => 'complemento_id',
         ]);
         $this->hasMany('Folhadeatividades', [
             'foreignKey' => 'estagiario_id',
@@ -128,15 +119,6 @@ class EstagiariosTable extends Table
             ->allowEmptyString('observacoes');
 
         $validator
-            ->integer('alunoestagiario_id')
-            ->allowEmptyString('alunoestagiario_id');
-
-        $validator
-            ->scalar('turno')
-            ->maxLength('turno', 1)
-            ->allowEmptyString('turno');
-
-        $validator
             ->boolean('benetransporte')
             ->allowEmptyString('benetransporte');
 
@@ -165,7 +147,6 @@ class EstagiariosTable extends Table
         $rules->add($rules->existsIn(['instituicao_id'], 'Instituicoes'), ['errorField' => 'instituicao_id']);
         $rules->add($rules->existsIn(['supervisor_id'], 'Supervisores'), ['errorField' => 'supervisor_id']);
         $rules->add($rules->existsIn(['professor_id'], 'Professores'), ['errorField' => 'professor_id']);
-        $rules->add($rules->existsIn(['complemento_id'], 'Complementos'), ['errorField' => 'complemento_id']);
 
         return $rules;
     }

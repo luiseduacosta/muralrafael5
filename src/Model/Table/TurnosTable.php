@@ -9,7 +9,6 @@ use Cake\Validation\Validator;
 /**
  * Turnos Model
  *
- * @property \App\Model\Table\EstagiariosTable&\Cake\ORM\Association\HasMany $Estagiarios
  * @method \App\Model\Entity\Turno newEmptyEntity()
  * @method \App\Model\Entity\Turno newEntity(array $data, array $options = [])
  * @method array<\App\Model\Entity\Turno> newEntities(array $data, array $options = [])
@@ -41,9 +40,6 @@ class TurnosTable extends Table
         $this->setDisplayField('turno');
         $this->setPrimaryKey('id');
 
-        $this->hasMany('Estagiarios', [
-            'foreignKey' => 'turno_id',
-        ]);
     }
 
     /**

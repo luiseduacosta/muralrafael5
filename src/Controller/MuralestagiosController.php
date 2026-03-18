@@ -35,7 +35,7 @@ class MuralestagiosController extends AppController
         $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->configuracao->mural_periodo_atual;
         $this->set('periodo', $periodo);
 
-        $contained = ['Instituicoes', 'Professores'];
+        $contained = ['Instituicoes'];
 
         if ($periodo == 'all') {
             $muralestagios = $this->Muralestagios->find('all')
@@ -85,7 +85,7 @@ class MuralestagiosController extends AppController
         }
 
         $muralestagio = $this->Muralestagios->get($id, [
-            'contain' => ['Instituicoes', 'Professores', 'Inscricoes' => ['Alunos']],
+            'contain' => ['Instituicoes', 'Inscricoes' => ['Alunos']],
         ]);
 
         if (empty($user_session)) {
@@ -142,11 +142,8 @@ class MuralestagiosController extends AppController
             }
             $this->Flash->error(__('Registro de mural de estágio não foi feito. Tente novamente.'));
         }
-        $professores = $this->fetchTable("Professores")->find('list');
         $instituicoes = $this->fetchTable("Instituicoes")->find('list');
-        // $turmas = $this->fetchTable("Turmas")->find('list');
-        // $turnos = $this->fetchTable("Turnos")->find('list');
-        $this->set(compact('muralestagio', 'instituicoes', 'professores', 'periodo'));
+        $this->set(compact('muralestagio', 'instituicoes', 'periodo'));
     }
 
     /**
@@ -193,10 +190,7 @@ class MuralestagiosController extends AppController
             $this->Flash->error(__('The muralestagio could not be saved. Please, try again.'));
         }
         $instituicoes = $this->fetchTable('Instituicoes')->find('list');
-        // $turmas = $this->fetchTable('Turmas')->find('list');
-        // $turnos = $this->fetchTable('Turnos')->find('list');
-        $professores = $this->fetchTable('Professores')->find('list', ['limit' => 500]);
-        $this->set(compact('muralestagio', 'instituicoes', 'professores'));
+        $this->set(compact('muralestagio', 'instituicoes'));
     }
 
     /**

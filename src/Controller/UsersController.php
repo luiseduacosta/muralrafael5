@@ -45,7 +45,7 @@ class UsersController extends AppController
         $user_session = $this->request->getAttribute('identity');
         if ($user_session) { $user_data = $user_session->getOriginalData(); }
 
-        $contained = []; //'Administradores', 'Alunos', 'Professores', 'Supervisores'];
+        $contained = ['Administradores', 'Alunos', 'Professores', 'Supervisores'];
         
         $this->Authorization->authorize($this->Users);
         
@@ -54,7 +54,13 @@ class UsersController extends AppController
         } else {
             $query = $this->Authorization->applyScope($this->Users->find('all')->contain($contained));
         }
-        $users = $this->paginate($query);
+        $users = $this->paginate($query, ['sortableFields' => [
+            'id',
+            'email',
+            'categoria',
+            'created',
+            'modified'
+        ]]);
         $this->set(compact('users'));
     }
 
@@ -260,9 +266,11 @@ class UsersController extends AppController
             $user = $result->getData();
             $this->Flash->success(__('Usuário logado.'));
             // Redirect based on category
+            pr($user);
             switch ($user['categoria']) {
-                case '1': // Admin
+                case 1: // Admin
                     $administrador = $this->fetchTable('Administradores')->findByUserId($user['id'])->first();
+                    pr($administrador);
                     if ($administrador) {
                         if ($administrador->user_id == $user['id']) {
                             return $this->redirect(['controller' => 'Administradores', 'action' => 'view', $administrador->id]);

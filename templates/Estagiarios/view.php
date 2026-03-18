@@ -25,21 +25,21 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <?= $this->Html->link(__('Folha de avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                     <?php endif; ?>
                     <?php if ($user_data['aluno_id'] && $user_data['aluno_id'] == $estagiario->aluno_id): ?>
-                        <?= $this->Html->link(__('<- Aluno(a)'), ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
+                        <?= $this->Html->link(__('Aluno(a)'), ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Declaração de estágio'), ['action' => 'declaracaodeestagiopdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Termo de compromisso'), ['action' => 'termocompromissopdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Atividades'), ['controller' => 'Folhadeatividades', 'action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Folha de avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                     <?php endif; ?>
                     <?php if ($user_data['professor_id'] && $user_data['professor_id'] == $estagiario->professor_id): ?>
-                        <?= $this->Html->link(__('<- Professor(a)'), ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
+                        <?= $this->Html->link(__('Professor(a)'), ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Atividades'), ['controller' => 'Folhadeatividades', 'action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Avaliação on-line'), ['controller' => 'Avaliacoes', 'action' => 'add', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Folha de avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('CH e nota'), ['controller' => 'Estagiarios', 'action' => 'lancanota', '?' => ['professor_id' => $user_data['professor_id']]], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                         <?php endif; ?>
                     <?php if ($user_data['supervisor_id'] && $user_data['supervisor_id'] == $estagiario->supervisor_id): ?>
-                        <?= $this->Html->link(__('<- Supervisor(a)'), ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
+                        <?= $this->Html->link(__('Supervisor(a)'), ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Atividades'), ['controller' => 'Folhadeatividades', 'action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Avaliação on-line'), ['controller' => 'Avaliacoes', 'action' => 'add', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Folha de avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
@@ -94,17 +94,13 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <dd><?= $estagiario->professor ? $this->Html->link($estagiario->professor->nome, ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id]) : '' ?></dd>
                 </div>
                 <div class="row">
-                    <dt class="col-2"><?= __('Complemento (Periodo Especial)') ?></dt>
-                    <dd><?= $estagiario->complemento ? h($estagiario->complemento->periodo_especial) : '' ?></dd>
-                </div>
-                    <div class="row">
-                        <dt class="col-2"><?= __('Nota') ?></dt>
-                        <dd><?= $this->Number->format($estagiario->nota ?? '') ?></dd>
-                    </div>                
-                    <div class="row">
-                        <dt class="col-2"><?= __('CH') ?></dt>
-                        <dd><?= $this->Number->format($estagiario->ch ?? '') ?></dd>
-                    </div>                
+                    <dt class="col-2"><?= __('Nota') ?></dt>
+                    <dd><?= $this->Number->format($estagiario->nota ?? '') ?></dd>
+                </div>                
+                <div class="row">
+                    <dt class="col-2"><?= __('CH') ?></dt>
+                    <dd><?= $this->Number->format($estagiario->ch ?? '') ?></dd>
+                </div>                
                 <div class="row">
                     <dt class="col-2"><?= __('Observações') ?></dt>
                     <dd><?= h($estagiario->observacoes) ?></dd>

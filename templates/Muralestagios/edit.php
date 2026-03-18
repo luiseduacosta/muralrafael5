@@ -39,9 +39,6 @@ if ($user_session) {
                     echo $this->Form->control('cargaHoraria', ['label' => 'Carga horária', 'placeholder' => 'Ex: 15']);
                     echo $this->Form->control('requisitos', ['class' => 'formCode hidden']);
                     echo $this->element('input_div', ['name' => 'requisitos', 'content' => $muralestagio->requisitos ]);
-                    // echo $this->Form->control('turma_id', ['options' => $turmas, 'class' => 'form-control']);
-                    // echo $this->Form->control('turno_id', ['options' => $turnos, 'class' => 'form-control']);
-                    // echo $this->Form->control('professor_id', ['options' => $professores, 'class' => 'form-control']);
                     echo $this->Form->control('localInscricao', ['label' => 'Local de inscrição', 'options' => [1 => 'Inscrição somente no mural da Coordenação de Estágio da ESS', 0 => 'Inscrição na Instituição e no mural da Coordenação de Estágio da ESS']]);
                     echo $this->Form->control('dataInscricao', ['type' => 'date', 'empty' => true, 'label' => 'Data de enecerramento da inscrição']);
                     echo $this->Form->control('localSelecao', ['label' => 'Local de seleção', 'placeholder' => 'Será informado oportunamente']);

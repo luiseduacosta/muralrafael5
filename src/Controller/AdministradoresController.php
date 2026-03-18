@@ -52,13 +52,6 @@ class AdministradoresController extends AppController
     public function view(?string $id = null)
     {
 
-        try {
-            $this->Authorization->authorize($this->Administradores);
-        } catch (ForbiddenException $error) {
-            $this->Flash->error('Authorization error: ' . $error->getMessage());
-            return $this->redirect('/');
-        }
-
         if ($id) {
             try {
                 $administrador = $this->Administradores->get($id);
@@ -66,6 +59,13 @@ class AdministradoresController extends AppController
                 $this->Flash->error('Error: ' . $error->getMessage());
                 return $this->redirect('/');
             }
+        }
+
+        try {
+            $this->Authorization->authorize($administrador);
+        } catch (ForbiddenException $error) {
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+            return $this->redirect('/');
         }
 
         $user_id = $this->request->getQuery('user_id');

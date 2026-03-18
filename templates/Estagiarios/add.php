@@ -80,7 +80,6 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         echo $this->Form->control('nota', ['required' => false, 'readonly' => true, 'label' => 'Nota']);
                         echo $this->Form->control('ch', ['required' => false, 'readonly' => true, 'label' => 'CH']);
                     }
-                    echo $this->Form->control('complemento_id', ['type' => 'hidden', 'default' => null, 'required' => false]); // Used only during the Covid-19
                     echo $this->Form->control('benetransporte', ['label' => 'Transporte', 'required' => false, 'empty' => true, 'default' => null]);
                     echo $this->Form->control('benealimentacao', ['label' => 'Alimentação', 'required' => false, 'empty' => true, 'default' => null]);
                     echo $this->Form->control('benebolsa', ['label' => 'Valor do benefício de Bolsa']);

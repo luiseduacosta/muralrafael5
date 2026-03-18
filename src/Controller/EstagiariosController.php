@@ -108,8 +108,7 @@ class EstagiariosController extends AppController
                 "Alunos",
                 "Instituicoes",
                 "Supervisores",
-                "Professores",
-                "Complementos",
+                "Professores"
             ],
         ]);
 
@@ -241,7 +240,7 @@ class EstagiariosController extends AppController
 
             $aluno = $this->fetchTable("Alunos")->find()->where(['id' => $id])->first();
             $instituicoes = $this->fetchTable("Instituicoes")->find("list")->order(['instituicao' => 'ASC']);
-
+            $professores = $this->fetchTable("Professores")->find("list")->order(['nome' => 'ASC']);
             if (!empty($estagiario->instituicao_id)) {
                 $supervisores = $this->fetchTable("Supervisores")->find("list")->matching('Instituicoes', function ($q) use ($estagiario) {
                     return $q->where(['Instituicoes.id' => $estagiario->instituicao_id]);
@@ -249,7 +248,6 @@ class EstagiariosController extends AppController
             } else {
                 $supervisores = $this->fetchTable("Supervisores")->find("list")->order(['nome' => 'ASC']);
             }
-            $professores = $this->fetchTable("Professores")->find("list");
 
             $this->set(
                 compact(
@@ -258,7 +256,7 @@ class EstagiariosController extends AppController
                     "aluno",
                     "instituicoes",
                     "supervisores",
-                    "professores",
+                    "professores"
                 ),
             );
         }
@@ -323,6 +321,7 @@ class EstagiariosController extends AppController
 
         $alunos = $this->fetchTable("Alunos")->find("list")->order(['nome' => 'ASC']);
         $instituicoes = $this->fetchTable("Instituicoes")->find("list")->order(['instituicao' => 'ASC']);
+        $professores = $this->fetchTable("Professores")->find("list")->order(['nome' => 'ASC']);
         if (!empty($estagiario->instituicao_id)) {
             $supervisores = $this->fetchTable("Supervisores")->find("list")->matching('Instituicoes', function ($q) use ($estagiario) {
                 return $q->where(['Instituicoes.id' => $estagiario->instituicao_id]);
@@ -330,16 +329,14 @@ class EstagiariosController extends AppController
         } else {
             $supervisores = $this->fetchTable("Supervisores")->find("list")->order(['nome' => 'ASC']);
         }
-        $professores = $this->fetchTable("Professores")->find("list")->order(['nome' => 'ASC']);
-        $complementos = $this->fetchTable("Complementos")->find("list");
+
         $this->set(
             compact(
                 "estagiario",
                 "alunos",
                 "instituicoes",
                 "supervisores",
-                "professores",
-                "complementos",
+                "professores"
             ),
         );
     }

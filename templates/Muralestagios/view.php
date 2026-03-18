@@ -91,10 +91,6 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
                     <td><?= $muralestagio->requisitos ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Professor') ?></th>
-                    <td><?= $muralestagio->professor ? $this->Html->link($muralestagio->professor->nome, ['controller' => 'Professores', 'action' => 'view', $muralestagio->professor->id]) : '' ?></td>
-                </tr>
-                <tr>
                     <th><?= __('Local Inscrição') ?></th>
                     <td><?= h($muralestagio->localInscricao) ? "Inscrição somente no mural da Coordenação de Estágio da ESS" : "Inscrição na Instituição e no mural da Coordenação de Estágio da ESS" ?></td>
                 </tr>

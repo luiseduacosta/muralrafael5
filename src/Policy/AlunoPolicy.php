@@ -51,6 +51,13 @@ final class AlunoPolicy implements BeforePolicyInterface
             }
         }
 
+        // Professor pode ver alunos estagiarios
+        if ($userSession->getOriginalData()['categoria'] == '3') {
+            if ($alunoData->estagiarios->professores->id == $userSession->getOriginalData()['professor_id']) {
+                return new Result(true);
+            }
+        }
+        
         return $this->sameUser($userSession, $alunoData)
             ? new Result(true)
             : new Result(false, 'Erro: aluno view policy not authorized');

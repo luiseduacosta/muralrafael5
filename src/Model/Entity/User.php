@@ -30,7 +30,6 @@ use Cake\ORM\TableRegistry;
  * @property \App\Model\Entity\Supervisor $supervisor
  * @property \App\Model\Entity\Professor $professor
  * @property \App\Model\Entity\Administrador $administrador
- * @property \App\Model\Entity\Categoria $categoria
  * 
  */
 class User extends Entity implements AuthorizationIdentity, AuthenticationIdentity
@@ -63,7 +62,6 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
         'supervisor' => true,
         'professor' => true,
         'administrador' => true,
-        'role' => true, // Changed from 'categoria' to 'role'
     ];
 
     /**

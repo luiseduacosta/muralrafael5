@@ -25,19 +25,14 @@ use Cake\ORM\Entity;
  * @property int|null $ch
  * @property string|null $observacoes
  * @property int|null $alunoestagiario_id
- * @property string|null $turno
  * @property bool|null $benetransporte
  * @property bool|null $benealimentacao
  * @property string|null $benebolsa
- * @property int|null $complemento_id
  *
  * @property \App\Model\Entity\Aluno $aluno
  * @property \App\Model\Entity\Instituicao $instituicao
  * @property \App\Model\Entity\Supervisor $supervisor
  * @property \App\Model\Entity\Professor $professor
- * @property \App\Model\Entity\Turma $turma
- * @property \App\Model\Entity\Turno $turno_rel
- * @property \App\Model\Entity\Complemento $complemento
  * @property \App\Model\Entity\Folhadeatividade $folhadeatividade
  * @property \App\Model\Entity\Avaliacao $avaliacao
  */
@@ -63,24 +58,16 @@ class Estagiario extends Entity
         'supervisor_id' => true,
         'professor_id' => true,
         'periodo' => true,
-        'turno_id' => true,
         'nota' => true,
         'ch' => true,
         'observacoes' => true,
-        'alunoestagiario_id' => true,
-        'turno' => true,
         'benetransporte' => true,
         'benealimentacao' => true,
         'benebolsa' => true,
-        'complemento_id' => true,
-        'turno_entidade' => true,
         'aluno' => true,
         'instituicao' => true,
         'supervisor' => true,
         'professor' => true,
-        'turma' => true,
-        'turno_rel' => true,
-        'complemento' => true,
         'folhadeatividade' => true,
         'avaliacoes' => true,
     ];
