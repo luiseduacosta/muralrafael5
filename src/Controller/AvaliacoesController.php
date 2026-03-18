@@ -48,7 +48,15 @@ class AvaliacoesController extends AppController
 
         if ($categoria == '1') {
             $query = $this->Avaliacoes->find()->contain(['Estagiarios' => ['Alunos', 'Instituicoes']]);
-            $avaliacoes = $this->paginate($query, ['sortableFields' => ['id', 'Estagiarios.Alunos.nome', 'Estagiarios.Instituicoes.instituicao', 'avaliacao1', 'timestamp']]);
+            $avaliacoes = $this->paginate($query, [
+                'sortableFields' => [
+                    'id',
+                    'Estagiarios.Alunos.nome',
+                    'Estagiarios.Instituicoes.instituicao',
+                    'avaliacao1',
+                    'timestamp',
+                ],
+            ]);
         } elseif ($categoria == '2') {
             $estagiario_id = $this->getRequest()->getQuery('estagiario_id');
             if ($estagiario_id) {
@@ -56,7 +64,18 @@ class AvaliacoesController extends AppController
                     ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Avaliacoes'])
                     ->where(['Estagiarios.id' => $estagiario_id, 'Estagiarios.aluno_id' => $user_data['aluno_id']]);
                 if ($query->count() == 1) {
-                    $estagiarios = $this->paginate($query, ['sortableFields' => ['id', 'Alunos.nome', 'periodo', 'nivel', 'Instituicoes.instituicao', 'Supervisores.nome', 'ch', 'nota']]);
+                    $estagiarios = $this->paginate($query, [
+                        'sortableFields' => [
+                            'id',
+                            'Alunos.nome',
+                            'periodo',
+                            'nivel',
+                            'Instituicoes.instituicao',
+                            'Supervisores.nome',
+                            'ch',
+                            'nota',
+                        ],
+                    ]);
                 } else {
                     $this->Flash->error(__('Avaliações do Estagiário não encontradas'));
 
@@ -66,20 +85,53 @@ class AvaliacoesController extends AppController
                  $query = $this->fetchTable('Estagiarios')->find()
                     ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Avaliacoes'])
                     ->where(['Estagiarios.aluno_id' => $user_data['aluno_id']]);
-                 $estagiarios = $this->paginate($query, ['sortableFields' => ['id', 'Alunos.nome', 'periodo', 'nivel', 'Instituicoes.instituicao', 'Supervisores.nome', 'ch', 'nota']]);
+                 $estagiarios = $this->paginate($query, [
+                     'sortableFields' => [
+                         'id',
+                         'Alunos.nome',
+                         'periodo',
+                         'nivel',
+                         'Instituicoes.instituicao',
+                         'Supervisores.nome',
+                         'ch',
+                         'nota',
+                     ],
+                 ]);
             }
         } elseif ($categoria == '3') {
             $query = $this->fetchTable('Estagiarios')->find()
                 ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Avaliacoes'])
                 ->where(['Estagiarios.professor_id' => $user_data['professor_id']]);
 
-            $estagiarios = $this->paginate($query, ['sortableFields' => ['id', 'Alunos.nome', 'periodo', 'nivel', 'Instituicoes.instituicao', 'Supervisores.nome', 'ch', 'nota']]);
+            $estagiarios = $this->paginate($query, [
+                'sortableFields' => [
+                    'id',
+                    'Alunos.nome',
+                    'periodo',
+                    'nivel',
+                    'Instituicoes.instituicao',
+                    'Supervisores.nome',
+                    'ch',
+                    'nota',
+                ],
+            ]);
         } elseif ($categoria == '4') {
             $query = $this->fetchTable('Estagiarios')->find()
                 ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Avaliacoes'])
                 ->where(['Estagiarios.supervisor_id' => $user_data['supervisor_id']]);
 
-            $estagiarios = $this->paginate($query, ['sortableFields' => ['id', 'Alunos.nome', 'periodo', 'nivel', 'Instituicoes.instituicao', 'Supervisores.nome', 'ch', 'nota']]);
+            $estagiarios = $this->paginate($query, [
+                'sortableFields' => [
+                    'id',
+                    'Alunos.nome',
+                    'periodo',
+                    'nivel',
+                    'Instituicoes.instituicao',
+                    'Supervisores.nome',
+                    'ch',
+                    'nota',
+                ],
+            ]);
         }
 
         $this->set(compact('avaliacoes', 'estagiarios'));
@@ -121,7 +173,11 @@ class AvaliacoesController extends AppController
             $this->Flash->error(__('Aluno sem avaliaçao online'));
             $estagiario_id = $this->getRequest()->getQuery('estagiario_id');
 
-            return $this->redirect(['controller' => 'Avaliacoes', 'action' => 'imprimeavaliacaopdf', '?' => ['estagiario_id' => $estagiario_id]]);
+            return $this->redirect([
+                'controller' => 'Avaliacoes',
+                'action' => 'imprimeavaliacaopdf',
+                '?' => ['estagiario_id' => $estagiario_id],
+            ]);
         }
     }
 
@@ -265,7 +321,11 @@ class AvaliacoesController extends AppController
         if (empty($avaliacao)) {
             $this->Flash->error(__('Sem avaliação on-line'));
 
-            return $this->redirect(['controller' => 'Avaliacoes', 'action' => 'avaliacaomanualpdf', '?' => ['estagiario_id' => $id]]);
+            return $this->redirect([
+                'controller' => 'Avaliacoes',
+                'action' => 'avaliacaomanualpdf',
+                '?' => ['estagiario_id' => $id],
+            ]);
         }
 
         $this->viewBuilder()->setLayout('pdf/default');

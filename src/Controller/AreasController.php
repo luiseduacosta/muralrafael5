@@ -3,14 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Authorization\Exception\ForbiddenException;
-
-/**
- * Areas Controller
- *
- * @property \App\Model\Table\AreasTable $Areas
- * @method \App\Model\Entity\Area[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
- */
 class AreasController extends AppController
 {
     /**
@@ -18,7 +10,6 @@ class AreasController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
-
     public function index()
     {
         $this->Authorization->authorize($this->Areas);

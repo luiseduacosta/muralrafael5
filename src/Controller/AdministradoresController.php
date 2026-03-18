@@ -28,7 +28,6 @@ class AdministradoresController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
-
     public function index()
     {
         try {

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Authorization\Exception\ForbiddenException;
 use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
@@ -45,6 +44,7 @@ class VisitasController extends AppController
         $instituicao_id = $this->request->getQuery('instituicao_id');
         if (empty($instituicao_id)) {
             $this->Flash->info(__('Sem parâmetro da instituição.'));
+
             return $this->redirect($this->referer());
         }
 
@@ -55,6 +55,7 @@ class VisitasController extends AppController
             ->firstOrFail();
         } catch (RecordNotFoundException $e) {
             $this->Flash->info(__('A visita que você tentou visualizar não existe.'));
+
             return $this->redirect(['action' => 'index', '?' => ['instituicao_id' => $instituicao_id]]);
         }
 
@@ -106,6 +107,7 @@ class VisitasController extends AppController
             ]);
         } catch (RecordNotFoundException $e) {
             $this->Flash->info(__('A visita que você tentou editar não existe.'));
+
             return $this->redirect(['action' => 'index']);
         }
         $this->Authorization->authorize($visita);
@@ -136,6 +138,7 @@ class VisitasController extends AppController
             $visita = $this->Visitas->get($id);
         } catch (RecordNotFoundException $e) {
             $this->Flash->info(__('A visita que você tentou deletar não existe.'));
+
             return $this->redirect(['action' => 'index']);
         }
         $this->Authorization->authorize($visita);

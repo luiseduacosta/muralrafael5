@@ -40,7 +40,6 @@ class AppController extends Controller
      *
      * @return void
      */
-
     public function initialize(): void
     {
         parent::initialize();
@@ -65,9 +64,10 @@ class AppController extends Controller
      * @param array|string $fallback Fallback URL if no referer is available
      * @return \Cake\Http\Response
      */
-    protected function redirectBack($fallback = ['action' => 'index'])
+    protected function redirectBack(array|string $fallback = ['action' => 'index'])
     {
         $referer = $this->request->referer();
+
         return $this->redirect($referer ?: $fallback);
     }
 }

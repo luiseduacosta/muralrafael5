@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Authorization\Exception\ForbiddenException;
-
 /**
  * Complementos Controller
  *
@@ -33,7 +31,7 @@ class ComplementosController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $complemento = $this->Complementos->get($id);
         $this->Authorization->authorize($complemento);
@@ -75,7 +73,7 @@ class ComplementosController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
         $complemento = $this->Complementos->get($id);
         $this->Authorization->authorize($complemento);
@@ -98,7 +96,7 @@ class ComplementosController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $complemento = $this->Complementos->get($id);

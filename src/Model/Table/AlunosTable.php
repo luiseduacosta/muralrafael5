@@ -86,12 +86,19 @@ class AlunosTable extends Table
         $validator
             ->scalar('ingresso')
             ->maxLength('ingresso', 6)
-            ->regex('ingresso', '/^[0-9]{4}\-[1-2]$/', 'Período de ingresso inválido')
+            ->regex(
+                'ingresso',
+                '/^[0-9]{4}\-[1-2]$/',
+                'Período de ingresso inválido',
+            )
             ->allowEmptyString('ingresso');
 
         $validator
             ->scalar('turno')
-            ->add('turno', 'inList', ['rule' => ['inList', ['diurno', 'noturno', 'indefinido', 'outro']], 'message' => 'Turno inválido'])
+            ->add('turno', 'inList', [
+                'rule' => ['inList', ['diurno', 'noturno', 'indefinido', 'outro']],
+                'message' => 'Turno inválido',
+            ])
             ->maxLength('turno', 10)
             ->allowEmptyString('turno');
 

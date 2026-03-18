@@ -56,13 +56,15 @@ class UsersController extends AppController
         } else {
             $query = $this->Authorization->applyScope($this->Users->find('all')->contain($contained));
         }
-        $users = $this->paginate($query, ['sortableFields' => [
-            'id',
-            'email',
-            'categoria',
-            'created',
-            'modified',
-        ]]);
+        $users = $this->paginate($query, [
+            'sortableFields' => [
+                'id',
+                'email',
+                'categoria',
+                'created',
+                'modified',
+            ],
+        ]);
         $this->set(compact('users'));
     }
 
@@ -77,7 +79,7 @@ class UsersController extends AppController
     {
         $contained = ['Administradores', 'Alunos', 'Supervisores', 'Professores'];
 
-        $user = $this->Users->get($id, [ 'contain' =>  $contained ]);
+        $user = $this->Users->get($id, ['contain' => $contained]);
         try {
             $this->Authorization->authorize($user);
         } catch (ForbiddenException $error) {
@@ -154,8 +156,14 @@ class UsersController extends AppController
                 } elseif ($user->categoria == 4) {
                     $supervisor = $this->fetchTable('Supervisores')->findByCress($user->registro)->first();
                     if ($supervisor) {
-                        $this->fetchTable('Supervisores')->updateAll(['user_id' => $user->id], ['id' => $supervisor->id]);
-                        $this->fetchTable('Users')->updateAll(['supervisor_id' => $supervisor->id], ['id' => $user->id]);
+                        $this->fetchTable('Supervisores')->updateAll(
+                            ['user_id' => $user->id],
+                            ['id' => $supervisor->id],
+                        );
+                        $this->fetchTable('Users')->updateAll(
+                            ['supervisor_id' => $supervisor->id],
+                            ['id' => $user->id],
+                        );
                     } else {
                         $this->Flash->error(__('Supervisor(a) não cadastrado(a).'));
 
@@ -164,8 +172,14 @@ class UsersController extends AppController
                 } elseif ($user->categoria == 1) {
                     $administrador = $this->fetchTable('Administradores')->findByEmail($user->email)->first();
                     if ($administrador) {
-                        $this->fetchTable('Administradores')->updateAll(['user_id' => $user->id], ['id' => $administrador->id]);
-                        $this->fetchTable('Users')->updateAll(['administrador_id' => $administrador->id], ['id' => $user->id]);
+                        $this->fetchTable('Administradores')->updateAll(
+                            ['user_id' => $user->id],
+                            ['id' => $administrador->id],
+                        );
+                        $this->fetchTable('Users')->updateAll(
+                            ['administrador_id' => $administrador->id],
+                            ['id' => $user->id],
+                        );
                     } else {
                         $this->Flash->error(__('Administrador(a) não cadastrado(a).'));
 
@@ -193,7 +207,14 @@ class UsersController extends AppController
         return $this->edit($id);
     }
 
-    public function edit($id = null)
+    /**
+     * Edit method
+     *
+     * @param string|null $id User id.
+     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function edit(?string $id = null)
     {
         $user_data = ['administrador_id' => 0,'aluno_id' => 0,'professor_id' => 0,'supervisor_id' => 0];
         $user_session = $this->request->getAttribute('identity');
@@ -202,7 +223,7 @@ class UsersController extends AppController
         }
 
         $user = $this->Users->get($id);
-        $sameUser = ($user_session and $user_session->get('id') == $id);
+        $sameUser = ($user_session && $user_session->get('id') == $id);
 
         try {
             $this->Authorization->authorize($user);
@@ -270,10 +291,11 @@ class UsersController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    /*
+    /**
      * Login method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful login, renders view otherwise.
      */
-
     public function login()
     {
         // authorize all users to access login
@@ -291,7 +313,11 @@ class UsersController extends AppController
                     $administrador = $this->fetchTable('Administradores')->findByUserId($user['id'])->first();
                     if ($administrador) {
                         if ($administrador->user_id == $user['id']) {
-                            return $this->redirect(['controller' => 'Administradores', 'action' => 'view', $administrador->id]);
+                            return $this->redirect([
+                                'controller' => 'Administradores',
+                                'action' => 'view',
+                                $administrador->id,
+                            ]);
                         } else {
                             // Update user->administrador_id with the administrador->id
                             $user->administrador_id = $administrador->id;
@@ -301,7 +327,11 @@ class UsersController extends AppController
                             $this->fetchTable('Administradores')->save($administrador);
                             $this->Flash->success(__('Administrador e usuário associados.'));
 
-                            return $this->redirect(['controller' => 'Administradores', 'action' => 'view', $administrador->id]);
+                            return $this->redirect([
+                                'controller' => 'Administradores',
+                                'action' => 'view',
+                                $administrador->id,
+                            ]);
                         }
                     }
 
@@ -313,10 +343,14 @@ class UsersController extends AppController
                         } catch (RecordNotFoundException $error) {
                             $this->Flash->error(__('Record not found: ' . $error->getMessage()));
 
-                            return $this->redirect([ 'controller' => 'Alunos', 'action' => 'add']);
+                            return $this->redirect(['controller' => 'Alunos', 'action' => 'add']);
                         }
                         if ($aluno) {
-                            if ($aluno->user_id !== $user['id'] || $user['aluno_id'] !== $aluno->id || $user['registro'] !== $aluno->registro) {
+                            if (
+                                $aluno->user_id !== $user['id']
+                                || $user['aluno_id'] !== $aluno->id
+                                || $user['registro'] !== $aluno->registro
+                            ) {
                                 // Update user->aluno_id with the aluno->id
                                 $user->aluno_id = $aluno->id;
                                 $user->registro = $aluno->registro;
@@ -336,7 +370,7 @@ class UsersController extends AppController
                         } catch (RecordNotFoundException $error) {
                             $this->Flash->error(__('Record not found: ' . $error->getMessage()));
 
-                            return $this->redirect([ 'controller' => 'Alunos', 'action' => 'add']);
+                            return $this->redirect(['controller' => 'Alunos', 'action' => 'add']);
                         }
                         if ($aluno) {
                             if ($aluno->user_id !== $user['id']) {
@@ -363,10 +397,14 @@ class UsersController extends AppController
                         } catch (RecordNotFoundException $error) {
                             $this->Flash->error(__('Record not found: ' . $error->getMessage()));
 
-                            return $this->redirect([ 'controller' => 'Professores', 'action' => 'add']);
+                            return $this->redirect(['controller' => 'Professores', 'action' => 'add']);
                         }
                         if ($professor) {
-                            if ($professor->user_id !== $user['id'] || $user['professor_id'] !== $professor->id || $user['registro'] !== $professor->siape) {
+                            if (
+                                $professor->user_id !== $user['id']
+                                || $user['professor_id'] !== $professor->id
+                                || $user['registro'] !== $professor->siape
+                            ) {
                                 // Update user->professor_id with the professor->id
                                 $user->professor_id = $professor->id;
                                 $user->registro = $professor->siape;
@@ -386,7 +424,7 @@ class UsersController extends AppController
                         } catch (RecordNotFoundException $error) {
                             $this->Flash->error(__('Record not found: ' . $error->getMessage()));
 
-                            return $this->redirect([ 'controller' => 'Professores', 'action' => 'add']);
+                            return $this->redirect(['controller' => 'Professores', 'action' => 'add']);
                         }
                         if ($professor) {
                             // Update user->professor_id with the professor->id
@@ -410,10 +448,14 @@ class UsersController extends AppController
                         } catch (RecordNotFoundException $error) {
                             $this->Flash->error(__('Record not found: ' . $error->getMessage()));
 
-                            return $this->redirect([ 'controller' => 'Supervisores', 'action' => 'add']);
+                            return $this->redirect(['controller' => 'Supervisores', 'action' => 'add']);
                         }
                         if ($supervisor) {
-                            if ($supervisor->user_id !== $user['id'] || $user['supervisor_id'] !== $supervisor->id || $user['registro'] !== $supervisor->cress) {
+                            if (
+                                $supervisor->user_id !== $user['id']
+                                || $user['supervisor_id'] !== $supervisor->id
+                                || $user['registro'] !== $supervisor->cress
+                            ) {
                                 // Update user->supervisor_id with the supervisor->id
                                 $user->supervisor_id = $supervisor->id;
                                 $user->registro = $supervisor->cress;
@@ -424,7 +466,11 @@ class UsersController extends AppController
                                 $this->Flash->success(__('Supervisor e usuário associados.'));
                             }
 
-                            return $this->redirect(['controller' => 'Supervisores', 'action' => 'view', $supervisor->id]);
+                            return $this->redirect([
+                                'controller' => 'Supervisores',
+                                'action' => 'view',
+                                $supervisor->id,
+                            ]);
                         }
                     }
                     if ($user['registro']) {
@@ -433,7 +479,7 @@ class UsersController extends AppController
                         } catch (RecordNotFoundException $error) {
                             $this->Flash->error(__('Record not found: ' . $error->getMessage()));
 
-                            return $this->redirect([ 'controller' => 'Supervisores', 'action' => 'add']);
+                            return $this->redirect(['controller' => 'Supervisores', 'action' => 'add']);
                         }
                         if ($supervisor) {
                             if ($supervisor->user_id !== $user['id']) {
@@ -447,7 +493,11 @@ class UsersController extends AppController
                                 $this->Flash->success(__('Supervisor e usuário associados.'));
                             }
 
-                            return $this->redirect(['controller' => 'Supervisores', 'action' => 'view', $supervisor->id]);
+                            return $this->redirect([
+                                'controller' => 'Supervisores',
+                                'action' => 'view',
+                                $supervisor->id,
+                            ]);
                         }
                     }
 
@@ -461,10 +511,11 @@ class UsersController extends AppController
         }
     }
 
-    /*
+    /**
      * Logout method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on logout.
      */
-
     public function logout()
     {
         // authorize all users to access logout
@@ -480,11 +531,14 @@ class UsersController extends AppController
         return $this->redirect('/');
     }
 
-    /*
+    /**
      * Alternarusuario method
      * https://book.cakephp.org/authentication/3/en/impersonation.html
+     *
+     * @param string|null $id User id.
+     * @return \Cake\Http\Response|null|void Redirects on successful impersonation.
      */
-    public function alternarusuario($id = null)
+    public function alternarusuario(?string $id = null)
     {
         $this->Authorization->skipAuthorization();
 

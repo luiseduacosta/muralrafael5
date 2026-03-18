@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Authorization\Exception\ForbiddenException;
-
 /**
  * Turmas Controller
  *

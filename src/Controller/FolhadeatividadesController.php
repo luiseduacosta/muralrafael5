@@ -198,7 +198,11 @@ class FolhadeatividadesController extends AppController
             if ($this->Folhadeatividades->save($folhadeatividade)) {
                 $this->Flash->success(__('Atividade atualizada.'));
 
-                return $this->redirect(['controller' => 'Folhadeatividades', 'action' => 'view', '?' => ['id' => $folhadeatividade->id]]);
+                return $this->redirect([
+                    'controller' => 'Folhadeatividades',
+                    'action' => 'view',
+                    '?' => ['id' => $folhadeatividade->id],
+                ]);
             }
             $this->Flash->error(
                 __('Não foi possível atualizar. Tente outra vez.'),
