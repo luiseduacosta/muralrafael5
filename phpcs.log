@@ -1,0 +1,259 @@
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Application.php
+----------------------------------------------------------------------------
+FOUND 1 ERROR AND 2 WARNINGS AFFECTING 3 LINES
+----------------------------------------------------------------------------
+  56 | WARNING | Line exceeds 120 characters; contains 130 characters
+ 112 | WARNING | Line exceeds 120 characters; contains 121 characters
+ 192 | ERROR   | Missing doc comment for function getAuthorizationService()
+----------------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Console\Installer.php
+----------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+----------------------------------------------------------------------
+ 68 | ERROR | Unused variable $class.
+----------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Controller\AdministradoresController.php
+--------------------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 30 | ERROR | There must be no blank lines after the function comment or
+    |       | attribute
+--------------------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Controller\AlunosController.php
+--------------------------------------------------------------------------------
+FOUND 3 ERRORS AND 3 WARNINGS AFFECTING 6 LINES
+--------------------------------------------------------------------------------
+  51 | ERROR   | Unused variable $user_data.
+ 199 | ERROR   | The use of function sizeof() is forbidden; use count() instead
+ 288 | ERROR   | Method \App\Controller\AlunosController::declaracaoperiodo()
+     |         | does not have return type hint nor @return annotation for its
+     |         | return value.
+ 459 | WARNING | Line exceeds 120 characters; contains 146 characters
+ 479 | WARNING | Line exceeds 120 characters; contains 250 characters
+ 529 | WARNING | Line exceeds 120 characters; contains 143 characters
+--------------------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Controller\AppController.php
+--------------------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 42 | ERROR | There must be no blank lines after the function comment or
+    |       | attribute
+--------------------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Controller\AreasController.php
+--------------------------------------------------------------------------------
+FOUND 2 ERRORS AFFECTING 2 LINES
+--------------------------------------------------------------------------------
+  6 | ERROR | [x] Type Authorization\Exception\ForbiddenException is not used
+    |       |     in this file.
+ 20 | ERROR | [ ] There must be no blank lines after the function comment or
+    |       |     attribute
+--------------------------------------------------------------------------------
+PHPCBF CAN FIX THE 1 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+--------------------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Controller\AvaliacoesController.php
+--------------------------------------------------------------------------
+FOUND 0 ERRORS AND 7 WARNINGS AFFECTING 7 LINES
+--------------------------------------------------------------------------
+  51 | WARNING | Line exceeds 120 characters; contains 174 characters
+  59 | WARNING | Line exceeds 120 characters; contains 187 characters
+  69 | WARNING | Line exceeds 120 characters; contains 184 characters
+  76 | WARNING | Line exceeds 120 characters; contains 179 characters
+  82 | WARNING | Line exceeds 120 characters; contains 179 characters
+ 124 | WARNING | Line exceeds 120 characters; contains 146 characters
+ 268 | WARNING | Line exceeds 120 characters; contains 134 characters
+--------------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Controller\ComplementosController.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 4 LINES
+--------------------------------------------------------------------------------
+   6 | ERROR | [x] Type Authorization\Exception\ForbiddenException is not used
+     |       |     in this file.
+  36 | ERROR | [x] Method \App\Controller\ComplementosController::view() does
+     |       |     not have native type hint for its parameter $id but it
+     |       |     should be possible to add it based on @param annotation
+     |       |     "string|null".
+  78 | ERROR | [x] Method \App\Controller\ComplementosController::edit() does
+     |       |     not have native type hint for its parameter $id but it
+     |       |     should be possible to add it based on @param annotation
+     |       |     "string|null".
+ 101 | ERROR | [x] Method \App\Controller\ComplementosController::delete() does
+     |       |     not have native type hint for its parameter $id but it
+     |       |     should be possible to add it based on @param annotation
+     |       |     "string|null".
+--------------------------------------------------------------------------------
+PHPCBF CAN FIX THE 4 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+--------------------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Controller\ConfiguracoesController.php
+--------------------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 6 | ERROR | [x] Type Authorization\Exception\ForbiddenException is not used in
+   |       |     this file.
+--------------------------------------------------------------------------------
+PHPCBF CAN FIX THE 1 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+--------------------------------------------------------------------------------
+
+
+FILE: ...:\xampp\htdocs\muralrafael5\src\Controller\FolhadeatividadesController.php
+--------------------------------------------------------------------------------
+FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 201 | WARNING | Line exceeds 120 characters; contains 138 characters
+--------------------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Controller\PagesController.php
+--------------------------------------------------------------------------------
+FOUND 3 ERRORS AFFECTING 3 LINES
+--------------------------------------------------------------------------------
+ 37 | ERROR | [x] Class \Cake\Event\EventInterface should not be referenced via
+    |       |     a fully qualified name, but via a use statement.
+ 40 | ERROR | [x] Whitespace found at end of line
+ 42 | ERROR | [x] Every function/method needs a newline afterwards
+--------------------------------------------------------------------------------
+PHPCBF CAN FIX THE 3 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+--------------------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Controller\SupervisoresController.php
+--------------------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 40 | ERROR | [x] Multi-line arrays must have a trailing comma after the last
+    |       |     element.
+--------------------------------------------------------------------------------
+PHPCBF CAN FIX THE 1 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+--------------------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Controller\TurmasController.php
+--------------------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 6 | ERROR | [x] Type Authorization\Exception\ForbiddenException is not used in
+   |       |     this file.
+--------------------------------------------------------------------------------
+PHPCBF CAN FIX THE 1 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+--------------------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Controller\TurnosController.php
+--------------------------------------------------------------------------------
+FOUND 4 ERRORS AFFECTING 4 LINES
+--------------------------------------------------------------------------------
+  6 | ERROR | [x] Type Authorization\Exception\ForbiddenException is not used
+    |       |     in this file.
+ 36 | ERROR | [x] Method \App\Controller\TurnosController::view() does not have
+    |       |     native type hint for its parameter $id but it should be
+    |       |     possible to add it based on @param annotation "string|null".
+ 71 | ERROR | [x] Method \App\Controller\TurnosController::edit() does not have
+    |       |     native type hint for its parameter $id but it should be
+    |       |     possible to add it based on @param annotation "string|null".
+ 94 | ERROR | [x] Method \App\Controller\TurnosController::delete() does not
+    |       |     have native type hint for its parameter $id but it should be
+    |       |     possible to add it based on @param annotation "string|null".
+--------------------------------------------------------------------------------
+PHPCBF CAN FIX THE 4 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+--------------------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Controller\UsersController.php
+--------------------------------------------------------------------------------
+FOUND 12 ERRORS AND 11 WARNINGS AFFECTING 17 LINES
+--------------------------------------------------------------------------------
+  80 | ERROR   | Double space found
+ 157 | WARNING | Line exceeds 120 characters; contains 122 characters
+ 158 | WARNING | Line exceeds 120 characters; contains 121 characters
+ 167 | WARNING | Line exceeds 120 characters; contains 128 characters
+ 168 | WARNING | Line exceeds 120 characters; contains 127 characters
+ 196 | ERROR   | Missing doc comment for function edit()
+ 196 | ERROR   | Method \App\Controller\UsersController::edit() does not have
+     |         | parameter type hint nor @param annotation for its parameter
+     |         | $id.
+ 196 | ERROR   | Method \App\Controller\UsersController::edit() does not have
+     |         | return type hint nor @return annotation for its return value.
+ 205 | ERROR   | Logical operator "and" is prohibited; use "&&" instead
+ 277 | ERROR   | Missing doc comment for function login()
+ 277 | ERROR   | Method \App\Controller\UsersController::login() does not have
+     |         | return type hint nor @return annotation for its return value.
+ 294 | WARNING | Line exceeds 120 characters; contains 128 characters
+ 304 | WARNING | Line exceeds 120 characters; contains 128 characters
+ 319 | WARNING | Line exceeds 120 characters; contains 144 characters
+ 369 | WARNING | Line exceeds 120 characters; contains 157 characters
+ 416 | WARNING | Line exceeds 120 characters; contains 161 characters
+ 427 | WARNING | Line exceeds 120 characters; contains 122 characters
+ 450 | WARNING | Line exceeds 120 characters; contains 122 characters
+ 468 | ERROR   | Missing doc comment for function logout()
+ 468 | ERROR   | Method \App\Controller\UsersController::logout() does not have
+     |         | return type hint nor @return annotation for its return value.
+ 487 | ERROR   | Missing doc comment for function alternarusuario()
+ 487 | ERROR   | Method \App\Controller\UsersController::alternarusuario() does
+     |         | not have parameter type hint nor @param annotation for its
+     |         | parameter $id.
+ 487 | ERROR   | Method \App\Controller\UsersController::alternarusuario() does
+     |         | not have return type hint nor @return annotation for its
+     |         | return value.
+--------------------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Controller\VisitasController.php
+--------------------------------------------------------------------------------
+FOUND 5 ERRORS AFFECTING 5 LINES
+--------------------------------------------------------------------------------
+   6 | ERROR | [x] Type Authorization\Exception\ForbiddenException is not used
+     |       |     in this file.
+  48 | ERROR | [x] Missing blank line before return statement
+  58 | ERROR | [x] Missing blank line before return statement
+ 109 | ERROR | [x] Missing blank line before return statement
+ 139 | ERROR | [x] Missing blank line before return statement
+--------------------------------------------------------------------------------
+PHPCBF CAN FIX THE 5 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+--------------------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Model\Table\AlunosTable.php
+----------------------------------------------------------------------
+FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
+----------------------------------------------------------------------
+ 94 | WARNING | Line exceeds 120 characters; contains 137 characters
+----------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\Model\Table\MuralestagiosTable.php
+--------------------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+--------------------------------------------------------------------------------
+ 69 | ERROR | [x] Class \ArrayObject should not be referenced via a fully
+    |       |     qualified name, but via a use statement.
+--------------------------------------------------------------------------------
+PHPCBF CAN FIX THE 1 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+--------------------------------------------------------------------------------
+
+
+FILE: C:\xampp\htdocs\muralrafael5\src\View\Helper\SessionHelper.php
+----------------------------------------------------------------------
+FOUND 1 ERROR AFFECTING 1 LINE
+----------------------------------------------------------------------
+ 1 | ERROR | [x] Missing declare(strict_types=1).
+----------------------------------------------------------------------
+PHPCBF CAN FIX THE 1 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+----------------------------------------------------------------------
+
+Time: 1.85 secs; Memory: 34MB

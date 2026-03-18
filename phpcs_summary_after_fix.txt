@@ -1,0 +1,25 @@
+﻿
+PHP CODE SNIFFER REPORT SUMMARY
+--------------------------------------------------------------------------------
+FILE                                                            ERRORS  WARNINGS
+--------------------------------------------------------------------------------
+C:\xampp\htdocs\muralrafael5\src\Application.php                1       2
+C:\xampp\htdocs\muralrafael5\src\Console\Installer.php          1       0
+...s\muralrafael5\src\Controller\AdministradoresController.php  1       0
+...mpp\htdocs\muralrafael5\src\Controller\AlunosController.php  3       3
+C:\xampp\htdocs\muralrafael5\src\Controller\AppController.php   1       0
+...ampp\htdocs\muralrafael5\src\Controller\AreasController.php  2       0
+...htdocs\muralrafael5\src\Controller\AvaliacoesController.php  0       7
+...docs\muralrafael5\src\Controller\ComplementosController.php  4       0
+...ocs\muralrafael5\src\Controller\ConfiguracoesController.php  1       0
+...muralrafael5\src\Controller\FolhadeatividadesController.php  0       1
+...mpp\htdocs\muralrafael5\src\Controller\TurmasController.php  1       0
+...mpp\htdocs\muralrafael5\src\Controller\TurnosController.php  4       0
+...ampp\htdocs\muralrafael5\src\Controller\UsersController.php  12      11
+C:\xampp\htdocs\muralrafael5\src\Model\Table\AlunosTable.php    0       1
+--------------------------------------------------------------------------------
+A TOTAL OF 31 ERRORS AND 25 WARNINGS WERE FOUND IN 14 FILES
+--------------------------------------------------------------------------------
+PHPCBF CAN FIX 11 OF THESE SNIFF VIOLATIONS AUTOMATICALLY
+--------------------------------------------------------------------------------
+
