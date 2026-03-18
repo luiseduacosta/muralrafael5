@@ -45,6 +45,7 @@ final class AvaliacoesTablePolicy implements BeforePolicyInterface
         if (in_array($user_data['categoria'], ['1', '2', '3', '4'])) {
             return new Result(true);
         }
+
         return new Result(false);
     }
 

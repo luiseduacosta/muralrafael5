@@ -1,13 +1,15 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Estagiario[]|\Cake\Collection\CollectionInterface $estagiarios
+ * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Estagiario> $estagiarios
  */
 declare(strict_types=1);
 
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $user_session->getOriginalData(); }
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
+}
 
 ?>
 
@@ -37,7 +39,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 'type' => 'select',
                 'class' => 'form-control',
                 'empty' => false,
-                'onChange' => 'this.form.submit();'
+                'onChange' => 'this.form.submit();',
             ]); ?>
         </div>
         <?= $this->Form->end(); ?>
@@ -50,7 +52,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <table class="table table-striped table-hover table-responsive" id="table-estagiarios">
             <thead>
                 <tr id="table-estagiarios-header">
-                    <?php if ($user_data['administrador_id'] || $user_data['professor_id']): ?>
+                    <?php if ($user_data['administrador_id'] || $user_data['professor_id']) : ?>
                         <th><?= $this->Paginator->sort('Estagiarios.id', 'Id') ?></th>
                     <?php endif; ?>
                     <th><?= $this->Paginator->sort('Alunos.nome', 'Aluno(a)') ?></th>
@@ -67,28 +69,28 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
             </thead>
             <tbody id="table-estagiarios-body">
-                <?php foreach ($estagiarios as $estagiario): ?>
+                <?php foreach ($estagiarios as $estagiario) : ?>
                     <?php // pr($estagiario); die(); ?>
                     <tr data-id="<?= $estagiario->id ?>">
-                        <?php if ($user_data['administrador_id'] || $user_data['professor_id']): ?>
+                        <?php if ($user_data['administrador_id'] || $user_data['professor_id']) : ?>
                             <td><?= $estagiario->id ?></td>
                         <?php endif; ?>
-                        <td><?= !empty($estagiario->aluno->nome) ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario['aluno_id']]) : "Sem aluno"; ?>
+                        <td><?= !empty($estagiario->aluno->nome) ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario['aluno_id']]) : 'Sem aluno'; ?>
                         </td>
                         <td><?= $estagiario['registro'] ?></td>
                         <td>
-                            <?php if (isset($estagiario['instituicao_id'])): ?>
-                                <?= !empty($estagiario->instituicao->instituicao) ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario['instituicao_id']]) : "Sem instituicao"; ?>
-                            <?php else: ?>
-                               <?= "Sem instituicao"; ?>
+                            <?php if (isset($estagiario['instituicao_id'])) : ?>
+                                <?= !empty($estagiario->instituicao->instituicao) ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario['instituicao_id']]) : 'Sem instituicao'; ?>
+                            <?php else : ?>
+                                <?= 'Sem instituicao'; ?>
                             <?php endif; ?>
                         </td>
                         <td>
-                            <?php 
+                            <?php
                             if (isset($estagiario['supervisor_id'])) {
-                                echo !empty($estagiario->supervisor->nome) ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario['supervisor_id']]) : "Sem supervisor";
-                            } else { 
-                                echo "Sem supervisor";
+                                echo !empty($estagiario->supervisor->nome) ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario['supervisor_id']]) : 'Sem supervisor';
+                            } else {
+                                echo 'Sem supervisor';
                             }
                             ?>
                         </td>
@@ -96,21 +98,21 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <td><?= $estagiario['nivel'] ?></td>
                         <td class="editable-field" data-field="nota"><?= $this->Number->format($estagiario['nota'], ['precision' => 2]) ?></td>
                         <td class="editable-field" data-field="ch"><?= $this->Number->format($estagiario['ch']) ?></td>
-                        <?php if (isset($estagiario['folha_id'])): ?>
+                        <?php if (isset($estagiario['folha_id'])) : ?>
                             <td><?= $this->Html->link('Folha de atividades', ['controller' => 'Folhadeatividades', 'action' => 'index', $estagiario['id']]) ?>
                             </td>
-                        <?php else: ?>
+                        <?php else : ?>
                             <td></td>
                         <?php endif; ?>
-                        <?php if (isset($estagiario['avaliacao_id'])): ?>
+                        <?php if (isset($estagiario['avaliacao_id'])) : ?>
                             <td><?= $this->Html->link('Ver avaliação', ['controller' => 'avaliacoes', 'action' => 'view', $estagiario['avaliacao_id']]) ?>
                             </td>
-                        <?php else: ?>
+                        <?php else : ?>
                             <td></td>
                         <?php endif; ?>
                         <td class="actions">
                             <?= $this->Html->link(__('Ver'), ['action' => 'view', $estagiario['id']]) ?>
-                            <?php if ($user_data['administrador_id'] || $user_data['professor_id'] && ($user_data['professor_id'] == $estagiario->professor_id)): ?>
+                            <?php if ($user_data['administrador_id'] || $user_data['professor_id'] && ($user_data['professor_id'] == $estagiario->professor_id)) : ?>
                                 <button type="button" class="btn btn-sm btn-warning btn-edit"><?= __('Editar') ?></button>
                                 <button type="button" class="btn btn-sm btn-primary btn-save" style="display:none">Salvar</button>
                                 <button type="button" class="btn btn-sm btn-secondary btn-cancel" style="display:none">Cancelar</button>

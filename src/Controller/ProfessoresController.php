@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
-use Cake\Event\EventInterface;
 use Cake\ORM\Query;
 
 /**
@@ -108,6 +107,7 @@ class ProfessoresController extends AppController
 
         if ($user_data['professor_id'] > 0) {
             $this->Flash->warning(__('Professor já está cadastrado.'));
+
             return $this->redirect(['action' => 'view', $user_data['professor_id']]);
         }
 
@@ -166,7 +166,6 @@ class ProfessoresController extends AppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-
             $professor = $this->Professores->patchEntity($professor, $this->request->getData());
             if ($this->Professores->save($professor)) {
                 $this->Flash->success(__('The professor has been saved.'));
@@ -192,8 +191,9 @@ class ProfessoresController extends AppController
 
         try {
             $this->Authorization->authorize($professor);
-            if (sizeof($professor->estagiarios) > 0) {
-                $this->Flash->warning(__("O(a) professor(a) tem estagiários associados."));
+            if (count($professor->estagiarios) > 0) {
+                $this->Flash->warning(__('O(a) professor(a) tem estagiários associados.'));
+
                 return $this->redirect(['controller' => 'Professores', 'action' => 'view', $id]);
             }
 

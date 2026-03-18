@@ -90,6 +90,7 @@ final class EstagiarioPolicy implements BeforePolicyInterface
         if ($user_data['professor_id']) {
             return new Result(true);
         }
+
         return new Result(false, 'Erro: lancanota policy not authorized');
     }
 
@@ -131,6 +132,7 @@ final class EstagiarioPolicy implements BeforePolicyInterface
     protected function isProfessorOwned(IdentityInterface $userSession, Estagiario $estagiarioData): bool
     {
         $user_data = $userSession->getOriginalData();
+
         return isset($user_data['professor_id']) && $user_data['professor_id'] === $estagiarioData->professor_id;
     }
 

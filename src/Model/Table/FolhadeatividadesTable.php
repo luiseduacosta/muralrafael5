@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventInterface;
+use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -49,9 +49,17 @@ class FolhadeatividadesTable extends Table
         ]);
     }
 
-    public function beforeFind($event, $query, $options, $primary)
+    /**
+     * Before find callback to apply default ordering.
+     *
+     * @param \Cake\Event\EventInterface $event The beforeFind event.
+     * @param \Cake\ORM\Query $query The query object.
+     * @param array $options The options array.
+     * @param bool $primary Whether this is a primary query or not.
+     * @return \Cake\ORM\Query
+     */
+    public function beforeFind(EventInterface $event, Query $query, array $options, bool $primary): Query
     {
-
         $query->order(['dia' => 'ASC']);
 
         return $query;
@@ -106,9 +114,6 @@ class FolhadeatividadesTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-
-        $rules->add($rules->existsIn(['estagiario_id'], 'Estagiarios'), ['errorField' => 'estagiario_id']);
-
         return $rules;
     }
 }

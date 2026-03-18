@@ -8,10 +8,12 @@ declare(strict_types=1);
 
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $user_session->getOriginalData(); }
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
+}
 ?>
 
-<?= $this->Html->script("jquery.mask.min"); ?>
+<?= $this->Html->script('jquery.mask.min'); ?>
 <script>
     $(document).ready(function () {
         $('#cpf').mask('000.000.000-00');
@@ -41,25 +43,25 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <fieldset>
                 <h3><?= __('Adicionando Supervisor(a)') ?></h3>
                 <?php
-                    if ($user_data['administrador_id']):
-                        $val = $this->request->getParam('pass') ? $this->request->getParam('pass')[0] : '';
-                        echo $this->Form->control('user_id', ['type' => 'number', 'hidden' => true, 'label' => false, 'value' => $val ]); 
-                    elseif ($user_data['supervisor_id']):
-                        echo $this->Form->control('user_id', ['type' => 'number', 'hidden' => true, 'label' => false, 'value' => $user_session->get('id')]); 
-                    endif;
+                if ($user_data['administrador_id']) :
+                    $val = $this->request->getParam('pass') ? $this->request->getParam('pass')[0] : '';
+                    echo $this->Form->control('user_id', ['type' => 'number', 'hidden' => true, 'label' => false, 'value' => $val ]);
+                elseif ($user_data['supervisor_id']) :
+                        echo $this->Form->control('user_id', ['type' => 'number', 'hidden' => true, 'label' => false, 'value' => $user_session->get('id')]);
+                endif;
                     echo $this->Form->control('nome', ['required' => true]);
                     echo $this->Form->control('cpf', ['label' => 'CPF', 'pattern' => '[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}', 'placeholder' => '000.000.000-00', 'required' => false]);
-                    if ($supervisor->cress) {
-                        echo $this->Form->control('cress', ['label' => 'CRESS', 'value' => $supervisor->cress, 'readonly' => true, 'required' => true]);
-                    } else {
-                        echo $this->Form->control('cress', ['label' => 'CRESS', 'required' => true]);
-                    }
+                if ($supervisor->cress) {
+                    echo $this->Form->control('cress', ['label' => 'CRESS', 'value' => $supervisor->cress, 'readonly' => true, 'required' => true]);
+                } else {
+                    echo $this->Form->control('cress', ['label' => 'CRESS', 'required' => true]);
+                }
                     echo $this->Form->control('regiao', ['label' => 'Região', 'default' => '7', 'required' => false]);
-                    if ($supervisor->email) {
-                        echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'value' => $supervisor->email, 'readonly' => true, 'required' => false]);
-                    } else {
-                        echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'required' => false]);
-                    }
+                if ($supervisor->email) {
+                    echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'value' => $supervisor->email, 'readonly' => true, 'required' => false]);
+                } else {
+                    echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'required' => false]);
+                }
                     echo $this->Form->control('cargo', ['label' => 'Cargo na instituição', 'required' => false, 'default' => null]);
                     echo $this->Form->control('cep', ['label' => 'CEP', 'pattern' => '[0-9]{5}\-[0-9]{3}', 'placeholder' => '00000-000',  'required' => false]);
                     echo $this->Form->control('endereco', ['required' => false]);

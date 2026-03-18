@@ -1,7 +1,7 @@
-<?php 
+<?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Aluno[]|\Cake\Collection\CollectionInterface $alunos
+ * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Aluno> $alunos
  */
 
 declare(strict_types=1);
@@ -18,7 +18,7 @@ $cpf = $this->getRequest()->getQuery('cpf');
 $email = $this->getRequest()->getQuery('email');
 ?>
 
-<?= $this->Html->script("jquery.mask.min"); ?>
+<?= $this->Html->script('jquery.mask.min'); ?>
 <script>
     $(document).ready(function () {
         $("#cpf").mask("999.999.999-99");
@@ -38,7 +38,7 @@ $email = $this->getRequest()->getQuery('email');
             <?php echo $this->Form->end(); ?>
         </div>
 
-        <input type="radio" name="tabs" id="tab_dre" <?= ($dre) ? 'checked' : '' ?> >
+        <input type="radio" name="tabs" id="tab_dre" <?= $dre ? 'checked' : '' ?> >
         <label for="tab_dre">Busca por DRE</label>
         <div class="tab-content">
             <?php echo $this->Form->create(null, ['type' => 'get', 'valueSources' => ['query', 'context']]) ?>
@@ -47,7 +47,7 @@ $email = $this->getRequest()->getQuery('email');
             <?php echo $this->Form->end(); ?>
         </div>
         
-        <input type="radio" name="tabs" id="tab_cpf" <?= ($cpf) ? 'checked' : '' ?> >
+        <input type="radio" name="tabs" id="tab_cpf" <?= $cpf ? 'checked' : '' ?> >
         <label for="tab_cpf">Busca por CPF</label>
         <div class="tab-content">
             <?php echo $this->Form->create(null, ['type' => 'get', 'valueSources' => ['query', 'context']]) ?>
@@ -56,7 +56,7 @@ $email = $this->getRequest()->getQuery('email');
             <?php echo $this->Form->end(); ?>
         </div>
         
-        <input type="radio" name="tabs" id="tab_email" <?= ($email) ? 'checked' : '' ?> >
+        <input type="radio" name="tabs" id="tab_email" <?= $email ? 'checked' : '' ?> >
         <label for="tab_email">Busca por email</label>
         <div class="tab-content">
             <?php echo $this->Form->create(null, ['type' => 'get', 'valueSources' => ['query', 'context']]) ?>
@@ -65,12 +65,20 @@ $email = $this->getRequest()->getQuery('email');
             <?php echo $this->Form->end(); ?>
         </div>
     </div>
-    <?php if (isset($alunos)): ?>
-        <?php if (iterator_count($alunos)): ?>
-            <?php if ($nome): ?><h3>Resultado da busca para o termo "<?= $nome ?>"</h3><?php endif; ?>
-            <?php if ($dre):  ?><h3>Resultado da busca para o DRE <?= $dre ?></h3><?php endif; ?>
-            <?php if ($cpf):  ?><h3>Resultado da busca para o CPF <?= $cpf ?></h3><?php endif; ?>
-            <?php if ($email):  ?><h3>Resultado da busca para o email <?= $email ?></h3><?php endif; ?>
+    <?php if (isset($alunos)) : ?>
+        <?php if (iterator_count($alunos)) : ?>
+            <?php if ($nome) :
+                ?><h3>Resultado da busca para o termo "<?= $nome ?>"</h3><?php
+            endif; ?>
+            <?php if ($dre) :
+                ?><h3>Resultado da busca para o DRE <?= $dre ?></h3><?php
+            endif; ?>
+            <?php if ($cpf) :
+                ?><h3>Resultado da busca para o CPF <?= $cpf ?></h3><?php
+            endif; ?>
+            <?php if ($email) :
+                ?><h3>Resultado da busca para o email <?= $email ?></h3><?php
+            endif; ?>
             <div class="paginator">
                 <?= $this->element('paginator'); ?>
             </div>
@@ -84,7 +92,7 @@ $email = $this->getRequest()->getQuery('email');
                             <th><?= $this->Paginator->sort('email', 'E-mail'); ?></th>
                         </tr>
                     </thead>
-                    <?php foreach ($alunos as $aluno): ?>
+                    <?php foreach ($alunos as $aluno) : ?>
                         <tr>
                             <td><?= $aluno->registro; ?></td>
                             <td><?= $this->Html->link($aluno->nome, ['action' => 'view', $aluno->id]); ?></td>
@@ -98,11 +106,19 @@ $email = $this->getRequest()->getQuery('email');
                 <?= $this->element('paginator'); ?>
                 <?= $this->element('paginator_count'); ?>
             </div>
-        <?php else: ?>
-            <?php if ($nome): ?><h3>Nenhum resultado encontrado para o termo "<?= $nome ?>"</h3><?php endif; ?>
-            <?php if ($dre):  ?><h3>Nenhum resultado encontrado para o DRE <?= $dre ?></h3><?php endif; ?>
-            <?php if ($cpf):  ?><h3>Nenhum resultado encontrado para o CPF <?= $cpf ?></h3><?php endif; ?>
-            <?php if ($email):  ?><h3>Nenhum resultado encontrado para o email <?= $email ?></h3><?php endif; ?>
+        <?php else : ?>
+            <?php if ($nome) :
+                ?><h3>Nenhum resultado encontrado para o termo "<?= $nome ?>"</h3><?php
+            endif; ?>
+            <?php if ($dre) :
+                ?><h3>Nenhum resultado encontrado para o DRE <?= $dre ?></h3><?php
+            endif; ?>
+            <?php if ($cpf) :
+                ?><h3>Nenhum resultado encontrado para o CPF <?= $cpf ?></h3><?php
+            endif; ?>
+            <?php if ($email) :
+                ?><h3>Nenhum resultado encontrado para o email <?= $email ?></h3><?php
+            endif; ?>
         <?php endif; ?>
     <?php endif; ?>
 </div>

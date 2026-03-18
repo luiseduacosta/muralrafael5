@@ -3,7 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Configuracao $configuracao
  */
-use Cake\I18n\Date;
 ?>
 <div>
     <div class="column-responsive column-80">

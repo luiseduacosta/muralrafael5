@@ -44,12 +44,12 @@ final class AvaliacaoPolicy implements BeforePolicyInterface
     public function canView(IdentityInterface $user, Avaliacao $avaliacao): Result
     {
         $user_data = $user->getOriginalData();
-        
+
         // Student can only view their own
         if ($user_data['aluno_id']) {
             return new Result($user_data['aluno_id'] == $avaliacao->estagiario->aluno_id);
         }
-        
+
         // Professor can view evaluations for their assigned students
         if ($user_data['professor_id']) {
             return new Result($user_data['professor_id'] == $avaliacao->estagiario->professor_id);

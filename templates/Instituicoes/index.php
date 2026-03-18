@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Instituicao[]|\Cake\Collection\CollectionInterface $instituicoes
+ * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Instituicao> $instituicoes
  */
 declare(strict_types=1);
 
@@ -12,14 +12,14 @@ if ($user_session) {
 }
 ?>
 <div class="instituicoes index content">
-	<aside>
-		<div class="nav">    
-        	<?php if ($user_data['administrador_id']): ?>
+    <aside>
+        <div class="nav">    
+            <?php if ($user_data['administrador_id']) : ?>
                 <?= $this->Html->link(__('Nova Instituição'), ['action' => 'add'], ['class' => 'button']) ?>
                 <?= $this->Html->link(__('Áreas'), ['controller' => 'Areas', 'action' => 'index'], ['class' => 'button']) ?>
             <?php endif; ?>
-		</div>
-	</aside>
+        </div>
+    </aside>
     
     <h3><?= __('Lista de Instituições') ?></h3>
     
@@ -30,7 +30,7 @@ if ($user_session) {
         <table>
             <thead>
                 <tr>
-				    <?php if ($user_data['administrador_id']): ?>
+                    <?php if ($user_data['administrador_id']) : ?>
                         <th class="actions"><?= __('Actions') ?></th>
                         <th><?= $this->Paginator->sort('id') ?></th>
                     <?php endif; ?>
@@ -44,9 +44,9 @@ if ($user_session) {
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($instituicoes as $instituicao): ?>
+                <?php foreach ($instituicoes as $instituicao) : ?>
                 <tr>
-				    <?php if ($user_data['administrador_id']): ?>
+                    <?php if ($user_data['administrador_id']) : ?>
                         <td class="actions">
                             <?= $this->Html->link(__('Ver'), ['action' => 'view', $instituicao->id]) ?>
                             <?= $this->Html->link(__('Editar'), ['action' => 'edit', $instituicao->id]) ?>

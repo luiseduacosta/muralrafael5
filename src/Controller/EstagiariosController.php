@@ -5,7 +5,6 @@ namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
 use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\Event\EventInterface;
 
 /**
  * Estagiarios Controller
@@ -19,18 +18,18 @@ class EstagiariosController extends AppController
      * paginate array
      */
     protected array $paginate = [
-        "sortableFields" => [
-            "Estagiarios.id",
-            "Alunos.nome",
-            "Estagiarios.periodo",
-            "Estagiarios.registro",
-            "Instituicoes.instituicao",
-            "Supervisores.nome",
-            "Professores.nome",
-            "Estagiarios.periodo",
-            "Estagiarios.nivel",
-            "Estagiarios.nota",
-            "Estagiarios.ch",
+        'sortableFields' => [
+            'Estagiarios.id',
+            'Alunos.nome',
+            'Estagiarios.periodo',
+            'Estagiarios.registro',
+            'Instituicoes.instituicao',
+            'Supervisores.nome',
+            'Professores.nome',
+            'Estagiarios.periodo',
+            'Estagiarios.nivel',
+            'Estagiarios.nota',
+            'Estagiarios.ch',
         ],
     ];
 
@@ -48,50 +47,50 @@ class EstagiariosController extends AppController
         $this->set('periodo', $periodo);
 
         $contained = [
-            "Alunos",
-            "Professores",
-            "Supervisores",
-            "Instituicoes",
+            'Alunos',
+            'Professores',
+            'Supervisores',
+            'Instituicoes',
         ];
 
-        $conditions = ["conditions" => ["Estagiarios.periodo" => $periodo]];
+        $conditions = ['conditions' => ['Estagiarios.periodo' => $periodo]];
 
         try {
             $this->Authorization->authorize($this->Estagiarios);
-            if ($periodo == "all") {
+            if ($periodo == 'all') {
                 $estagiarios = $this->Estagiarios
-                    ->find("all")
+                    ->find('all')
                     ->contain($contained);
             } else {
                 $estagiarios = $this->Estagiarios
-                    ->find("all", $conditions)
+                    ->find('all', $conditions)
                     ->contain($contained);
             }
         } catch (ForbiddenException $error) {
-            if ($periodo == "all") {
+            if ($periodo == 'all') {
                 $estagiarios = $this->Authorization->applyScope(
-                    $this->Estagiarios->find("all")->contain($contained),
+                    $this->Estagiarios->find('all')->contain($contained),
                 );
             } else {
                 $estagiarios = $this->Authorization->applyScope(
                     $this->Estagiarios
-                        ->find("all", $conditions)
+                        ->find('all', $conditions)
                         ->contain($contained),
                 );
             }
         }
 
-        $this->set("estagiarios", $this->paginate($estagiarios));
+        $this->set('estagiarios', $this->paginate($estagiarios));
 
-        $periodototal = $this->Estagiarios->find("list", [
-            "keyField" => "periodo",
-            "valueField" => "periodo",
+        $periodototal = $this->Estagiarios->find('list', [
+            'keyField' => 'periodo',
+            'valueField' => 'periodo',
         ]);
         $periodos = $periodototal->toArray();
-        $periodos = array_merge($periodos, ["all" => "Todos"]);
+        $periodos = array_merge($periodos, ['all' => 'Todos']);
         $periodos = array_reverse($periodos);
 
-        $this->set("periodos", $periodos);
+        $this->set('periodos', $periodos);
     }
 
     /**
@@ -101,25 +100,26 @@ class EstagiariosController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $estagiario = $this->Estagiarios->get($id, [
-            "contain" => [
-                "Alunos",
-                "Instituicoes",
-                "Supervisores",
-                "Professores"
+            'contain' => [
+                'Alunos',
+                'Instituicoes',
+                'Supervisores',
+                'Professores',
             ],
         ]);
 
         try {
             $this->Authorization->authorize($estagiario);
         } catch (ForbiddenException $error) {
-            $this->Flash->error("Authorization error: " . $error->getMessage());
-            return $this->redirect("/");
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect('/');
         }
 
-        $this->set(compact("estagiario"));
+        $this->set(compact('estagiario'));
     }
 
     /**
@@ -140,8 +140,9 @@ class EstagiariosController extends AppController
         try {
             $this->Authorization->authorize($estagiario);
         } catch (ForbiddenException $error) {
-            $this->Flash->error("Authorization error: " . $error->getMessage());
-            return $this->redirect(["controller" => "Muralestagios", "action" => "index"]);
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
         $periodoatual = $this->configuracao->termo_compromisso_periodo;
@@ -153,6 +154,7 @@ class EstagiariosController extends AppController
 
         if (empty($id)) {
             $this->Flash->error(__('Sem parámetros para localizar o(a) aluno(a)'));
+
             return $this->redirectBack(['controller' => 'Alunos', 'action' => 'index']);
         }
 
@@ -195,11 +197,9 @@ class EstagiariosController extends AppController
                 );
 
                 if ($compare >= 0) {
-                    $this->Flash->info(
-                        __(
-                            'O período de estágio do aluno tem que ser igual ou maior que o período atual ' . $periodoatual->mural_periodo_atual,
-                        ),
-                    );
+                    $periodoMsg = 'O período de estágio do aluno tem que ser igual ou maior que o período atual ';
+                    $periodoMsg .= $periodoatual->mural_periodo_atual;
+                    $this->Flash->info(__($periodoMsg));
 
                     return $this->redirect([
                         'controller' => 'Estagiarios',
@@ -214,49 +214,53 @@ class EstagiariosController extends AppController
 
             $this->set('nivel', $nivel);
 
-            if ($this->request->is("post")) {
+            if ($this->request->is('post')) {
                 // Verifica se o estagiario já existe no periodo atual
-  
+
                 $estagiarioexiste = $this->Estagiarios->find()
                     ->where([
-                        "periodo" => $periodoatual,
-                        "aluno_id" => $this->request->getData("aluno_id"),
+                        'periodo' => $periodoatual,
+                        'aluno_id' => $this->request->getData('aluno_id'),
                     ])
                     ->first();
 
                 if ($estagiarioexiste) {
-                    $this->Flash->warning("Estagiario já existe para este periodo.");
-                    return $this->redirect(["action" => "view", $estagiarioexiste->id]);
+                    $this->Flash->warning('Estagiario já existe para este periodo.');
+
+                    return $this->redirect(['action' => 'view', $estagiarioexiste->id]);
                 }
                 $estagiario = $this->Estagiarios->patchEntity($estagiario, $this->request->getData());
                 if ($this->Estagiarios->save($estagiario)) {
-                    $this->Flash->success(__("Estagiario salvo com sucesso."));
-                    return $this->redirect(["action" => "view", $estagiario->id]);
+                    $this->Flash->success(__('Estagiario salvo com sucesso.'));
+
+                    return $this->redirect(['action' => 'view', $estagiario->id]);
                 }
                 $this->Flash->error(
-                    __("Ocorreu um erro ao salvar o estagiario. Por favor, tente novamente."),
+                    __('Ocorreu um erro ao salvar o estagiario. Por favor, tente novamente.'),
                 );
             }
 
-            $aluno = $this->fetchTable("Alunos")->find()->where(['id' => $id])->first();
-            $instituicoes = $this->fetchTable("Instituicoes")->find("list")->order(['instituicao' => 'ASC']);
-            $professores = $this->fetchTable("Professores")->find("list")->order(['nome' => 'ASC']);
+            $aluno = $this->fetchTable('Alunos')->find()->where(['id' => $id])->first();
+            $instituicoes = $this->fetchTable('Instituicoes')->find('list')->order(['instituicao' => 'ASC']);
+            $professores = $this->fetchTable('Professores')->find('list')->order(['nome' => 'ASC']);
             if (!empty($estagiario->instituicao_id)) {
-                $supervisores = $this->fetchTable("Supervisores")->find("list")->matching('Instituicoes', function ($q) use ($estagiario) {
-                    return $q->where(['Instituicoes.id' => $estagiario->instituicao_id]);
-                });
+                $supervisores = $this->fetchTable('Supervisores')
+                    ->find('list')
+                    ->matching('Instituicoes', function ($q) use ($estagiario) {
+                        return $q->where(['Instituicoes.id' => $estagiario->instituicao_id]);
+                    });
             } else {
-                $supervisores = $this->fetchTable("Supervisores")->find("list")->order(['nome' => 'ASC']);
+                $supervisores = $this->fetchTable('Supervisores')->find('list')->order(['nome' => 'ASC']);
             }
 
             $this->set(
                 compact(
-                    "periodo",
-                    "estagiario",
-                    "aluno",
-                    "instituicoes",
-                    "supervisores",
-                    "professores"
+                    'periodo',
+                    'estagiario',
+                    'aluno',
+                    'instituicoes',
+                    'supervisores',
+                    'professores',
                 ),
             );
         }
@@ -269,9 +273,8 @@ class EstagiariosController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
-        
         // Support AJAX POST with id in request body
         if ($id === null && $this->request->is(['post', 'put', 'patch'])) {
             $id = $this->request->getData('id');
@@ -282,11 +285,12 @@ class EstagiariosController extends AppController
         try {
             $this->Authorization->authorize($estagiario);
         } catch (ForbiddenException $error) {
-            $this->Flash->error("Authorization error: " . $error->getMessage());
-            return $this->redirect(["controller" => "Muralestagios", "action" => "index"]);
+            $this->Flash->error('Authorization error: ' . $error->getMessage());
+
+            return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
-        if ($this->request->is(["patch", "post", "put"])) {
+        if ($this->request->is(['patch', 'post', 'put'])) {
             // Check the format of the field nota and replace comma with dot
             if (!empty($this->request->getData('nota'))) {
                 $nota = str_replace(',', '.', $this->request->getData('nota'));
@@ -319,24 +323,26 @@ class EstagiariosController extends AppController
             );
         }
 
-        $alunos = $this->fetchTable("Alunos")->find("list")->order(['nome' => 'ASC']);
-        $instituicoes = $this->fetchTable("Instituicoes")->find("list")->order(['instituicao' => 'ASC']);
-        $professores = $this->fetchTable("Professores")->find("list")->order(['nome' => 'ASC']);
+        $alunos = $this->fetchTable('Alunos')->find('list')->order(['nome' => 'ASC']);
+        $instituicoes = $this->fetchTable('Instituicoes')->find('list')->order(['instituicao' => 'ASC']);
+        $professores = $this->fetchTable('Professores')->find('list')->order(['nome' => 'ASC']);
         if (!empty($estagiario->instituicao_id)) {
-            $supervisores = $this->fetchTable("Supervisores")->find("list")->matching('Instituicoes', function ($q) use ($estagiario) {
-                return $q->where(['Instituicoes.id' => $estagiario->instituicao_id]);
-            });
+            $supervisores = $this->fetchTable('Supervisores')
+                ->find('list')
+                ->matching('Instituicoes', function ($q) use ($estagiario) {
+                    return $q->where(['Instituicoes.id' => $estagiario->instituicao_id]);
+                });
         } else {
-            $supervisores = $this->fetchTable("Supervisores")->find("list")->order(['nome' => 'ASC']);
+            $supervisores = $this->fetchTable('Supervisores')->find('list')->order(['nome' => 'ASC']);
         }
 
         $this->set(
             compact(
-                "estagiario",
-                "alunos",
-                "instituicoes",
-                "supervisores",
-                "professores"
+                'estagiario',
+                'alunos',
+                'instituicoes',
+                'supervisores',
+                'professores',
             ),
         );
     }
@@ -348,36 +354,37 @@ class EstagiariosController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null)
     {
-        $this->request->allowMethod(["post", "delete"]);
+        $this->request->allowMethod(['post', 'delete']);
 
         $estagiario = $this->Estagiarios->get($id, ['contain' => 'Folhadeatividades']);
 
         try {
             $this->Authorization->authorize($estagiario);
 
-            if (sizeof($estagiario->folhadeatividades) > 0) {
+            if (count($estagiario->folhadeatividades) > 0) {
                 $this->Flash->warning(__('Estagiário com atividades associadas'));
+
                 return $this->redirect(['controller' => 'Estagiarios', 'action' => 'view', $id]);
             }
 
             if ($this->Estagiarios->delete($estagiario)) {
-                $this->Flash->success(__("The estagiario has been deleted."));
+                $this->Flash->success(__('The estagiario has been deleted.'));
             } else {
                 $this->Flash->error(
                     __(
-                        "The estagiario could not be deleted. Please, try again.",
+                        'The estagiario could not be deleted. Please, try again.',
                     ),
                 );
             }
         } catch (ForbiddenException $error) {
             $this->Flash->error(
-                __("Authorization error: " . $error->getMessage()),
+                __('Authorization error: ' . $error->getMessage()),
             );
         }
 
-        return $this->redirect(["action" => "index"]);
+        return $this->redirect(['action' => 'index']);
     }
 
     /**
@@ -405,6 +412,7 @@ class EstagiariosController extends AppController
 
         if (!isset($aluno_id) || $aluno_id === null) {
             $this->Flash->error(__('Selecionar o(a) aluno(a) para o termo de compromisso'));
+
             return $this->redirect(['controller' => 'Alunos', 'action' => 'index']);
         }
 
@@ -416,18 +424,23 @@ class EstagiariosController extends AppController
 
         if (empty($estagiario)) {
             $this->Flash->error(__('Aluno sem estágio.'));
-            return $this->redirect(['controller' => 'Estagiarios', 'action' => 'add', '?' => ['aluno_id' => $aluno_id]]);
+
+            return $this->redirect([
+                'controller' => 'Estagiarios',
+                'action' => 'add',
+                '?' => ['aluno_id' => $aluno_id],
+            ]);
         }
 
         try {
             $this->Authorization->authorize($estagiario);
         } catch (ForbiddenException $e) {
             $this->Flash->error(__('Acesso negado. Você não tem permissão para acessar esta página.'));
+
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
         if ($estagiario) {
-
             $periodoatual = $this->configuracao->termo_compromisso_periodo;
 
             $compare = $this->comparePeriodo((string)$periodoatual, (string)$estagiario->periodo);
@@ -512,10 +525,10 @@ class EstagiariosController extends AppController
         $kb = $this->periodoKey($b);
 
         if ($ka === 0 || $kb === 0) {
-            return (strcmp(trim($a), trim($b)) <=> 0);
+            return strcmp(trim($a), trim($b)) <=> 0;
         }
 
-        return ($ka <=> $kb);
+        return $ka <=> $kb;
     }
 
     /**
@@ -542,6 +555,7 @@ class EstagiariosController extends AppController
 
         if (empty($id)) {
             $this->Flash->error(__('Sem parâmetros para localizar o estagiário'));
+
             return $this->redirectBack(['action' => 'index']);
         }
 
@@ -551,6 +565,7 @@ class EstagiariosController extends AppController
             ]);
         } catch (RecordNotFoundException $e) {
             $this->Flash->error(__('Estagiário não encontrado.'));
+
             return $this->redirectBack(['action' => 'index']);
         }
 
@@ -569,6 +584,7 @@ class EstagiariosController extends AppController
      * Declaracaodeestagiopdf method
      *
      * @param string|null $id Estagiario id.
+     * @return \Cake\Http\Response|null|void
      */
     public function declaracaodeestagiopdf(?string $id = null)
     {
@@ -588,73 +604,80 @@ class EstagiariosController extends AppController
 
         if (empty($id)) {
             $this->Flash->error(__('Sem parâmetros para localizar o estagiário'));
+
             return $this->redirectBack(['action' => 'index']);
         }
 
         $estagiario = $this->Estagiarios
             ->find()
-            ->contain(["Alunos", "Supervisores", "Instituicoes"])
-            ->where(["Estagiarios.id IS" => $id])
+            ->contain(['Alunos', 'Supervisores', 'Instituicoes'])
+            ->where(['Estagiarios.id IS' => $id])
             ->first();
 
         if (!$estagiario) {
-            $this->Flash->error(__("Sem estagio cadastrado."));
+            $this->Flash->error(__('Sem estagio cadastrado.'));
+
             return $this->redirectBack([
-                "controller" => "estagiarios",
-                "action" => "view",
+                'controller' => 'estagiarios',
+                'action' => 'view',
                 $id,
             ]);
         }
 
         if (empty($estagiario->aluno->identidade)) {
-            $this->Flash->error(__("Aluno sem RG"));
+            $this->Flash->error(__('Aluno sem RG'));
+
             return $this->redirect(
-                "/alunos/view/" . $estagiario->aluno->id,
+                '/alunos/view/' . $estagiario->aluno->id,
             );
         }
 
         if (empty($estagiario->aluno->orgao)) {
             $this->Flash->error(
-                __("Aluno não especifica o orgão emisor do documento"),
+                __('Aluno não especifica o orgão emisor do documento'),
             );
+
             return $this->redirect(
-                "/alunos/view/" . $estagiario->aluno->id,
+                '/alunos/view/' . $estagiario->aluno->id,
             );
         }
         if (empty($estagiario->aluno->cpf)) {
-            $this->Flash->error(__("Aluno sem CPF"));
+            $this->Flash->error(__('Aluno sem CPF'));
+
             return $this->redirect(
-                "/alunos/view/" . $estagiario->aluno->id,
+                '/alunos/view/' . $estagiario->aluno->id,
             );
         }
 
         if (empty($estagiario->supervisor->id)) {
-            $this->Flash->error(__("Falta o supervisor de estágio"));
-            return $this->redirect("/estagiarios/view/" . $estagiario->id);
+            $this->Flash->error(__('Falta o supervisor de estágio'));
+
+            return $this->redirect('/estagiarios/view/' . $estagiario->id);
         }
 
         $this->viewBuilder()->setLayout('pdf/default');
-        $this->viewBuilder()->setClassName("CakePdf.Pdf");
-        $this->viewBuilder()->setOption("pdfConfig", [
-            "orientation" => "portrait",
+        $this->viewBuilder()->setClassName('CakePdf.Pdf');
+        $this->viewBuilder()->setOption('pdfConfig', [
+            'orientation' => 'portrait',
         ]);
-        $this->set("estagiario", $estagiario);
+        $this->set('estagiario', $estagiario);
     }
 
     /**
      * Nivelestagio method
      *
      * Compara o periodoautal com o periodo de estagio do estagiario para definiar o nivel de estagio
+     *
      * @param string $periodoatual Periodo atual
-     * @param Estagiario $ultimoestagio Ultimo estagio
+     * @param \App\Controller\Estagiario $ultimoestagio Ultimo estagio
      * @return int Nivel de estagio
      */
-    private function nivelestagio($periodoatual, $ultimoestagio)
+    private function nivelestagio(string $periodoatual, Estagiario $ultimoestagio)
     {
         /* Se o periodo atual é o mesmo do periodo cadastrado no estagiário deixa o nivel como está */
         if ($periodoatual == $ultimoestagio->periodo) {
             $nivel = $ultimoestagio->nivel;
-            /** Se o periodo atual é maior que o cadastrado então passa para o próximo nivel e insere um novo registro */
+        /** Se o periodo atual é maior que o cadastrado então passa para o próximo nivel e insere um novo registro */
         } elseif ($periodoatual > $ultimoestagio->periodo) {
             $nivel = $ultimoestagio->nivel + 1;
             /** Calculo o ultimo nível de estágio possível a partir do ajuste curricular. */
@@ -671,14 +694,16 @@ class EstagiariosController extends AppController
         } else {
             $this->Flash->error(
                 __(
-                    "Período de estágio atual não pode ser menor que o último período cursado.",
+                    'Período de estágio atual não pode ser menor que o último período cursado.',
                 ),
             );
+
             return $this->redirect([
-                "action" => "view",
+                'action' => 'view',
                 $ultimoestagio->id,
             ]);
         }
+
         return $nivel;
     }
 
@@ -688,7 +713,7 @@ class EstagiariosController extends AppController
      * @param string|null $id Professor id.
      * @return \Cake\Http\Response|null|void Renders view otherwise.
      */
-    public function lancanota($id = null)
+    public function lancanota(?string $id = null)
     {
         $this->Authorization->authorize($this->Estagiarios, 'lancanota');
 
@@ -698,74 +723,76 @@ class EstagiariosController extends AppController
         if ($user_data['professor_id']) {
             $professor_id = $user_data['professor_id'];
         } else {
-            $professor_id = (int)$this->request->getQuery("professor_id") ?? $this->request->getData("professor_id");
+            $professor_id = (int)$this->request->getQuery('professor_id') ?? $this->request->getData('professor_id');
         }
 
         if (empty($professor_id)) {
             $this->Flash->error(
                 __(
-                    "Sem parâmetro para localizar os estagiários do(a) professor(a).",
+                    'Sem parâmetro para localizar os estagiários do(a) professor(a).',
                 ),
             );
-            return $this->redirectBack(["action" => "index"]);
+
+            return $this->redirectBack(['action' => 'index']);
         }
 
         $professor = $this->fetchTable('Professores')
             ->find()
-            ->select(["id", "nome"])
-            ->where(["id" => $professor_id])
+            ->select(['id', 'nome'])
+            ->where(['id' => $professor_id])
             ->first();
 
         if (!$professor) {
-            $this->Flash->error(__("Professor não encontrado."));
-            return $this->redirectBack(["action" => "index"]);
+            $this->Flash->error(__('Professor não encontrado.'));
+
+            return $this->redirectBack(['action' => 'index']);
         }
 
-        $periodos = $this->Estagiarios->find("list", ["keyField" => "periodo", "valueField" => "periodo"])
-            ->where(["Estagiarios.professor_id" => $professor_id])
-            ->order(["Estagiarios.periodo" => "ASC"])
+        $periodos = $this->Estagiarios->find('list', ['keyField' => 'periodo', 'valueField' => 'periodo'])
+            ->where(['Estagiarios.professor_id' => $professor_id])
+            ->order(['Estagiarios.periodo' => 'ASC'])
             ->toArray();
 
-        $periodo = $this->request->getQuery("periodo") ?? $this->request->getData("periodo");
+        $periodo = $this->request->getQuery('periodo') ?? $this->request->getData('periodo');
         if ($periodo === null) {
             $periodo = !empty($periodos) ? end($periodos) : null;
         }
 
         $estagiariosQuery = $this->Estagiarios->find()
             ->contain([
-                    "Alunos" => [
-                        "fields" => ["id", "nome"],
+                    'Alunos' => [
+                        'fields' => ['id', 'nome'],
                     ],
-                    "Professores" => ["fields" => ["id", "nome", "siape"]],
-                    "Supervisores" => ["fields" => ["id", "nome"]],
-                    "Instituicoes" => ["fields" => ["id", "instituicao"]],
-                    "Avaliacoes" => ["fields" => ["id", "estagiario_id"]],
+                    'Professores' => ['fields' => ['id', 'nome', 'siape']],
+                    'Supervisores' => ['fields' => ['id', 'nome']],
+                    'Instituicoes' => ['fields' => ['id', 'instituicao']],
+                    'Avaliacoes' => ['fields' => ['id', 'estagiario_id']],
             ])
-            ->where(["Estagiarios.professor_id" => $professor_id]);
+            ->where(['Estagiarios.professor_id' => $professor_id]);
 
         if ($periodo) {
-            $estagiariosQuery->where(["Estagiarios.periodo" => $periodo]);
+            $estagiariosQuery->where(['Estagiarios.periodo' => $periodo]);
         }
 
         $estagiarios = $this->paginate($estagiariosQuery, [
-            "sortableFields" => [
-                "Estagiarios.id",
-                "Alunos.nome",
-                "Estagiarios.registro",
-                "Instituicoes.instituicao",
-                "Supervisores.nome",
-                "Estagiarios.periodo",
-                "Estagiarios.nivel",
-                "Estagiarios.nota",
-                "Estagiarios.ch",
+            'sortableFields' => [
+                'Estagiarios.id',
+                'Alunos.nome',
+                'Estagiarios.registro',
+                'Instituicoes.instituicao',
+                'Supervisores.nome',
+                'Estagiarios.periodo',
+                'Estagiarios.nivel',
+                'Estagiarios.nota',
+                'Estagiarios.ch',
             ],
-            "order" => ["Alunos.nome" => "ASC"],
+            'order' => ['Alunos.nome' => 'ASC'],
         ]);
 
-        $this->set("periodo", $periodo);
-        $this->set("periodos", $periodos);
-        $this->set("professor", $professor);
-        $this->set("estagiarios", $estagiarios);
+        $this->set('periodo', $periodo);
+        $this->set('periodos', $periodos);
+        $this->set('professor', $professor);
+        $this->set('estagiarios', $estagiarios);
     }
 
     /**
@@ -783,46 +810,48 @@ class EstagiariosController extends AppController
         if ($user_data['professor_id']) {
             $professor_id = $user_data['professor_id'];
         } else {
-            $professor_id = (int)$this->request->getQuery("professor_id");
+            $professor_id = (int)$this->request->getQuery('professor_id');
         }
 
         if (empty($professor_id)) {
             $this->Flash->error(
                 __(
-                    "Sem parâmetro para localizar os estagiários do(a) professor(a).",
+                    'Sem parâmetro para localizar os estagiários do(a) professor(a).',
                 ),
             );
-            return $this->redirectBack(["action" => "index"]);
+
+            return $this->redirectBack(['action' => 'index']);
         }
 
         $professor = $this->fetchTable('Professores')
             ->find()
-            ->select(["id", "nome"])
-            ->where(["id" => $professor_id])
+            ->select(['id', 'nome'])
+            ->where(['id' => $professor_id])
             ->first();
 
         if (!$professor) {
-            $this->Flash->error(__("Professor não encontrado."));
-            return $this->redirectBack(["action" => "index"]);
+            $this->Flash->error(__('Professor não encontrado.'));
+
+            return $this->redirectBack(['action' => 'index']);
         }
 
-        $periodo = $this->request->getQuery("periodo");
+        $periodo = $this->request->getQuery('periodo');
 
         $estagiariosQuery = $this->Estagiarios->find()
             ->contain([
-                "Alunos" => [
-                    "fields" => ["id", "nome"],
+                'Alunos' => [
+                    'fields' => ['id', 'nome'],
                 ],
-                "Professores" => ["fields" => ["id", "nome", "siape"]],
-                "Supervisores" => ["fields" => ["id", "nome"]],
-                "Instituicoes" => ["fields" => ["id", "instituicao"]],
-                "Avaliacoes" => ["fields" => ["id", "estagiario_id"]],
+                'Professores' => ['fields' => ['id', 'nome', 'siape']],
+                'Supervisores' => ['fields' => ['id', 'nome']],
+                'Instituicoes' => ['fields' => ['id', 'instituicao']],
+                'Avaliacoes' => ['fields' => ['id', 'estagiario_id']],
             ])
-            ->where(["Estagiarios.professor_id" => $professor_id])
-            ->order(["Alunos.nome" => "ASC"]);
+            ->where(['Estagiarios.professor_id' => $professor_id])
+            ->order(['Alunos.nome' => 'ASC']);
 
         if ($periodo) {
-            $estagiariosQuery->where(["Estagiarios.periodo" => $periodo]);
+            $estagiariosQuery->where(['Estagiarios.periodo' => $periodo]);
         }
 
         $estagiarios = $estagiariosQuery->all();
@@ -833,9 +862,8 @@ class EstagiariosController extends AppController
             'orientation' => 'portrait',
         ]);
 
-        $this->set("periodo", $periodo);
-        $this->set("professor", $professor);
-        $this->set("estagiarios", $estagiarios);
+        $this->set('periodo', $periodo);
+        $this->set('professor', $professor);
+        $this->set('estagiarios', $estagiarios);
     }
-
 }

@@ -57,7 +57,7 @@ final class AlunoPolicy implements BeforePolicyInterface
                 return new Result(true);
             }
         }
-        
+
         return $this->sameUser($userSession, $alunoData)
             ? new Result(true)
             : new Result(false, 'Erro: aluno view policy not authorized');

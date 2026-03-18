@@ -8,9 +8,11 @@ declare(strict_types=1);
 
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $user_session->getOriginalData(); }
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
+}
 ?>
-<?= $this->Html->script("jquery.mask.min"); ?>
+<?= $this->Html->script('jquery.mask.min'); ?>
 
 <script>
     $(document).ready(function () {
@@ -36,12 +38,12 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <aside>
                 <div class="nav">
                     <?= $this->Html->link(__('Listar Alunos'), ['action' => 'index'], ['class' => 'button']) ?>
-                    <?php if ($user_data['administrador_id']): ?>
-                    <?= $this->Form->postLink(
-                        __('Excluir Aluno(a)'),
-                        ['action' => 'delete', $aluno->id],
-                        ['confirm' => __('Are you sure you want to delete {0}?', $aluno->nome), 'class' => 'button']
-                    ) ?>
+                    <?php if ($user_data['administrador_id']) : ?>
+                        <?= $this->Form->postLink(
+                            __('Excluir Aluno(a)'),
+                            ['action' => 'delete', $aluno->id],
+                            ['confirm' => __('Are you sure you want to delete {0}?', $aluno->nome), 'class' => 'button'],
+                        ) ?>
                     <?php endif; ?>
                 </div>
             </aside>
@@ -49,9 +51,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <fieldset>
                 <h3><?= __('Editando aluno(a) ' . $aluno->id) ?></h3>
                 <?php
-                    if ($user_data['administrador_id']):
-                       echo $this->Form->control('user_id', ['type' => 'number', 'hidden' => true, 'label' => false]); 
-                    endif;
+                if ($user_data['administrador_id']) :
+                    echo $this->Form->control('user_id', ['type' => 'number', 'hidden' => true, 'label' => false]);
+                endif;
                     echo $this->Form->control('nome', ['label' => 'Nome Completo', 'required' => true]);
                     echo $this->Form->control('nomesocial', ['label' => 'Nome Social', 'required' => false]);
                     echo $this->Form->control('registro', ['label' => 'Registro', 'required' => true]);

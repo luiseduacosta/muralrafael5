@@ -51,6 +51,7 @@ final class EstagiariosTablePolicy implements BeforePolicyInterface
         if ($user_data['administrador_id'] || $user_data['professor_id']) {
             return new Result(true);
         }
+
         return new Result(false, 'Erro: lancanota policy not authorized');
     }
 
@@ -64,6 +65,7 @@ final class EstagiariosTablePolicy implements BeforePolicyInterface
         if ($user_data['professor_id']) {
             return new Result(true);
         }
+
         return new Result(false, 'Erro: lancanota policy not authorized');
     }
 

@@ -31,14 +31,14 @@
                 </tr>
             </thead>
 
-            <?php foreach ($alunos as $aluno): ?>
-            <?php $carga_estagio = 0; ?>
+            <?php foreach ($alunos as $aluno) : ?>
+                <?php $carga_estagio = 0; ?>
                 <tr>
                     <td><?php echo $this->Html->link($aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $aluno->id ]); ?></td>
                     <td><?php echo h($aluno['registro']); ?></td>
                     <td><?php echo sizeof($aluno['estagiarios']); ?></td>
                     
-                    <?php for ($i = 0; $i <= 3; $i++): ?>
+                    <?php for ($i = 0; $i <= 3; $i++) : ?>
                             <?php $estagiario = $aluno['estagiarios'][$i] ?? null; ?>
                             <td><?php echo $estagiario ? $estagiario['nivel'] : ''; ?></td>
                             <td><?php echo $estagiario ? $estagiario['periodo'] : '-'; ?></td>

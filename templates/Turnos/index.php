@@ -5,11 +5,11 @@
  */
 ?>
 <div class="turnos index content">
-	<aside>
-		<div class="nav">
+    <aside>
+        <div class="nav">
             <?= $this->Html->link(__('Novo Turno'), ['action' => 'add'], ['class' => 'button']) ?>
-		</div>
-	</aside>
+        </div>
+    </aside>
     
     <h3><?= __('Turnos') ?></h3>
     
@@ -26,7 +26,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($turnos as $turno): ?>
+                <?php foreach ($turnos as $turno) : ?>
                 <tr>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $turno->id]) ?>

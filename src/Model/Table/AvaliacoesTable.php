@@ -199,7 +199,6 @@ class AvaliacoesTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-
         $rules->add($rules->existsIn(['estagiario_id'], 'Estagiarios'), ['errorField' => 'estagiario_id']);
 
         return $rules;

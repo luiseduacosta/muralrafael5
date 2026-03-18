@@ -84,7 +84,11 @@ class UsersController extends AppController
             $user_session = $this->request->getAttribute('identity');
             $this->Flash->error('Authorization error: ' . $error->getMessage());
 
-            return $this->redirect(['action' => 'view', $user_session->id]);
+            if ($user_session) {
+                return $this->redirect(['action' => 'view', $user_session->id]);
+            }
+
+            return $this->redirect('/');
         }
 
         $this->set(compact('user'));
@@ -100,11 +104,7 @@ class UsersController extends AppController
         // authorize all users to add
         $this->Authorization->skipAuthorization();
 
-        $user_data = ['administrador_id' => 0,'aluno_id' => 0,'professor_id' => 0,'supervisor_id' => 0];
         $user_session = $this->request->getAttribute('identity');
-        if ($user_session) {
-            $user_data = $user_session->getOriginalData();
-        }
 
         if ($user_session) {
             $this->Flash->warning(__('Usuario ja esta logado.'));
@@ -119,7 +119,7 @@ class UsersController extends AppController
             ]);
 
             // Verify is registro has a valid value set. It is mandatory for all of the new users except admin
-            if ($this->request->getData('categoria') != '1') {
+            if ($this->request->getData('categoria') !== '1') {
                 $registro = $this->request->getData('registro');
                 if (empty($registro)) {
                     $this->Flash->error(__('O registro é obrigatório para o tipo de usuário selecionado.'));
@@ -190,7 +190,7 @@ class UsersController extends AppController
      */
     public function editpassword(?string $id = null)
     {
-        $this->edit($id);
+        return $this->edit($id);
     }
 
     public function edit($id = null)
@@ -209,7 +209,11 @@ class UsersController extends AppController
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
 
-            return $this->redirect(['action' => 'edit', $user_session->id]);
+            if ($user_session) {
+                return $this->redirect(['action' => 'edit', $user_session->id]);
+            }
+
+            return $this->redirect('/');
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -282,11 +286,9 @@ class UsersController extends AppController
             $user = $result->getData();
             $this->Flash->success(__('Usuário logado.'));
             // Redirect based on category
-            pr($user);
             switch ($user['categoria']) {
                 case 1: // Admin
                     $administrador = $this->fetchTable('Administradores')->findByUserId($user['id'])->first();
-                    pr($administrador);
                     if ($administrador) {
                         if ($administrador->user_id == $user['id']) {
                             return $this->redirect(['controller' => 'Administradores', 'action' => 'view', $administrador->id]);
@@ -314,7 +316,7 @@ class UsersController extends AppController
                             return $this->redirect([ 'controller' => 'Alunos', 'action' => 'add']);
                         }
                         if ($aluno) {
-                            if ($aluno->user_id != $user['id'] || $user['aluno_id'] != $aluno->id || $user['registro'] != $aluno->registro) {
+                            if ($aluno->user_id !== $user['id'] || $user['aluno_id'] !== $aluno->id || $user['registro'] !== $aluno->registro) {
                                 // Update user->aluno_id with the aluno->id
                                 $user->aluno_id = $aluno->id;
                                 $user->registro = $aluno->registro;
@@ -337,7 +339,7 @@ class UsersController extends AppController
                             return $this->redirect([ 'controller' => 'Alunos', 'action' => 'add']);
                         }
                         if ($aluno) {
-                            if ($aluno->user_id != $user['id']) {
+                            if ($aluno->user_id !== $user['id']) {
                                 // Update user->aluno_id with the aluno->id
                                 $user->aluno_id = $aluno->id;
                                 $user->registro = $aluno->registro;
@@ -364,7 +366,7 @@ class UsersController extends AppController
                             return $this->redirect([ 'controller' => 'Professores', 'action' => 'add']);
                         }
                         if ($professor) {
-                            if ($professor->user_id != $user['id'] || $user['professor_id'] != $professor->id || $user['registro'] != $professor->siape) {
+                            if ($professor->user_id !== $user['id'] || $user['professor_id'] !== $professor->id || $user['registro'] !== $professor->siape) {
                                 // Update user->professor_id with the professor->id
                                 $user->professor_id = $professor->id;
                                 $user->registro = $professor->siape;
@@ -411,7 +413,7 @@ class UsersController extends AppController
                             return $this->redirect([ 'controller' => 'Supervisores', 'action' => 'add']);
                         }
                         if ($supervisor) {
-                            if ($supervisor->user_id != $user['id'] || $user['supervisor_id'] != $supervisor->id || $user['registro'] != $supervisor->cress) {
+                            if ($supervisor->user_id !== $user['id'] || $user['supervisor_id'] !== $supervisor->id || $user['registro'] !== $supervisor->cress) {
                                 // Update user->supervisor_id with the supervisor->id
                                 $user->supervisor_id = $supervisor->id;
                                 $user->registro = $supervisor->cress;
@@ -434,7 +436,7 @@ class UsersController extends AppController
                             return $this->redirect([ 'controller' => 'Supervisores', 'action' => 'add']);
                         }
                         if ($supervisor) {
-                            if ($supervisor->user_id != $user['id']) {
+                            if ($supervisor->user_id !== $user['id']) {
                                 // Update user->supervisor_id with the supervisor->id
                                 $user->supervisor_id = $supervisor->id;
                                 $user->registro = $supervisor->cress;
@@ -490,7 +492,7 @@ class UsersController extends AppController
         $user_data = $identity->getOriginalData();
 
         // Only administrators can impersonate
-        if ($user_data['categoria'] != '1' && !$this->request->getSession()->check('Auth.impersonating')) {
+        if ($user_data['categoria'] !== '1' && !$this->request->getSession()->check('Auth.impersonating')) {
             $this->Flash->error(__('Acesso negado. Apenas administradores podem alternar usuários.'));
 
             return $this->redirect(['action' => 'index']);

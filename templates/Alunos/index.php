@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Aluno[]|\Cake\Collection\CollectionInterface $alunos
+ * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Aluno> $alunos
  */
 declare(strict_types=1);
 
@@ -12,15 +12,15 @@ if ($user_session) {
 }
 ?>
 <div class="alunos index content">
-	<?php if ($user_data['administrador_id'] OR $user_data['aluno_id']): ?>
-	<aside>
-		<div class="nav">
-            <?php if ($user_data['administrador_id']): ?>
-				<?= $this->Html->link(__('Novo Aluno'), ['action' => 'add'], ['class' => 'button']) ?>
-				<?= $this->Html->link(__('Buscar Aluno'), ['action' => 'busca'], ['class' => 'button']) ?>
+    <?php if ($user_data['administrador_id'] or $user_data['aluno_id']) : ?>
+    <aside>
+        <div class="nav">
+            <?php if ($user_data['administrador_id']) : ?>
+                <?= $this->Html->link(__('Novo Aluno'), ['action' => 'add'], ['class' => 'button']) ?>
+                <?= $this->Html->link(__('Buscar Aluno'), ['action' => 'busca'], ['class' => 'button']) ?>
             <?php endif; ?>
-		</div>
-	</aside>
+        </div>
+    </aside>
     <?php endif; ?>
     <h3><?= __('Lista de Alunos(as)') ?></h3>
     <div class="paginator">
@@ -30,7 +30,7 @@ if ($user_session) {
         <table>
             <thead>
                 <tr>
-				    <?php if ($user_data['administrador_id']): ?>
+                    <?php if ($user_data['administrador_id']) : ?>
                         <th class="actions"><?= __('Actions') ?></th>
                         <th><?= $this->Paginator->sort('id') ?></th>
                     <?php endif; ?>
@@ -46,9 +46,9 @@ if ($user_session) {
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($alunos as $aluno): ?>
+                <?php foreach ($alunos as $aluno) : ?>
                 <tr>
-				    <?php if ($user_data['administrador_id']): ?>
+                    <?php if ($user_data['administrador_id']) : ?>
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $aluno->id]) ?>
                         <?= $this->Html->link(__('Editar'), ['action' => 'edit', $aluno->id]) ?>
@@ -58,15 +58,15 @@ if ($user_session) {
                     <?php endif; ?>
                     <td><?= $aluno->nome ? $this->Html->link(h($aluno->nome), ['action' => 'view', $aluno->id]) : '' ?></td>
                     <td><?= h($aluno->registro) ?></td>
-                    <td><?= ($aluno->user || $aluno->email) ? $this->Text->autoLinkEmails($aluno->email) : '' ?></td>
-                    <?php if (!empty($aluno->telefone) && strlen($aluno->telefone) < 10): ?>
+                    <td><?= $aluno->user || $aluno->email ? $this->Text->autoLinkEmails($aluno->email) : '' ?></td>
+                    <?php if (!empty($aluno->telefone) && strlen($aluno->telefone) < 10) : ?>
                         <td><?= $aluno->telefone ? '(' . $aluno->codigo_telefone . ') ' . h($aluno->telefone) : '' ?></td>
-                    <?php else: ?>
+                    <?php else : ?>
                         <td><?= h($aluno->telefone) ?></td>
                     <?php endif; ?>
-                    <?php if (!empty($aluno->celular) && strlen($aluno->celular) < 10): ?>
+                    <?php if (!empty($aluno->celular) && strlen($aluno->celular) < 10) : ?>
                         <td><?= $aluno->celular ? '(' . $aluno->codigo_celular . ') ' . h($aluno->celular) : '' ?></td>
-                    <?php else: ?>
+                    <?php else : ?>
                         <td><?= h($aluno->celular) ?></td>
                     <?php endif; ?>
                     <td><?= h($aluno->cpf) ?></td>

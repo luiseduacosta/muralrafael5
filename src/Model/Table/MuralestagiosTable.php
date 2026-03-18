@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventInterface;
+use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -57,9 +57,17 @@ class MuralestagiosTable extends Table
         ]);
     }
 
-    public function beforeFind($event, $query, $options, $primary)
+    /**
+     * Before find callback to apply default ordering.
+     *
+     * @param \Cake\Event\EventInterface $event The beforeFind event.
+     * @param \Cake\ORM\Query $query The query object.
+     * @param \ArrayObject $options The options array.
+     * @param bool $primary Whether this is a primary query or not.
+     * @return \Cake\ORM\Query
+     */
+    public function beforeFind(EventInterface $event, Query $query, \ArrayObject $options, bool $primary): Query
     {
-
         $query->order(['Muralestagios.id' => 'ASC']);
 
         return $query;

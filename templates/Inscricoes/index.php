@@ -1,41 +1,43 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Inscricao[]|\Cake\Collection\CollectionInterface $inscricoes
+ * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Inscricao> $inscricoes
  */
 
-$user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+$user_data = ['administrador_id' => 0,'aluno_id' => 0,'professor_id' => 0,'supervisor_id' => 0];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $user_session->getOriginalData(); }
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
+}
 ?>
 
 <div class="inscricoes index content">
-	<aside>
-        <?php if ($user_data['administrador_id']): ?>
+    <aside>
+        <?php if ($user_data['administrador_id']) : ?>
             <div class="nav">
                 <?= $this->Html->link(__('Nova Inscricao'), ['action' => 'add'], ['class' => 'button']) ?>
             </div>
         <?php endif; ?>
-	</aside>
+    </aside>
     
     <div class="row justify-content-center">
-	    <div class="col-auto">
-	        <?php echo $this->Form->create($inscricoes, ['type' => 'get', 'url' => ['controller' => 'Inscricoes', 'action' => 'index'], 'class' => 'form-inline']); ?>
-				<?= $this->Form->label('periodo', 'Período'); ?>
-				<?= $this->Form->input('periodo', [
-					'label' => false,
+        <div class="col-auto">
+            <?php echo $this->Form->create($inscricoes, ['type' => 'get', 'url' => ['controller' => 'Inscricoes', 'action' => 'index'], 'class' => 'form-inline']); ?>
+                <?= $this->Form->label('periodo', 'Período'); ?>
+                <?= $this->Form->input('periodo', [
+                    'label' => false,
                     'type' => 'select',
-					'options' => $periodos,
-					'value' => $periodo,
-					'class' => 'form-control',
-					'onchange' => 'this.form.submit()'
-				]); ?>
-			<?php echo $this->Form->end(); ?>
-	    </div>
+                    'options' => $periodos,
+                    'value' => $periodo,
+                    'class' => 'form-control',
+                    'onchange' => 'this.form.submit()',
+                ]); ?>
+            <?php echo $this->Form->end(); ?>
+        </div>
     </div>
 
     <h3><?= __('Lista de inscrições') ?></h3>
-	
+    
     <div class="paginator">
         <?= $this->element('paginator'); ?>
     </div>
@@ -54,11 +56,11 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($inscricoes as $inscricao): ?>    
+                <?php foreach ($inscricoes as $inscricao) : ?>    
                 <tr>
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $inscricao->id]) ?>
-                        <?php if ($user_data['administrador_id']): ?>
+                        <?php if ($user_data['administrador_id']) : ?>
                             <?= $this->Html->link(__('Editar'), ['action' => 'edit', $inscricao->id]) ?>
                             <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $inscricao->id], ['confirm' => __('Are you sure you want to delete # {0}?', $inscricao->id)]) ?>
                         <?php endif; ?>

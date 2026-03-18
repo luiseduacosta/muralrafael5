@@ -1,10 +1,10 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
+use Cake\Event\EventInterface;
 
 /**
  * Muralestagios Controller
@@ -17,7 +17,7 @@ class MuralestagiosController extends AppController
     /**
      * beforeFilter method
      */
-    public function beforeFilter(\Cake\Event\EventInterface $event): void
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
@@ -32,7 +32,8 @@ class MuralestagiosController extends AppController
     public function index()
     {
         $this->Authorization->authorize($this->Muralestagios);
-        $periodo = $this->getRequest()->getParam('pass') ? $this->request->getParam('pass')[0] : $this->configuracao->mural_periodo_atual;
+        $pass = $this->getRequest()->getParam('pass');
+        $periodo = $pass ? $pass[0] : $this->configuracao->mural_periodo_atual;
         $this->set('periodo', $periodo);
 
         $contained = ['Instituicoes'];
@@ -47,20 +48,20 @@ class MuralestagiosController extends AppController
 
         $this->set('muralestagios', $this->paginate($muralestagios, [
             'sortableFields' => [
-                'instituicao', 
-                'vagas', 
-                'beneficios', 
-                'final_de_semana', 
-                'cargaHoraria', 
-                'dataInscricao', 
-                'dataSelecao'
+                'instituicao',
+                'vagas',
+                'beneficios',
+                'final_de_semana',
+                'cargaHoraria',
+                'dataInscricao',
+                'dataSelecao',
             ],
             'order' => ['dataInscricao' => 'desc'],
         ]));
 
         $periodototal = $this->Muralestagios->find('list', [
             'keyField' => 'periodo',
-            'valueField' => 'periodo'
+            'valueField' => 'periodo',
         ]);
         $periodos = $periodototal->toArray();
         $periodos = array_merge($periodos, ['all' => 'Todos']);
@@ -76,13 +77,9 @@ class MuralestagiosController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
-        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
         $user_session = $this->request->getAttribute('identity');
-        if ($user_session) {
-            $user_data = $user_session->getOriginalData();
-        }
 
         $muralestagio = $this->Muralestagios->get($id, [
             'contain' => ['Instituicoes', 'Inscricoes' => ['Alunos']],
@@ -90,6 +87,7 @@ class MuralestagiosController extends AppController
 
         if (empty($user_session)) {
             $this->Flash->error('Authorization error: User not authenticated.');
+
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
         $this->set(compact('muralestagio'));
@@ -106,23 +104,24 @@ class MuralestagiosController extends AppController
             $this->Authorization->authorize($this->Muralestagios);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
+
             return $this->redirect('/');
         }
 
         $periodo = $this->configuracao->mural_periodo_atual;
-        
+
         $muralestagio = $this->Muralestagios->newEmptyEntity();
         if ($this->request->is('post')) {
-
             if ($this->request->getData('convenio') == '0') {
                 $this->Flash->error(__('Instituição não conveniada.'));
+
                 return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
             }
 
             // Get Instituicao name
-            $instituicao = $this->fetchTable("Instituicoes")
+            $instituicao = $this->fetchTable('Instituicoes')
             ->find()
-            ->select(['id', 'instituicao']) 
+            ->select(['id', 'instituicao'])
             ->where(['Instituicoes.id' => $this->request->getData('instituicao_id')])
             ->first();
 
@@ -142,7 +141,7 @@ class MuralestagiosController extends AppController
             }
             $this->Flash->error(__('Registro de mural de estágio não foi feito. Tente novamente.'));
         }
-        $instituicoes = $this->fetchTable("Instituicoes")->find('list');
+        $instituicoes = $this->fetchTable('Instituicoes')->find('list');
         $this->set(compact('muralestagio', 'instituicoes', 'periodo'));
     }
 
@@ -153,7 +152,7 @@ class MuralestagiosController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
         $muralestagio = $this->Muralestagios->get($id);
 
@@ -166,11 +165,10 @@ class MuralestagiosController extends AppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-
             // Get Instituicao name
-            $instituicao = $this->fetchTable("Instituicoes")
+            $instituicao = $this->fetchTable('Instituicoes')
             ->find()
-            ->select(['id', 'instituicao']) 
+            ->select(['id', 'instituicao'])
             ->where(['Instituicoes.id' => $this->request->getData('instituicao_id')])
             ->first();
 
@@ -185,6 +183,7 @@ class MuralestagiosController extends AppController
 
             if ($this->Muralestagios->save($muralestagio)) {
                 $this->Flash->success(__('The muralestagio has been saved.'));
+
                 return $this->redirect(['action' => 'view', $id]);
             }
             $this->Flash->error(__('The muralestagio could not be saved. Please, try again.'));
@@ -200,7 +199,7 @@ class MuralestagiosController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $muralestagio = $this->Muralestagios->get($id, ['contain' => 'Inscricoes']);
@@ -209,8 +208,9 @@ class MuralestagiosController extends AppController
             $this->Authorization->authorize($muralestagio);
 
             // If have inscricoes not delete
-            if (sizeof($muralestagio->inscricoes) > 0) {
+            if (count($muralestagio->inscricoes) > 0) {
                 $this->Flash->warning(__('Inscrições associadas a este Mural de estágios'));
+
                 return $this->redirect(['controller' => 'Muralestagios', 'action' => 'view', $id]);
             }
 
@@ -233,7 +233,7 @@ class MuralestagiosController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function imprimepdf($id = null)
+    public function imprimepdf(?string $id = null)
     {
         $muralestagio = $this->Muralestagios->find()
             ->contain(['Inscricoes' => [
@@ -252,12 +252,11 @@ class MuralestagiosController extends AppController
         }
 
         $this->viewBuilder()->setLayout('pdf/default');
-        $this->viewBuilder()->setClassName("CakePdf.Pdf");
-        $this->viewBuilder()->setOption("pdfConfig", [
-            "orientation" => "portrait",
+        $this->viewBuilder()->setClassName('CakePdf.Pdf');
+        $this->viewBuilder()->setOption('pdfConfig', [
+            'orientation' => 'portrait',
         ]);
 
         $this->set(compact('muralestagio'));
     }
-
 }

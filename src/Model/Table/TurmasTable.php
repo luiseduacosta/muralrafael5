@@ -39,7 +39,6 @@ class TurmasTable extends Table
         $this->setAlias('Turmas');
         $this->setDisplayField('turma');
         $this->setPrimaryKey('id');
-
     }
 
     /**

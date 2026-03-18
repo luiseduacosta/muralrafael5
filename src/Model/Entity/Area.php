@@ -10,7 +10,7 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $area
- * 
+ *
  * @property \App\Model\Entity\Instituicao[] $instituicoes
  */
 class Area extends Entity

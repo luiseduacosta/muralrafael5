@@ -8,10 +8,12 @@ declare(strict_types=1);
 
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $user_session->getOriginalData(); }
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
+}
 ?>
 
-<?= $this->Html->script("jquery.mask.min"); ?>
+<?= $this->Html->script('jquery.mask.min'); ?>
 <script>
     $(document).ready(function () {
         $('#cpf').mask('000.000.000-00');
@@ -35,11 +37,11 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <aside>
                 <div class="nav">   
                     <?= $this->Html->link(__('Listar Supervisores'), ['action' => 'index'], ['class' => 'button']) ?>
-                    <?php if ($user_data['administrador_id']): ?>
+                    <?php if ($user_data['administrador_id']) : ?>
                         <?= $this->Form->postLink(
                             __('Excluir'),
                             ['action' => 'delete', $supervisor->id],
-                            ['confirm' => __('Are you sure you want to delete {0}?', $supervisor->nome), 'class' => 'button']
+                            ['confirm' => __('Are you sure you want to delete {0}?', $supervisor->nome), 'class' => 'button'],
                         ) ?>
                     <?php endif; ?>
                 </div>
@@ -48,9 +50,9 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <fieldset>
                 <h3><?= __('Editando supervisor_') . $supervisor->id ?></h3>
                 <?php
-                    if ($user_data['administrador_id']):
-                       echo $this->Form->control('user_id', ['type' => 'number', 'hidden' => true]); 
-                    endif;
+                if ($user_data['administrador_id']) :
+                    echo $this->Form->control('user_id', ['type' => 'number', 'hidden' => true]);
+                endif;
                     echo $this->Form->control('nome', ['required' => true]);
                     echo $this->Form->control('cpf', ['label' => 'CPF', 'pattern' => '[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}', 'placeholder' => '000.000.000-00', 'required' => false]);
                     echo $this->Form->control('cress', ['label' => 'CRESS', 'required' => true]);

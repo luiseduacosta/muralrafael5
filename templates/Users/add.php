@@ -6,16 +6,18 @@
 
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $user_session->getOriginalData(); }
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
+}
 ?>
 
 <div class="users form content">
     <aside>
         <div class="nav">
-            <?php if ($user_data['administrador_id']): ?>
+            <?php if ($user_data['administrador_id']) : ?>
                 <?= $this->Html->link(__('Listar Usuários'), ['action' => 'index'], ['class' => 'button']) ?>
             <?php endif; ?>
-            <?php if (!$user_session):  ?>
+            <?php if (!$user_session) :  ?>
                 <?= $this->Html->link(__('Fazer Login'), ['action' => 'login'], ['class' => 'button']) ?>
             <?php endif; ?>
         </div>

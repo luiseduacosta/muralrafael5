@@ -5,7 +5,7 @@
  */
 ?>
 
-<?= $this->Html->script("jquery.mask.min"); ?>
+<?= $this->Html->script('jquery.mask.min'); ?>
 <script>
     $(document).ready(function () {
         $('#cnpj').mask('00.000.000/0000-00', {placeholder: '00.000.000/0000-00'});
@@ -22,7 +22,7 @@
                     <?= $this->Form->postLink(
                         __('Excluir'),
                         ['action' => 'delete', $instituicao->id],
-                        ['confirm' => __('Are you sure you want to delete {0}?', $instituicao->instituicao), 'class' => 'button']
+                        ['confirm' => __('Are you sure you want to delete {0}?', $instituicao->instituicao), 'class' => 'button'],
                     ) ?>
                 </div>
             </aside>

@@ -8,7 +8,9 @@ declare(strict_types=1);
 
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $user_session->getOriginalData(); }
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
+}
 
 ?>
 <div>
@@ -16,14 +18,14 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <div class="avaliacoes view content">
             <aside>
                 <div class="nav">
-                    <?php if ($user_data['administrador_id'] || $user_data['supervisor_id']): ?>
+                    <?php if ($user_data['administrador_id'] || $user_data['supervisor_id']) : ?>
                         <?= $this->Html->link(__('Editar avaliação'), ['action' => 'edit', $avaliacao->id], ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Excluir avaliação'), ['action' => 'delete', $avaliacao->id], ['confirm' => __('Tem certeza que quer excluir o registro # {0}?', $avaliacao->id), 'class' => 'button']) ?>
                         <?= $this->Html->link(__('Listar avaliações'), ['action' => 'index'], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Nova avaliação'), ['action' => 'add'], ['class' => 'button']) ?>
                     <?php endif; ?>
                     <?= $this->Html->link(__('Imprimir folha de avaliação'), ['action' => 'avaliacaomanualpdf', '?' => ['estagiario_id' => $avaliacao->estagiario_id]], ['class' => 'button']) ?>
-                    <?php if ($user_data['administrador_id'] || $user_data['aluno_id'] || $user_data['supervisor_id']): ?>
+                    <?php if ($user_data['administrador_id'] || $user_data['aluno_id'] || $user_data['supervisor_id']) : ?>
                         <?= $this->Html->link(__('Imprimir avaliação'), ['action' => 'imprimeavaliacaopdf', $avaliacao->id], ['class' => 'button']) ?>
                     <?php endif; ?>    
                 </div>
@@ -43,21 +45,21 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <th><?= __('1) ASSIDUIDADE: Desenvolveu as atividades propostas com frequência, ausentando-se apenas com conhecimento e acordado com o(a) supervisor(a) de campo e ou acadêmico(a), seja por motivo de saúde, seja por situações estabelecidas na Lei 11788/2008, entre outras:') ?>
                         </th>
                         <td><?php
-                        switch ($avaliacao->avaliacao1):
+                        switch ($avaliacao->avaliacao1) :
                             case 0:
-                                echo "Ruim";
+                                echo 'Ruim';
                                 break;
                             case 1:
-                                echo "Regular";
+                                echo 'Regular';
                                 break;
                             case 2:
-                                echo "Bom";
+                                echo 'Bom';
                                 break;
                             case 3:
-                                echo "Excelente";
+                                echo 'Excelente';
                                 break;
                             default:
-                                echo "Sem avaliação";
+                                echo 'Sem avaliação';
                                 break;
                         endswitch;
                         ?>
@@ -66,21 +68,21 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <tr>
                         <th><?= __('2) PONTUALIDADE: cumpre horário estabelecido no Plano de Estágio:') ?></th>
                         <td><?php
-                        switch ($avaliacao->avaliacao2):
+                        switch ($avaliacao->avaliacao2) :
                             case 0:
-                                echo "Ruim";
+                                echo 'Ruim';
                                 break;
                             case 1:
-                                echo "Regular";
+                                echo 'Regular';
                                 break;
                             case 2:
-                                echo "Bom";
+                                echo 'Bom';
                                 break;
                             case 3:
-                                echo "Excelente";
+                                echo 'Excelente';
                                 break;
                             default:
-                                echo "Sem avaliação";
+                                echo 'Sem avaliação';
                                 break;
                         endswitch;
                         ?></td>
@@ -88,21 +90,21 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <tr>
                         <th><?= __('3) COMPROMISSO: com as ações e estratégias previstas no Plano de Estágio:') ?></th>
                         <td><?php
-                        switch ($avaliacao->avaliacao3):
+                        switch ($avaliacao->avaliacao3) :
                             case 0:
-                                echo "Ruim";
+                                echo 'Ruim';
                                 break;
                             case 1:
-                                echo "Regular";
+                                echo 'Regular';
                                 break;
                             case 2:
-                                echo "Bom";
+                                echo 'Bom';
                                 break;
                             case 3:
-                                echo "Excelente";
+                                echo 'Excelente';
                                 break;
                             default:
-                                echo "Sem avaliação";
+                                echo 'Sem avaliação';
                                 break;
                         endswitch;
                         ?></td>
@@ -111,21 +113,21 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <th><?= __('4) Na relação com o(a) usuário(a): compromisso ético-político no atendimento ao usuário(a):') ?>
                         </th>
                         <td><?php
-                        switch ($avaliacao->avaliacao4):
+                        switch ($avaliacao->avaliacao4) :
                             case 0:
-                                echo "Ruim";
+                                echo 'Ruim';
                                 break;
                             case 1:
-                                echo "Regular";
+                                echo 'Regular';
                                 break;
                             case 2:
-                                echo "Bom";
+                                echo 'Bom';
                                 break;
                             case 3:
-                                echo "Excelente";
+                                echo 'Excelente';
                                 break;
                             default:
-                                echo "Sem avaliação";
+                                echo 'Sem avaliação';
                                 break;
                         endswitch;
                         ?></td>
@@ -134,21 +136,21 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <th><?= __('5) Na relação com outro(a)s profissionais: Integração e articulação à equipe da área de estágio, cooperação e habilidade de trabalhar em equipe multiprofissional:') ?>
                         </th>
                         <td><?php
-                        switch ($avaliacao->avaliacao5):
+                        switch ($avaliacao->avaliacao5) :
                             case 0:
-                                echo "Ruim";
+                                echo 'Ruim';
                                 break;
                             case 1:
-                                echo "Regular";
+                                echo 'Regular';
                                 break;
                             case 2:
-                                echo "Bom";
+                                echo 'Bom';
                                 break;
                             case 3:
-                                echo "Excelente";
+                                echo 'Excelente';
                                 break;
                             default:
-                                echo "Sem avaliação";
+                                echo 'Sem avaliação';
                                 break;
                         endswitch;
                         ?></td>
@@ -157,21 +159,21 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <th><?= __('6) CRITICIDADE E INICATIVA: Capacidade crítica, interventiva, propositiva e investigativa no enfrentamento das diversas questões existentes no campo de estágio:') ?>
                         </th>
                         <td><?php
-                        switch ($avaliacao->avaliacao6):
+                        switch ($avaliacao->avaliacao6) :
                             case 0:
-                                echo "Ruim";
+                                echo 'Ruim';
                                 break;
                             case 1:
-                                echo "Regular";
+                                echo 'Regular';
                                 break;
                             case 2:
-                                echo "Bom";
+                                echo 'Bom';
                                 break;
                             case 3:
-                                echo "Excelente";
+                                echo 'Excelente';
                                 break;
                             default:
-                                echo "Sem avaliação";
+                                echo 'Sem avaliação';
                                 break;
                         endswitch;
                         ?></td>
@@ -180,21 +182,21 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <th><?= __('7) Apreensão do referencial teórico-metodológico, ético-político e investigativo e aplicação nas atividades inerentes ao campo e previstas no Plano de Estágio:') ?>
                         </th>
                         <td><?php
-                        switch ($avaliacao->avaliacao7):
+                        switch ($avaliacao->avaliacao7) :
                             case 0:
-                                echo "Ruim";
+                                echo 'Ruim';
                                 break;
                             case 1:
-                                echo "Regular";
+                                echo 'Regular';
                                 break;
                             case 2:
-                                echo "Bom";
+                                echo 'Bom';
                                 break;
                             case 3:
-                                echo "Excelente";
+                                echo 'Excelente';
                                 break;
                             default:
-                                echo "Sem avaliação";
+                                echo 'Sem avaliação';
                                 break;
                         endswitch;
                         ?></td>
@@ -203,21 +205,21 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <th><?= __('8) Avaliação do desempenho do(a) estagiário(a) na elaboração de relatórios, pesquisas, projetos de pesquisa e intervenção, etc:') ?>
                         </th>
                         <td><?php
-                        switch ($avaliacao->avaliacao8):
+                        switch ($avaliacao->avaliacao8) :
                             case 0:
-                                echo "Ruim";
+                                echo 'Ruim';
                                 break;
                             case 1:
-                                echo "Regular";
+                                echo 'Regular';
                                 break;
                             case 2:
-                                echo "Bom";
+                                echo 'Bom';
                                 break;
                             case 3:
-                                echo "Excelente";
+                                echo 'Excelente';
                                 break;
                             default:
-                                echo "Sem avaliação";
+                                echo 'Sem avaliação';
                                 break;
                         endswitch;
                         ?></td>
@@ -226,15 +228,15 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <th><?= __('9) As atividades previstas no Plano de Estágio em articulação com o nível de formação acadêmica foram efetuadas plenamente?') ?>
                         </th>
                         <td><?php
-                        switch ($avaliacao->avaliacao9):
+                        switch ($avaliacao->avaliacao9) :
                             case 0:
-                                echo "Sim";
+                                echo 'Sim';
                                 break;
                             case 1:
-                                echo "Não";
+                                echo 'Não';
                                 break;
                             default:
-                                echo "Sem avaliação";
+                                echo 'Sem avaliação';
                                 break;
                         endswitch;
                         ?></td>
@@ -247,15 +249,15 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <th><?= __('10) O desempenho das atividades desenvolvidas pelo(a) estagiário(a) e o processo de supervisão foram afetados pelas condições de trabalho no campo de estágio e, em particular, pelas condições estabelecidas pelo estágio remoto?') ?>
                         </th>
                         <td><?php
-                        switch ($avaliacao->avaliacao10):
+                        switch ($avaliacao->avaliacao10) :
                             case 0:
-                                echo "Sim";
+                                echo 'Sim';
                                 break;
                             case 1:
-                                echo "Não";
+                                echo 'Não';
                                 break;
                             default:
-                                echo "Sem avaliação";
+                                echo 'Sem avaliação';
                                 break;
                         endswitch;
                         ?></td>
@@ -268,15 +270,15 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <th><?= __('11) Quanto à integração Disciplina de OTP/Coordenação de Estágio da ESS/Campo de Estágio: houve algum tipo de interlocução entre os 3 segmentos: aluno(a),  professor(a) e supervisor(a)?') ?>
                         </th>
                         <td><?php
-                        switch ($avaliacao->avaliacao11):
+                        switch ($avaliacao->avaliacao11) :
                             case 0:
-                                echo "Sim";
+                                echo 'Sim';
                                 break;
                             case 1:
-                                echo "Não";
+                                echo 'Não';
                                 break;
                             default:
-                                echo "Sem avaliação";
+                                echo 'Sem avaliação';
                                 break;
                         endswitch;
                         ?></td>
@@ -288,15 +290,15 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     <tr>
                         <th><?= __('12) Você recebeu e acompanhou o programa da Disciplina OTP?') ?></th>
                         <td><?php
-                        switch ($avaliacao->avaliacao12):
+                        switch ($avaliacao->avaliacao12) :
                             case 0:
-                                echo "Sim";
+                                echo 'Sim';
                                 break;
                             case 1:
-                                echo "Não";
+                                echo 'Não';
                                 break;
                             default:
-                                echo "Sem avaliação";
+                                echo 'Sem avaliação';
                                 break;
                         endswitch;
                         ?></td>
@@ -309,15 +311,15 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                         <th><?= __('13) Há questões que você considera que devam ser mais enfatizadas na disciplina de OTP?') ?>
                         </th>
                         <td><?php
-                        switch ($avaliacao->avaliacao13):
+                        switch ($avaliacao->avaliacao13) :
                             case 0:
-                                echo "Sim";
+                                echo 'Sim';
                                 break;
                             case 1:
-                                echo "Não";
+                                echo 'Não';
                                 break;
                             default:
-                                echo "Sem avaliação";
+                                echo 'Sem avaliação';
                                 break;
                         endswitch;
                         ?></td>

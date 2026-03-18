@@ -14,7 +14,6 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\SupervisoresTable&\Cake\ORM\Association\BelongsTo $Supervisores
  * @property \App\Model\Table\ProfessoresTable&\Cake\ORM\Association\BelongsTo $Professores
  * @property \App\Model\Table\AdministradoresTable&\Cake\ORM\Association\BelongsTo $Administradores
- * 
  * @method \App\Model\Entity\User newEmptyEntity()
  * @method \App\Model\Entity\User newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\User[] newEntities(array $data, array $options = [])
@@ -70,7 +69,6 @@ class UsersTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
-
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create');
@@ -124,7 +122,6 @@ class UsersTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-
         $rules->add($rules->isUnique(['email']));
 
         return $rules;

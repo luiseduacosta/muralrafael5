@@ -21,7 +21,7 @@ class ConfiguracoesController extends AppController
     public function index()
     {
         $this->Authorization->authorize($this->Configuracoes);
-        $this->redirect('/configuracoes/view/1');
+        $this->redirect(['controller' => 'configuracoes', 'action' => 'view', 1]);
     }
 
     /**
@@ -48,6 +48,7 @@ class ConfiguracoesController extends AppController
     public function edit(?string $id = null)
     {
         $configuracao = $this->Configuracoes->get($id);
+
         $this->Authorization->authorize($configuracao);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $configuracao = $this->Configuracoes->patchEntity($configuracao, $this->request->getData());

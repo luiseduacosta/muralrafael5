@@ -11,7 +11,7 @@
             <?= $this->Form->postLink(
                 __('Excluir'),
                 ['action' => 'delete', $folhadeatividade->id],
-                ['confirm' => __('Tem certeza que quer excluir esta atividade # {0}?', $folhadeatividade->id), 'class' => 'button']
+                ['confirm' => __('Tem certeza que quer excluir esta atividade # {0}?', $folhadeatividade->id), 'class' => 'button'],
             ) ?>
             <?= $this->Html->link(__('Lista de atividades'), ['action' => 'index', $estagiario->estagiario->id], ['class' => 'button']) ?>
          

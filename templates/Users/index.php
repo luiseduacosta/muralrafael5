@@ -1,22 +1,25 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\User[]|\Cake\Collection\CollectionInterface $users
+ * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\User> $users
  */
 
 declare(strict_types=1);
+
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $user_session->getOriginalData(); }
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
+}
 ?>
 <div class="users index content">
-	<aside>
-        <?php if ($user_data['administrador_id']): ?>
+    <aside>
+        <?php if ($user_data['administrador_id']) : ?>
             <div class="nav">
                 <?= $this->Html->link(__('Novo usuário'), ['action' => 'add'], ['class' => 'button']) ?>
             </div>
         <?php endif; ?>
-	</aside>
+    </aside>
     
     <h3><?= __('Lista de usuários') ?></h3>
     
@@ -36,13 +39,13 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($users as $user): ?>
+                <?php foreach ($users as $user) : ?>
                 <tr>
                     <td class="actions">
-                        <?php if ($user_data['administrador_id']): ?>
+                        <?php if ($user_data['administrador_id']) : ?>
                             <?= $this->Html->link(__('Ver'), ['action' => 'view', $user->id]) ?>
                             <?= $this->Html->link(__('Editar'), ['action' => 'edit', $user->id]) ?>
-                            <?php if ($user->id !== $user_session->id): ?>
+                            <?php if ($user->id !== $user_session->id) : ?>
                                 <?= $this->Html->link(__('Alternar'), ['action' => 'alternarusuario', $user->id]) ?>
                             <?php endif; ?>
                             <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $user->id)]) ?>
@@ -56,10 +59,10 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                             '1' => 'Administrador',
                             '2' => 'Aluno',
                             '3' => 'Professor',
-                            '4' => 'Supervisor'
+                            '4' => 'Supervisor',
                         ];
-                        echo isset($categorias[$user->categoria]) ? $categorias[$user->categoria] : $user->categoria;
-                    ?>
+                        echo $categorias[$user->categoria] ?? $user->categoria;
+                        ?>
                     </td>
                     <td><?= $user->created ? h($user->created->format('d/m/Y H:i:s')) : '' ?></td>
                     <td><?= $user->modified ? h($user->modified->format('d/m/Y H:i:s')) : '' ?></td>

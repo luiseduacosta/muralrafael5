@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $user_session->getOriginalData(); }
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
+}
 ?>
 
-<?= $this->Html->script("jquery.mask.min"); ?>
+<?= $this->Html->script('jquery.mask.min'); ?>
 <script>
     $(document).ready(function () {
         $('#cpf').mask('000.000.000-00');
@@ -32,7 +34,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
     <div class="column-responsive column-80">
         <div class="alunos form content">
     
-            <?php if ($user_data['administrador_id']): ?>
+            <?php if ($user_data['administrador_id']) : ?>
             <aside>
                 <div class="nav">
                     <?= $this->Html->link(__('Listar Alunos'), ['action' => 'index'], ['class' => 'button']) ?>
@@ -43,28 +45,28 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
             <fieldset>
                 <h3><?= __('Adicionando Aluno(a)') ?></h3>
                 <?php
-                    if ($user_data['administrador_id']):
-                        $val = $this->request->getParam('pass') ? $this->request->getParam('pass')[0] : '';
-                        echo $this->Form->control('user_id', ['type' => 'number', 'value' => $val, 'hidden' => true, 'label' => false ]); 
-                    elseif ($user_data['aluno_id']):
-                        echo $this->Form->control('user_id', ['type' => 'number', 'value' => $user_session->get('id'), 'hidden' => true, 'label' => false ]); 
-                    endif;
+                if ($user_data['administrador_id']) :
+                    $val = $this->request->getParam('pass') ? $this->request->getParam('pass')[0] : '';
+                    echo $this->Form->control('user_id', ['type' => 'number', 'value' => $val, 'hidden' => true, 'label' => false ]);
+                elseif ($user_data['aluno_id']) :
+                        echo $this->Form->control('user_id', ['type' => 'number', 'value' => $user_session->get('id'), 'hidden' => true, 'label' => false ]);
+                endif;
                     echo $this->Form->control('nome', ['label' => 'Nome Completo', 'required' => true]);
-                    echo $this->Form->control('nomesocial', ['label' => 'Nome Social', 'required' => false]);       
-                    if ($aluno->registro) {
-                        echo $this->Form->control('registro', ['label' => 'Número de Registro - DRE', 'value' => $aluno->registro, 'required' => true, 'readonly' => true]);
-                    } else {
-                        echo $this->Form->control('registro', ['label' => 'Número de Registro - DRE', 'required' => true]);
-                    }
+                    echo $this->Form->control('nomesocial', ['label' => 'Nome Social', 'required' => false]);
+                if ($aluno->registro) {
+                    echo $this->Form->control('registro', ['label' => 'Número de Registro - DRE', 'value' => $aluno->registro, 'required' => true, 'readonly' => true]);
+                } else {
+                    echo $this->Form->control('registro', ['label' => 'Número de Registro - DRE', 'required' => true]);
+                }
                     echo $this->Form->control('codigo_telefone', ['label' => 'Código do Telefone', 'required' => false]);
                     echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)[\s][0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'data-mask' => '(00) 0000.0000', 'required' => false]);
                     echo $this->Form->control('codigo_celular', ['label' => 'Código do Celular', 'required' => false]);
                     echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '\([0-9]{2}\)[\s][0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 00000.0000', 'data-mask' => '(00) 00000.0000', 'required' => false]);
-                    if ($aluno->email) {
-                        echo $this->Form->control('email', ['type' => 'email', 'value' => $aluno->email, 'required' => true, 'readonly' => true]);
-                    } else {
-                        echo $this->Form->control('email', ['type' => 'email', 'required' => true]);
-                    }
+                if ($aluno->email) {
+                    echo $this->Form->control('email', ['type' => 'email', 'value' => $aluno->email, 'required' => true, 'readonly' => true]);
+                } else {
+                    echo $this->Form->control('email', ['type' => 'email', 'required' => true]);
+                }
                     echo $this->Form->control('cpf', ['label' => 'CPF', 'pattern' => '[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}', 'placeholder' => '000.000.000-00', 'data-mask' => '000.000.000-00', 'required' => true]);
                     echo $this->Form->control('identidade', ['label' => 'Registro da Identidade', 'required' => false]);
                     echo $this->Form->control('orgao', ['label' => 'Órgão Emissor da Identidade', 'required' => false]);

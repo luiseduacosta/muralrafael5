@@ -10,7 +10,6 @@ use Cake\Validation\Validator;
  * Areas Model
  *
  * @property \App\Model\Table\InstituicoesTable&\Cake\ORM\Association\HasMany $Instituicoes
- * 
  * @method \App\Model\Entity\Area newEmptyEntity()
  * @method \App\Model\Entity\Area newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Area[] newEntities(array $data, array $options = [])

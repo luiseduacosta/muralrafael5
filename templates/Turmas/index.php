@@ -1,16 +1,16 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Turma[]|\Cake\Collection\CollectionInterface $turmas
+ * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Turma> $turmas
  */
 ?>
 <div class="turmas index content">
     
-	<aside>
-		<div class="nav">
+    <aside>
+        <div class="nav">
             <?= $this->Html->link(__('Nova Turma'), ['action' => 'add'], ['class' => 'button']) ?>
-		</div>
-	</aside>
+        </div>
+    </aside>
             
     <h3><?= __('Lista de Turmas') ?></h3>
     
@@ -27,7 +27,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($turmas as $turma): ?>
+                <?php foreach ($turmas as $turma) : ?>
                 <tr>
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $turma->id]) ?>

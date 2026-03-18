@@ -1,10 +1,10 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
+use Exception;
 
 /**
  * Instituicoes Controller
@@ -25,6 +25,7 @@ class InstituicoesController extends AppController
             $this->Authorization->authorize($this->Instituicoes);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
+
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
@@ -54,20 +55,21 @@ class InstituicoesController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $instituicao = $this->Instituicoes->find()->contain([
             'Areas',
             'Supervisores' => ['Users'],
             'Estagiarios' => ['Alunos', 'Professores', 'Supervisores', 'Instituicoes'],
             'Muralestagios' => ['Instituicoes'],
-            'Visitas'
+            'Visitas',
         ])->where(['Instituicoes.id' => $id])->first();
 
         try {
             $this->Authorization->authorize($instituicao);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
+
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
@@ -85,6 +87,7 @@ class InstituicoesController extends AppController
             $this->Authorization->authorize($this->Instituicoes);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
+
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
@@ -98,8 +101,18 @@ class InstituicoesController extends AppController
             }
             $this->Flash->error(__('The instituicao could not be saved. Please, try again.'));
         }
-        $areas = $this->fetchTable('Areas')->find('list')->order(['area' => 'ASC'])->select(['id', 'area'])->all()->toArray();
-        $supervisores = $this->fetchTable('Supervisores')->find('list')->order(['nome' => 'ASC'])->select(['id', 'nome'])->all()->toArray();
+        $areas = $this->fetchTable('Areas')
+            ->find('list')
+            ->order(['area' => 'ASC'])
+            ->select(['id', 'area'])
+            ->all()
+            ->toArray();
+        $supervisores = $this->fetchTable('Supervisores')
+            ->find('list')
+            ->order(['nome' => 'ASC'])
+            ->select(['id', 'nome'])
+            ->all()
+            ->toArray();
         $this->set(compact('instituicao', 'areas', 'supervisores'));
     }
 
@@ -110,13 +123,17 @@ class InstituicoesController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
-        $instituicao = $this->Instituicoes->find()->contain(['Supervisores'])->where(['Instituicoes.id' => $id])->first();
+        $instituicao = $this->Instituicoes->find()
+            ->contain(['Supervisores'])
+            ->where(['Instituicoes.id' => $id])
+            ->first();
         try {
             $this->Authorization->authorize($instituicao);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
+
             return $this->redirect(['controller' => 'Instituicoes', 'action' => 'index']);
         }
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -128,8 +145,18 @@ class InstituicoesController extends AppController
             }
             $this->Flash->error(__('The instituicao could not be saved. Please, try again.'));
         }
-        $areas = $this->fetchTable('Areas')->find('list')->order(['area' => 'ASC'])->select(['id', 'area'])->all()->toArray();
-        $supervisores = $this->fetchTable('Supervisores')->find('list')->order(['nome' => 'ASC'])->select(['id', 'nome'])->all()->toArray();
+        $areas = $this->fetchTable('Areas')
+            ->find('list')
+            ->order(['area' => 'ASC'])
+            ->select(['id', 'area'])
+            ->all()
+            ->toArray();
+        $supervisores = $this->fetchTable('Supervisores')
+            ->find('list')
+            ->order(['nome' => 'ASC'])
+            ->select(['id', 'nome'])
+            ->all()
+            ->toArray();
         $this->set(compact('instituicao', 'areas', 'supervisores'));
     }
 
@@ -140,7 +167,7 @@ class InstituicoesController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $instituicao = $this->Instituicoes->get($id, ['contain' => ['Estagiarios']]);
@@ -149,12 +176,14 @@ class InstituicoesController extends AppController
             $this->Authorization->authorize($instituicao);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
+
             return $this->redirect(['controller' => 'Instituicoes', 'action' => 'index']);
         }
 
         // If the instituicao has estagiarios, show an error message and return to the view
-        if (sizeof($instituicao->estagiarios) > 0) {
+        if (count($instituicao->estagiarios) > 0) {
             $this->Flash->error(__('Erro ao Excluir: A instituicao tem estagiários associados.'));
+
             return $this->redirect(['controller' => 'Instituicoes', 'action' => 'view', $id]);
         }
 
@@ -201,5 +230,4 @@ class InstituicoesController extends AppController
                 ->withStringBody(json_encode(['error' => 'Erro ao buscar supervisores']));
         }
     }
-
 }

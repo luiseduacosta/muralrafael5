@@ -15,13 +15,13 @@ if ($user_session) {
             <aside>
                 <div class="nav">
                     <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
-                    <?php if ($user_data['administrador_id']): ?>
+                    <?php if ($user_data['administrador_id']) : ?>
                         <?= $this->Html->link(__('Listar Supervisores'), ['action' => 'index'], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Editar Supervisor(a)'), ['action' => 'edit', $supervisor->id], ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Excluir Supervisor(a)'), ['action' => 'delete', $supervisor->id], ['confirm' => __('Are you sure you want to delete {0}?', $supervisor->nome), 'class' => 'button']) ?>
                         <?= $this->Html->link(__('Novo Supervisor(a)'), ['action' => 'add'], ['class' => 'button']) ?>
                     <?php endif; ?>
-                    <?php if ($user_data['supervisor_id'] && $user_data['supervisor_id'] == $supervisor->id): ?>
+                    <?php if ($user_data['supervisor_id'] && $user_data['supervisor_id'] == $supervisor->id) : ?>
                         <?= $this->Html->link(__('Editar'), ['action' => 'edit', $supervisor->id], ['class' => 'button']) ?>
                     <?php endif; ?>
                 </div>
@@ -54,9 +54,9 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Telefone') ?></th>
-                    <?php if ($supervisor->telefone && (strlen($supervisor->telefone) < 8)): ?>
-                        <td><?= '(' . $supervisor->codigo_tel . ') '. $supervisor->telefone ?></td>
-                    <?php else: ?>
+                    <?php if ($supervisor->telefone && (strlen($supervisor->telefone) < 8)) : ?>
+                        <td><?= '(' . $supervisor->codigo_tel . ') ' . $supervisor->telefone ?></td>
+                    <?php else : ?>
                         <td><?= $supervisor->telefone ?>
                     <?php endif ?>    
                 </tr>
@@ -66,9 +66,9 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Celular') ?></th>
-                    <?php if ($supervisor->celular && (strlen($supervisor->celular) < 8)): ?>
-                            <td><?= '(' . $supervisor->codigo_cel . ') '. $supervisor->celular ?></td>
-                    <?php else: ?>        
+                    <?php if ($supervisor->celular && (strlen($supervisor->celular) < 8)) : ?>
+                            <td><?= '(' . $supervisor->codigo_cel . ') ' . $supervisor->celular ?></td>
+                    <?php else : ?>        
                         <td><?= h($supervisor->celular) ?></td>
                     <?php endif ?>    
                 </tr>
@@ -133,7 +133,7 @@ if ($user_session) {
             </div>
             
             <?php if (!empty($supervisor->user)) : ?>
-                <?php if ($user_data['administrador_id'] || $user_data['supervisor_id'] == $supervisor->user->id): ?>
+                <?php if ($user_data['administrador_id'] || $user_data['supervisor_id'] == $supervisor->user->id) : ?>
                     <div class="related">
                         <h4><?= __('User') ?></h4>
                         <div class="table_wrap">
@@ -182,7 +182,7 @@ if ($user_session) {
                                 <tr>
                                     <td class="actions">
                                         <?= $this->Html->link(__('Ver'), ['controller' => 'Instituicoes', 'action' => 'view', $instituicao->id]) ?>
-                                        <?php if ($user_data['administrador_id']): ?>
+                                        <?php if ($user_data['administrador_id']) : ?>
                                             <?= $this->Html->link(__('Editar'), ['controller' => 'Instituicoes', 'action' => 'edit', $instituicao->id]) ?>
                                             <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Instituicoes', 'action' => 'delete', $instituicao->id], ['confirm' => __('Are you sure you want to delete {0}?', $instituicao->instituicao)]) ?>
                                         <?php endif; ?>
@@ -227,7 +227,7 @@ if ($user_session) {
                             <tr>
                                 <td class="actions">
                                     <?= $this->Html->link(__('Ver'), ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?>
-                                    <?php if ($user_data['administrador_id']): ?>
+                                    <?php if ($user_data['administrador_id']) : ?>
                                         <?= $this->Html->link(__('Editar'), ['controller' => 'Estagiarios', 'action' => 'edit', $estagiario->id]) ?>
                                         <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete estagiario_{0}?', $estagiario->id)]) ?>
                                     <?php endif; ?>
@@ -238,11 +238,19 @@ if ($user_session) {
                                 <td>
                                     <?php
                                     $turno = '';
-                                    switch ( $estagiario->turno ) {
-                                        case 'D': $turno = 'Diurno';   break;
-                                        case 'N': $turno = 'Noturno';  break;
-                                        case 'A': $turno = 'Ambos';    break;
-                                        case 'I': $turno = 'Integral'; break;
+                                    switch ($estagiario->turno) {
+                                        case 'D':
+                                            $turno = 'Diurno';
+                                            break;
+                                        case 'N':
+                                            $turno = 'Noturno';
+                                            break;
+                                        case 'A':
+                                            $turno = 'Ambos';
+                                            break;
+                                        case 'I':
+                                            $turno = 'Integral';
+                                            break;
                                     }
                                     echo h($turno);
                                     ?>

@@ -16,11 +16,11 @@ if ($user_session) {
             <aside>
                 <div class="nav">
                     <?= $this->Html->link(__('Mural estagios'), ['action' => 'index'], ['class' => 'button']) ?>
-                    <?php if ($user_data['administrador_id']): ?>
+                    <?php if ($user_data['administrador_id']) : ?>
                         <?= $this->Form->postLink(
                             __('Excluir'),
                             ['action' => 'delete', $muralestagio->id],
-                            ['confirm' => __('Are you sure you want to delete # {0}?', $muralestagio->id), 'class' => 'button']
+                            ['confirm' => __('Are you sure you want to delete # {0}?', $muralestagio->id), 'class' => 'button'],
                         ) ?>
                     <?php endif; ?>
                 </div>

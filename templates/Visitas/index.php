@@ -1,25 +1,28 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Visita[]|\Cake\Collection\CollectionInterface $visitas
+ * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Visita> $visitas
  */
 declare(strict_types=1);
+
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $user_session->getOriginalData(); }
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
+}
 ?>
 <div class="visitas index content">
-	<aside>
-		<?php if ($user_data['administrador_id']): ?>
+    <aside>
+        <?php if ($user_data['administrador_id']) : ?>
             <div class="nav">
-                <?php if (isset($instituicao_id)): ?>
+                <?php if (isset($instituicao_id)) : ?>
                     <?= $this->Html->link(__('Nova Visita'), ['action' => 'add', '?' => ['instituicao_id' => $instituicao_id]], ['class' => 'button']) ?>
-                <?php else: ?>
+                <?php else : ?>
                     <?= $this->Html->link(__('Nova Visita'), ['action' => 'add'], ['class' => 'button']) ?>
                 <?php endif; ?>
             </div>
         <?php endif; ?>
-	</aside>
+    </aside>
     
     <h3><?= __('Lista de visitas') ?></h3>
     
@@ -40,12 +43,12 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($visitas as $visita): ?>
+                <?php foreach ($visitas as $visita) : ?>
                 <tr> 
-                <?php //pr($visita); ?>
+                    <?php //pr($visita); ?>
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $visita->id]) ?>
-                        <?php if ($user_data['administrador_id']): ?>
+                        <?php if ($user_data['administrador_id']) : ?>
                             <?= $this->Html->link(__('Editar'), ['action' => 'edit', $visita->id]) ?>
                             <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $visita->id], ['confirm' => __('Are you sure you want to delete visita_{0}?', $visita->id)]) ?>
                         <?php endif; ?>

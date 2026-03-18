@@ -13,7 +13,7 @@
                     <?= $this->Form->postLink(
                         __('Excluir'),
                         ['action' => 'delete', $complemento->id],
-                        ['confirm' => __('Are you sure you want to delete {0}?', $complemento->nome), 'class' => 'button']
+                        ['confirm' => __('Are you sure you want to delete {0}?', $complemento->nome), 'class' => 'button'],
                     ) ?>
                 </div>
             </aside>

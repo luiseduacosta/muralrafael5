@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
-use Cake\Event\EventInterface;
 
 /**
  * Supervisores Controller
@@ -25,6 +24,7 @@ class SupervisoresController extends AppController
             $this->Authorization->authorize($this->Supervisores);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
+
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
@@ -78,6 +78,7 @@ class SupervisoresController extends AppController
 
         if (!$id) {
             $this->Flash->error(__('Invalid supervisor id.'));
+
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
@@ -119,6 +120,7 @@ class SupervisoresController extends AppController
 
         if ($user_data['supervisor_id'] > 0) {
             $this->Flash->warning(__('Supervisor já está cadastrado.'));
+
             return $this->redirect(['action' => 'view', $user_data['supervisor_id']]);
         }
 
@@ -206,8 +208,9 @@ class SupervisoresController extends AppController
         try {
             $this->Authorization->authorize($supervisor);
 
-            if (sizeof($supervisor->estagiarios) > 0) {
+            if (count($supervisor->estagiarios) > 0) {
                 $this->Flash->warning(__('Supervisor(a) tem estagiários associados'));
+
                 return $this->redirect(['controller' => 'Supervisores', 'action' => 'view', $id]);
             }
 

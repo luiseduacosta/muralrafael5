@@ -5,9 +5,13 @@
  */
 declare(strict_types=1);
 
+use Cake\I18n\DateTime;
+
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $user_session->getOriginalData(); }
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
+}
 ?>
 
 <script type="text/javascript">
@@ -71,15 +75,15 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     echo $this->Form->control('nivel', ['value' => $estagiario->nivel, 'readonly' => true, 'required' => true]);
                     echo $this->Form->control('ajuste2020', ['options' => ['1' => 'Sim (3 semestres)', '0' => 'Não (4 semestres)'], 'value' => $aluno->ajuste2020, 'readonly']);
                     echo $this->Form->control('tc', ['label' => 'Termo de compromisso assinado S/N', 'options' => ['1' => 'Sim', '0' => 'Nao'], 'default' => '0','required' => false]);
-                    echo $this->Form->control('tc_solicitacao', ['label' => 'Data de Solicitação', 'value' => \Cake\I18n\DateTime::now()->format('Y-m-d'), 'readonly' => true]);
+                    echo $this->Form->control('tc_solicitacao', ['label' => 'Data de Solicitação', 'value' => DateTime::now()->format('Y-m-d'), 'readonly' => true]);
                     echo $this->Form->control('instituicao_id', ['options' => $instituicoes, 'class' => 'form-control']);
                     echo $this->Form->control('supervisor_id', ['options' => $supervisores, 'empty' => true, 'class' => 'form-control']);
                     echo $this->Form->control('professor_id', ['options' => $professores, 'empty' => true, 'class' => 'form-control']);
                     echo $this->Form->control('periodo', ['value' => $periodo, 'readonly' => true]);
-                    if ($user_data['categoria'] == "1") {
-                        echo $this->Form->control('nota', ['required' => false, 'readonly' => true, 'label' => 'Nota']);
-                        echo $this->Form->control('ch', ['required' => false, 'readonly' => true, 'label' => 'CH']);
-                    }
+                if ($user_data['categoria'] == '1') {
+                    echo $this->Form->control('nota', ['required' => false, 'readonly' => true, 'label' => 'Nota']);
+                    echo $this->Form->control('ch', ['required' => false, 'readonly' => true, 'label' => 'CH']);
+                }
                     echo $this->Form->control('benetransporte', ['label' => 'Transporte', 'required' => false, 'empty' => true, 'default' => null]);
                     echo $this->Form->control('benealimentacao', ['label' => 'Alimentação', 'required' => false, 'empty' => true, 'default' => null]);
                     echo $this->Form->control('benebolsa', ['label' => 'Valor do benefício de Bolsa']);

@@ -5,7 +5,9 @@
  */
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $this->request->getAttribute('identity')->getOriginalData(); }
+if ($user_session) {
+    $user_data = $this->request->getAttribute('identity')->getOriginalData();
+}
 ?>
 
 <?php
@@ -13,7 +15,7 @@ if ($user_session) { $user_data = $this->request->getAttribute('identity')->getO
 $departamentos = [
     'Fundamentos' => 'Fundamentos',
     'Métodos e técnicas' => 'Metodologia',
-    'Política social' => 'Politicas'
+    'Política social' => 'Politicas',
 ]
 ?>
 
@@ -24,13 +26,13 @@ $departamentos = [
                 <div class="nav">
                     <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                     <?= $this->Html->link(__('Listar Professores'), ['action' => 'index'], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
-                    <?php if ($user_data['administrador_id']): ?>
+                    <?php if ($user_data['administrador_id']) : ?>
                         <?= $this->Html->link(__('Editar Professor(a)'), ['action' => 'edit', $professor->id], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Form->postLink(__('Excluir Professor(a)'), ['action' => 'delete', $professor->id], ['confirm' => __('Are you sure you want to delete {0}?', $professor->nome), 'class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Novo(a) Professor(a)'), ['action' => 'add'], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('CH e nota'), ['controller' => 'Estagiarios', 'action' => 'lancanota', '?' => ['professor_id' => $professor->id]], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                     <?php endif; ?>
-                    <?php if ($user_data['professor_id'] && ($professor->id == $user_data['professor_id'])): ?>
+                    <?php if ($user_data['professor_id'] && ($professor->id == $user_data['professor_id'])) : ?>
                         <?= $this->Html->link(__('Editar Professor(a)'), ['action' => 'edit', $professor->id], ['class' => 'button mb-1', 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('CH e nota'), ['controller' => 'Estagiarios', 'action' => 'lancanota', '?' => ['professor_id' => $professor->id]], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                     <?php endif; ?>
@@ -84,17 +86,17 @@ $departamentos = [
                 </tr>
                 <tr>
                     <th><?= __('Telefone') ?></th>
-                    <?php if (strlen($professor->telefone) < 10): ?>
+                    <?php if (strlen($professor->telefone) < 10) : ?>
                         <td><?= $professor->telefone ? h('(' . $professor->ddd_telefone . ') ' . $professor->telefone) : '' ?></td>
-                    <?php else: ?>
+                    <?php else : ?>
                         <td><?= $professor->telefone ?></td>
                     <?php endif ?>    
                 </tr>
                 <tr>
                     <th><?= __('Celular') ?></th>
-                    <?php if (strlen($professor->celular) < 10): ?>
+                    <?php if (strlen($professor->celular) < 10) : ?>
                         <td><?= $professor->celular ? h('(' . $professor->ddd_celular . ') ' . $professor->celular) : '' ?></td>
-                    <?php else: ?>
+                    <?php else : ?>
                         <td><?= $professor->celular ?></td>
                     <?php endif ?>    
                     </tr>
@@ -225,7 +227,7 @@ $departamentos = [
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Users', 'action' => 'view', $professor->user->id]) ?>
-                                <?php if ($user_data['administrador_id']): ?>
+                                <?php if ($user_data['administrador_id']) : ?>
                                     <?= $this->Html->link(__('Editar'), ['controller' => 'Users', 'action' => 'edit', $professor->user->id]) ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Users', 'action' => 'delete', $professor->user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $professor->user->id)]) ?>
                                 <?php endif; ?>
@@ -268,7 +270,7 @@ $departamentos = [
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?>
-                                <?php if ($user_data['administrador_id']): ?>
+                                <?php if ($user_data['administrador_id']) : ?>
                                     <?= $this->Html->link(__('Editar'), ['controller' => 'Estagiarios', 'action' => 'edit', $estagiario->id]) ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete estagiario_{0}?', $estagiario->id)]) ?>
                                 <?php endif; ?>
@@ -277,16 +279,24 @@ $departamentos = [
                             <td><?= $estagiario->aluno ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
                             <td><?= h($estagiario->registro) ?></td>
                             <td>
-        						<?php
+                                <?php
                                 $turno = '';
-        						switch ( $estagiario->turno ) {
-        							case 'D': $turno = 'Diurno';     break;
-        							case 'N': $turno = 'Noturno';    break;
-        							case 'A': $turno = 'Ambos';      break;
-        		                    case 'I': $turno = 'Indefinido'; break;
-        						}
-        						echo h($turno);
-        						?>
+                                switch ($estagiario->turno) {
+                                    case 'D':
+                                        $turno = 'Diurno';
+                                        break;
+                                    case 'N':
+                                        $turno = 'Noturno';
+                                        break;
+                                    case 'A':
+                                        $turno = 'Ambos';
+                                        break;
+                                    case 'I':
+                                        $turno = 'Indefinido';
+                                        break;
+                                }
+                                echo h($turno);
+                                ?>
                             </td>
                             <td><?= h($estagiario->nivel) ?></td>
                             <td><?= h($estagiario->tc == '1' ? 'Sim' : 'Não') ?></td>

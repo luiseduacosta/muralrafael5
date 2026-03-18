@@ -9,6 +9,7 @@ use Authorization\Policy\BeforePolicyInterface;
 use Authorization\Policy\Result;
 use Authorization\Policy\ResultInterface;
 use Cake\ORM\Query;
+use Cake\ORM\TableRegistry;
 
 final class InscricoesTablePolicy implements BeforePolicyInterface
 {
@@ -64,7 +65,8 @@ final class InscricoesTablePolicy implements BeforePolicyInterface
      */
     public function canAdd(IdentityInterface $userSession, InscricoesTable $inscricoesTable): Result
     {
-        $alunocadastrado = \Cake\ORM\TableRegistry::getTableLocator()->get('Alunos')->find()->where(['user_id' => $userSession->id]);
+        $alunosTable = TableRegistry::getTableLocator()->get('Alunos');
+        $alunocadastrado = $alunosTable->find()->where(['user_id' => $userSession->id]);
 
         return $alunocadastrado->count() > 0
             ? new Result(false, 'Erro: inscricoes canAdd policy not authorized')

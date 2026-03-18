@@ -1,8 +1,8 @@
 <!-- templates/element/input_div.php -->
-<?php /* requires previous Form->control($name) */ 
+<?php /* requires previous Form->control($name) */
 
 echo '<input class="showCode" name="code_toggle_' . $name . '" type="checkbox"/> <label for="code_toggle_' . $name . '">Mostrar código HTML</label>';
-echo '<div class="inputDiv" name="code_toggle_' . $name . '" contenteditable>' . $content . '</div>'; 
+echo '<div class="inputDiv" name="code_toggle_' . $name . '" contenteditable>' . $content . '</div>';
 ?>
 
 <script>

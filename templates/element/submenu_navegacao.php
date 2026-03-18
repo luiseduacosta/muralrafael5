@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => 0];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) 
-{ 
-    $user_data = $user_session->getOriginalData(); 
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
 }
 ?>
 <!-- templates/element/submenu_navegacao.php -->
@@ -24,9 +23,9 @@ if ($user_session)
 </script>
     
 <nav>
-    <?php 
+    <?php
         $logo = $this->Html->image('logoess_horizontal-azul.svg', ['height' => '50', 'width' => '150', 'alt' => 'ESS']);
-        echo $this->Html->link($logo, $this->getRequest()->getRequestTarget() == '/' ? "http://www.ess.ufrj.br" : '/', ['escape' => false, 'full'=>true]);
+        echo $this->Html->link($logo, $this->getRequest()->getRequestTarget() == '/' ? 'http://www.ess.ufrj.br' : '/', ['escape' => false, 'full' => true]);
     ?>
 
     <label for="nav-toggler" class="responsive-toggle-label toggle-icon">☰</label>
@@ -34,58 +33,58 @@ if ($user_session)
     
     <menu class="responsive-toggle-dropdown">
 
-        <li><?php echo $this->Html->link("Mural", ['controller' => 'Muralestagios', 'action' => 'index']); ?></li>
+        <li><?php echo $this->Html->link('Mural', ['controller' => 'Muralestagios', 'action' => 'index']); ?></li>
 
-        <?php if ($user_data['administrador_id'] || $user_data['aluno_id']): ?>
+        <?php if ($user_data['administrador_id'] || $user_data['aluno_id']) : ?>
         <li class="menu-declaracoes">
             <input id="menu-declaracoes-toggler" type="checkbox" class="toggle-input" />
             <label for="menu-declaracoes-toggler" class="toggle-label">Declarações <span class="toggle-more">▾</span><span class="toggle-less">◂</span></label>
             
             <menu class="toggle-dropdown">
                 
-                    <li><?php echo $this->Html->link("Declaração de periódo", ["controller" => "Alunos", "action" => "declaracaoperiodo"]); ?></li>
-                    <li><?php echo $this->Html->link("Termo de compromisso", ["controller" => "Estagiarios", "action" => "termocompromisso"]); ?></li>
-                    <li><?php echo $this->Html->link("Declaração de estágio", ["controller" => "Estagiarios", "action" => "declaracaodeestagiopdf"]); ?></li>
-                    <li><?php echo $this->Html->link("Folha de atividades", ["controller" => "Folhadeatividades", "action" => "index"]); ?></li>
-                    <li><?php echo $this->Html->link("Avaliação discente", ["controller" => "Avaliacoes", "action" => "index"]); ?></li>
+                    <li><?php echo $this->Html->link('Declaração de periódo', ['controller' => 'Alunos', 'action' => 'declaracaoperiodo']); ?></li>
+                    <li><?php echo $this->Html->link('Termo de compromisso', ['controller' => 'Estagiarios', 'action' => 'termocompromisso']); ?></li>
+                    <li><?php echo $this->Html->link('Declaração de estágio', ['controller' => 'Estagiarios', 'action' => 'declaracaodeestagiopdf']); ?></li>
+                    <li><?php echo $this->Html->link('Folha de atividades', ['controller' => 'Folhadeatividades', 'action' => 'index']); ?></li>
+                    <li><?php echo $this->Html->link('Avaliação discente', ['controller' => 'Avaliacoes', 'action' => 'index']); ?></li>
 
             </menu>
         </li>
         <?php endif; ?>
 
-        <?php if ($user_data['administrador_id']): ?>
+        <?php if ($user_data['administrador_id']) : ?>
         <li class="menu-consulta">
             <input id="menu-consulta-toggler" type="checkbox" class="toggle-input" />
             <label for="menu-consulta-toggler" class="toggle-label">Consulta <span class="toggle-more">▾</span><span class="toggle-less">◂</span></label>
             
             <menu class="toggle-dropdown">
                 
-                <li><?php echo $this->Html->link("Alunos", ['controller' => 'Alunos', 'action' => 'index']); ?></li>
-                <li><?php echo $this->Html->link("Supervisores", ['controller' => 'Supervisores', 'action' => 'index']); ?></li>                
-                <li><?php echo $this->Html->link("Instituições", ['controller' => 'Instituicoes', 'action' => 'index']); ?></li>
-                <li><?php echo $this->Html->link("Inscrições", ['controller' => 'Inscricoes', 'action' => 'index']); ?></li>
-                <li><?php echo $this->Html->link("Estagiários", ['controller' => 'Estagiarios', 'action' => 'index']); ?></li>
-                <li><?php echo $this->Html->link("Professores", ['controller' => 'Professores', 'action' => 'index']); ?></li>
+                <li><?php echo $this->Html->link('Alunos', ['controller' => 'Alunos', 'action' => 'index']); ?></li>
+                <li><?php echo $this->Html->link('Supervisores', ['controller' => 'Supervisores', 'action' => 'index']); ?></li>                
+                <li><?php echo $this->Html->link('Instituições', ['controller' => 'Instituicoes', 'action' => 'index']); ?></li>
+                <li><?php echo $this->Html->link('Inscrições', ['controller' => 'Inscricoes', 'action' => 'index']); ?></li>
+                <li><?php echo $this->Html->link('Estagiários', ['controller' => 'Estagiarios', 'action' => 'index']); ?></li>
+                <li><?php echo $this->Html->link('Professores', ['controller' => 'Professores', 'action' => 'index']); ?></li>
         
             </menu>
         </li>
         <?php endif; ?>
 
         <?php if ($user_data['aluno_id']) { ?>
-                <li><?php echo $this->Html->link("Meus dados", ['controller' => 'Alunos', 'action' => 'view', $user_data['aluno_id']]); ?></li>
+                <li><?php echo $this->Html->link('Meus dados', ['controller' => 'Alunos', 'action' => 'view', $user_data['aluno_id']]); ?></li>
         <?php } ?>
 
         <?php if ($user_data['professor_id']) { ?>
-                <li><?php echo $this->Html->link("Meus dados", ['controller' => 'Professores', 'action' => 'view', $user_data['professor_id']]); ?></li>
+                <li><?php echo $this->Html->link('Meus dados', ['controller' => 'Professores', 'action' => 'view', $user_data['professor_id']]); ?></li>
         <?php } ?>
 
         <?php if ($user_data['supervisor_id']) { ?>
-                <li><?php echo $this->Html->link("Meus dados", ['controller' => 'Supervisores', 'action' => 'view', $user_data['supervisor_id']]); ?></li>
+                <li><?php echo $this->Html->link('Meus dados', ['controller' => 'Supervisores', 'action' => 'view', $user_data['supervisor_id']]); ?></li>
         <?php } ?>
         
         <li><?php echo $this->Html->link('Grupo Google', 'https://groups.google.com/forum/#!forum/estagio_ess'); ?></li>
         
-        <?php if ($user_data['administrador_id']): ?>
+        <?php if ($user_data['administrador_id']) : ?>
             <li class="menu-admin">
                 <input id="menu-admin-toggler" type="checkbox" class="toggle-input" />
                 <label for="menu-admin-toggler" class="toggle-label">Administração <span class="toggle-more">▾</span><span class="toggle-less">◂</span></label>
@@ -99,7 +98,7 @@ if ($user_session)
                     <li><?php echo $this->Html->link('Complemento período', ['controller' => 'Complementos', 'action' => 'index']); ?></li>
                 </menu>
             </li>
-        <?php else: ?>
+        <?php else : ?>
             <li><?php echo $this->Html->link('Fale conosco', 'mailto:[EMAIL_ADDRESS]'); ?></li>
         <?php endif; ?>
 
@@ -110,14 +109,14 @@ if ($user_session)
             
             <menu class="toggle-dropdown">
                 
-                <?php if ($user_session): ?>
-                    <?php if ($this->request->getSession()->check('Auth.impersonating')): ?>
+                <?php if ($user_session) : ?>
+                    <?php if ($this->request->getSession()->check('Auth.impersonating')) : ?>
                         <li><?php echo $this->Html->link('Retornar ao Administrador', ['controller' => 'Users', 'action' => 'alternarusuario'], ['style' => 'color: #ffc107; font-weight: bold;']); ?></li>
                     <?php endif; ?>
-                    <li><?php echo $this->Html->link("Minha conta", ['controller' => 'Users', 'action' => 'view', $user_session->id]); ?></li>
+                    <li><?php echo $this->Html->link('Minha conta', ['controller' => 'Users', 'action' => 'view', $user_session->id]); ?></li>
                     <li><?php echo $this->Html->link('Sair (' . $user_session->get('email') . ')', ['controller' => 'Users', 'action' => 'logout']); ?></li>
-                <?php else: ?>
-                    <li><?php echo $this->Html->link("Login", ['controller' => 'Users', 'action' => 'login']); ?></li>
+                <?php else : ?>
+                    <li><?php echo $this->Html->link('Login', ['controller' => 'Users', 'action' => 'login']); ?></li>
                 <?php endif; ?>
             </menu>  
         </li>    

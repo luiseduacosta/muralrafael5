@@ -14,9 +14,9 @@
     <fieldset>
         <h3><?= __('Declaração de ' . $totalperiodos . 'º' . ' período do(a) aluno') ?></h3>
         <?php
-        if ($aluno->periodonovo):
+        if ($aluno->periodonovo) :
             echo $this->Form->control('novoperiodo', ['label' => ['text' => 'Período de ingresso'], 'value' => $aluno->periodonovo]);
-        else:
+        else :
             echo $this->Form->control('novoperiodo', ['label' => ['text' => 'Período de ingresso'], 'value' => $aluno->ingresso]);
         endif;
         echo $this->Form->control('nome', ['readonly']);

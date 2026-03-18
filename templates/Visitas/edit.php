@@ -4,9 +4,12 @@
  * @var \App\Model\Entity\Visita $visita
  */
 declare(strict_types=1);
+
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
 $user_session = $this->request->getAttribute('identity');
-if ($user_session) { $user_data = $user_session->getOriginalData(); }
+if ($user_session) {
+    $user_data = $user_session->getOriginalData();
+}
 ?>
 <div>
     <div class="column-responsive column-80">
@@ -14,11 +17,11 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
         <aside>
             <div class="nav">
                 <?= $this->Html->link(__('Listar Visitas'), ['action' => 'index'], ['class' => 'button']) ?>
-                <?php if ($user_data['administrador_id']): ?>
+                <?php if ($user_data['administrador_id']) : ?>
                     <?= $this->Form->postLink(
                         __('Excluir'),
                         ['action' => 'delete', $visita->id],
-                        ['confirm' => __('Are you sure you want to delete visita_{0}?', $visita->id), 'class' => 'button']
+                        ['confirm' => __('Are you sure you want to delete visita_{0}?', $visita->id), 'class' => 'button'],
                     ) ?>
                 <?php endif; ?>
             </div>

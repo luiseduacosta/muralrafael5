@@ -1,22 +1,15 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
-use Cake\Event\EventInterface;
-use App\Model\Table\AvaliacoesTable;
-use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\Datasource\ResultSetInterface;
-use Cake\Http\Response;
-use function Cake\I18n\__;
 
 /**
  * Avaliacoes Controller
  *
- * @property AvaliacoesTable $Avaliacoes
- * @method \App\Model\Entity\Avaliaco[]|ResultSetInterface paginate($object = null, array $settings = [])
+ * @property \App\Controller\AvaliacoesTable $Avaliacoes
+ * @method \App\Model\Entity\Avaliaco[]|\App\Controller\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class AvaliacoesController extends AppController
 {
@@ -24,19 +17,22 @@ class AvaliacoesController extends AppController
      * paginate array
      */
     protected array $paginate = [
-        'sortableFields' => ['id', 'timestamp']
+        'sortableFields' => ['id', 'timestamp'],
     ];
+
     /**
      * Index method. Mostra os estágios de um aluno estagiario.
      *
-     * @return Response|null|void Renders view
+     * @param string|null $id
+     * @return \Cake\Http\Response|null|void Renders view
      */
-    public function index($id = null)
+    public function index(?string $id = null)
     {
         try {
             $this->Authorization->authorize($this->Avaliacoes);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
+
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
@@ -63,6 +59,7 @@ class AvaliacoesController extends AppController
                     $estagiarios = $this->paginate($query, ['sortableFields' => ['id', 'Alunos.nome', 'periodo', 'nivel', 'Instituicoes.instituicao', 'Supervisores.nome', 'ch', 'nota']]);
                 } else {
                     $this->Flash->error(__('Avaliações do Estagiário não encontradas'));
+
                     return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
                 }
             } else {
@@ -93,10 +90,10 @@ class AvaliacoesController extends AppController
      *
      * @param string|null $id Avaliaco id.
      * @param mixed $estagiario_id
-     * @return Response|null|void Renders view
-     * @throws RecordNotFoundException When record not found.
+     * @return \App\Controller\Response|null|void Renders view
+     * @throws \App\Controller\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $contained = ['Estagiarios' => ['Alunos', 'Instituicoes', 'Professores', 'Supervisores']];
 
@@ -116,12 +113,14 @@ class AvaliacoesController extends AppController
                 $this->Authorization->authorize($avaliacao);
             } catch (ForbiddenException $error) {
                 $this->Flash->error('Authorization error: ' . $error->getMessage());
+
                 return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
             }
             $this->set(compact('avaliacao'));
         } else {
             $this->Flash->error(__('Aluno sem avaliaçao online'));
             $estagiario_id = $this->getRequest()->getQuery('estagiario_id');
+
             return $this->redirect(['controller' => 'Avaliacoes', 'action' => 'imprimeavaliacaopdf', '?' => ['estagiario_id' => $estagiario_id]]);
         }
     }
@@ -129,21 +128,24 @@ class AvaliacoesController extends AppController
     /**
      * Add method
      *
-     * @return Response|null|void Redirects on successful add, renders view otherwise.
+     * @param string|null $id
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
-    public function add($id = null)
+    public function add(?string $id = null)
     {
         try {
             $this->Authorization->authorize($this->Avaliacoes);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
+
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
         $estagiario_id = $this->getRequest()->getQuery('estagiario_id');
-        
+
         if (empty($estagiario_id)) {
             $this->Flash->error(__('Parâmetro estagiário é obrigatório.'));
+
             return $this->redirect(['action' => 'index']);
         }
 
@@ -153,6 +155,7 @@ class AvaliacoesController extends AppController
 
         if ($avaliacaoexiste) {
             $this->Flash->error(__('O(A) estagiário(a) já possui avaliação.'));
+
             return $this->redirect(['action' => 'view', $avaliacaoexiste->id]);
         }
 
@@ -168,9 +171,9 @@ class AvaliacoesController extends AppController
         }
 
         $estagiario = $this->fetchTable('Estagiarios')->get($estagiario_id, [
-            'contain' => ['Alunos']
+            'contain' => ['Alunos'],
         ]);
-        
+
         $this->set(compact('avaliacao', 'estagiario'));
     }
 
@@ -178,10 +181,10 @@ class AvaliacoesController extends AppController
      * Edit method
      *
      * @param string|null $id Avaliaco id.
-     * @return Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws RecordNotFoundException When record not found.
+     * @return \App\Controller\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @throws \App\Controller\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
         $avaliacao = $this->Avaliacoes->get($id, [
             'contain' => ['Estagiarios' => 'Alunos'],
@@ -205,6 +208,7 @@ class AvaliacoesController extends AppController
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('Avaliaçao não foi atualizada. Tente novamente.'));
+
             return $this->redirect(['action' => 'edit', $id]);
         }
 
@@ -215,10 +219,10 @@ class AvaliacoesController extends AppController
      * Delete method
      *
      * @param string|null $id Avaliaco id.
-     * @return Response|null|void Redirects to index.
-     * @throws RecordNotFoundException When record not found.
+     * @return \App\Controller\Response|null|void Redirects to index.
+     * @throws \App\Controller\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $avaliacao = $this->Avaliacoes->get($id);
@@ -240,14 +244,16 @@ class AvaliacoesController extends AppController
     /**
      * Imprimeavaliacaopdf method
      *
-     * @return Response|null|void Renders view
+     * @param string|null $id
+     * @return \Cake\Http\Response|null|void Renders view
      */
-    public function imprimeavaliacaopdf($id = null)
+    public function imprimeavaliacaopdf(?string $id = null)
     {
         $this->Authorization->skipAuthorization();
 
         if (empty($id)) {
             $this->Flash->error(__('Parâmetro estagiário é obrigatório.'));
+
             return $this->redirectBack(['action' => 'index']);
         }
 
@@ -258,6 +264,7 @@ class AvaliacoesController extends AppController
 
         if (empty($avaliacao)) {
             $this->Flash->error(__('Sem avaliação on-line'));
+
             return $this->redirect(['controller' => 'Avaliacoes', 'action' => 'avaliacaomanualpdf', '?' => ['estagiario_id' => $id]]);
         }
 
@@ -268,8 +275,8 @@ class AvaliacoesController extends AppController
             [
                 'orientation' => 'portrait',
                 'download' => true,
-                'filename' => 'avaliacao_discente_' . $avaliacao->id . '.pdf'
-            ]
+                'filename' => 'avaliacao_discente_' . $avaliacao->id . '.pdf',
+            ],
         );
         $this->set('avaliacao', $avaliacao);
     }
@@ -277,13 +284,14 @@ class AvaliacoesController extends AppController
     /**
      * Avaliacaomanualpdf method
      *
-     * @return Response|null|void Renders view
+     * @param string|null $id
+     * @return \Cake\Http\Response|null|void Renders view
      */
-    public function avaliacaomanualpdf($id = null)
+    public function avaliacaomanualpdf(?string $id = null)
     {
         $this->Authorization->skipAuthorization();
 
-        $this->layout = false;
+        $this->viewBuilder()->setLayout(false);
 
         $estagiario_id = $this->request->getQuery('estagiario_id');
 
@@ -294,6 +302,7 @@ class AvaliacoesController extends AppController
                 ->first();
         } else {
             $this->Flash->error(__('Sem parâmetros para localizar o(a) estagiário(a)'));
+
             return $this->redirect(['controller' => 'Estagiarios', 'action' => 'index']);
         }
 
@@ -304,8 +313,8 @@ class AvaliacoesController extends AppController
             [
                 'orientation' => 'portrait',
                 'download' => true,
-                'filename' => 'avaliacao_discente_' . $id . '.pdf'
-            ]
+                'filename' => 'avaliacao_discente_' . $id . '.pdf',
+            ],
         );
         $this->set('estagiario', $estagiario);
     }

@@ -15,7 +15,7 @@ if ($user_session) {
             <aside>
                 <div class="nav">
                         <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
-                        <?php if ($user_data['administrador_id']): ?>
+                        <?php if ($user_data['administrador_id']) : ?>
                             <?= $this->Html->link(__('Listar Instituições'), ['action' => 'index'], ['class' => 'button']) ?>
                             <?= $this->Html->link(__('Editar Instituição'), ['action' => 'edit', $instituicao->id], ['class' => 'button']) ?>
                             <?= $this->Form->postLink(__('Excluir Instituição'), ['action' => 'delete', $instituicao->id], ['confirm' => __('Are you sure you want to delete {0}?', $instituicao->instituicao), 'class' => 'button']) ?>
@@ -56,7 +56,7 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Endereço') ?></th>
-                    <td><?= h($instituicao->endereco . ' - ' . $instituicao->bairro . ' - ' .  $instituicao->municipio . ' - ' . $instituicao->cep ) ?></td>
+                    <td><?= h($instituicao->endereco . ' - ' . $instituicao->bairro . ' - ' .  $instituicao->municipio . ' - ' . $instituicao->cep) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Telefone') ?></th>
@@ -71,10 +71,16 @@ if ($user_session) {
                     <td>
                         <?php
                         $fim_de_semana = '';
-                        switch ( $instituicao->fim_de_semana ) {
-                            case 0: $fim_de_semana = 'Não';          break;
-                            case 1: $fim_de_semana = 'Sim';          break;
-                            case 2: $fim_de_semana = 'Parcialmente'; break;
+                        switch ($instituicao->fim_de_semana) {
+                            case 0:
+                                $fim_de_semana = 'Não';
+                                break;
+                            case 1:
+                                $fim_de_semana = 'Sim';
+                                break;
+                            case 2:
+                                $fim_de_semana = 'Parcialmente';
+                                break;
                         }
                         echo $fim_de_semana;
                         ?>
@@ -82,7 +88,7 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Local de inscrição') ?></th>
-                    <td><?= h($instituicao->local_inscricao) ? "Inscrição somente no mural da Coordenação de Estágio da ESS" : "Inscrição na Instituição e no mural da Coordenação de Estágio da ESS" ?></td>
+                    <td><?= h($instituicao->local_inscricao) ? 'Inscrição somente no mural da Coordenação de Estágio da ESS' : 'Inscrição na Instituição e no mural da Coordenação de Estágio da ESS' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Seguro') ?></th>
@@ -124,7 +130,7 @@ if ($user_session) {
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Supervisores', 'action' => 'view', $supervisores->id]) ?>
-                                <?php if ($user_data['administrador_id']): ?>
+                                <?php if ($user_data['administrador_id']) : ?>
                                     <?= $this->Html->link(__('Editar'), ['controller' => 'Supervisores', 'action' => 'edit', $supervisores->id]) ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Supervisores', 'action' => 'delete', $supervisores->id], ['confirm' => __('Are you sure you want to delete # {0}?', $supervisores->id)]) ?>
                                 <?php endif; ?>
@@ -164,7 +170,7 @@ if ($user_session) {
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?>
-                                <?php if ($user_data['administrador_id']): ?>
+                                <?php if ($user_data['administrador_id']) : ?>
                                     <?= $this->Html->link(__('Editar'), ['controller' => 'Estagiarios', 'action' => 'edit', $estagiario->id]) ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Estagiarios', 'action' => 'delete', $estagiario->id], ['confirm' => __('Are you sure you want to delete # {0}?', $estagiario->id)]) ?>
                                 <?php endif; ?>
@@ -173,16 +179,24 @@ if ($user_session) {
                             <td><?= $estagiario->aluno ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
                             <td><?= h($estagiario->registro) ?></td>
                             <td>
-        						<?php
+                                <?php
                                 $turno = '';
-        						switch ( $estagiario->turno ) {
-        							case 'D': $turno = 'Diurno';     break;
-        							case 'N': $turno = 'Noturno';    break;
-        							case 'A': $turno = 'Ambos';      break;
-        		                    case 'I': $turno = 'Indefinido'; break;
-        						}
-        						echo h($turno);
-        						?>
+                                switch ($estagiario->turno) {
+                                    case 'D':
+                                        $turno = 'Diurno';
+                                        break;
+                                    case 'N':
+                                        $turno = 'Noturno';
+                                        break;
+                                    case 'A':
+                                        $turno = 'Ambos';
+                                        break;
+                                    case 'I':
+                                        $turno = 'Indefinido';
+                                        break;
+                                }
+                                echo h($turno);
+                                ?>
                             </td>
                             <td><?= $estagiario->instituicao ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario->instituicao->id]) : '' ?></td>
                             <td><?= $estagiario->supervisor ? $this->Html->link(h($estagiario->supervisor->nome), ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
@@ -216,7 +230,7 @@ if ($user_session) {
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Muralestagios', 'action' => 'view', $muralestagio->id]) ?>
-                                <?php if ($user_data['administrador_id']): ?>
+                                <?php if ($user_data['administrador_id']) : ?>
                                     <?= $this->Html->link(__('Editar'), ['controller' => 'Muralestagios', 'action' => 'edit', $muralestagio->id]) ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Muralestagios', 'action' => 'delete', $muralestagio->id], ['confirm' => __('Are you sure you want to delete # {0}?', $muralestagio->id)]) ?>
                                 <?php endif; ?>
@@ -228,10 +242,16 @@ if ($user_session) {
                             <td>
                                 <?php
                                 $fim_de_semana = '';
-                                switch ( $muralestagio->fim_de_semana ) {
-                                    case 0: $fim_de_semana = 'Não';          break;
-                                    case 1: $fim_de_semana = 'Sim';          break;
-                                    case 2: $fim_de_semana = 'Parcialmente'; break;
+                                switch ($muralestagio->fim_de_semana) {
+                                    case 0:
+                                        $fim_de_semana = 'Não';
+                                        break;
+                                    case 1:
+                                        $fim_de_semana = 'Sim';
+                                        break;
+                                    case 2:
+                                        $fim_de_semana = 'Parcialmente';
+                                        break;
                                 }
                                 echo $fim_de_semana;
                                 ?>
@@ -264,7 +284,7 @@ if ($user_session) {
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Visitas', 'action' => 'view', $visita->id]) ?>
-                                <?php if ($user_data['administrador_id']): ?>
+                                <?php if ($user_data['administrador_id']) : ?>
                                     <?= $this->Html->link(__('Editar'), ['controller' => 'Visitas', 'action' => 'edit', $visita->id]) ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Visitas', 'action' => 'delete', $visita->id], ['confirm' => __('Are you sure you want to delete visita_{0}?', $visita->id)]) ?>
                                 <?php endif; ?>

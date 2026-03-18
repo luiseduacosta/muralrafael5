@@ -30,7 +30,6 @@ use Cake\ORM\TableRegistry;
  * @property \App\Model\Entity\Supervisor $supervisor
  * @property \App\Model\Entity\Professor $professor
  * @property \App\Model\Entity\Administrador $administrador
- * 
  */
 class User extends Entity implements AuthorizationIdentity, AuthenticationIdentity
 {
@@ -73,7 +72,13 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
 
     // Automatically hash passwords when they are changed.
 
-    protected function _setPassword(string $password)
+    /**
+     * Set password hook - automatically hashes the password.
+     *
+     * @param string $password The plain text password.
+     * @return string The hashed password.
+     */
+    protected function _setPassword(string $password): string
     {
         $hasher = new DefaultPasswordHasher();
 
@@ -117,8 +122,8 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
         $administradores = TableRegistry::getTableLocator()->get('Administradores');
         $administrador = $administradores->find('all', [
             'conditions' => [
-                'Administradores.user_id' => $this->id
-                ], 
+                'Administradores.user_id' => $this->id,
+                ],
             ])
             ->first();
         $this->administrador_id = false;
@@ -155,8 +160,11 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
 
     /**
      * Setter to be used by the middleware.
+     *
+     * @param \Authorization\Service\AuthorizationService $service The authorization service.
+     * @return self
      */
-    public function setAuthorization(AuthorizationService $service)
+    public function setAuthorization(AuthorizationService $service): self
     {
         $this->authorization = $service;
 

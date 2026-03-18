@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Professor[]|\Cake\Collection\CollectionInterface $professores
+ * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Professor> $professores
  */
 ?>
 
@@ -16,16 +16,16 @@ if ($user_session) {
 $departamentos = [
     'Fundamentos' => 'Fundamentos',
     'Métodos e técnicas' => 'Metodologia',
-    'Política social' => 'Politicas'
+    'Política social' => 'Politicas',
 ]
 ?>
 
 <div class="professores index content">
-	<aside>
-		<div class="nav">
+    <aside>
+        <div class="nav">
             <?= $this->Html->link(__('Novo Professor'), ['action' => 'add'], ['class' => 'button']) ?>
-		</div>
-	</aside>
+        </div>
+    </aside>
     
     <h3><?= __('Lista de Professores(as)') ?></h3>
     
@@ -47,12 +47,12 @@ $departamentos = [
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($professores as $professor): ?>
+                <?php foreach ($professores as $professor) : ?>
                 <tr>
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $professor->id]) ?>
                         <?= $this->Html->link(__('Editar'), ['action' => 'edit', $professor->id]) ?>
-                        <?php if ($user_data['administrador_id']): ?>
+                        <?php if ($user_data['administrador_id']) : ?>
                             <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $professor->id], ['confirm' => __('Are you sure you want to delete {0}?', $professor->nome)]) ?>
                         <?php endif; ?>
                     </td>
@@ -60,7 +60,7 @@ $departamentos = [
                     <td><?= $this->Html->link(h($professor->nome), ['action' => 'view', $professor->id]) ?></td>
                     <td><?= (string)$professor->siape ? $professor->siape : 'S/d' ?></td>
                     <td><?= $professor->celular ? '(' . h($professor->ddd_celular) . ')' . h($professor->celular) : '' ?></td>
-                    <td><?= ($professor->email) ? $this->Text->autoLinkEmails($professor->email) : '' ?></td>
+                    <td><?= $professor->email ? $this->Text->autoLinkEmails($professor->email) : '' ?></td>
                     <td><?= $professor->curriculolattes ? $this->Html->link('http://lattes.cnpq.br/' . h($professor->curriculolattes)) : '' ?></td>
                     <td><?= h($professor->departamento) ?></td>
                 </tr>

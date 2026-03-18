@@ -12,7 +12,7 @@
                     <?= $this->Form->postLink(
                         __('Excluir'),
                         ['action' => 'delete', $turno->id],
-                        ['confirm' => __('Are you sure you want to delete # {0}?', $turno->id), 'class' => 'button']
+                        ['confirm' => __('Are you sure you want to delete # {0}?', $turno->id), 'class' => 'button'],
                     ) ?>
                     <?= $this->Html->link(__('Listar Turnos'), ['action' => 'index'], ['class' => 'button']) ?>
                 </div>

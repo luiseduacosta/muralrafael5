@@ -110,5 +110,4 @@ final class AlunosTablePolicy implements BeforePolicyInterface
     {
         return new Result(true);
     }
-
 }

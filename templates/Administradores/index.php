@@ -1,13 +1,13 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Administrador[]|\Cake\Collection\CollectionInterface $administradores
+ * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Administrador> $administradores
  */
 ?>
 <div class="administradores index content">
     
     <h3><?= __('Lista de Administradores') ?></h3>
-	
+    
     <div class="paginator">
         <?= $this->element('paginator'); ?>
     </div>
@@ -26,7 +26,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($administradores as $administrador): ?>
+                <?php foreach ($administradores as $administrador) : ?>
                 <tr>
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $administrador->id]) ?>

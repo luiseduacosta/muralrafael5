@@ -30,7 +30,7 @@ final class MuralestagioPolicy implements BeforePolicyInterface
                 )
             ) {
                 return true;
-                }
+            }
         }
 
         return null;

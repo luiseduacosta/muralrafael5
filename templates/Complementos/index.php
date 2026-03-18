@@ -1,18 +1,18 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Complemento[]|\Cake\Collection\CollectionInterface $complementos
+ * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Complemento> $complementos
  */
 ?>
 <div class="complementos index content">
     <aside>
-		<div class="nav">
+        <div class="nav">
             <?= $this->Html->link(__('Novo Complemento'), ['action' => 'add'], ['class' => 'button']) ?>
         </div>
-	</aside>
+    </aside>
     
     <h3><?= __('Lista de Complementos') ?></h3>
-	
+    
     <div class="paginator">
         <?= $this->element('paginator'); ?>
     </div>
@@ -26,7 +26,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($complementos as $complemento): ?>
+                <?php foreach ($complementos as $complemento) : ?>
                 <tr>
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $complemento->id]) ?>

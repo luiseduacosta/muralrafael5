@@ -54,7 +54,7 @@ final class MuralestagiosTablePolicy implements BeforePolicyInterface
     /**
      * @param \Authorization\IdentityInterface $userSession
      * @param \App\Model\Entity\Muralestagio $muralestagioData
-     * @return \Authorization\Policy\Result 
+     * @return \Authorization\Policy\Result
      */
     public function canImprimepdf(IdentityInterface $userSession, Muralestagio $muralestagioData): Result
     {

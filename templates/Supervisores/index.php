@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Supervisor[]|\Cake\Collection\CollectionInterface $supervisores
+ * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Supervisor> $supervisores
  */
 ?>
 <div class="supervisores index content">
@@ -26,7 +26,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($supervisores as $supervisor): ?>
+                <?php foreach ($supervisores as $supervisor) : ?>
                 <tr>
                     <td class="actions">
                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $supervisor->id]) ?>
@@ -36,7 +36,7 @@
                     <td><?= $this->Html->link((string)$supervisor->id, ['action' => 'view', $supervisor->id]) ?></td>
                     <td><?= $this->Html->link($supervisor->nome, ['action' => 'view', $supervisor->id]) ?></td>
                     <td><?= h($supervisor->cpf) ?></td>
-                    <td><?= ($supervisor->email) ? $this->Text->autoLinkEmails($supervisor->email) : '' ?></td>
+                    <td><?= $supervisor->email ? $this->Text->autoLinkEmails($supervisor->email) : '' ?></td>
                     <td><?= h($supervisor->cress) ?></td>
                 </tr>
                 <?php endforeach; ?>

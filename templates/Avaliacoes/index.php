@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Avaliacao[]|\Cake\Collection\CollectionInterface $avaliacoes
+ * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Avaliacao> $avaliacoes
  */
 
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
@@ -15,8 +15,7 @@ if ($user_session) {
 ?>
 <div class="avaliacoes index content">
 
-    <?php if ( $user_data['administrador_id'] OR $user_data['supervisor_id'] ): ?>
-
+    <?php if ($user_data['administrador_id'] or $user_data['supervisor_id']) : ?>
         <aside>
             <div class="nav">
                 <?= $this->Html->link(__('Nova Avaliação'), ['action' => 'add'], ['class' => 'button']) ?>
@@ -25,8 +24,7 @@ if ($user_session) {
 
     <?php endif; ?>
     
-    <?php if ($user_data['administrador_id']): ?>
-    
+    <?php if ($user_data['administrador_id']) : ?>
         <?php $this->Paginator->setPaginated($avaliacoes); ?>
         <h3><?= __('Lista de Avaliações') ?></h3>
     
@@ -43,7 +41,7 @@ if ($user_session) {
                 </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($avaliacoes as $avaliacao): ?>
+                    <?php foreach ($avaliacoes as $avaliacao) : ?>
                     <tr>
                         <td class="actions">
                             <?= $this->Html->link(__('Ver'), ['action' => 'view', $avaliacao->id]) ?>
@@ -61,14 +59,13 @@ if ($user_session) {
             </table>
         </div>
 
-	<?php else: ?>
-    
+    <?php else : ?>
         <?php $this->Paginator->setPaginated($estagiarios); ?>
         <div class="table-responsive">
             <table class="table table-striped table-hover table-responsive">
                 <thead>
                     <tr>
-                        <?php if ($user_data['administrador_id']): ?>
+                        <?php if ($user_data['administrador_id']) : ?>
                             <th class="actions"><?= __('Ações') ?></th>
                         <th><?= $this->Paginator->sort('id') ?></th>
                         <?php endif; ?>
@@ -83,10 +80,10 @@ if ($user_session) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($estagiarios as $estagiario): ?>
+                    <?php foreach ($estagiarios as $estagiario) : ?>
                         <tr>
-                            <?php if ($user_data['administrador_id']): ?>
-                                <?php if (isset($estagiario->avaliacao->id)): ?>
+                            <?php if ($user_data['administrador_id']) : ?>
+                                <?php if (isset($estagiario->avaliacao->id)) : ?>
                                     <td class="actions">
                                         <?= $this->Html->link(__('Ver'), ['action' => 'view', $estagiario->avaliacao->id]) ?>
                                         <?= $this->Html->link(__('Editar'), ['action' => 'edit', $estagiario->avaliacao->id]) ?>
@@ -94,20 +91,19 @@ if ($user_session) {
                                     </td>
                                 <?php endif; ?>
                                 <td><?= isset($estagiario->id) ? $this->Html->link((string)$estagiario->id, ['controller' => 'estagiarios', 'action' => 'view', $estagiario->id]) : '' ?></td>
-                            <?php else: ?>
-    
-                                <?php if ($user_data['administrador_id'] || $user_data['supervisor_id']): ?>
+                            <?php else : ?>
+                                <?php if ($user_data['administrador_id'] || $user_data['supervisor_id']) : ?>
                                     <td><?= $estagiario->hasValue('avaliacao') ? $this->Html->link('Ver avaliação', ['controller' => 'Avaliacoes', 'action' => 'view', $estagiario->avaliacao->id], ['class' => 'btn btn-success']) : $this->Html->link('Fazer avaliação', ['controller' => 'avaliacoes', 'action' => 'add', $estagiario->id], ['class' => 'btn btn-warning']) ?>
                                     </td>
-                                <?php else: ?>
+                                <?php else : ?>
                                     <td><?= $estagiario->hasValue('avaliacao') ? $this->Html->link('Ver avaliação', ['controller' => 'Avaliacoes', 'action' => 'view', $estagiario->avaliacao->id], ['class' => 'btn btn-success']) : 'Sem avaliação on-line' ?>
                                     </td>
                                 <?php endif; ?>
     
-                                <?php if ($user_data['administrador_id']): ?>
+                                <?php if ($user_data['administrador_id']) : ?>
                                     <td><?= $estagiario->hasValue('aluno') ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?>
                                     </td>
-                                <?php else: ?>
+                                <?php else : ?>
                                     <td><?= $estagiario->hasValue('aluno') ? $estagiario->aluno->nome : '' ?></td>
                                 <?php endif; ?>
     

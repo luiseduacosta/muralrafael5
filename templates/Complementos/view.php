@@ -14,7 +14,7 @@ if ($user_session) {
         <div class="complementos view content">
             <aside>
                 <div class="nav">
-                    <?php if ($user_data['administrador_id']): ?>
+                    <?php if ($user_data['administrador_id']) : ?>
                         <?= $this->Html->link(__('Listar Complementos'), ['action' => 'index'], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Editar Complemento'), ['action' => 'edit', $complemento->id], ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Excluir Complemento'), ['action' => 'delete', $complemento->id], ['confirm' => __('Are you sure you want to delete {0}?', $complemento->periodo_especial), 'class' => 'button']) ?>
