@@ -37,8 +37,7 @@ class SupervisoresController extends AppController
                 'nome',
                 'cpf',
                 'cress',
-                'email',
-                'Users.email',
+                'email'
             ],
         ]);
 
