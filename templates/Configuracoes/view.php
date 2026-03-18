@@ -17,7 +17,7 @@ use Cake\I18n\Date;
             <dl>
                 <div class="row">
                     <dt class="col-3"><?= __('Instituição - Curso') ?></dt>
-                    <dd class="col-9"><?= h($configuracao->instituicao) ?></dd>
+                    <dd class="col-9"><?= h($configuracao->instituicao_curso) ?></dd>
                     <dt class="col-3"><?= __('Período Atual Mural') ?></dt>
                     <dd class="col-9"><?= h($configuracao->mural_periodo_atual) ?></dd>
                     <dt class="col-3"><?= __('Período Termo Compromisso') ?></dt>

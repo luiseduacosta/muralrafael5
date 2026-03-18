@@ -553,7 +553,7 @@ class AlunosController extends AppController
             'order' => ['nivel' => 'asc']
         ]));
 
-        $instituicao = $this->fetchTable("Configuracoes")->find()->first()['instituicao'];
+        $instituicao = $this->fetchTable("Configuracoes")->find()->first()['instituicao_curso'];
         if (empty($instituicao)) { $instituicao = 'ESS/UFRJ'; }
         $this->set('instituicao', $instituicao);
     

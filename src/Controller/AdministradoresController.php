@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
 use Cake\Event\EventInterface;
+use Exception;
 
 /**
  * Administradores Controller
@@ -51,39 +52,46 @@ class AdministradoresController extends AppController
      */
     public function view(?string $id = null)
     {
+        $administrador = null;
 
         if ($id) {
             try {
-                $administrador = $this->Administradores->get($id);
-            } catch (\Exception $error) {
+                $administrador = $this->Administradores->get($id, [
+                    'contain' => ['Users'],
+                ]);
+            } catch (Exception $error) {
                 $this->Flash->error('Error: ' . $error->getMessage());
+
                 return $this->redirect('/');
             }
+        } else {
+            $user_id = $this->request->getQuery('user_id');
+            if ($user_id) {
+                try {
+                    $administrador = $this->Administradores->find('all', [
+                        'conditions' => ['Administradores.user_id' => $user_id],
+                        'contain' => ['Users'],
+                    ])->first();
+                } catch (Exception $error) {
+                    $this->Flash->error('Error: ' . $error->getMessage());
+
+                    return $this->redirect('/');
+                }
+            }
+        }
+
+        if (!$administrador) {
+            $this->Flash->error('Administrador not found');
+
+            return $this->redirect(['action' => 'index']);
         }
 
         try {
             $this->Authorization->authorize($administrador);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
+
             return $this->redirect('/');
-        }
-
-        $user_id = $this->request->getQuery('user_id');
-        if ($user_id) {
-            try {
-                $administrador = $this->Administradores->find('all', [
-                    'conditions' => ['Administradores.user_id' => $user_id],
-                    'contain' => ['Users'],
-                ])->first();
-            } catch (\Exception $error) {
-                $this->Flash->error('Error: ' . $error->getMessage());
-                return $this->redirect('/');
-            }
-        }
-
-        if (!$administrador) {
-            $this->Flash->error('Administrador not found');
-            return $this->redirect(['action' => 'index']);
         }
 
         $this->set(compact('administrador'));
@@ -140,5 +148,4 @@ class AdministradoresController extends AppController
         }
         $this->set(compact('administrador'));
     }
-    
 }

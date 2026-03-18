@@ -1,10 +1,10 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\EventInterface;
 
 /**
@@ -30,10 +30,10 @@ class UsersController extends AppController
      */
     protected array $paginate = [
         'sortableFields' => [
-            'id', 'email', 'Alunos.nome', 'Professores.nome', 'Supervisores.nome', 'created', 'modified'
-        ]
+            'id', 'email', 'Alunos.nome', 'Professores.nome', 'Supervisores.nome', 'created', 'modified',
+        ],
     ];
-    
+
     /**
      * Index method
      *
@@ -41,14 +41,16 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_data = ['administrador_id' => 0,'aluno_id' => 0,'professor_id' => 0,'supervisor_id' => 0];
         $user_session = $this->request->getAttribute('identity');
-        if ($user_session) { $user_data = $user_session->getOriginalData(); }
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
 
         $contained = ['Administradores', 'Alunos', 'Professores', 'Supervisores'];
-        
+
         $this->Authorization->authorize($this->Users);
-        
+
         if ($user_data['administrador_id']) {
             $query = $this->Users->find('all')->contain($contained);
         } else {
@@ -59,7 +61,7 @@ class UsersController extends AppController
             'email',
             'categoria',
             'created',
-            'modified'
+            'modified',
         ]]);
         $this->set(compact('users'));
     }
@@ -71,16 +73,17 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $contained = ['Administradores', 'Alunos', 'Supervisores', 'Professores'];
-        
+
         $user = $this->Users->get($id, [ 'contain' =>  $contained ]);
         try {
             $this->Authorization->authorize($user);
         } catch (ForbiddenException $error) {
             $user_session = $this->request->getAttribute('identity');
             $this->Flash->error('Authorization error: ' . $error->getMessage());
+
             return $this->redirect(['action' => 'view', $user_session->id]);
         }
 
@@ -96,28 +99,31 @@ class UsersController extends AppController
     {
         // authorize all users to add
         $this->Authorization->skipAuthorization();
-        
-        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+
+        $user_data = ['administrador_id' => 0,'aluno_id' => 0,'professor_id' => 0,'supervisor_id' => 0];
         $user_session = $this->request->getAttribute('identity');
-        if ($user_session) { $user_data = $user_session->getOriginalData(); }
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
 
         if ($user_session) {
             $this->Flash->warning(__('Usuario ja esta logado.'));
         }
-        
+
         $user = $this->Users->newEmptyEntity();
-        
+
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData(), [
                 'fields' => ['categoria', 'registro', 'password', 'email'],
-                'accessibleFields' => ['password' => true]
+                'accessibleFields' => ['password' => true],
             ]);
- 
+
             // Verify is registro has a valid value set. It is mandatory for all of the new users except admin
             if ($this->request->getData('categoria') != '1') {
                 $registro = $this->request->getData('registro');
                 if (empty($registro)) {
                     $this->Flash->error(__('O registro é obrigatório para o tipo de usuário selecionado.'));
+
                     return $this->redirect(['action' => 'add']);
                 }
             }
@@ -125,48 +131,53 @@ class UsersController extends AppController
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 // Update the entities with the user id and the user id with the entity id
-                if ($user->aluno_id) {
+                if ($user->categoria == 2) {
                     $aluno = $this->fetchTable('Alunos')->findByRegistro($user->registro)->first();
                     if ($aluno) {
                         $this->fetchTable('Alunos')->updateAll(['user_id' => $user->id], ['id' => $aluno->id]);
                         $this->fetchTable('Users')->updateAll(['aluno_id' => $aluno->id], ['id' => $user->id]);
                     } else {
                         $this->Flash->error(__('Aluno(a) não cadastrado(a).'));
+
                         return $this->redirect(['controller' => 'Alunos', 'action' => 'add']);
                     }
-                } else if ($user->professor_id) {
+                } elseif ($user->categoria == 3) {
                     $professor = $this->fetchTable('Professores')->findBySiape($user->registro)->first();
                     if ($professor) {
                         $this->fetchTable('Professores')->updateAll(['user_id' => $user->id], ['id' => $professor->id]);
                         $this->fetchTable('Users')->updateAll(['professor_id' => $professor->id], ['id' => $user->id]);
                     } else {
                         $this->Flash->error(__('Professor(a) não cadastrado(a).'));
+
                         return $this->redirect(['controller' => 'Professores', 'action' => 'add']);
                     }
-                } else if ($user->supervisor_id) {
+                } elseif ($user->categoria == 4) {
                     $supervisor = $this->fetchTable('Supervisores')->findByCress($user->registro)->first();
                     if ($supervisor) {
                         $this->fetchTable('Supervisores')->updateAll(['user_id' => $user->id], ['id' => $supervisor->id]);
                         $this->fetchTable('Users')->updateAll(['supervisor_id' => $supervisor->id], ['id' => $user->id]);
                     } else {
                         $this->Flash->error(__('Supervisor(a) não cadastrado(a).'));
+
                         return $this->redirect(['controller' => 'Supervisores', 'action' => 'add']);
                     }
-                } elseif ($user->administrador_id) {
+                } elseif ($user->categoria == 1) {
                     $administrador = $this->fetchTable('Administradores')->findByEmail($user->email)->first();
                     if ($administrador) {
                         $this->fetchTable('Administradores')->updateAll(['user_id' => $user->id], ['id' => $administrador->id]);
                         $this->fetchTable('Users')->updateAll(['administrador_id' => $administrador->id], ['id' => $user->id]);
                     } else {
                         $this->Flash->error(__('Administrador(a) não cadastrado(a).'));
+
                         return $this->redirect(['controller' => 'Administradores', 'action' => 'add']);
                     }
                 }
+
                 return $this->redirect(['action' => 'view', $user->id]);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
-        
+
         $this->set(compact('user'));
     }
 
@@ -177,47 +188,51 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function editpassword($id = null)
+    public function editpassword(?string $id = null)
     {
         $this->edit($id);
     }
+
     public function edit($id = null)
     {
-        $user_data = ['administrador_id'=>0,'aluno_id'=>0,'professor_id'=>0,'supervisor_id'=>0];
+        $user_data = ['administrador_id' => 0,'aluno_id' => 0,'professor_id' => 0,'supervisor_id' => 0];
         $user_session = $this->request->getAttribute('identity');
-        if ($user_session) { $user_data = $user_session->getOriginalData(); }
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
 
         $user = $this->Users->get($id);
         $sameUser = ($user_session and $user_session->get('id') == $id);
-                
+
         try {
             $this->Authorization->authorize($user);
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());
+
             return $this->redirect(['action' => 'edit', $user_session->id]);
         }
-            
+
         if ($this->request->is(['patch', 'post', 'put'])) {
-            
             $opt = ['fields' => ['email']];
             $data = $this->request->getData();
-            
+
             if (array_key_exists('password', $data)) {
                 $opt = [
                     'fields' => ['email', 'password'],
-                    'accessibleFields' => ['password' => ($user_data['administrador_id'] || $sameUser)]
+                    'accessibleFields' => ['password' => ($user_data['administrador_id'] || $sameUser)],
                 ];
             } else {
                 unset($data['password']);
             }
-            
+
             $user = $this->Users->patchEntity($user, $data, $opt);
-            
+
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
+
                 return $this->redirect(['action' => 'view', $id]);
             }
-            
+
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
 
@@ -232,7 +247,7 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null) 
+    public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
@@ -245,7 +260,7 @@ class UsersController extends AppController
                 $this->Flash->error(__('The user could not be deleted. Please, try again.'));
             }
         } catch (ForbiddenException $error) {
-            $this->Flash->error(__( 'Authorization error: ' . $error->getMessage() ));
+            $this->Flash->error(__('Authorization error: ' . $error->getMessage()));
         }
 
         return $this->redirect(['action' => 'index']);
@@ -254,11 +269,12 @@ class UsersController extends AppController
     /*
      * Login method
      */
+
     public function login()
     {
         // authorize all users to access login
         $this->Authorization->skipAuthorization();
-        
+
         $result = $this->Authentication->getResult();
 
         // If the user is logged in send them away.
@@ -282,16 +298,19 @@ class UsersController extends AppController
                             $administrador->user_id = $user['id'];
                             $this->fetchTable('Administradores')->save($administrador);
                             $this->Flash->success(__('Administrador e usuário associados.'));
+
                             return $this->redirect(['controller' => 'Administradores', 'action' => 'view', $administrador->id]);
                         }
                     }
+
                     return $this->redirect(['controller' => 'Administradores', 'action' => 'add']);
                 case '2': // Aluno: two ways to pair the user with an aluno: aluno_id or numero
                     if ($user['aluno_id']) {
                         try {
                             $aluno = $this->fetchTable('Alunos')->get($user['aluno_id']);
-                        } catch (\Cake\Datasource\Exception\RecordNotFoundException $error) {
-                            $this->Flash->error(__( 'Record not found: ' . $error->getMessage() ));
+                        } catch (RecordNotFoundException $error) {
+                            $this->Flash->error(__('Record not found: ' . $error->getMessage()));
+
                             return $this->redirect([ 'controller' => 'Alunos', 'action' => 'add']);
                         }
                         if ($aluno) {
@@ -305,14 +324,16 @@ class UsersController extends AppController
                                 $this->fetchTable('Alunos')->save($aluno);
                                 $this->Flash->success(__('Aluno e usuário associados.'));
                             }
+
                             return $this->redirect(['controller' => 'Alunos', 'action' => 'view', $aluno->id]);
                         }
                     }
                     if ($user['registro']) {
                         try {
                             $aluno = $this->fetchTable('Alunos')->findByRegistro($user['registro'])->first();
-                        } catch (\Cake\Datasource\Exception\RecordNotFoundException $error) {
-                            $this->Flash->error(__( 'Record not found: ' . $error->getMessage() ));
+                        } catch (RecordNotFoundException $error) {
+                            $this->Flash->error(__('Record not found: ' . $error->getMessage()));
+
                             return $this->redirect([ 'controller' => 'Alunos', 'action' => 'add']);
                         }
                         if ($aluno) {
@@ -326,17 +347,20 @@ class UsersController extends AppController
                                 $this->fetchTable('Alunos')->save($aluno);
                                 $this->Flash->success(__('Aluno e usuário associados.'));
                             }
+
                             return $this->redirect(['controller' => 'Alunos', 'action' => 'view', $aluno->id]);
                         }
                     }
+
                     return $this->redirect(['controller' => 'Alunos', 'action' => 'add']);
 
                 case '3': // Professor: two ways to pair the user with a professor: professor_id or siape
                     if ($user['professor_id']) {
                         try {
                             $professor = $this->fetchTable('Professores')->get($user['professor_id']);
-                        } catch (\Cake\Datasource\Exception\RecordNotFoundException $error) {
-                            $this->Flash->error(__( 'Record not found: ' . $error->getMessage() ));
+                        } catch (RecordNotFoundException $error) {
+                            $this->Flash->error(__('Record not found: ' . $error->getMessage()));
+
                             return $this->redirect([ 'controller' => 'Professores', 'action' => 'add']);
                         }
                         if ($professor) {
@@ -350,14 +374,16 @@ class UsersController extends AppController
                                 $this->fetchTable('Professores')->save($professor);
                                 $this->Flash->success(__('Professor e usuário associados.'));
                             }
+
                             return $this->redirect(['controller' => 'Professores', 'action' => 'view', $professor->id]);
-                        }               
+                        }
                     }
                     if ($user['registro']) {
                         try {
                             $professor = $this->fetchTable('Professores')->findBySiape($user['registro'])->first();
-                        } catch (\Cake\Datasource\Exception\RecordNotFoundException $error) {
-                            $this->Flash->error(__( 'Record not found: ' . $error->getMessage() ));
+                        } catch (RecordNotFoundException $error) {
+                            $this->Flash->error(__('Record not found: ' . $error->getMessage()));
+
                             return $this->redirect([ 'controller' => 'Professores', 'action' => 'add']);
                         }
                         if ($professor) {
@@ -369,16 +395,19 @@ class UsersController extends AppController
                             $professor->user_id = $user['id'];
                             $this->fetchTable('Professores')->save($professor);
                             $this->Flash->success(__('Professor e usuário associados.'));
+
                             return $this->redirect(['controller' => 'Professores', 'action' => 'view', $professor->id]);
                         }
                     }
+
                     return $this->redirect(['controller' => 'Professores', 'action' => 'add']);
                 case '4': // Supervisor: two ways to pair the user with a supervisor: supervisor_id or cress
                     if ($user['supervisor_id']) {
                         try {
                             $supervisor = $this->fetchTable('Supervisores')->get($user['supervisor_id']);
-                        } catch (\Cake\Datasource\Exception\RecordNotFoundException $error) {
-                            $this->Flash->error(__( 'Record not found: ' . $error->getMessage() ));
+                        } catch (RecordNotFoundException $error) {
+                            $this->Flash->error(__('Record not found: ' . $error->getMessage()));
+
                             return $this->redirect([ 'controller' => 'Supervisores', 'action' => 'add']);
                         }
                         if ($supervisor) {
@@ -392,14 +421,16 @@ class UsersController extends AppController
                                 $this->fetchTable('Supervisores')->save($supervisor);
                                 $this->Flash->success(__('Supervisor e usuário associados.'));
                             }
+
                             return $this->redirect(['controller' => 'Supervisores', 'action' => 'view', $supervisor->id]);
                         }
                     }
                     if ($user['registro']) {
                         try {
                             $supervisor = $this->fetchTable('Supervisores')->findByCress($user['registro'])->first();
-                        } catch (\Cake\Datasource\Exception\RecordNotFoundException $error) {
-                            $this->Flash->error(__( 'Record not found: ' . $error->getMessage() ));
+                        } catch (RecordNotFoundException $error) {
+                            $this->Flash->error(__('Record not found: ' . $error->getMessage()));
+
                             return $this->redirect([ 'controller' => 'Supervisores', 'action' => 'add']);
                         }
                         if ($supervisor) {
@@ -413,9 +444,11 @@ class UsersController extends AppController
                                 $this->fetchTable('Supervisores')->save($supervisor);
                                 $this->Flash->success(__('Supervisor e usuário associados.'));
                             }
+
                             return $this->redirect(['controller' => 'Supervisores', 'action' => 'view', $supervisor->id]);
                         }
                     }
+
                     return $this->redirect(['controller' => 'Supervisores', 'action' => 'add']);
                 default:
                     return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
@@ -429,17 +462,19 @@ class UsersController extends AppController
     /*
      * Logout method
      */
+
     public function logout()
     {
         // authorize all users to access logout
         $this->Authorization->skipAuthorization();
-        
+
         // Clear impersonation data if logging out
         $this->request->getSession()->delete('Auth.impersonating');
-        
+
         $this->Authentication->logout();
-        
+
         $this->Flash->warning(__('Usuario desconectado.'));
+
         return $this->redirect('/');
     }
 
@@ -450,20 +485,21 @@ class UsersController extends AppController
     public function alternarusuario($id = null)
     {
         $this->Authorization->skipAuthorization();
-        
+
         $identity = $this->Authentication->getIdentity();
         $user_data = $identity->getOriginalData();
 
         // Only administrators can impersonate
         if ($user_data['categoria'] != '1' && !$this->request->getSession()->check('Auth.impersonating')) {
             $this->Flash->error(__('Acesso negado. Apenas administradores podem alternar usuários.'));
+
             return $this->redirect(['action' => 'index']);
         }
 
         if ($id) {
             // Start impersonating
             $targetUser = $this->Users->get($id);
-            
+
             // Store original admin ID if not already impersonating
             if (!$this->request->getSession()->check('Auth.impersonating')) {
                 $this->request->getSession()->write('Auth.impersonating', $user_data['id']);
@@ -471,22 +507,23 @@ class UsersController extends AppController
 
             $this->Authentication->impersonate($targetUser);
             $this->Flash->success(__('Você agora está acessando como ' . $targetUser->email));
+
             return $this->redirect('/');
         } else {
             // Stop impersonating if no ID is provided and we are currently impersonating
             if ($this->request->getSession()->check('Auth.impersonating')) {
                 $originalId = $this->request->getSession()->read('Auth.impersonating');
                 $originalUser = $this->Users->get($originalId);
-                
+
                 $this->Authentication->impersonate($originalUser);
                 $this->request->getSession()->delete('Auth.impersonating');
-                
+
                 $this->Flash->success(__('Identidade restaurada para administrador.'));
+
                 return $this->redirect(['action' => 'index']);
             }
         }
 
         return $this->redirect(['action' => 'index']);
     }
-    
 }

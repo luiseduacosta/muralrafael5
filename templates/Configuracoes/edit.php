@@ -11,7 +11,7 @@
             <fieldset>
                 <h3><?= __('Editando Configurações') ?></h3>
                 <?php
-                    echo $this->Form->control('instituicao', ['label' => 'Instiuiçõa - Curso']);
+                    echo $this->Form->control('instituicao_curso', ['label' => 'Instiuiçõa - Curso']);
                     echo $this->Form->control('mural_periodo_atual', ['label' => 'Período Atual Mural']);
                     echo $this->Form->control('termo_compromisso_periodo', ['label' => 'Período Termo Compromisso']);
                     echo $this->Form->control('termo_compromisso_inicio', ['label' => 'Inicio Termo Compromisso']);
