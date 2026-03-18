@@ -9,6 +9,7 @@ use Cake\ORM\Entity;
  * Configuracao Entity
  *
  * @property int $id
+ * @property string $instituicao_curso
  * @property string $mural_periodo_atual
  * @property int $curso_turma_atual
  * @property \Cake\I18n\FrozenDate $curso_abertura_inscricoes
@@ -30,6 +31,7 @@ class Configuracao extends Entity
      * @var array
      */
     protected array $_accessible = [
+        'instituicao_curso' => true,
         'mural_periodo_atual' => true,
         'curso_turma_atual' => true,
         'curso_abertura_inscricoes' => true,
