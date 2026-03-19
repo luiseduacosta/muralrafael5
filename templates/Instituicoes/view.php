@@ -37,7 +37,7 @@ if ($user_session) {
                 <tr>
                     <th><?= __('Área') ?></th>
                     <!-- Area_rel está definida em Instituicao.php //-->
-                    <td><?= $instituicao->area_rel->area ? $this->Html->link($instituicao->area_rel->area, ['controller' => 'Areas', 'action' => 'view', $instituicao->area_rel->id]) : '' ?></td>
+                    <td><?= empty($instituicao->area_rel->area) ? '' : $this->Html->link($instituicao->area_rel->area, ['controller' => 'Areas', 'action' => 'view', $instituicao->area_rel->id]) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Natureza') ?></th>
