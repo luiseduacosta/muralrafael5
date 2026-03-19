@@ -123,16 +123,6 @@ class AlunosController extends AppController
 
             if ($this->Alunos->save($aluno)) {
                 $this->Flash->success(__('O aluno foi adicionado com sucesso.'));
-                // Update user record with aluno_id and numero only if the user is a aluno
-                if ($user_data['aluno_id']) {
-                    $user = $this->fetchTable('Users')->get($aluno->user_id);
-                    $user->aluno_id = $aluno->id;
-                    $user->numero = $aluno->registro;
-                    $this->fetchTable('Users')->save($user);
-                    // Refresh the user identity in the session
-                    $this->Authentication->setIdentity($user);
-                }
-                // Go to aluno view page
                 return $this->redirect(['action' => 'view', $aluno->id]);
             }
             $this->Flash->error(__('Erro ao adicionar: não foi possível salvar os dados.'));

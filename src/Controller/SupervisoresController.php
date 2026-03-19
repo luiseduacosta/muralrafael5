@@ -134,16 +134,6 @@ class SupervisoresController extends AppController
 
             if ($this->Supervisores->save($supervisor)) {
                 $this->Flash->success(__('The supervisor has been saved.'));
-                // Update the user with the supervisor id only if the atual user is supervisor
-                if ($user_data['supervisor_id']) {
-                    $user = $this->fetchTable('Users')->get($supervisor->user_id);
-                    $user->supervisor_id = $supervisor->id;
-                    $user->numero = $supervisor->cress;
-                    $this->fetchTable('Users')->save($user);
-                    // Refresh the user identity in the session
-                    $this->Authentication->setIdentity($user);
-                }
-                // Go to view
                 return $this->redirect(['action' => 'view', $supervisor->id]);
             }
             $this->Flash->error(__('The supervisor could not be saved. Please, try again.'));

@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `complementos` (
 
 CREATE TABLE IF NOT EXISTS `configuracoes` (
   `id` int(11) NOT NULL AUTO_INCREMENT, 
-  `instituicao_curso` varchar(10) NOT NULL DEFAULT 'ESS/UFRJ',
+  `instituicao_curso` varchar(10) NOT NULL DEFAULT 'ESS/UFRJ' COMMENT 'Instituicao de ensino superior e curso.',
   `mural_periodo_atual` char(6) NOT NULL,
   `curso_turma_atual` smallint(2) DEFAULT NULL,
   `curso_abertura_inscricoes` date DEFAULT NULL,
@@ -187,8 +187,8 @@ CREATE TABLE IF NOT EXISTS `estagiarios` (
   `benetransporte` tinyint(1) DEFAULT NULL COMMENT 'Beneficio de transporte: 0=Nao, 1=Sim',
   `benealimentacao` tinyint(1) DEFAULT NULL COMMENT 'Beneficio de alimentacao: 0=Nao, 1=Sim',
   `benebolsa` varchar(5) DEFAULT NULL COMMENT 'Valor em R$ do Beneficio de bolsa',
-  `turno_id` smallint(6) DEFAULT NULL COMMENT 'Turno de estagio: d=Matutino, n=Noturno, i=Indefinido. Obsoleto?',
-  `turma_id` smallint(6) NOT NULL COMMENT 'Link com a tabela Turmas de estagio',
+  `turno_id` smallint(6) DEFAULT NULL COMMENT 'Turno de estagio: d=Matutino, n=Noturno, i=Indefinido. Obsoleto!',
+  `turma_id` smallint(6) NOT NULL COMMENT 'Link com a tabela Turmas de estagio' COMMENT 'Turma de estagio. Obsoleto',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Estagiários.';  
 
@@ -222,7 +222,7 @@ CREATE TABLE IF NOT EXISTS `inscricoes` (
   `data` date NOT NULL,
   `periodo` char(6) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `alunonovo_id` int(11) DEFAULT NULL,
+  `alunonovo_id` int(11) DEFAULT NULL COMMENT 'ID de tabela de alunos novos. Obsoleto',
   `aluno_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Inscrições de alunos para seleção de estágios.';
@@ -351,7 +351,7 @@ CREATE TABLE IF NOT EXISTS `professores` (
   `dataegresso` date DEFAULT NULL,
   `motivoegresso` varchar(100) DEFAULT NULL,
   `observacoes` text DEFAULT NULL,
-  `user_id` int(11) NOT NULL COMMENT 'ID da tabela users',
+  `user_id` int(11) DEFAULT NULL COMMENT 'ID da tabela users',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Professores.';
 
@@ -385,7 +385,7 @@ CREATE TABLE IF NOT EXISTS `supervisores` (
   `num_inscricao` int(3) DEFAULT NULL COMMENT 'Número de inscrição no curso de supervisores',
   `curso_turma` char(1) DEFAULT NULL COMMENT 'Turma de curso de supervisores',
   `observacoes` text DEFAULT NULL,
-  `user_id` int(11) NOT NULL COMMENT 'ID da tabela users',
+  `user_id` int(11) DEFAULT NULL COMMENT 'ID da tabela users',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Supervisores de estagiários.';
 
@@ -399,7 +399,7 @@ CREATE TABLE IF NOT EXISTS `turmas` (
   `id` smallint(3) NOT NULL AUTO_INCREMENT,
   `turma` varchar(70) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Turmas de estagiários.';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Turmas de estagiários. Obsoleta';
 
 -- --------------------------------------------------------
 --
@@ -410,7 +410,7 @@ CREATE TABLE IF NOT EXISTS `turnos` (
   `id` smallint(3) NOT NULL AUTO_INCREMENT,
   `turno` varchar(70) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Turnos de estagiários.';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Turnos de estagiários. Obsoleta';
 
 -- --------------------------------------------------------
 
@@ -425,9 +425,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   `categoria` enum('1','2','3','4') NOT NULL DEFAULT '2' COMMENT '1=Administrador, 2=Aluno, 3=Professor, 4=Supervisor',
   `numero` int(9) DEFAULT NULL COMMENT 'Registro do aluno, SIAPE do professor ou CRESS do supervisor',
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `aluno_id` int(11) DEFAULT NULL,
-  `supervisor_id` int(11) DEFAULT NULL,
-  `professor_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Usuários: administradores, professores, supervisores e alunos.';
 

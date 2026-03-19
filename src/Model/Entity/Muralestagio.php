@@ -15,7 +15,7 @@ use Cake\ORM\Entity;
  * @property int $vagas
  * @property string|null $beneficios
  * @property string|null $final_de_semana
- * @property int|null $cargaHoraria
+ * @property int|null $carga_horaria
  * @property string|null $requisitos
  * @property string|null $horario
  * @property \Cake\I18n\FrozenDate|null $data_selecao

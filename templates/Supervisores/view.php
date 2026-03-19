@@ -19,7 +19,7 @@ if ($user_session) {
                         <?= $this->Html->link(__('Listar Supervisores'), ['action' => 'index'], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Editar Supervisor(a)'), ['action' => 'edit', $supervisor->id], ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Excluir Supervisor(a)'), ['action' => 'delete', $supervisor->id], ['confirm' => __('Are you sure you want to delete {0}?', $supervisor->nome), 'class' => 'button']) ?>
-                        <?= $this->Html->link(__('Novo Supervisor(a)'), ['action' => 'add'], ['class' => 'button']) ?>
+                        <?= $this->Html->link(__('Novo(a) Supervisor(a)'), ['action' => 'add'], ['class' => 'button']) ?>
                     <?php endif; ?>
                     <?php if ($user_data['supervisor_id'] && $user_data['supervisor_id'] == $supervisor->id) : ?>
                         <?= $this->Html->link(__('Editar'), ['action' => 'edit', $supervisor->id], ['class' => 'button']) ?>

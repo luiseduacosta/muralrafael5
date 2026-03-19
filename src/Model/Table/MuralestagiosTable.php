@@ -108,7 +108,7 @@ class MuralestagiosTable extends Table
                 ->allowEmptyString('final_de_semana');
 
         $validator
-                ->allowEmptyString('cargaHoraria');
+                ->allowEmptyString('carga_horaria');
 
         $validator
                 ->scalar('requisitos')

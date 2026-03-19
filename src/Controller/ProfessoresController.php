@@ -122,16 +122,6 @@ class ProfessoresController extends AppController
 
             if ($this->Professores->save($professor)) {
                 $this->Flash->success(__('The professor has been saved.'));
-                // Update the user with the professor_id if the atual user is professor
-                if ($user_data['professor_id']) {
-                    $user = $this->fetchTable('Users')->get($professor->user_id);
-                    $user->professor_id = $professor->id;
-                    $user->numero = $professor->siape;
-                    $this->fetchTable('Users')->save($user);
-                    // Refresh the user identity in the session
-                    $this->Authentication->setIdentity($user);
-                }
-                // Got to view
                 return $this->redirect(['action' => 'view', $professor->id]);
             }
             $this->Flash->error(__('The professor could not be saved. Please, try again.'));

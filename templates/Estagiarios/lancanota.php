@@ -96,8 +96,8 @@ if ($user_session) {
                         </td>
                         <td><?= $estagiario['periodo'] ?></td>
                         <td><?= $estagiario['nivel'] ?></td>
-                        <td class="editable-field" data-field="nota"><?= $this->Number->format($estagiario['nota'], ['precision' => 2]) ?></td>
-                        <td class="editable-field" data-field="ch"><?= $this->Number->format($estagiario['ch']) ?></td>
+                        <td class="editable-field" data-field="nota"><?= empty($estagiario['nota']) ? '' : $this->Number->format($estagiario['nota'], ['precision' => 2]) ?></td>
+                        <td class="editable-field" data-field="ch"><?= empty($estagiario['ch']) ? '' : $this->Number->format($estagiario['ch']) ?></td>
                         <?php if (isset($estagiario['folha_id'])) : ?>
                             <td><?= $this->Html->link('Folha de atividades', ['controller' => 'Folhadeatividades', 'action' => 'index', $estagiario['id']]) ?>
                             </td>
