@@ -52,11 +52,11 @@ class MuralestagiosController extends AppController
                 'vagas',
                 'beneficios',
                 'final_de_semana',
-                'cargaHoraria',
-                'dataInscricao',
-                'dataSelecao',
+                'carga_horaria',
+                'data_inscricao',
+                'data_selecao',
             ],
-            'order' => ['dataInscricao' => 'desc'],
+          'order' => ['data_inscricao' => 'desc'],
         ]));
 
         $periodototal = $this->Muralestagios->find('list', [
@@ -128,9 +128,10 @@ class MuralestagiosController extends AppController
             // Put the instituicao name in the data
             $dados = $this->request->getData();
             $dados['instituicao'] = $instituicao->instituicao;
+            $dados['periodo'] = $periodo;
 
             // Horario de seleção has only 5 digits
-            $dados['horarioSelecao'] = substr($dados['horarioSelecao'], 0, 5);
+            $dados['horario_selecao'] = substr($dados['horario_selecao'], 0, 5);
 
             $muralestagio = $this->Muralestagios->patchEntity($muralestagio, $dados);
 
@@ -177,16 +178,16 @@ class MuralestagiosController extends AppController
             $dados['instituicao'] = $instituicao->instituicao;
 
             // Horario de seleção has only 5 digits
-            $dados['horarioSelecao'] = substr($dados['horarioSelecao'], 0, 5);
+            $dados['horario_selecao'] = substr($dados['horario_selecao'], 0, 5);
 
             $muralestagio = $this->Muralestagios->patchEntity($muralestagio, $dados);
 
             if ($this->Muralestagios->save($muralestagio)) {
-                $this->Flash->success(__('The muralestagio has been saved.'));
+                $this->Flash->success(__('O mural de estágio foi salvo com sucesso.'));
 
                 return $this->redirect(['action' => 'view', $id]);
             }
-            $this->Flash->error(__('The muralestagio could not be saved. Please, try again.'));
+            $this->Flash->error(__('O mural de estágio não foi salvo. Tente novamente.'));
         }
         $instituicoes = $this->fetchTable('Instituicoes')->find('list');
         $this->set(compact('muralestagio', 'instituicoes'));
@@ -215,9 +216,9 @@ class MuralestagiosController extends AppController
             }
 
             if ($this->Muralestagios->delete($muralestagio)) {
-                $this->Flash->success(__('The muralestagio has been deleted.'));
+                $this->Flash->success(__('O mural de estágio foi excluído com sucesso.'));
             } else {
-                $this->Flash->error(__('The muralestagio could not be deleted. Please, try again.'));
+                $this->Flash->error(__('O mural de estágio não foi excluído. Tente novamente.'));
             }
         } catch (ForbiddenException $error) {
             $this->Flash->error('Authorization error: ' . $error->getMessage());

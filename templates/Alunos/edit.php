@@ -64,7 +64,7 @@ if ($user_session) {
                     echo $this->Form->control('cpf', ['label' => 'CPF', 'pattern' => '[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}', 'placeholder' => '000.000.000-00', 'required' => true]);
                     echo $this->Form->control('identidade', ['label' => 'Identidade - RG', 'required' => false]);
                     echo $this->Form->control('orgao', ['label' => 'Orgão expedidor', 'title' => 'Máximo 20 caracteres', 'required' => false]);
-                    echo $this->Form->control('nascimento', ['label' => 'Data de Nascimento', 'required' => true]);
+                    echo $this->Form->control('nascimento', ['label' => 'Data de Nascimento', 'type' => 'date', 'required' => true]);
                     echo $this->Form->control('ingresso', ['label' => 'Período de Ingresso', 'pattern' => '[0-9]{4}\-[1-2]', 'placeholder' => '0000-0', 'required' => true]);
                     echo $this->Form->control('turno', ['options' => ['diurno' => 'Diurno', 'noturno' => 'Noturno', 'indefinido' => 'Indefinido'], 'empty' => true, 'required' => true]);
                     echo $this->Form->control('cep', ['label' => 'CEP', 'pattern' => '[0-9]{5}-[0-9]{3}', 'placeholder' => '00000-000', 'required' => false]);

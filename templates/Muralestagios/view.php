@@ -90,7 +90,7 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
                 </tr>
                 <tr>
                     <th><?= __('Carga Horária') ?></th>
-                    <td><?= $this->Number->format($muralestagio->cargaHoraria) ?></td>
+                    <td><?= $this->Number->format($muralestagio->carga_horaria) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Requisitos') ?></th>
@@ -98,44 +98,44 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
                 </tr>
                 <tr>
                     <th><?= __('Local Inscrição') ?></th>
-                    <td><?= h($muralestagio->localInscricao) ? 'Inscrição somente no mural da Coordenação de Estágio da ESS' : 'Inscrição na Instituição e no mural da Coordenação de Estágio da ESS' ?></td>
+                    <td><?= h($muralestagio->local_inscricao) ? 'Inscrição somente no mural da Coordenação de Estágio da ESS' : 'Inscrição na Instituição e no mural da Coordenação de Estágio da ESS' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Data de encerramento das inscrições') ?></th>
-                    <td><?= $muralestagio->dataInscricao ? $muralestagio->dataInscricao->format('d/m/Y') : '' ?></td>
+                    <td><?= $muralestagio->data_inscricao ? $muralestagio->data_inscricao->format('d/m/Y') : '' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Local da Seleção') ?></th>
-                    <td><?= h($muralestagio->localSelecao) ?></td>
+                    <td><?= h($muralestagio->local_selecao) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Data da Seleção') ?></th>
-                    <td><?= $muralestagio->dataSelecao ? $muralestagio->dataSelecao->format('d/m/Y') : '' ?></td>
+                    <td><?= $muralestagio->data_selecao ? $muralestagio->data_selecao->format('d/m/Y') : '' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Horário da Seleção') ?></th>
-                    <td><?= h($muralestagio->horarioSelecao) ?></td>
+                    <td><?= h($muralestagio->horario_selecao) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Forma de Seleção') ?></th>
                     <td>
                         <?php
                         $forma_selecao = '';
-                        switch (h($muralestagio->formaSelecao)) {
+                        switch (h($muralestagio->forma_selecao)) {
                             case 0:
-                                $formaSelecao = 'Entrevista';
+                                $forma_selecao = 'Entrevista';
                                 break;
                             case 1:
-                                $formaSelecao = 'CR';
+                                $forma_selecao = 'CR';
                                 break;
                             case 2:
-                                $formaSelecao = 'Prova';
+                                $forma_selecao = 'Prova';
                                 break;
                             case 3:
-                                $formaSelecao = 'Outra';
+                                $forma_selecao = 'Outra';
                                 break;
                         }
-                        echo $formaSelecao;
+                        echo $forma_selecao;
                         ?>
                     </td>
                 </tr>
@@ -163,14 +163,14 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
                 </tr>
             <?php elseif ($user_data['aluno_id']) : ?>
                 <!-- if dataInscricao is empty them let the close day of application open //-->
-                <?php if (empty($muralestagio->dataInscricao)) {
-                    $muralestagio->dataInscricao = new Date('tomorrow');
+                <?php if (empty($muralestagio->data_inscricao)) {
+                    $muralestagio->data_inscricao = new Date('tomorrow');
                 } ?>
-                <?php if ($muralestagio->dataInscricao->isFuture() || $muralestagio->dataInscricao->isToday()) : ?>
+                <?php if ($muralestagio->data_inscricao->isFuture() || $muralestagio->data_inscricao->isToday()) : ?>
                     <!--
                     Se a inscricao eh na instituição também tem que fazer inscrição no mural
                     //-->
-                    <?php if ((string)$muralestagio['localInscricao'] === '1') : ?>
+                    <?php if ((string)$muralestagio['local_inscricao'] === '1') : ?>
                         <tr>
                             <td colspan = 2>
                                 <p class="text-center text-danger">Não esqueça de também fazer inscrição na instituição. Ambas são necessárias!</p>

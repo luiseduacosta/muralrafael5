@@ -19,7 +19,7 @@ if ($user_session) {
     </aside>
     <?= $this->Form->create($inscricao) ?>
     <fieldset>
-        <h3><?= __('Adicionar Inscricao') ?></h3>
+        <h3><?= __('Adicionar Inscrição') ?></h3>
         <?php
             echo $this->Form->control('aluno_none', ['disabled' => !$user_data['administrador_id'], 'type' => 'text', 'value' => $aluno ? $aluno->nome : '']);
             echo $this->Form->hidden('registro', ['disabled' => !$user_data['administrador_id'], 'type' => 'text', 'value' => $aluno ? $aluno->registro : '']);

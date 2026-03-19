@@ -31,7 +31,7 @@ if ($user_session) {
             <thead>
                 <tr>
                     <?php if ($user_data['administrador_id']) : ?>
-                        <th class="actions"><?= __('Actions') ?></th>
+                        <th class="actions"><?= __('Ações') ?></th>
                         <th><?= $this->Paginator->sort('id') ?></th>
                     <?php endif; ?>
                     <th><?= $this->Paginator->sort('nome') ?></th>
@@ -58,20 +58,20 @@ if ($user_session) {
                     <?php endif; ?>
                     <td><?= $aluno->nome ? $this->Html->link(h($aluno->nome), ['action' => 'view', $aluno->id]) : '' ?></td>
                     <td><?= h($aluno->registro) ?></td>
-                    <td><?= $aluno->user || $aluno->email ? $this->Text->autoLinkEmails($aluno->email) : '' ?></td>
-                    <?php if (!empty($aluno->telefone) && strlen($aluno->telefone) < 10) : ?>
+                    <td><?= $aluno->user || (!empty($aluno->email) ? $this->Text->autoLinkEmails($aluno->email) : '') ?></td>
+                    <?php if (!empty((string)$aluno->telefone) && strlen((string)$aluno->telefone) < 10) : ?>
                         <td><?= $aluno->telefone ? '(' . $aluno->codigo_telefone . ') ' . h($aluno->telefone) : '' ?></td>
                     <?php else : ?>
                         <td><?= h($aluno->telefone) ?></td>
                     <?php endif; ?>
-                    <?php if (!empty($aluno->celular) && strlen($aluno->celular) < 10) : ?>
+                    <?php if (!empty((string)$aluno->celular) && strlen((string)$aluno->celular) < 10) : ?>
                         <td><?= $aluno->celular ? '(' . $aluno->codigo_celular . ') ' . h($aluno->celular) : '' ?></td>
                     <?php else : ?>
                         <td><?= h($aluno->celular) ?></td>
                     <?php endif; ?>
                     <td><?= h($aluno->cpf) ?></td>
-                    <td><?= $aluno->nascimento ? $aluno->nascimento->format('d/m/Y') : '' ?></td>
-                    <td><?= h($aluno->ingresso) ?></td>
+                    <td><?= $aluno->nascimento ? $this->Time->format($aluno->nascimento, 'd/m/Y') : '' ?></td>
+                    <td><?= h($aluno->ingresso) ?? 's/d' ?></td>
                     <td><?= h($aluno->turno) ?></td>
                 </tr>
                 <?php endforeach; ?>

@@ -41,7 +41,7 @@ class MuralestagiosTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('mural_estagio');
+        $this->setTable('mural_estagios');
         $this->setAlias('Muralestagios');
         $this->setDisplayField('instituicao');
         $this->setPrimaryKey('id');
@@ -66,13 +66,12 @@ class MuralestagiosTable extends Table
      * @param bool $primary Whether this is a primary query or not.
      * @return \Cake\ORM\Query
      */
-    public function beforeFind(EventInterface $event, Query $query, ArrayObject $options, bool $primary): Query
+    public function beforeFind(EventInterface $event, Query $query, \ArrayObject $options, bool $primary)
     {
-        $query->order(['Muralestagios.id' => 'ASC']);
+        $query->order(['data_inscricao' => 'DESC']);
 
         return $query;
     }
-
     /**
      * Default validation rules.
      *
@@ -122,31 +121,31 @@ class MuralestagiosTable extends Table
                 ->allowEmptyString('horario');
 
         $validator
-                ->scalar('localInscricao')
-                ->notEmptyString('localInscricao');
+                ->scalar('local_inscricao')
+                ->notEmptyString('local_inscricao');
 
         $validator
-                ->date('dataInscricao')
-                ->allowEmptyDate('dataInscricao');
+                ->date('data_inscricao')
+                ->allowEmptyDate('data_inscricao');
 
         $validator
-                ->date('dataSelecao')
-                ->allowEmptyDate('dataSelecao');
+                ->date('data_selecao')
+                ->allowEmptyDate('data_selecao');
 
         $validator
-                ->scalar('horarioSelecao')
-                ->maxLength('horarioSelecao', 8)
-                ->allowEmptyString('horarioSelecao');
+                ->scalar('horario_selecao')
+                ->maxLength('horario_selecao', 8)
+                ->allowEmptyString('horario_selecao');
 
         $validator
-                ->scalar('localSelecao')
-                ->maxLength('localSelecao', 70)
-                ->allowEmptyString('localSelecao');
+                ->scalar('local_selecao')
+                ->maxLength('local_selecao', 70)
+                ->allowEmptyString('local_selecao');
 
         $validator
-                ->scalar('formaSelecao')
-                ->maxLength('formaSelecao', 1)
-                ->allowEmptyString('formaSelecao');
+                ->scalar('forma_selecao')
+                ->maxLength('forma_selecao', 1)
+                ->allowEmptyString('forma_selecao');    
 
         $validator
                 ->scalar('contato')

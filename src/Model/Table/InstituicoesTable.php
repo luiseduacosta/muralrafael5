@@ -48,7 +48,7 @@ class InstituicoesTable extends Table
 
         $this->belongsTo('Areas', [
             'foreignKey' => 'area_id',
-            'propertyName' => 'area_rel', // para evitar conflito com o campo area
+            'propertyName' => 'area_rel', // para evitar conflito com o campo area da mesma tabela
         ]);
 
         $this->hasMany('Inscricoes', [

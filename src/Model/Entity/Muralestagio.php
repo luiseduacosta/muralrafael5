@@ -18,16 +18,16 @@ use Cake\ORM\Entity;
  * @property int|null $cargaHoraria
  * @property string|null $requisitos
  * @property string|null $horario
- * @property \Cake\I18n\FrozenDate|null $dataSelecao
- * @property \Cake\I18n\FrozenDate|null $dataInscricao
- * @property string|null $horarioSelecao
- * @property string|null $localSelecao
- * @property string|null $formaSelecao
+ * @property \Cake\I18n\FrozenDate|null $data_selecao
+ * @property \Cake\I18n\FrozenDate|null $data_inscricao
+ * @property string|null $horario_selecao
+ * @property string|null $local_selecao
+ * @property string|null $forma_selecao
  * @property string|null $contato
  * @property string|null $outras
  * @property string|null $periodo
  * @property \Cake\I18n\FrozenDate|null $datafax
- * @property string $localInscricao
+ * @property string $local_inscricao
  * @property string|null $email
  *
  * @property \App\Model\Entity\Instituicao $instituicao_rel
@@ -52,19 +52,19 @@ class Muralestagio extends Entity
         'vagas' => true,
         'beneficios' => true,
         'final_de_semana' => true,
-        'cargaHoraria' => true,
+        'carga_horaria' => true,
         'requisitos' => true,
         'horario' => true,
-        'dataSelecao' => true,
-        'dataInscricao' => true,
-        'horarioSelecao' => true,
-        'localSelecao' => true,
-        'formaSelecao' => true,
+        'data_selecao' => true,
+        'data_inscricao' => true,
+        'horario_selecao' => true,
+        'local_selecao' => true,
+        'forma_selecao' => true,
         'contato' => true,
         'outras' => true,
         'periodo' => true,
         'datafax' => true,
-        'localInscricao' => true,
+        'local_inscricao' => true,
         'email' => true,
         'instituicao_rel' => true,
     ];

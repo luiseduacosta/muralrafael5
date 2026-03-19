@@ -72,9 +72,9 @@ if ($user_session) {
                     <th><?= $this->Paginator->sort('vagas') ?></th>
                     <th><?= $this->Paginator->sort('beneficios') ?></th>
                     <th><?= $this->Paginator->sort('fim_de_semana', 'Fim de semana') ?></th>
-                    <th><?= $this->Paginator->sort('cargaHoraria', 'Carga Horária') ?></th>
-                    <th><?= $this->Paginator->sort('dataSelecao', 'Seleção') ?></th>
-                    <th><?= $this->Paginator->sort('dataInscricao', 'Inscrição') ?></th>
+                    <th><?= $this->Paginator->sort('carga_horaria', 'Carga Horária') ?></th>
+                    <th><?= $this->Paginator->sort('data_selecao', 'Seleção') ?></th>
+                    <th><?= $this->Paginator->sort('data_inscricao', 'Inscrição') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -108,9 +108,9 @@ if ($user_session) {
                             echo $fim_de_semana;
                             ?>
                         </td>
-                        <td><?= h($muralestagio->cargaHoraria) ?></td>
-                        <td><?= $muralestagio->dataSelecao ? $muralestagio->dataSelecao->format('d/m/Y') : '' ?></td>
-                        <td><?= $muralestagio->dataInscricao ? $muralestagio->dataInscricao->format('d/m/Y') : '' ?></td>
+                        <td><?= h($muralestagio->carga_horaria) ?></td>
+                        <td><?= $muralestagio->data_selecao ? $muralestagio->data_selecao->format('d/m/Y') : '' ?></td>
+                        <td><?= $muralestagio->data_inscricao ? $muralestagio->data_inscricao->format('d/m/Y') : '' ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

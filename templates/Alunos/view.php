@@ -47,7 +47,7 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Data de Nascimento') ?></th>
-                    <td><?= h($aluno->nascimento ? $aluno->nascimento->format('d/m/Y') : '') ?></td>
+                    <td><?= h($aluno->nascimento ? $this->Time->format($aluno->nascimento, 'd/m/Y') : '') ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Registro') ?></th>
@@ -55,11 +55,11 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Ingresso') ?></th>
-                    <td><?= h($aluno->ingresso) ?></td>
+                    <td><?= h($aluno->ingresso ?? 's/d') ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Turno') ?></th>
-                    <td><?= h($aluno->turno) ?></td>
+                    <td><?= h($aluno->turno ?? 's/d') ?></td>
                 </tr>
                 <tr>
                     <th><?= __('CPF') ?></th>
@@ -67,7 +67,7 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Identidade') ?></th>
-                    <td><?= h($aluno->identidade) ?></td>
+                    <td><?= h($aluno->identidade ?? 's/d') ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Orgão expedidor') ?></th>
@@ -79,15 +79,15 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Telefone') ?></th>
-                    <?php if (!empty($aluno->telefone) && strlen($aluno->telefone) < 10) : ?>
+                    <?php if (!empty((string)$aluno->telefone) && strlen((string)$aluno->telefone) < 10) : ?>
                     <td><?= '(' . h($aluno->codigo_telefone) . ') ' . h($aluno->telefone) ?></td>
                     <?php else : ?>
-                    <td><?= h($aluno->telefone) ?></td>
+                    <td><?= h($aluno->telefone ?? 's/d') ?></td>
                     <?php endif; ?>
                 </tr>
                 <tr>
                     <th><?= __('Celular') ?></th>
-                    <?php if (!empty($aluno->celular) && strlen($aluno->celular) < 10) : ?>
+                    <?php if (!empty((string)$aluno->celular) && strlen((string)$aluno->celular) < 10) : ?>
                     <td><?= '(' . h($aluno->codigo_celular) . ') ' . h($aluno->celular) ?></td>
                     <?php else : ?>
                     <td><?= h($aluno->celular) ?></td>
@@ -95,7 +95,7 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Endereço') ?></th>
-                    <td><?= h($aluno->endereco . ' - ' . $aluno->bairro . ' - ' . $aluno->municipio . ' - ' . $aluno->cep) ?></td>
+                    <td><?= h($aluno->endereco ?? 's/d' . ' - ' . $aluno->bairro ?? 's/d' . ' - ' . $aluno->municipio ?? 's/d' . ' - ' . $aluno->cep ?? 's/d') ?></td>
                 </tr>
             </table>
             <?php if (!empty($aluno->observacoes)) : ?>
@@ -130,8 +130,8 @@ if ($user_session) {
                                 </td>
                                 <td><?= $this->Html->link((string)$aluno->user->id, ['controller' => 'Users', 'action' => 'view', $aluno->user->id]) ?></td>
                                 <td><?= $aluno->user->email ? $this->Text->autoLinkEmails($aluno->user->email) : '' ?></td>
-                                <td><?= h($aluno->user->created ? $aluno->user->created->format('d/m/Y H:i:s') : '') ?></td>
-                                <td><?= h($aluno->user->modified ? $aluno->user->modified->format('d/m/Y H:i:s') : '') ?></td>
+                                <td><?= h($aluno->user->created ? $this->Time->format($aluno->user->created, 'd/m/Y H:i:s') : 's/d') ?></td>
+                                <td><?= h($aluno->user->modified ? $this->Time->format($aluno->user->modified, 'd/m/Y H:i:s') : 's/d') ?></td>
                             </tr>
                         </table>
                     </div>
