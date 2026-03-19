@@ -317,7 +317,7 @@ class FolhadeatividadesController extends AppController
             return $this->redirect($redirect);
         }
 
-        $this->viewBuilder()->setLayout(false);
+        $this->viewBuilder()->setLayout(null);
         $atividades = $this->Folhadeatividades
             ->find()
             ->contain([

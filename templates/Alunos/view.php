@@ -201,23 +201,7 @@ if ($user_session) {
                             <td><?= $this->Html->link((string)$estagiario->id, ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?></td>
                             <td><?= $estagiario->instituicao ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario->instituicao->id]) : '' ?></td>
                             <td><?= h($estagiario->periodo) ?></td>
-                            <td>
-                                <?php
-                                $turno = '';
-                                switch ($estagiario->turno) {
-                                    case 'D':
-                                        $turno = 'Diurno';
-                                        break;
-                                    case 'N':
-                                        $turno = 'Noturno';
-                                        break;
-                                    case 'I':
-                                        $turno = 'Indeterminado';
-                                        break;
-                                }
-                                echo h($turno);
-                                ?>
-                            </td>
+                            <td><?= $estagiario->aluno->turno ?? 's/d' ?></td>
                             <td><?= ($estagiario->supervisor and $estagiario->supervisor->nome) ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
                             <td><?= $estagiario->professor ? $this->Html->link($estagiario->professor->nome, ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id]) : '' ?></td>
                             <td><?= h($estagiario->nivel) ?></td>

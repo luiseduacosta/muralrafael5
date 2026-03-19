@@ -215,11 +215,11 @@ if ($user_session) {
                             <th><?= __('Turno') ?></th>
                             <th><?= __('Nivel') ?></th>
                             <th><?= __('TC assinado') ?></th>
-                            <th><?= __('TC Solicitação') ?></th>
+                            <th><?= __('TC Solicitado') ?></th>
                             <th><?= __('Instituição') ?></th>
                             <th><?= __('Supervisor') ?></th>
                             <th><?= __('Professor') ?></th>
-                            <th><?= __('Periodo') ?></th>
+                            <th><?= __('Período') ?></th>
                             <th><?= __('Nota') ?></th>
                             <th><?= __('CH') ?></th>
                         </tr>
@@ -235,26 +235,7 @@ if ($user_session) {
                                 <td><?= h($estagiario->id) ?></td>
                                 <td><?= $estagiario->aluno ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
                                 <td><?= h($estagiario->registro) ?></td>
-                                <td>
-                                    <?php
-                                    $turno = '';
-                                    switch ($estagiario->turno) {
-                                        case 'D':
-                                            $turno = 'Diurno';
-                                            break;
-                                        case 'N':
-                                            $turno = 'Noturno';
-                                            break;
-                                        case 'A':
-                                            $turno = 'Ambos';
-                                            break;
-                                        case 'I':
-                                            $turno = 'Integral';
-                                            break;
-                                    }
-                                    echo h($turno);
-                                    ?>
-                                </td>
+                                <td><?= (string)$estagiario->aluno->turno ?></td>
                                 <td><?= h($estagiario->nivel) ?></td>
                                 <td><?= h($estagiario->tc_assinado) == '1' ? __('Sim') : __('Não') ?></td>
                                 <td><?= $estagiario->tc_solicitacao ? $estagiario->tc_solicitacao->format('d/m/Y') : '' ?></td>

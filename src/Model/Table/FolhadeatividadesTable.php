@@ -54,13 +54,13 @@ class FolhadeatividadesTable extends Table
      *
      * @param \Cake\Event\EventInterface $event The beforeFind event.
      * @param \Cake\ORM\Query $query The query object.
-     * @param array $options The options array.
+     * @param \ArrayObject $options The options array.
      * @param bool $primary Whether this is a primary query or not.
      * @return \Cake\ORM\Query
      */
-    public function beforeFind(EventInterface $event, Query $query, array $options, bool $primary): Query
+    public function beforeFind(EventInterface $event, Query $query, \ArrayObject $options, bool $primary)
     {
-        $query->order(['dia' => 'ASC']);
+        $query->orderBy(['dia' => 'ASC']);
 
         return $query;
     }

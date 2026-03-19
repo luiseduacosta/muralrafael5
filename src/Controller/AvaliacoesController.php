@@ -351,7 +351,7 @@ class AvaliacoesController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $this->viewBuilder()->setLayout(false);
+        $this->viewBuilder()->setLayout(null);
 
         $estagiario_id = $this->request->getQuery('estagiario_id');
 

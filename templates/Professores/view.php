@@ -278,26 +278,7 @@ $departamentos = [
                             <td><?= h($estagiario->id) ?></td>
                             <td><?= $estagiario->aluno ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
                             <td><?= h($estagiario->registro) ?></td>
-                            <td>
-                                <?php
-                                $turno = '';
-                                switch ($estagiario->turno) {
-                                    case 'D':
-                                        $turno = 'Diurno';
-                                        break;
-                                    case 'N':
-                                        $turno = 'Noturno';
-                                        break;
-                                    case 'A':
-                                        $turno = 'Ambos';
-                                        break;
-                                    case 'I':
-                                        $turno = 'Indefinido';
-                                        break;
-                                }
-                                echo h($turno);
-                                ?>
-                            </td>
+                            <td><?= $estagiario->aluno->turno ? h($estagiario->aluno->turno) : '' ?></td>
                             <td><?= h($estagiario->nivel) ?></td>
                             <td><?= h($estagiario->tc == '1' ? 'Sim' : 'Não') ?></td>
                             <td><?= h($estagiario->tc_solicitacao?->format('d/m/Y')) ?></td>
