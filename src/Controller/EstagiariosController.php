@@ -55,6 +55,18 @@ class EstagiariosController extends AppController
 
         $conditions = ['conditions' => ['Estagiarios.periodo' => $periodo]];
 
+        // Filter by aluno_id and instituicao_id on the first row of the table
+        if ($this->request->is(['get', 'post'])) {
+            $aluno_id = $this->request->getQuery('aluno_id');
+            if (!empty($aluno_id)) {
+                $conditions['conditions']['Estagiarios.aluno_id'] = $aluno_id;
+            }
+            $instituicao = $this->request->getQuery('instituicao_id');
+            if (!empty($instituicao)) {
+                $conditions['conditions']['Estagiarios.instituicao_id'] = $instituicao;
+            }
+        }
+
         try {
             $this->Authorization->authorize($this->Estagiarios);
             if ($periodo == 'all') {
@@ -89,6 +101,31 @@ class EstagiariosController extends AppController
         $periodos = $periodototal->toArray();
         $periodos = array_merge($periodos, ['all' => 'Todos']);
         $periodos = array_reverse($periodos);
+
+        // Filter by aluno_id on the first row of the table
+        $alunos = $this->Estagiarios->Alunos->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nome',
+            'order' => ['Alunos.nome' => 'asc'],
+        ])
+        ->matching('Estagiarios', function ($q) use ($periodo) {
+            return $q->where(['Estagiarios.periodo' => $periodo]);
+        })
+        ->distinct(['Alunos.id']);
+
+        // Filter by instituicao_id on the first row of the table
+        $instituicoes = $this->Estagiarios->Instituicoes->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'instituicao',
+            'order' => ['Instituicoes.instituicao' => 'asc'],
+        ])
+        ->matching('Estagiarios', function ($q) use ($periodo) {
+            return $q->where(['Estagiarios.periodo' => $periodo]);
+        })
+        ->distinct(['Instituicoes.id']);
+
+        $this->set('alunos', $alunos);
+        $this->set('instituicoes', $instituicoes);
 
         $this->set('periodos', $periodos);
     }

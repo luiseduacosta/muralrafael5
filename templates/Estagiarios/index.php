@@ -14,22 +14,22 @@ if ($user_session) {
 ?>
 
 <div class="estagiarios index content">
+
+    <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Estagiarios', 'action' => 'index'], 'class' => 'form-inline']); ?>
     
     <div class="row justify-content-center">
         <div class="col-auto">
             <?php if ($user_data['administrador_id']) : ?>
-                <?= $this->Form->create($estagiarios, ['type' => 'get', 'url' => ['controller' => 'Estagiarios', 'action' => 'index'], 'class' => 'form-inline']); ?>
-                    <?= $this->Form->label('estagiarioperiodo', 'Período'); ?>
-                    <?= $this->Form->input('periodo', [
-                            'default' => $periodo ?? $configuracao->termo_compromisso_periodo,
-                            'id' => 'estagiarioperiodo',
-                            'type' => 'select',
-                            'options' => $periodos,
-                            'class' => 'form-control',
-                            'onChange' => 'this.form.submit();',
-                        ]);
-                    ?>
-                <?= $this->Form->end(); ?>
+                <?= $this->Form->label('estagiarioperiodo', 'Período'); ?>
+                <?= $this->Form->input('periodo', [
+                        'default' => $periodo ?? $configuracao->termo_compromisso_periodo,
+                        'id' => 'estagiarioperiodo',
+                        'type' => 'select',
+                        'options' => $periodos,
+                        'class' => 'form-control',
+                        'onChange' => 'this.form.submit();',
+                    ]);
+                ?>
             <?php else : ?>
                 <h3 class="label">Período: <?= $configuracao['mural_periodo_atual']; ?></h3>
             <?php endif; ?>
@@ -49,6 +49,7 @@ if ($user_session) {
     <div class="paginator">
         <?= $this->element('paginator'); ?>
     </div>
+
     <div class="table_wrap">
         <table>
             <thead>
@@ -65,6 +66,20 @@ if ($user_session) {
                     <th><?= $this->Paginator->sort('Professores.nome', 'Professor') ?></th>
                     <th><?= $this->Paginator->sort('Estagiarios.nota', 'Nota') ?></th>
                     <th><?= $this->Paginator->sort('Estagiarios.ch', 'CH') ?></th>
+                </tr>
+                <tr class='filters'>
+                    <?php if ($user_data['administrador_id']) : ?>
+                        <th></th>
+                    <?php endif; ?>
+                    <th></th>
+                    <th><?= $this->Form->select('aluno_id', $alunos, ['empty' => 'Todos', 'value' => $this->request->getQuery('aluno_id'), 'onChange' => 'this.form.submit();'], ['class' => 'form-control']) ?></th>
+                    <th><?= $this->Form->select('instituicao_id', $instituicoes, ['empty' => 'Todos', 'value' => $this->request->getQuery('instituicao_id'), 'onChange' => 'this.form.submit();'], ['class' => 'form-control']) ?></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -91,6 +106,9 @@ if ($user_session) {
             </tbody>
         </table>
     </div>
+
+    <?= $this->Form->end(); ?>
+
     <div class="paginator">
         <?= $this->element('paginator'); ?>
         <?= $this->element('paginator_count'); ?>

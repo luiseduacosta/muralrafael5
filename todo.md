@@ -35,7 +35,6 @@ turmas
 universidades *
 visitas
 
-
 - controllers:
 
 alunos
@@ -73,3 +72,6 @@ Atendimento presencial: 2ª, 3ª e 4ª feira: 09h-13h; 5ª f: 09h-20h e 6ª f: 0
 Para nós, todas as solicitações são importantes ;)
 
 PRAZO DE RESPOSTA: ATÉ 72H ÚTEIS. Agradecemos a compreensão e colaboração \@/
+
+# Filtrar os professores no EstagiariosController para excluir os egressos
+# Fazer os filtros no index dos Estagiarios: nivel, professor_id, supervisor_id, instituicao_id
