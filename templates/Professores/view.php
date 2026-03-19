@@ -233,7 +233,7 @@ $departamentos = [
                                 <?php endif; ?>
                             </td>
                             <td><?= h($professor->user->id) ?></td>
-                            <td><?= $professor->user->email ? $this->Text->autoLinkEmails($professor->user->email) : '' ?></td>
+                            <td><?= $professor->email ? $this->Text->autoLinkEmails($professor->email) : '' ?></td>
                             <td><?= h($professor->user->numero) ?></td>
                             <td><?= $professor->user->timestamp ? h($professor->user->timestamp) : '' ?></td>
                         </tr>
@@ -246,19 +246,19 @@ $departamentos = [
             <div class="related">
                 <h4><?= __('Estagiarios') ?></h4>
                 <div class="paginator">
-                    <?= $this->element('paginator'); ?>
+                    <?php echo $this->element('paginator'); ?>
                 </div>
                 <div class="table_wrap">
-                    <table>
-                        <tr>
-                            <th class="actions"><?= __('Ações') ?></th>
+                    <table style="table-layout: auto; width: auto;">
+                    <tr>
+                            <th class="actions"><?= __('Ações') ?></th> 
                             <th><?= __('Id') ?></th>
                             <th><?= __('Aluno(a)') ?></th>
                             <th><?= __('Registro') ?></th>
-                            <th><?= __('Turno') ?></th>
-                            <th><?= __('Nível') ?></th>
-                            <th><?= __('Tc assinado') ?></th>
-                            <th><?= __('Tc Solicitação') ?></th>
+                            <th><?= __('Turno') ?>
+                            <th><?= __('Nível') ?>
+                            <th><?= __('TC assinado') ?>
+                            <th><?= __('TC solicitado') ?>
                             <th><?= __('Instituição') ?></th>
                             <th><?= __('Supervisor(a)') ?></th>
                             <th><?= __('Período') ?></th>
@@ -278,9 +278,9 @@ $departamentos = [
                             <td><?= h($estagiario->id) ?></td>
                             <td><?= $estagiario->aluno ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
                             <td><?= h($estagiario->registro) ?></td>
-                            <td><?= $estagiario->aluno->turno ? h($estagiario->aluno->turno) : '' ?></td>
+                            <td style="min-width: 80px; max-width: 120px;"><?= h($estagiario->aluno->turno ?? '') ?></td>
                             <td><?= h($estagiario->nivel) ?></td>
-                            <td><?= h($estagiario->tc == '1' ? 'Sim' : 'Não') ?></td>
+                            <td><?= $estagiario->tc ='1' ? 'Sim' : 'Não' ?></td>
                             <td><?= h($estagiario->tc_solicitacao?->format('d/m/Y')) ?></td>
                             <td><?= $estagiario->instituicao ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario->instituicao->id]) : '' ?></td>
                             <td><?= $estagiario->supervisor ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
