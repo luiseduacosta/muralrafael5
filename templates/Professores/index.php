@@ -22,8 +22,18 @@ $departamentos = [
 
 <div class="professores index content">
     <aside>
-        <div class="nav">
-            <?= $this->Html->link(__('Novo Professor'), ['action' => 'add'], ['class' => 'button']) ?>
+        <div class="row">
+            <div class="col-sm-6 d-flex justify-content-start">
+                <?= $this->Html->link(__('Novo(a) Professor(a)'), ['action' => 'add'], ['class' => 'button']) ?>
+            </div>
+            <div class="col-sm-6 d-flex justify-content-end">
+                <?= $this->Form->create(null, ['type' => 'get', 'url' => ['action' => 'index'], 'class' => 'form-inline']) ?>
+                    <div class="form-group">
+                        <?= $this->Form->label('busca', 'Busca', ['class' => 'button mr-2 mb-4']) ?>
+                        <?= $this->Form->control('busca', ['placeholder' => 'Busca Avançada', 'label' => false, 'onChange' => 'this.form.submit()', 'class' => 'form-control']) ?>
+                    </div>
+                <?= $this->Form->end() ?>
+            </div>
         </div>
     </aside>
     
@@ -44,6 +54,7 @@ $departamentos = [
                     <th><?= $this->Paginator->sort('email', 'Email') ?></th>
                     <th><?= $this->Paginator->sort('curriculolattes', 'Lattes') ?></th>
                     <th><?= $this->Paginator->sort('departamento') ?></th>
+                    <th><?= $this->Paginator->sort('motivoegresso', 'Egresso') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -55,14 +66,22 @@ $departamentos = [
                         <?php if ($user_data['administrador_id']) : ?>
                             <?= $this->Form->postLink(__('Excluir'), ['action' => 'delete', $professor->id], ['confirm' => __('Are you sure you want to delete {0}?', $professor->nome)]) ?>
                         <?php endif; ?>
-                    </td>
+                     </td>
                     <td><?= $this->Html->link((string)$professor->id, ['action' => 'view', $professor->id]) ?></td>
                     <td><?= $this->Html->link(h($professor->nome), ['action' => 'view', $professor->id]) ?></td>
                     <td><?= (string)$professor->siape ? $professor->siape : 'S/d' ?></td>
-                    <td><?= $professor->celular ? '(' . h($professor->ddd_celular) . ')' . h($professor->celular) : '' ?></td>
+
+                    <td>
+                        <?php if (strlen($professor->celular) < 10) : ?>
+                            <?= '(' . h($professor->ddd_celular) . ') ' . h($professor->celular) ?>
+                        <?php else: ?>
+                            <?= $professor->celular ?>
+                        <?php endif; ?>
+                    </td>
                     <td><?= $professor->email ? $this->Text->autoLinkEmails($professor->email) : '' ?></td>
                     <td><?= $professor->curriculolattes ? $this->Html->link('http://lattes.cnpq.br/' . h($professor->curriculolattes)) : '' ?></td>
                     <td><?= h($professor->departamento) ?></td>
+                    <td><?= h($professor->motivoegresso) ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

@@ -36,10 +36,8 @@ $submit = [
                     <?php echo $this->Form->control('registro', ['value' => $estagio->aluno->registro, 'readonly']); ?>
                     <?php echo $this->Form->control('aluno_id', ['label' => ['text' => 'Aluno'], 'options' => [$estagio->aluno->id => $estagio->aluno->nome], 'empty' => false, 'readonly']); ?>
                     <?php echo $this->Form->control('ingresso', ['label' => ['text' => 'Ingresso'], 'value' => $estagio->aluno->ingresso, 'readonly']); ?>
-                    <?php echo $this->Form->control('turno', ['options' => ['D' => 'Diurno', 'N' => 'Noturno', 'I' => 'Sem informação'], 'value' => substr($estagio->aluno->turno, 0, 1)]); ?>
                     <?php echo $this->Form->control('nivel', ['options' => ['1' => 1, '2' => 2, '3' => 3, '4' => 4, '9' => 'Extra curricular'], 'value' => $estagio->aluno->nivel, 'readonly']); ?>
                     <?php echo $this->Form->control('periodo', ['label' => ['text' => 'Período'], 'value' => $estagio->aluno->periodo, 'readonly']); ?>
-                    <?php echo $this->Form->control('turno', ['options' => ['D' => 'Diurno', 'N' => 'Noturno', 'I' => 'Sem informação'], 'value' => substr($estagio->aluno->turno, 0, 1)]); ?>
                     <?php echo $this->Form->control('nivel', ['options' => ['1' => 1, '2' => 2, '3' => 3, '4' => 4, '9' => 'Extra curricular'], 'value' => $estagio->aluno->nivel, 'readonly']); ?>
                     <?php echo $this->Form->control('periodo', ['label' => ['text' => 'Período'], 'value' => $estagio->aluno->periodo, 'readonly']); ?>
                 </fieldset>

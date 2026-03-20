@@ -235,7 +235,7 @@ if ($user_session) {
                                 <td><?= h($estagiario->id) ?></td>
                                 <td><?= $estagiario->aluno ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
                                 <td><?= h($estagiario->registro) ?></td>
-                                <td><?= (string)$estagiario->aluno->turno ?></td>
+                                <td><?= (string)$estagiario->aluno->turno ?? __('N/A') ?></td>
                                 <td><?= h($estagiario->nivel) ?></td>
                                 <td><?= h($estagiario->tc_assinado) == '1' ? __('Sim') : __('Não') ?></td>
                                 <td><?= $estagiario->tc_solicitacao ? $estagiario->tc_solicitacao->format('d/m/Y') : '' ?></td>

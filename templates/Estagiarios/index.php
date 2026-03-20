@@ -75,11 +75,11 @@ if ($user_session) {
                     <th><?= $this->Form->select('aluno_id', $alunos, ['empty' => 'Todos', 'value' => $this->request->getQuery('aluno_id'), 'onChange' => 'this.form.submit();'], ['class' => 'form-control']) ?></th>
                     <th><?= $this->Form->select('instituicao_id', $instituicoes, ['empty' => 'Todos', 'value' => $this->request->getQuery('instituicao_id'), 'onChange' => 'this.form.submit();'], ['class' => 'form-control']) ?></th>
                     <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th><?= $this->Form->select('nivel', $niveis, ['empty' => 'Todos', 'value' => $this->request->getQuery('nivel'), 'onChange' => 'this.form.submit();'], ['class' => 'form-control']) ?></th>
+                    <th><?= $this->Form->select('supervisor_id', $supervisores, ['empty' => 'Todos', 'value' => $this->request->getQuery('supervisor_id'), 'onChange' => 'this.form.submit();'], ['class' => 'form-control']) ?></th>
+                    <th><?= $this->Form->select('professor_id', $professores, ['empty' => 'Todos', 'value' => $this->request->getQuery('professor_id'), 'onChange' => 'this.form.submit();'], ['class' => 'form-control']) ?></th>
+                    <th><?= $this->Form->select('nota', $notas, ['empty' => 'Todos', 'value' => $this->request->getQuery('nota'), 'onChange' => 'this.form.submit();'], ['class' => 'form-control']) ?></th>
+                    <th><?= $this->Form->select('ch', $chs, ['empty' => 'Todos', 'value' => $this->request->getQuery('ch'), 'onChange' => 'this.form.submit();'], ['class' => 'form-control']) ?></th>
                 </tr>
             </thead>
             <tbody>

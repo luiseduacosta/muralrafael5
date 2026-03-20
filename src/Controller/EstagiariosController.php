@@ -65,6 +65,26 @@ class EstagiariosController extends AppController
             if (!empty($instituicao)) {
                 $conditions['conditions']['Estagiarios.instituicao_id'] = $instituicao;
             }
+            $nivel = $this->request->getQuery('nivel');
+            if (!empty($nivel)) {
+                $conditions['conditions']['Estagiarios.nivel'] = $nivel;
+            }
+            $supervisor_id = $this->request->getQuery('supervisor_id');
+            if (!empty($supervisor_id)) {
+                $conditions['conditions']['Estagiarios.supervisor_id'] = $supervisor_id;
+            }
+            $professor_id = $this->request->getQuery('professor_id');
+            if (!empty($professor_id)) {
+                $conditions['conditions']['Estagiarios.professor_id'] = $professor_id;
+            }
+            $nota = $this->request->getQuery('nota');
+            if (!empty($nota)) {
+                $conditions['conditions']['Estagiarios.nota'] = $nota;
+            }
+            $ch = $this->request->getQuery('ch');
+            if (!empty($ch)) {
+                $conditions['conditions']['Estagiarios.ch'] = $ch;
+            }
         }
 
         try {
@@ -124,8 +144,62 @@ class EstagiariosController extends AppController
         })
         ->distinct(['Instituicoes.id']);
 
+        // Filter by nivel on the first row of the table
+        $niveis = $this->Estagiarios->find('list', [
+            'keyField' => 'nivel',
+            'valueField' => 'nivel',
+            'order' => ['Estagiarios.nivel' => 'asc']
+        ])
+        ->where(['Estagiarios.periodo' => $periodo])
+        ->distinct(['Estagiarios.nivel']);
+
+        // Filter by supervisor_id on the first row of the table
+        $supervisores = $this->Estagiarios->Supervisores->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nome',
+            'order' => ['Supervisores.nome' => 'asc'],
+        ])
+        ->matching('Estagiarios', function ($q) use ($periodo) {
+            return $q->where(['Estagiarios.periodo' => $periodo]);
+        })
+        ->distinct(['Supervisores.id']);
+
+        // Filter by professor_id on the first row of the table
+        $professores = $this->Estagiarios->Professores->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nome',
+            'order' => ['Professores.nome' => 'asc'],
+        ])
+        ->matching('Estagiarios', function ($q) use ($periodo) {
+            return $q->where(['Estagiarios.periodo' => $periodo]);
+        })
+        ->distinct(['Professores.id']);
+
+        // Filter by nota on the first row of the table
+        $notas = $this->Estagiarios->find('list', [
+            'keyField' => 'nota',
+            'valueField' => 'nota',
+            'order' => ['Estagiarios.nota' => 'asc'],
+        ])
+        ->where(['Estagiarios.periodo' => $periodo, 'Estagiarios.nota IS NOT NULL'])
+        ->distinct(['Estagiarios.nota']);
+
+        // Filter by ch on the first row of the table
+        $chs = $this->Estagiarios->find('list', [
+            'keyField' => 'ch',
+            'valueField' => 'ch',
+            'order' => ['Estagiarios.ch' => 'asc'],
+        ])
+        ->where(['Estagiarios.periodo' => $periodo, 'Estagiarios.ch IS NOT NULL'])
+        ->distinct(['Estagiarios.ch']);
+
         $this->set('alunos', $alunos);
         $this->set('instituicoes', $instituicoes);
+        $this->set('niveis', $niveis);
+        $this->set('supervisores', $supervisores);
+        $this->set('professores', $professores);
+        $this->set('notas', $notas);
+        $this->set('chs', $chs);
 
         $this->set('periodos', $periodos);
     }
@@ -279,7 +353,7 @@ class EstagiariosController extends AppController
 
             $aluno = $this->fetchTable('Alunos')->find()->where(['id' => $id])->first();
             $instituicoes = $this->fetchTable('Instituicoes')->find('list')->order(['instituicao' => 'ASC']);
-            $professores = $this->fetchTable('Professores')->find('list')->order(['nome' => 'ASC']);
+            $professores = $this->fetchTable('Professores')->find('list')->where(['motivoegresso' => ''])->order(['nome' => 'ASC']);
             if (!empty($estagiario->instituicao_id)) {
                 $supervisores = $this->fetchTable('Supervisores')
                     ->find('list')
@@ -362,7 +436,7 @@ class EstagiariosController extends AppController
 
         $alunos = $this->fetchTable('Alunos')->find('list')->order(['nome' => 'ASC']);
         $instituicoes = $this->fetchTable('Instituicoes')->find('list')->order(['instituicao' => 'ASC']);
-        $professores = $this->fetchTable('Professores')->find('list')->order(['nome' => 'ASC']);
+        $professores = $this->fetchTable('Professores')->find('list')->where(['motivoegresso' => ''])->order(['nome' => 'ASC']);
         if (!empty($estagiario->instituicao_id)) {
             $supervisores = $this->fetchTable('Supervisores')
                 ->find('list')

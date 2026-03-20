@@ -134,7 +134,7 @@ $departamentos = [
                 <div id='tab-2' class='tab-pane fade' role='tabpanel' aria-labelledby='academicos-tab'>
                 <table>
                 <tr>
-                    <th><?= __('Formacao profissional') ?></th>
+                    <th><?= __('Formação profissional') ?></th>
                     <td><?= h($professor->formacaoprofissional) ?></td>
                 </tr>
                 <tr>

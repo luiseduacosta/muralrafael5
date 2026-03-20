@@ -29,7 +29,15 @@ class ProfessoresController extends AppController
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
-        $query = $this->Professores->find()->contain(['Users']);
+        $busca = $this->request->getQuery('busca');
+        if (empty($busca)) {
+            $busca = '';
+            echo 'Busca vazia';
+            // die();
+        }
+        $condition = ['OR' => ['Professores.nome LIKE' => '%' . $busca . '%']];
+
+        $query = $this->Professores->find()->where($condition)->contain(['Users']);
 
         $professores = $this->paginate($query, [
             'order' => ['Professores.nome' => 'ASC'],
@@ -42,6 +50,7 @@ class ProfessoresController extends AppController
                 'celular',
                 'curriculolattes',
                 'departamento',
+                'motivoegresso',
             ],
         ]);
 
@@ -197,5 +206,26 @@ class ProfessoresController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function busca($nome = null)
+    {
+        $this->Authorization->authorize($this->Professores);
+
+        $query = $this->Professores->find()
+            ->where([
+                'OR' => [
+                    'Professores.nome LIKE' => '%' . $nome . '%',
+                    'Professores.cpf LIKE' => '%' . $nome . '%',
+                    'Professores.siape LIKE' => '%' . $nome . '%',
+                    'Professores.email LIKE' => '%' . $nome . '%',
+                    'Professores.celular LIKE' => '%' . $nome . '%',
+                ],
+            ])
+            ->order(['Professores.nome' => 'ASC']);
+
+        $professores = $this->paginate($query, ['limit' => 25]);
+
+        $this->set(compact('professores'));
     }
 }

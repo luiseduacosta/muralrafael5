@@ -39,7 +39,7 @@ if ($user_session) {
             
             <?php if (!empty($turma->estagiarios)) : ?>
             <div class="related">
-                <h4><?= __('Related Estagiarios') ?></h4>
+                <h4><?= __('Estagiarios') ?></h4>
                 <div class="table_wrap">
                     <table>
                         <tr>
@@ -73,26 +73,7 @@ if ($user_session) {
                             <td><?= $estagiarios->aluno ? $this->Html->link(h($estagiarios->aluno->nome), ['controller' => 'alunos', 'action' => 'view', $estagiarios->alunonovo_id]) : '' ?></td>
                             <td><?= h($estagiarios->registro) ?></td>
                             <td><?= h($estagiarios->ajustecurricular2020) ?></td>
-                            <td>
-                                <?php
-                                $turno = '';
-                                switch ($estagiarios->turno) {
-                                    case 'D':
-                                        $turno = 'Diurno';
-                                        break;
-                                    case 'N':
-                                        $turno = 'Noturno';
-                                        break;
-                                    case 'A':
-                                        $turno = 'Ambos';
-                                        break;
-                                    case 'I':
-                                        $turno = 'Integral';
-                                        break;
-                                }
-                                echo h($turno);
-                                ?>
-                            </td>
+                            <td><?= h($estagiarios->aluno->turno ?? __('N/A')) ?></td>
                             <td><?= h($estagiarios->nivel) ?></td>
                             <td><?= h($estagiarios->tc) ?></td>
                             <td><?= h($estagiarios->tc_solicitacao) ?></td>

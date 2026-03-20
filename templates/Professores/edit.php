@@ -67,12 +67,12 @@ $departamentos = [
                 if ($professor->siape) {
                     echo $this->Form->control('siape', ['value' => $professor->siape, 'required' => true, 'readonly' => true]);
                 } else {
-                    echo $this->Form->control('siape', ['required' => true]);
+                    echo $this->Form->control('siape', ['required' => false]);
                 }
                 if ($professor->email) {
-                    echo $this->Form->control('email', ['type' => 'email', 'value' => $professor->email, 'required' => true, 'readonly' => true]);
+                    echo $this->Form->control('email', ['type' => 'email', 'value' => $professor->email, 'required' => false, 'readonly' => false]);
                 } else {
-                    echo $this->Form->control('email', ['type' => 'email', 'required' => true]);
+                    echo $this->Form->control('email', ['type' => 'email', 'required' => false]);
                 }
                     echo $this->Form->control('datanascimento', ['empty' => true, 'label' => 'Data de nascimento']);
                     echo $this->Form->control('localnascimento', ['label' => 'Local de nascimento']);
@@ -88,13 +88,13 @@ $departamentos = [
                     echo $this->Form->control('pesquisadordgp', ['label' => 'Pesquisa Dgp']);
                     echo $this->Form->control('formacaoprofissional', ['label' => 'Formacao Profissional']);
                     echo $this->Form->control('universidadedegraduacao', ['label' => 'Universidade de graduacao']);
-                    echo $this->Form->control('anoformacao', ['label' => 'Ano de formacao']);
-                    echo $this->Form->control('mestradoarea', ['label' => 'Area de mestrado']);
+                    echo $this->Form->control('anoformacao', ['label' => 'Ano de formação']);
+                    echo $this->Form->control('mestradoarea', ['label' => 'Área de mestrado']);
                     echo $this->Form->control('mestradouniversidade', ['label' => 'Universidade de mestrado']);
-                    echo $this->Form->control('mestradoanoconclusao', ['label' => 'Ano de conclusao de mestrado']);
-                    echo $this->Form->control('doutoradoarea', ['label' => 'Area de doutorado']);
+                    echo $this->Form->control('mestradoanoconclusao', ['label' => 'Ano de conclusão de mestrado']);
+                    echo $this->Form->control('doutoradoarea', ['label' => 'Área de doutorado']);
                     echo $this->Form->control('doutoradouniversidade', ['label' => 'Universidade de doutorado']);
-                    echo $this->Form->control('doutoradoanoconclusao', ['label' => 'Ano de conclusao de doutorado']);
+                    echo $this->Form->control('doutoradoanoconclusao', ['label' => 'Ano de conclusão de doutorado']);
                     echo $this->Form->control('dataingresso', ['empty' => true, 'label' => 'Data de ingresso']);
                     echo $this->Form->control('formaingresso', ['label' => 'Forma de ingresso']);
                     echo $this->Form->control('tipocargo', ['label' => 'Tipo de cargo']);
