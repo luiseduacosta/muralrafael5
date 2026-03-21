@@ -73,7 +73,8 @@ class ProfessoresTable extends Table
             ->allowEmptyString('cpf');
 
         $validator
-            ->integer('siape')
+            ->scalar('siape')
+            ->maxLength('siape', 10)
             ->allowEmptyString('siape');
 
         $validator
@@ -86,8 +87,7 @@ class ProfessoresTable extends Table
             ->allowEmptyString('localnascimento');
 
         $validator
-            ->scalar('ddd_telefone')
-            ->maxLength('ddd_telefone', 2)
+            ->nonNegativeInteger('ddd_telefone')
             ->notEmptyString('ddd_telefone');
 
         $validator
@@ -96,8 +96,7 @@ class ProfessoresTable extends Table
             ->allowEmptyString('telefone');
 
         $validator
-            ->scalar('ddd_celular')
-            ->maxLength('ddd_celular', 2)
+            ->nonNegativeInteger('ddd_celular')
             ->notEmptyString('ddd_celular');
 
         $validator
@@ -145,7 +144,8 @@ class ProfessoresTable extends Table
             ->allowEmptyString('universidadedegraduacao');
 
         $validator
-            ->integer('anoformacao')
+            ->nonNegativeInteger('anoformacao')
+            ->regex('anoformacao', '/^[1-2][0-9]{3}$/', 'Insira um ano válido')
             ->allowEmptyString('anoformacao');
 
         $validator
@@ -159,7 +159,8 @@ class ProfessoresTable extends Table
             ->allowEmptyString('mestradouniversidade');
 
         $validator
-            ->integer('mestradoanoconclusao')
+            ->nonNegativeInteger('mestradoanoconclusao')
+            ->regex('mestradoanoconclusao', '/^[1-2][0-9]{3}$/', 'Insira um ano válido')
             ->allowEmptyString('mestradoanoconclusao');
 
         $validator
@@ -173,7 +174,8 @@ class ProfessoresTable extends Table
             ->allowEmptyString('doutoradouniversidade');
 
         $validator
-            ->integer('doutoradoanoconclusao')
+            ->nonNegativeInteger('doutoradoanoconclusao')
+            ->regex('doutoradoanoconclusao', '/^[1-2][0-9]{3}$/', 'Insira um ano válido')
             ->allowEmptyString('doutoradoanoconclusao');
 
         $validator
@@ -210,11 +212,11 @@ class ProfessoresTable extends Table
             ->allowEmptyString('motivoegresso');
 
         $validator
-            ->integer('cress')
+            ->nonNegativeInteger('cress')
             ->allowEmptyString('cress');
 
         $validator
-            ->integer('regiao')
+            ->nonNegativeInteger('regiao')
             ->allowEmptyString('regiao');
 
         $validator

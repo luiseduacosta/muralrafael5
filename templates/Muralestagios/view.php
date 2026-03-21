@@ -102,7 +102,7 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
                 </tr>
                 <tr>
                     <th><?= __('Data de encerramento das inscrições') ?></th>
-                    <td><?= $muralestagio->data_inscricao ? $muralestagio->data_inscricao->format('d/m/Y') : '' ?></td>
+                    <td><?= $muralestagio->data_inscricao ? $this->Time->format($muralestagio->data_inscricao, 'd/m/Y') : '' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Local da Seleção') ?></th>
@@ -110,7 +110,7 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
                 </tr>
                 <tr>
                     <th><?= __('Data da Seleção') ?></th>
-                    <td><?= $muralestagio->data_selecao ? $muralestagio->data_selecao->format('d/m/Y') : '' ?></td>
+                    <td><?= $muralestagio->data_selecao ? $this->Time->format($muralestagio->data_selecao, 'd/m/Y') : '' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Horário da Seleção') ?></th>
@@ -220,9 +220,9 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
                                 <td><?= h($inscricao->id) ?></td>
                                 <td><?= $inscricao->aluno ? h($inscricao->aluno->registro) : '' ?></td>
                                 <td><?= $inscricao->aluno ? $this->Html->link($inscricao->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $inscricao->aluno->id])  : '' ?></td>
-                                <td><?= h($inscricao->data ? $inscricao->data->format('d/m/Y') : '') ?></td>
+                                <td><?= $inscricao->data ? $this->Time->format($inscricao->data, 'd/m/Y') : '' ?></td>
                                 <td><?= h($inscricao->periodo) ?></td>
-                                <td><?= h($inscricao->timestamp ? $inscricao->timestamp->format('d/m/Y H:i:s') : '') ?></td>
+                                <td><?= $inscricao->timestamp ? $this->Time->format($inscricao->timestamp, 'd/m/Y H:i:s') : '' ?></td>
                             </tr>
                             <?php endforeach; ?>
                         </table>

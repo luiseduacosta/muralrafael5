@@ -86,15 +86,18 @@ class EstagiariosTable extends Table
         $validator
             ->scalar('ajuste2020')
             ->maxLength('ajuste2020', 1)
+            ->inList(['0', '1'])
             ->notEmptyString('ajuste2020');
 
         $validator
             ->scalar('nivel')
             ->maxLength('nivel', 1)
+            ->inList(['1', '2', '3', '4', '9'])
             ->notEmptyString('nivel');
 
         $validator
-            ->allowEmptyString('tc');
+            ->allowEmptyString('tc')
+            ->inList(['0', '1']);
 
         $validator
             ->date('tc_solicitacao')
@@ -110,6 +113,7 @@ class EstagiariosTable extends Table
             ->allowEmptyString('nota');
 
         $validator
+            ->nonNegativeInteger('ch')
             ->allowEmptyString('ch');
 
         $validator

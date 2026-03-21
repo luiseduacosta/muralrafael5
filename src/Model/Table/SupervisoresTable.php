@@ -77,6 +77,7 @@ class SupervisoresTable extends Table
         $validator
             ->scalar('cpf')
             ->maxLength('cpf', 14)
+            ->regex('cpf', '/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}$/', 'CPF inválido')
             ->allowEmptyString('cpf');
 
         $validator
@@ -97,26 +98,31 @@ class SupervisoresTable extends Table
         $validator
             ->scalar('cep')
             ->maxLength('cep', 9)
+            ->regex('cep', '/^[0-9]{5}\-[0-9]{3}$/', 'CEP inválido')
             ->allowEmptyString('cep');
 
         $validator
             ->scalar('codigo_tel')
             ->maxLength('codigo_tel', 2)
+            ->regex('codigo_tel', '/^[0-9]{2}$/', 'Código de telefone inválido')
             ->allowEmptyString('codigo_tel');
 
         $validator
             ->scalar('telefone')
             ->maxLength('telefone', 15)
+            ->regex('telefone', '/^[0-9]{4,5}\-[0-9]{4}$/', 'Telefone inválido')
             ->allowEmptyString('telefone');
 
         $validator
-            ->scalar('codigo_cel')
+            ->nonNegativeInteger('codigo_cel')
             ->maxLength('codigo_cel', 2)
+            ->regex('codigo_cel', '/^[0-9]{2}$/', 'Código de celular inválido')
             ->allowEmptyString('codigo_cel');
 
         $validator
-            ->scalar('celular')
+            ->nonNegativeInteger('celular')
             ->maxLength('celular', 15)
+            ->regex('celular', '/^[0-9]{4,5}\-[0-9]{4}$/', 'Celular inválido')
             ->allowEmptyString('celular');
 
         $validator
@@ -129,15 +135,16 @@ class SupervisoresTable extends Table
             ->allowEmptyString('escola');
 
         $validator
-            ->integer('ano_formatura')
+            ->nonNegativeInteger('ano_formatura')
+            ->regex('ano_formatura', '/^[1-2][0-9]{3}$/', 'Insira um ano válido')
             ->allowEmptyString('ano_formatura');
 
         $validator
-            ->integer('cress')
+            ->nonNegativeInteger('cress')
             ->notEmptyString('cress');
 
         $validator
-            ->scalar('regiao')
+            ->nonNegativeInteger('regiao')
             ->maxLength('regiao', 2)
             ->notEmptyString('regiao');
 
@@ -152,7 +159,8 @@ class SupervisoresTable extends Table
             ->allowEmptyString('area_curso');
 
         $validator
-            ->integer('ano_curso')
+            ->nonNegativeInteger('ano_curso')
+            ->regex('ano_curso', '/^[1-2][0-9]{3}$/', 'Insira um ano válido')
             ->allowEmptyString('ano_curso');
 
         $validator
@@ -161,7 +169,7 @@ class SupervisoresTable extends Table
             ->allowEmptyString('cargo');
 
         $validator
-            ->integer('num_inscricao')
+            ->nonNegativeInteger('num_inscricao')
             ->allowEmptyString('num_inscricao');
 
         $validator

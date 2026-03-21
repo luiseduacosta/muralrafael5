@@ -104,8 +104,8 @@ if ($user_session) {
                     <td><?= $instituicao->convenio ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Expira') ?></th>
-                    <td><?= $instituicao->expira ? $instituicao->expira->format('d/m/Y') : '' ?></td>
+                    <th><?= __('Expira em') ?></th>
+                    <td><?= $instituicao->expira ? $this->Time->format($instituicao->expira, 'd/m/Y') : '' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Observações') ?></th>
@@ -240,8 +240,8 @@ if ($user_session) {
                                 ?>
                             </td>
                             <td><?= h($muralestagio->cargaHoraria) ?></td>
-                            <td><?= $muralestagio->dataSelecao ? $muralestagio->dataSelecao->format('d/m/Y') : '' ?></td>
-                            <td><?= $muralestagio->dataInscricao ? $muralestagio->dataInscricao->format('d/m/Y') : '' ?></td>
+                            <td><?= $muralestagio->dataSelecao ? $this->Time->format($muralestagio->dataSelecao, 'd/m/Y') : '' ?></td>
+                            <td><?= $muralestagio->dataInscricao ? $this->Time->format($muralestagio->dataInscricao, 'd/m/Y') : '' ?></td>
                         </tr>
                         <?php endforeach; ?>
                     </table>

@@ -176,11 +176,6 @@ class InstituicoesTable extends Table
             ->integer('area_id')
             ->allowEmptyString('area_id');
 
-        $validator
-            ->scalar('area')
-            ->maxLength('area', 100)
-            ->allowEmptyString('area');
-
         return $validator;
     }
 

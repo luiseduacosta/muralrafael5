@@ -83,8 +83,9 @@ class UsersTable extends Table
             ->notEmptyString('password', 'Erro: senha vazia');
 
         $validator
-            ->scalar('categoria')
-            ->notEmptyString('categoria');
+            ->integer('categoria')
+            ->inList('categoria', [1, 2, 3, 4], 'Erro: categoria inválida')
+            ->notEmptyString('categoria', 'Erro: categoria vazia');
 
         $validator
             ->integer('numero')

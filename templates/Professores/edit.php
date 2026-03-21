@@ -74,7 +74,7 @@ $departamentos = [
                 } else {
                     echo $this->Form->control('email', ['type' => 'email', 'required' => false]);
                 }
-                    echo $this->Form->control('datanascimento', ['empty' => true, 'label' => 'Data de nascimento']);
+                    echo $this->Form->control('datanascimento', ['type' => 'date', 'empty' => true, 'label' => 'Data de nascimento']);
                     echo $this->Form->control('localnascimento', ['label' => 'Local de nascimento']);
                     echo $this->Form->control('ddd_telefone', ['label' => 'DDD telefone']);
                     echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)\s[0-9]{4}\.[0-9]{4}', 'width' => '15']);
@@ -83,7 +83,7 @@ $departamentos = [
                     echo $this->Form->control('homepage', ['label' => 'Homepage']);
                     echo $this->Form->control('redesocial', ['label' => 'Rede social']);
                     echo $this->Form->control('curriculolattes', ['label' => 'Curriculo Lattes']);
-                    echo $this->Form->control('atualizacaolattes', ['empty' => true, 'label' => 'Atualizacao Lattes']);
+                    echo $this->Form->control('atualizacaolattes', ['type' => 'date', 'empty' => true, 'label' => 'Atualizacao Lattes']);
                     echo $this->Form->control('curriculosigma', ['label' => 'Curriculo Sigma']);
                     echo $this->Form->control('pesquisadordgp', ['label' => 'Pesquisa Dgp']);
                     echo $this->Form->control('formacaoprofissional', ['label' => 'Formacao Profissional']);
@@ -95,12 +95,12 @@ $departamentos = [
                     echo $this->Form->control('doutoradoarea', ['label' => 'Área de doutorado']);
                     echo $this->Form->control('doutoradouniversidade', ['label' => 'Universidade de doutorado']);
                     echo $this->Form->control('doutoradoanoconclusao', ['label' => 'Ano de conclusão de doutorado']);
-                    echo $this->Form->control('dataingresso', ['empty' => true, 'label' => 'Data de ingresso']);
+                    echo $this->Form->control('dataingresso', ['type' => 'date', 'empty' => true, 'label' => 'Data de ingresso']);
                     echo $this->Form->control('formaingresso', ['label' => 'Forma de ingresso']);
                     echo $this->Form->control('tipocargo', ['label' => 'Tipo de cargo']);
                     echo $this->Form->control('regimetrabalho', ['label' => 'Regime de trabalho']);
                     echo $this->Form->control('departamento', ['label' => 'Departamento']);
-                    echo $this->Form->control('dataegresso', ['empty' => true, 'label' => 'Data de egresso']);
+                    echo $this->Form->control('dataegresso', ['type' => 'date', 'empty' => true, 'label' => 'Data de egresso']);
                     echo $this->Form->control('motivoegresso', ['label' => 'Motivo de egresso']);
                     echo $this->Form->control('observacoes', ['label' => 'Observações']);
                 ?>

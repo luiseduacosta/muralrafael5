@@ -70,7 +70,7 @@ $departamentos = [
                 } else {
                     echo $this->Form->control('email', ['type' => 'email', 'required' => true]);
                 }
-                    echo $this->Form->control('datanascimento', ['empty' => true, 'required' => false]);
+                    echo $this->Form->control('datanascimento', ['type' => 'date', 'empty' => true, 'required' => false]);
                     echo $this->Form->control('localnascimento', ['label' => 'Local Nascimento', 'required' => false]);
                     echo $this->Form->control('ddd_telefone', ['label' => 'DDD', 'required' => false]);
                     echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)\s[0-9]{4}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'required' => false]);
@@ -79,7 +79,7 @@ $departamentos = [
                     echo $this->Form->control('homepage', ['label' => 'Homepage', 'required' => false]);
                     echo $this->Form->control('redesocial', ['label' => 'Rede Social', 'required' => false]);
                     echo $this->Form->control('curriculolattes', ['label' => 'Curriculo Lattes', 'required' => false]);
-                    echo $this->Form->control('atualizacaolattes', ['empty' => true, 'required' => false]);
+                    echo $this->Form->control('atualizacaolattes', ['type' => 'date', 'empty' => true, 'required' => false]);
                     echo $this->Form->control('curriculosigma', ['label' => 'Curriculo Sigma', 'required' => false]);
                     echo $this->Form->control('pesquisadordgp', ['label' => 'Pesquisa Dord GP', 'required' => false]);
                     echo $this->Form->control('formacaoprofissional', ['label' => 'Formacao Profissional', 'required' => false]);
@@ -91,12 +91,12 @@ $departamentos = [
                     echo $this->Form->control('doutoradoarea', ['label' => 'Doutorado Área', 'required' => false]);
                     echo $this->Form->control('doutoradouniversidade', ['label' => 'Doutorado Universidade', 'required' => false]);
                     echo $this->Form->control('doutoradoanoconclusao', ['label' => 'Doutorado Ano Conclussão', 'required' => false]);
-                    echo $this->Form->control('dataingresso', ['empty' => true, 'required' => false]);
+                    echo $this->Form->control('dataingresso', ['type' => 'date', 'empty' => true, 'required' => false]);
                     echo $this->Form->control('formaingresso', ['label' => 'Forma Ingresso', 'required' => false]);
                     echo $this->Form->control('tipocargo', ['label' => 'Tipo Cargo', 'required' => false]);
                     echo $this->Form->control('regimetrabalho', ['label' => 'Regime Trabalho', 'required' => false]);
                     echo $this->Form->control('departamento', ['label' => 'Departamento', 'options' => $departamentos, 'required' => true]);
-                    echo $this->Form->control('dataegresso', ['empty' => true, 'required' => false]);
+                    echo $this->Form->control('dataegresso', ['type' => 'date', 'empty' => true, 'required' => false]);
                     echo $this->Form->control('motivoegresso', ['label' => 'Motivo Egresso', 'required' => false]);
                     echo $this->Form->control('observacoes', ['label' => 'Observaçoes', 'required' => false]);
                 ?>

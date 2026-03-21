@@ -78,18 +78,18 @@ $departamentos = [
                 </tr>
                <tr>
                     <th><?= __('Data de nascimento') ?></th>
-                    <td><?= h($professor->datanascimento) ?></td>
+                    <td><?= empty($professor->datanascimento) ? '' : $professor->datanascimento->format('d/m/Y') ?></td>
                 </tr>
                 <tr> 
                     <th><?= __('Local de nascimento') ?></th>
-                    <td><?= h($professor->localnascimento) ?></td>
+                    <td><?= empty($professor->localnascimento) ? '' : h($professor->localnascimento) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Telefone') ?></th>
                     <?php if (strlen($professor->telefone) < 10) : ?>
                         <td><?= $professor->telefone ? h('(' . $professor->ddd_telefone . ') ' . $professor->telefone) : '' ?></td>
                     <?php else : ?>
-                        <td><?= $professor->telefone ?></td>
+                        <td><?= empty($professor->telefone) ? '' : h($professor->telefone) ?></td>
                     <?php endif ?>    
                 </tr>
                 <tr>
@@ -97,32 +97,32 @@ $departamentos = [
                     <?php if (strlen($professor->celular) < 10) : ?>
                         <td><?= $professor->celular ? h('(' . $professor->ddd_celular . ') ' . $professor->celular) : '' ?></td>
                     <?php else : ?>
-                        <td><?= $professor->celular ?></td>
+                        <td><?= empty($professor->celular) ? '' : h($professor->celular) ?></td>
                     <?php endif ?>    
                     </tr>
                 <tr>
                     <th><?= __('Email') ?></th>
-                    <td><?= $professor->email ? $this->Text->autoLinkEmails($professor->email) : '' ?></td>
+                    <td><?= empty($professor->email) ? '' : $this->Text->autoLinkEmails($professor->email) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Home page') ?></th>
-                    <td><?= h($professor->homepage) ?></td>
+                    <td><?= empty($professor->homepage) ? '' : h($professor->homepage) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Rede social') ?></th>
-                    <td><?= h($professor->redesocial) ?></td>
+                    <td><?= empty($professor->redesocial) ? '' : h($professor->redesocial) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Curriculo lattes') ?></th>
-                    <td><?= $professor->curriculolattes ? $this->Html->link('http://lattes.cnpq.br/' . h($professor->curriculolattes)) : '' ?></td>
+                    <td><?= empty($professor->curriculolattes) ? '' : $this->Html->link('http://lattes.cnpq.br/' . h($professor->curriculolattes)) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Atualização lattes') ?></th>
-                    <td><?= h($professor->atualizacaolattes ? $professor->atualizacaolattes->format('d/m/Y') : '') ?></td>
+                    <td><?= empty($professor->atualizacaolattes) ? '' : $professor->atualizacaolattes->format('d/m/Y') ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Curriculo sigma') ?></th>
-                    <td><?= h($professor->curriculosigma) ?></td>
+                    <td><?= empty($professor->curriculosigma) ? '' : h($professor->curriculosigma) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Pesquisador DGP') ?></th>
@@ -180,7 +180,7 @@ $departamentos = [
                 </tr>
                 <tr>
                     <th><?= __('Data de ingresso') ?></th>
-                    <td><?= h($professor->dataingresso ? $professor->dataingresso->format('d/m/Y') : '') ?></td>
+                    <td><?= empty($professor->dataingresso) ? '' : $professor->dataingresso->format('d/m/Y') ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Forma de ingresso') ?></th>
@@ -196,7 +196,7 @@ $departamentos = [
                 </tr>
                 <tr>
                     <th><?= __('Data de egresso') ?></th>
-                    <td><?= h($professor->dataegresso ? $professor->dataegresso->format('d/m/Y') : '') ?></td>
+                    <td><?= empty($professor->dataegresso) ? '' : $professor->dataegresso->format('d/m/Y') ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Motivo egresso') ?></th>
@@ -281,7 +281,7 @@ $departamentos = [
                             <td style="min-width: 80px; max-width: 120px;"><?= h($estagiario->aluno->turno ?? '') ?></td>
                             <td><?= h($estagiario->nivel) ?></td>
                             <td><?= $estagiario->tc ='1' ? 'Sim' : 'Não' ?></td>
-                            <td><?= h($estagiario->tc_solicitacao?->format('d/m/Y')) ?></td>
+                            <td><?= $estagiario->tc_solicitacao ? $estagiario->tc_solicitacao->format('d/m/Y') : '' ?></td>
                             <td><?= $estagiario->instituicao ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario->instituicao->id]) : '' ?></td>
                             <td><?= $estagiario->supervisor ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
                             <td><?= h($estagiario->periodo) ?></td>
