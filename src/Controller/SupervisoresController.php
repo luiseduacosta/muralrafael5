@@ -28,7 +28,15 @@ class SupervisoresController extends AppController
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
-        $query = $this->Supervisores->find()->contain(['Users']);
+        $busca = $this->request->getQuery('busca');
+        if ($busca) {
+            $condition = ['OR' => ['Supervisores.nome LIKE' => '%' . $busca . '%']];
+        }
+        if (!isset($condition)) {
+            $condition = [];
+        }
+
+        $query = $this->Supervisores->find()->where($condition)->contain(['Users']);
 
         $supervisores = $this->paginate($query, [
             'order' => ['nome' => 'ASC'],

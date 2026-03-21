@@ -5,10 +5,25 @@
  */
 ?>
 <div class="supervisores index content">
-    
-    <?= $this->Html->link(__('Novo Supervisor'), ['action' => 'add'], ['class' => 'button']) ?>
-    
-    <h3><?= __('Lista de Supervisores') ?></h3>
+
+<aside>
+    <aside class="side-nav">
+        <div class="row">
+            <div class="col-6 d-flex justify-content-start">
+                <?= $this->Html->link(__('Novo(a) Supervisor(a)'), ['action' => 'add'], ['class' => 'button']) ?>
+            </div>
+            <div class="col-6 d-flex justify-content-end">
+                <?= $this->Form->create(null, ['type' => 'get', 'url' => ['action' => 'index'], 'class' => 'form-inline']) ?>
+                    <div class="form-group">
+                        <?= $this->Form->label('busca', 'Busca', ['class' => 'button mr-2 mb-4']) ?>
+                        <?= $this->Form->control('busca', ['placeholder' => 'Busca supervisor(a)', 'label' => false, 'onKeyDown' => 'if (event.keyCode == 13) {this.form.submit();}', 'class' => 'form-control']) ?>
+                    </div>
+                <?= $this->Form->end() ?>
+            </div>
+        </div>
+    </aside>
+
+    <h3><?= __('Lista de Supervisores(as)') ?></h3>
     
     <div class="paginator">
         <?= $this->element('paginator'); ?>

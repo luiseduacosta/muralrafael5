@@ -13,11 +13,23 @@ if ($user_session) {
 ?>
 <div class="instituicoes index content">
     <aside>
-        <div class="nav">    
-            <?php if ($user_data['administrador_id']) : ?>
-                <?= $this->Html->link(__('Nova Instituição'), ['action' => 'add'], ['class' => 'button']) ?>
-                <?= $this->Html->link(__('Áreas'), ['controller' => 'Areas', 'action' => 'index'], ['class' => 'button']) ?>
-            <?php endif; ?>
+        <div class="row">
+            <div class="col-6">
+                <?php if ($user_data['administrador_id']) : ?>
+                    <?= $this->Html->link(__('Nova Instituição'), ['action' => 'add'], ['class' => 'button']) ?>
+                    <?= $this->Html->link(__('Áreas'), ['controller' => 'Areas', 'action' => 'index'], ['class' => 'button']) ?>
+                <?php endif; ?>
+            </div>
+            <div class="col-6 d-flex justify-content-end">
+                <div class="search-form">
+                    <?= $this->Form->create(null, ['type' => 'get', 'url' => ['action' => 'index'], 'class' => 'form-inline']) ?>
+                        <div class="form-group">
+                            <?= $this->Form->label('busca', 'Busca', ['class' => 'button mr-2 mb-4']) ?>
+                            <?= $this->Form->control('busca', ['placeholder' => 'Busca instituição', 'label' => false, 'onKeyDown' => 'if (event.keyCode == 13) {this.form.submit();}', 'class' => 'form-control']) ?>
+                        </div>
+                    <?= $this->Form->end() ?>
+                </div>
+            </div>
         </div>
     </aside>
     

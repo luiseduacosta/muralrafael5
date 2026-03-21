@@ -29,7 +29,15 @@ class InstituicoesController extends AppController
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
-        $query = $this->Instituicoes->find()->contain(['Areas']);
+        $busca = $this->request->getQuery('busca');
+        if ($busca) {
+            $condition = ['Instituicoes.instituicao LIKE' => '%' . $busca . '%'];
+        }
+        if (!isset($condition)) {
+            $condition = [];
+        }
+
+        $query = $this->Instituicoes->find()->where($condition)->contain(['Areas']);
 
         $instituicoes = $this->paginate($query, [
             'order' => ['Instituicoes.instituicao' => 'ASC'],
@@ -57,13 +65,16 @@ class InstituicoesController extends AppController
      */
     public function view(?string $id = null)
     {
+        // Load the main institution with only light associations
         $instituicao = $this->Instituicoes->find()->contain([
             'Areas',
             'Supervisores' => ['Users'],
-            'Estagiarios' => ['Alunos', 'Professores', 'Supervisores', 'Instituicoes'],
-            'Muralestagios' => ['Instituicoes'],
-            'Visitas',
         ])->where(['Instituicoes.id' => $id])->first();
+
+        if (!$instituicao) {
+            $this->Flash->error(__('Instituição não encontrada.'));
+            return $this->redirect(['action' => 'index']);
+        }
 
         try {
             $this->Authorization->authorize($instituicao);
@@ -73,7 +84,24 @@ class InstituicoesController extends AppController
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
-        $this->set(compact('instituicao'));
+        // Paginate Estagiarios separately
+        $this->paginate = [
+            'Estagiarios' => ['limit' => 10, 'scope' => 'estagiario'],
+            'Muralestagios' => ['limit' => 10, 'scope' => 'mural'],
+            'Visitas' => ['limit' => 10, 'scope' => 'visita'],
+        ];
+
+        $estagiarios = $this->paginate($this->Instituicoes->Estagiarios->find()
+            ->where(['Estagiarios.instituicao_id' => $id])
+            ->contain(['Alunos', 'Professores', 'Supervisores']));
+
+        $muralestagios = $this->paginate($this->Instituicoes->Muralestagios->find()
+            ->where(['Muralestagios.instituicao_id' => $id]));
+
+        $visitas = $this->paginate($this->Instituicoes->Visitas->find()
+            ->where(['Visitas.instituicao_id' => $id]));
+
+        $this->set(compact('instituicao', 'estagiarios', 'muralestagios', 'visitas'));
     }
 
     /**

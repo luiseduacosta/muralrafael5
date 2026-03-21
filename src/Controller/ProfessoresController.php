@@ -30,13 +30,12 @@ class ProfessoresController extends AppController
         }
 
         $busca = $this->request->getQuery('busca');
-        if (empty($busca)) {
-            $busca = '';
-            echo 'Busca vazia';
-            // die();
+        if ($busca) {
+            $condition = ['OR' => ['Professores.nome LIKE' => '%' . $busca . '%']];
         }
-        $condition = ['OR' => ['Professores.nome LIKE' => '%' . $busca . '%']];
-
+        if (!isset($condition)) {
+            $condition = [];
+        }
         $query = $this->Professores->find()->where($condition)->contain(['Users']);
 
         $professores = $this->paginate($query, [

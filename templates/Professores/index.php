@@ -30,7 +30,7 @@ $departamentos = [
                 <?= $this->Form->create(null, ['type' => 'get', 'url' => ['action' => 'index'], 'class' => 'form-inline']) ?>
                     <div class="form-group">
                         <?= $this->Form->label('busca', 'Busca', ['class' => 'button mr-2 mb-4']) ?>
-                        <?= $this->Form->control('busca', ['placeholder' => 'Busca Avançada', 'label' => false, 'onChange' => 'this.form.submit()', 'class' => 'form-control']) ?>
+                        <?= $this->Form->control('busca', ['placeholder' => 'Busca professor(a)', 'label' => false, 'onKeyDown' => 'if (event.keyCode == 13) {this.form.submit();}', 'class' => 'form-control']) ?>
                     </div>
                 <?= $this->Form->end() ?>
             </div>

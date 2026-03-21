@@ -151,7 +151,7 @@ if ($user_session) {
             </div>
             <div class="related">
                 <h4><?= __('Estagiarios') ?></h4>
-                <?php if (!empty($instituicao->estagiarios)) : ?>
+                <?php if (!empty($estagiarios)) : ?>
                 <div class="table_wrap">
                     <table>
                         <tr>
@@ -167,7 +167,7 @@ if ($user_session) {
                             <th><?= __('Nota') ?></th>
                             <th><?= __('CH') ?></th>
                         </tr>
-                        <?php foreach ($instituicao->estagiarios as $estagiario) : ?>
+                        <?php foreach ($estagiarios as $estagiario) : ?>
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id]) ?>
@@ -190,11 +190,12 @@ if ($user_session) {
                         <?php endforeach; ?>
                     </table>
                 </div>
+                <?= $this->element('paginator', ['scope' => 'estagiario']) ?>
                 <?php endif; ?>
             </div>
             <div class="related">
                 <h4><?= __('Muralestagios') ?></h4>
-                <?php if (!empty($instituicao->muralestagios)) : ?>
+                <?php if (!empty($muralestagios)) : ?>
                 <div class="table_wrap">
                     <table>
                         <tr>
@@ -208,7 +209,7 @@ if ($user_session) {
                             <th><?= __('DataSelecao') ?></th>
                             <th><?= __('DataInscricao') ?></th>
                         </tr>
-                        <?php foreach ($instituicao->muralestagios as $muralestagio) : ?>
+                        <?php foreach ($muralestagios as $muralestagio) : ?>
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Muralestagios', 'action' => 'view', $muralestagio->id]) ?>
@@ -245,10 +246,11 @@ if ($user_session) {
                         <?php endforeach; ?>
                     </table>
                 </div>
+                <?= $this->element('paginator', ['scope' => 'mural']) ?>
                 <?php endif; ?>
             </div>
             
-            <?php if (!empty($instituicao->visitas)) : ?>
+            <?php if (!empty($visitas)) : ?>
             <div class="related">
                 <h4><?= __('Visitas') ?></h4>
                 <div class="table_wrap">
@@ -262,7 +264,7 @@ if ($user_session) {
                             <th><?= __('Descricao') ?></th>
                             <th><?= __('Avaliacao') ?></th>
                         </tr>
-                        <?php foreach ($instituicao->visitas as $visita) : ?>
+                        <?php foreach ($visitas as $visita) : ?>
                         <tr>
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'Visitas', 'action' => 'view', $visita->id]) ?>
@@ -281,6 +283,7 @@ if ($user_session) {
                         <?php endforeach; ?>
                     </table>
                 </div>
+                <?= $this->element('paginator', ['scope' => 'visita']) ?>
             </div>
             <?php endif; ?>
             
