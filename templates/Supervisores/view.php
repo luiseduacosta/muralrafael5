@@ -189,7 +189,7 @@ if ($user_session) {
                                     </td>
                                     <td><?= h($instituicao->id) ?></td>
                                     <td><?= $this->Html->link($instituicao->instituicao, ['controller' => 'instituicoes', 'action' => 'view', $instituicao->id]) ?></td>
-                                    <td><?= $instituicao->area_rel ? $this->Html->link(h($instituicao->area_rel->area), ['controller' => 'Areas', 'action' => 'view', $instituicao->area_rel->id]) : '' ?></td>
+                                    <td><?= $instituicao->area ? $this->Html->link(h($instituicao->area->area), ['controller' => 'Areas', 'action' => 'view', $instituicao->area->id]) : '' ?></td>
                                     <td><?= h($instituicao->natureza) ?></td>
                                     <td><?= h($instituicao->cnpj) ?></td>
                                     <td><?= $this->Text->autoLinkEmails($instituicao->email) ?></td>
