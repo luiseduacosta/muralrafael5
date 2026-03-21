@@ -20,12 +20,12 @@
                     echo $this->Form->control('instituicao_id', ['options' => $instituicoes, 'empty' => true, 'class' => 'form-control']);
                     echo $this->Form->control('email', ['label' => 'E-mail']);
                     echo $this->Form->control('convenio', ['label' => 'Convênio', 'type' => 'select', 'options' => [1 => 'Sim', 0 => 'Não'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
-                    echo $this->Form->control('vagas', ['label' => 'Número de vagas', 'default' => '1']);
-                    echo $this->Form->control('periodo', ['value' => $periodo]);
-                    echo $this->Form->control('beneficios', ['placeholder' => 'Bolsa, alimentação, transporte, etc.', 'label' => 'Benefícios']);
+                    echo $this->Form->control('vagas', ['label' => 'Número de vagas', 'default' => '1', 'class' => 'form-control']);
+                    echo $this->Form->control('periodo', ['value' => $periodo, 'class' => 'form-control']);
+                    echo $this->Form->control('beneficios', ['placeholder' => 'Bolsa, alimentação, transporte, etc.', 'label' => 'Benefícios', 'class' => 'form-control']);
                     echo $this->Form->control('fim_de_semana', ['label' => 'Fim de semana', 'type' => 'select', 'options' => [2 => 'Parcialmente', 1 => 'Sim', 0 => 'Não'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
-                    echo $this->Form->control('carga_horaria', ['placeholder' => '12', 'label' => 'Carga horária']);
-                    echo $this->Form->control('requisitos', ['placeholder' => 'Ética aprovada', 'label' => 'Requisitos']);
+                    echo $this->Form->control('carga_horaria', ['placeholder' => '12', 'label' => 'Carga horária', 'class' => 'form-control']);
+                    echo $this->Form->control('requisitos', ['placeholder' => 'Ética aprovada', 'label' => 'Requisitos', 'class' => 'form-control']);
                     echo $this->Form->control('local_inscricao', ['label' => 'Local de inscrição', 'type' => 'select', 'options' => [1 => 'Inscrição somente no mural da Coordenação de Estágio da ESS', 0 => 'Inscrição na Instituição e no mural da Coordenação de Estágio da ESS'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
                     echo $this->Form->control('data_inscricao', ['label' => 'Data de encerramento das inscrições', 'type' => 'date', 'empty' => true]);
                     echo $this->Form->control('local_selecao', ['label' => 'Local de seleção', 'type' => 'select', 'options' => [1 => 'Local na Coordenação de Estágio da ESS', 0 => 'Local na Instituição'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);

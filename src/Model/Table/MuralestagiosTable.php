@@ -91,7 +91,7 @@ class MuralestagiosTable extends Table
         $validator
                 ->scalar('convenio')
                 ->maxLength('convenio', 1)
-                ->inList(['0', '1'])
+                ->inList('convenio', ['0', '1'])
                 ->notEmptyString('convenio');
 
         $validator
@@ -106,7 +106,7 @@ class MuralestagiosTable extends Table
         $validator
                 ->scalar('final_de_semana')
                 ->maxLength('final_de_semana', 1)
-                ->inList(['0', '1'])
+                ->inList('final_de_semana', ['0', '1', '2'])
                 ->allowEmptyString('final_de_semana');
 
         $validator
