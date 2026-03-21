@@ -29,10 +29,8 @@ use Cake\ORM\Entity;
  * @property string $seguro
  * @property string $avaliacao
  * @property string|null $observacoes
- * @property int|null $areainstituicoes_id
- * @property string|null $area
  *
- * @property \App\Model\Entity\Area $area_rel
+ * @property \App\Model\Entity\Area $area
  * @property \App\Model\Entity\Estagiario[] $estagiarios
  * @property \App\Model\Entity\Muralestagio[] $muralestagios
  * @property \App\Model\Entity\Visita[] $visitas
@@ -70,9 +68,7 @@ class Instituicao extends Entity
         'seguro' => true,
         'avaliacao' => true,
         'observacoes' => true,
-        'areainstituicoes_id' => true,
         'area' => true,
-        'area_rel' => true, // Substitui area por area_rel
         'estagiarios' => true,
         'muralestagios' => true,
         'visitas' => true,

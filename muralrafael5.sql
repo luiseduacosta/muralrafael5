@@ -236,7 +236,7 @@ CREATE TABLE IF NOT EXISTS `inscricoes` (
 CREATE TABLE IF NOT EXISTS `instituicoes` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `areainstituicoes_id` smallint(3) DEFAULT NULL,
-  `area` smallint(3) DEFAULT NULL COMMENT 'Area de instituicao. Igual a areainstituicoes_id',
+  `area_id` smallint(3) DEFAULT NULL COMMENT 'Area da instituicao. Ex area. Igual a areainstituicoes_id',
   `natureza` varchar(50) DEFAULT NULL,
   `instituicao` varchar(120) NOT NULL DEFAULT '' COMMENT 'Nome da instituição',
   `cnpj` char(18) DEFAULT NULL,
@@ -256,7 +256,6 @@ CREATE TABLE IF NOT EXISTS `instituicoes` (
   `seguro` char(1) DEFAULT NULL COMMENT '0=Nao, 1=Sim',
   `avaliacao` set('1','2','3','4','5') NOT NULL DEFAULT '3' COMMENT 'Avaliação da instituição. Na tabela visitas há um campo descritivo.',
   `observacoes` varchar(255) DEFAULT NULL,
-  `area_id` smallint(3) DEFAULT NULL COMMENT 'Area de instituicao. Igual a areainstituicoes_id e area',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Instituições de estágio.';
 
@@ -343,10 +342,10 @@ CREATE TABLE IF NOT EXISTS `professores` (
   `doutoradouniversidade` varchar(50) DEFAULT NULL,
   `doutoradoanoconclusao` mediumint(4) DEFAULT NULL,
   `dataingresso` date DEFAULT NULL,
-  `formaingresso` varchar(100) DEFAULT NULL,
-  `tipocargo` varchar(10) DEFAULT NULL,
-  `categoria` varchar(10) DEFAULT NULL,
-  `regimetrabalho` varchar(5) DEFAULT NULL,
+  `formaingresso` varchar(100) DEFAULT NULL COMMENT 'Concurso público, transferência, etc',
+  `tipocargo` varchar(10) DEFAULT NULL COMMENT 'Efetivo, subtituto, temporario, convidado',
+  `categoria` varchar(10) DEFAULT NULL COMMENT 'Titular, associado, adjunto, auxiliar',
+  `regimetrabalho` varchar(5) DEFAULT NULL COMMENT '20, 40, 40DE',
   `departamento` varchar(30) DEFAULT NULL COMMENT 'Departamento do professor: Fundamentos, Métodos e técnicas, Política social',
   `dataegresso` date DEFAULT NULL,
   `motivoegresso` varchar(100) DEFAULT NULL,

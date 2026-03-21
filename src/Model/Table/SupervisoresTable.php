@@ -77,7 +77,7 @@ class SupervisoresTable extends Table
         $validator
             ->scalar('cpf')
             ->maxLength('cpf', 14)
-            ->regex('cpf', '/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}$/', 'CPF inválido')
+            ->regex('cpf', '/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/', 'CPF inválido')
             ->allowEmptyString('cpf');
 
         $validator
@@ -98,7 +98,7 @@ class SupervisoresTable extends Table
         $validator
             ->scalar('cep')
             ->maxLength('cep', 9)
-            ->regex('cep', '/^[0-9]{5}\-[0-9]{3}$/', 'CEP inválido')
+            ->regex('cep', '/^[0-9]{5}-[0-9]{3}$/', 'CEP inválido')
             ->allowEmptyString('cep');
 
         $validator
@@ -110,7 +110,7 @@ class SupervisoresTable extends Table
         $validator
             ->scalar('telefone')
             ->maxLength('telefone', 15)
-            ->regex('telefone', '/^[0-9]{4,5}\-[0-9]{4}$/', 'Telefone inválido')
+            ->regex('telefone', '/^\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}$/', 'Telefone inválido')
             ->allowEmptyString('telefone');
 
         $validator
@@ -122,7 +122,7 @@ class SupervisoresTable extends Table
         $validator
             ->nonNegativeInteger('celular')
             ->maxLength('celular', 15)
-            ->regex('celular', '/^[0-9]{4,5}\-[0-9]{4}$/', 'Celular inválido')
+            ->regex('celular', '/^\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}$/', 'Celular inválido')
             ->allowEmptyString('celular');
 
         $validator
@@ -136,7 +136,7 @@ class SupervisoresTable extends Table
 
         $validator
             ->nonNegativeInteger('ano_formatura')
-            ->regex('ano_formatura', '/^[1-2][0-9]{3}$/', 'Insira um ano válido')
+            ->regex('ano_formatura', '/^(19|20)[0-9]{2}$/', 'Insira um ano válido')
             ->allowEmptyString('ano_formatura');
 
         $validator
@@ -160,7 +160,7 @@ class SupervisoresTable extends Table
 
         $validator
             ->nonNegativeInteger('ano_curso')
-            ->regex('ano_curso', '/^[1-2][0-9]{3}$/', 'Insira um ano válido')
+            ->regex('ano_curso', '/^(19|20)[0-9]{2}$/', 'Insira um ano válido')
             ->allowEmptyString('ano_curso');
 
         $validator

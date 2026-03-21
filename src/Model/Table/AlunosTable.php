@@ -88,7 +88,7 @@ class AlunosTable extends Table
             ->maxLength('ingresso', 6)
             ->regex(
                 'ingresso',
-                '/^[0-9]{4}\-[1-2]$/',
+                '/^(19|20)[0-9]{2}-[1-2]$/',
                 'Período de ingresso inválido',
             )
             ->allowEmptyString('ingresso');
@@ -108,7 +108,7 @@ class AlunosTable extends Table
         $validator
             ->scalar('telefone')
             ->maxLength('telefone', 15)
-            ->regex('telefone', '/^\([0-9]{2}\) [0-9]{4,5}\.[0-9]{4}$/', 'Telefone inválido')
+            ->regex('telefone', '/^\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}$/', 'Telefone inválido')
             ->allowEmptyString('telefone');
 
         $validator
@@ -117,7 +117,7 @@ class AlunosTable extends Table
         $validator
             ->scalar('celular')
             ->maxLength('celular', 15)
-            ->regex('celular', '/^\([0-9]{2}\) [0-9]{4,5}\.[0-9]{4}$/', 'Telefone inválido')
+            ->regex('celular', '/^\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}$/', 'Telefone inválido')
             ->allowEmptyString('celular');
 
         $validator

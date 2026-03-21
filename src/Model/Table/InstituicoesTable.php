@@ -48,7 +48,6 @@ class InstituicoesTable extends Table
 
         $this->belongsTo('Areas', [
             'foreignKey' => 'area_id',
-            'propertyName' => 'area_rel', // para evitar conflito com o campo area da mesma tabela
         ]);
 
         $this->hasMany('Inscricoes', [
@@ -87,6 +86,10 @@ class InstituicoesTable extends Table
             ->maxLength('instituicao', 120)
             ->notEmptyString('instituicao');
 
+        $validator
+            ->integer('area_id')
+            ->allowEmptyString('area_id');
+    
         $validator
             ->scalar('natureza')
             ->maxLength('natureza', 50)
@@ -144,6 +147,7 @@ class InstituicoesTable extends Table
 
         $validator
             ->scalar('fim_de_semana')
+            ->inList('fim_de_semana', ['0', '1', '2'])
             ->maxLength('fim_de_semana', 1);
 
         $validator
@@ -151,7 +155,7 @@ class InstituicoesTable extends Table
             ->maxLength('localInscricao', 7);
 
         $validator
-            ->integer('convenio')
+            ->nonNegativeInteger('convenio')
             ->allowEmptyString('convenio');
 
         $validator
@@ -161,6 +165,7 @@ class InstituicoesTable extends Table
         $validator
             ->scalar('seguro')
             ->maxLength('seguro', 1)
+            ->inList('seguro', ['0', '1'])
             ->notEmptyString('seguro');
 
         $validator
@@ -171,10 +176,6 @@ class InstituicoesTable extends Table
             ->scalar('observacoes')
             ->maxLength('observacoes', 255)
             ->allowEmptyString('observacoes');
-
-        $validator
-            ->integer('area_id')
-            ->allowEmptyString('area_id');
 
         return $validator;
     }

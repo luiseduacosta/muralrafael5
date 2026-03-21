@@ -70,7 +70,10 @@ $departamentos = [
                 </tr>
                 <tr>
                     <th><?= __('CRESS') ?></th>
-                    <td><?= h($professor->cress) . ' ' . $professor->regiao . ' região' ?></td>
+                    <td><?php if (empty($professor->cress))
+                            echo '';
+                        else
+                            echo h($professor->cress) . ' ' . $professor->regiao . ' região' ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Siape') ?></th>
@@ -125,7 +128,7 @@ $departamentos = [
                     <td><?= empty($professor->curriculosigma) ? '' : h($professor->curriculosigma) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Pesquisador DGP') ?></th>
+                    <th><?= __('Diretorio de Grupos de Pesquisa') ?></th>
                     <td><?= h($professor->pesquisadordgp) ?></td>
                 </tr>
                 </table>

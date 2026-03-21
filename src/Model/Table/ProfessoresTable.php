@@ -73,8 +73,8 @@ class ProfessoresTable extends Table
             ->allowEmptyString('cpf');
 
         $validator
-            ->scalar('siape')
-            ->maxLength('siape', 10)
+            ->scalar('siape') // SIAPE: 8 dígitos. Pode começar com 0. Não pode ter pontos ou hífens
+            ->maxLength('siape', 8)
             ->allowEmptyString('siape');
 
         $validator
@@ -126,12 +126,12 @@ class ProfessoresTable extends Table
         $validator
             ->scalar('curriculosigma')
             ->maxLength('curriculosigma', 7)
-            ->allowEmptyString('curriculosigma');
+            ->allowEmptyString('curriculosigma'); // Obsoleto. Sistema da UFRJ destivado
 
         $validator
             ->scalar('pesquisadordgp')
             ->maxLength('pesquisadordgp', 20)
-            ->allowEmptyString('pesquisadordgp');
+            ->allowEmptyString('pesquisadordgp'); // Diretorio de grupos de pesquisa do CNPq
 
         $validator
             ->scalar('formacaoprofissional')
@@ -190,12 +190,17 @@ class ProfessoresTable extends Table
         $validator
             ->scalar('tipocargo')
             ->maxLength('tipocargo', 10)
-            ->allowEmptyString('tipocargo');
+            ->allowEmptyString('tipocargo'); // Tipo de cargo do professor: efetivo, subtituto, temporario, convidado
+
+        $validator
+            ->scalar('categoria')
+            ->maxLength('categoria', 10)
+            ->allowEmptyString('categoria'); // Categoria do professor: titular, associado, adjunto, auxiliar
 
         $validator
             ->scalar('regimetrabalho')
             ->maxLength('regimetrabalho', 5)
-            ->allowEmptyString('regimetrabalho');
+            ->allowEmptyString('regimetrabalho'); // Regime de trabalho do professor: 20, 40, 40DE
 
         $validator
             ->scalar('departamento')
@@ -226,11 +231,6 @@ class ProfessoresTable extends Table
         $validator
             ->email('email')
             ->allowEmptyString('email');
-
-        $validator
-            ->scalar('categoria')
-            ->maxLength('categoria', 10)
-            ->allowEmptyString('categoria');
 
         $validator
             ->scalar('observacoes')
