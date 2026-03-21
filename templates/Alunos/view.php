@@ -47,7 +47,7 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Data de Nascimento') ?></th>
-                    <td><?= h($aluno->nascimento ? $this->Time->format($aluno->nascimento, 'd/m/Y') : '') ?></td>
+                    <td><?= h($aluno->nascimento ? $aluno->nascimento->format('d/m/Y') : '') ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Registro') ?></th>
@@ -127,11 +127,11 @@ if ($user_session) {
                                     <?php if ($user_data['administrador_id']) : ?>
                                         <?= $this->Form->postLink(__('Excluir'), ['controller' => 'Users', 'action' => 'delete', $aluno->user->id], ['confirm' => __('Are you sure you want to delete user_{0}?', $aluno->user->id)]) ?>
                                     <?php endif; ?>
-                                </td>
+                                </td>   
                                 <td><?= $this->Html->link((string)$aluno->user->id, ['controller' => 'Users', 'action' => 'view', $aluno->user->id]) ?></td>
                                 <td><?= $aluno->user->email ? $this->Text->autoLinkEmails($aluno->user->email) : '' ?></td>
-                                <td><?= h($aluno->user->created ? $this->Time->format($aluno->user->created, 'd/m/Y H:i:s') : 's/d') ?></td>
-                                <td><?= h($aluno->user->modified ? $this->Time->format($aluno->user->modified, 'd/m/Y H:i:s') : 's/d') ?></td>
+                                <td><?= h($aluno->user->created ? $aluno->user->created->format('d/m/Y H:i:s') : 's/d') ?></td>
+                                <td><?= h($aluno->user->modified ? $aluno->user->modified->format('d/m/Y H:i:s') : 's/d') ?></td>
                             </tr>
                         </table>
                     </div>

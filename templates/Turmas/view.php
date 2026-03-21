@@ -122,8 +122,8 @@ if ($user_session) {
                             </td>
                             <td><?= h($muralestagios->vagas) ?></td>
                             <td><?= $muralestagios->professor ? $this->Html->link(h($muralestagios->professor->nome), ['controller' => 'professores', 'action' => 'view', $muralestagios->professor->id]) : '' ?></td>
-                            <td><?= $muralestagios->dataSelecao ? $this->Time->format($muralestagios->dataSelecao, 'd/m/Y') : '' ?></td>
-                            <td><?= $muralestagios->dataInscricao ? $this->Time->format($muralestagios->dataInscricao, 'd/m/Y') : '' ?></td>
+                            <td><?= $muralestagios->dataSelecao ? $muralestagios->dataSelecao->format('d/m/Y') : '' ?></td>
+                            <td><?= $muralestagios->dataInscricao ? $muralestagios->dataInscricao->format('d/m/Y') : '' ?></td>
                             <td><?= h($muralestagios->contato) ?></td>
                             <td><?= h($muralestagios->periodo) ?></td>
                         </tr>

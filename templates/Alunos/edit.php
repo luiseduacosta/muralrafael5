@@ -21,7 +21,7 @@ if ($user_session) {
         $('#ingresso').mask('0000-S', { translation: { 'S': { pattern: '[12]', optional: false } } }); // last digit is only 1 or 2
         $('#telefone').mask('(00) 0000.0000');
         var mask = function (val) {
-            return val.replace(/\D/g, '').length === 11 ? '(00) 00000.0000' : '(00) 00000.0000';
+            return val.replace(/\D/g, '').length === 11 ? '(00) 00000.0000' : '(00) 0000.0000';
         },
         opcoes = {
             onKeyPress: function (val, e, field, options) {

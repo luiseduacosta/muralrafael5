@@ -70,7 +70,7 @@ if ($user_session) {
                         <td><?= h($aluno->celular) ?></td>
                     <?php endif; ?>
                     <td><?= h($aluno->cpf) ?></td>
-                    <td><?= $aluno->nascimento ? $this->Time->format($aluno->nascimento, 'd/m/Y') : '' ?></td>
+                    <td><?= $aluno->nascimento ? $aluno->nascimento->format('d/m/Y') : '' ?></td>
                     <td><?= h($aluno->ingresso) ?? 's/d' ?></td>
                     <td><?= h($aluno->turno) ?></td>
                 </tr>

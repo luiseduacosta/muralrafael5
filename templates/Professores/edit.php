@@ -89,10 +89,10 @@ $departamentos = [
                     echo $this->Form->control('formacaoprofissional', ['label' => 'Formacao Profissional', 'required' => false]);
                     echo $this->Form->control('universidadedegraduacao', ['label' => 'Universidade de graduacao', 'required' => false]);
                     echo $this->Form->control('anoformacao', ['label' => 'Ano de formacao', 'pattern' => '[19|20][0-9]{2}', 'placeholder' => '0000', 'required' => false]);
-                    echo $this->Form->control('mestradoarea', ['label' => 'Area de mestrado', 'required' => false]);
+                    echo $this->Form->control('mestradoarea', ['label' => 'Área de mestrado', 'required' => false]);
                     echo $this->Form->control('mestradouniversidade', ['label' => 'Universidade de mestrado', 'required' => false]);
                     echo $this->Form->control('mestradoanoconclusao', ['label' => 'Ano de conclusao de mestrado', 'pattern' => '[19|20][0-9]{2}', 'placeholder' => '0000', 'required' => false]);
-                    echo $this->Form->control('doutoradoarea', ['label' => 'Area de doutorado', 'required' => false]);
+                    echo $this->Form->control('doutoradoarea', ['label' => 'Área de doutorado', 'required' => false]);
                     echo $this->Form->control('doutoradouniversidade', ['label' => 'Universidade de doutorado', 'required' => false]);
                     echo $this->Form->control('doutoradoanoconclusao', ['label' => 'Ano de conclusao de doutorado', 'pattern' => '[19|20][0-9]{2}', 'placeholder' => '0000', 'required' => false]);
                     echo $this->Form->control('dataingresso', ['type' => 'date', 'empty' => true, 'label' => 'Data de ingresso', 'required' => false]);
