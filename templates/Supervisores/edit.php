@@ -64,9 +64,9 @@ if ($user_session) {
                     echo $this->Form->control('bairro', ['label' => 'Bairro', 'required' => false]);
                     echo $this->Form->control('municipio', ['label' => 'Município', 'required' => false]);
                     echo $this->Form->control('codigo_tel', ['label' => 'DDD', 'required' => false]);
-                    echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)[\s][0-9]{4}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'required' => false]);
+                    echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)\s[0-9]{4}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'required' => false]);
                     echo $this->Form->control('codigo_cel', ['label' => 'DDD', 'required' => false]);
-                    echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '\([0-9]{2}\)[\s][0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 00000.0000', 'required' => false]);
+                    echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 00000.0000', 'required' => false]);
                     echo $this->Form->control('escola', ['label' => 'Instituição de Ensino', 'default' => null, 'required' => false]);
                     echo $this->Form->control('ano_formatura', ['required' => false, 'default' => null]);
                     echo $this->Form->control('outros_estudos', ['required' => false, 'default' => null]);

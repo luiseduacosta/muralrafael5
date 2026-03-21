@@ -73,9 +73,9 @@ $departamentos = [
                     echo $this->Form->control('datanascimento', ['empty' => true, 'required' => false]);
                     echo $this->Form->control('localnascimento', ['label' => 'Local Nascimento', 'required' => false]);
                     echo $this->Form->control('ddd_telefone', ['label' => 'DDD', 'required' => false]);
-                    echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)\s[0-9]{4}.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'required' => false]);
+                    echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)\s[0-9]{4}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'required' => false]);
                     echo $this->Form->control('ddd_celular', ['label' => 'DDD', 'required' => false]);
-                    echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '\([0-9]{2}\)\s[0-9]{4,5}.[0-9]{4}', 'placeholder' => '(00) 00000.0000', 'required' => false]);
+                    echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 00000.0000', 'required' => false]);
                     echo $this->Form->control('homepage', ['label' => 'Homepage', 'required' => false]);
                     echo $this->Form->control('redesocial', ['label' => 'Rede Social', 'required' => false]);
                     echo $this->Form->control('curriculolattes', ['label' => 'Curriculo Lattes', 'required' => false]);

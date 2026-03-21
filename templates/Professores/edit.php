@@ -77,9 +77,9 @@ $departamentos = [
                     echo $this->Form->control('datanascimento', ['empty' => true, 'label' => 'Data de nascimento']);
                     echo $this->Form->control('localnascimento', ['label' => 'Local de nascimento']);
                     echo $this->Form->control('ddd_telefone', ['label' => 'DDD telefone']);
-                    echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)\s[0-9]{4}.[0-9]{4}', 'width' => '15']);
+                    echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)\s[0-9]{4}\.[0-9]{4}', 'width' => '15']);
                     echo $this->Form->control('ddd_celular', ['label' => 'DDD celular']);
-                    echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '\([0-9]{2}\)\s[0-9]{4,5}.[0-9]{4}', 'width' => '15']);
+                    echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}', 'width' => '15']);
                     echo $this->Form->control('homepage', ['label' => 'Homepage']);
                     echo $this->Form->control('redesocial', ['label' => 'Rede social']);
                     echo $this->Form->control('curriculolattes', ['label' => 'Curriculo Lattes']);
