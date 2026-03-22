@@ -49,6 +49,10 @@ class InscricoesTable extends Table
         $this->belongsTo('Muralestagios', [
             'foreignKey' => 'muralestagio_id',
         ]);
+
+        $this->addBehavior('CounterCache', [
+            'Alunos' => ['inscricao_count'],
+        ]);
     }
 
     /**

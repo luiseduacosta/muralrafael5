@@ -90,7 +90,7 @@ $departamentos = [
                     echo $this->Form->control('cress', ['label' => 'CRESS', 'required' => false]);
                     echo $this->Form->control('regiao', ['label' => 'Regiao', 'required' => false]);
                 if ($professor->siape) {
-                    echo $this->Form->control('siape', ['value' => $professor->siape, 'required' => true, 'readonly' => true]);
+                    echo $this->Form->control('siape', ['value' => $professor->siape, 'required' => false, 'readonly' => true]);
                 } else {
                     echo $this->Form->control('siape', ['required' => false]);
                 }
