@@ -19,16 +19,39 @@ if ($user_session) {
         $('#cpf').mask('000.000.000-00');
         $('#cep').mask('00000-000');
         $('#ingresso').mask('0000-S', { translation: { 'S': { pattern: '[12]', optional: false } } }); // last digit is only 1 or 2
-        $('#telefone').mask('(00) 0000.0000');
-        var mask = function (val) {
-            return val.replace(/\D/g, '').length === 11 ? '(00) 00000.0000' : '(00) 0000.0000';
-        },
-        opcoes = {
-            onKeyPress: function (val, e, field, options) {
-                field.mask(mask.apply({}, arguments), options);
-            }
+        if ($('#codigo-telefone').val() == null) {
+            codigo = '21';
+        } else {
+            codigo = $('#codigo-telefone').val();
+        }
+
+        if ($('#telefone').val().length >= 8 && $('#telefone').val().length <= 10) {
+            $('#telefone').val('(' + codigo + ') ' + $('#telefone').val());
+        } 
+        var telMaskBehavior = function (val) {
+            return val.replace(/\D/g, '').length === 11 ? '(00) 00000.0000' : '(00) 0000.00009';
         };
-        $("#celular").mask(mask, opcoes);
+        var telOptions = {
+            onKeyPress: function(val, e, field, options) {
+                field.mask(telMaskBehavior.apply({}, arguments), options);
+            },
+            clearIfNotMatch: true
+        };
+        $('#telefone').mask(telMaskBehavior, telOptions);
+
+        if ($('#celular').val().length >= 8 && $('#celular').val().length <= 10) {
+            $('#celular').val('(' + codigo + ') ' + $('#celular').val());
+        } 
+        var celMaskBehavior = function (val) {
+            return val.replace(/\D/g, '').length === 11 ? '(00) 00000.0000' : '(00) 0000.00009';
+        };
+        var celOptions = {
+            onKeyPress: function(val, e, field, options) {
+                field.mask(celMaskBehavior.apply({}, arguments), options);
+            },
+            clearIfNotMatch: true
+        };
+        $('#celular').mask(celMaskBehavior, celOptions);
     });
 </script>   
 

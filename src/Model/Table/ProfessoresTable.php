@@ -93,6 +93,7 @@ class ProfessoresTable extends Table
         $validator
             ->scalar('telefone')
             ->maxLength('telefone', 15)
+            ->regex('telefone', '/^\([0-9]{2}\)\s[0-9]{4}\.[0-9]{4}$/', 'Insira um número de telefone válido')
             ->allowEmptyString('telefone');
 
         $validator
@@ -102,6 +103,7 @@ class ProfessoresTable extends Table
         $validator
             ->scalar('celular')
             ->maxLength('celular', 15)
+            ->regex('celular', '/^\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}$/', 'Insira um número de celular válido')
             ->allowEmptyString('celular');
 
         $validator
@@ -145,7 +147,7 @@ class ProfessoresTable extends Table
 
         $validator
             ->nonNegativeInteger('anoformacao')
-            ->regex('anoformacao', '/^[1-2][0-9]{3}$/', 'Insira um ano válido')
+            ->regex('anoformacao', '/^(19|20)[0-9]{2}$/', 'Insira um ano válido')
             ->allowEmptyString('anoformacao');
 
         $validator
@@ -160,7 +162,7 @@ class ProfessoresTable extends Table
 
         $validator
             ->nonNegativeInteger('mestradoanoconclusao')
-            ->regex('mestradoanoconclusao', '/^[1-2][0-9]{3}$/', 'Insira um ano válido')
+            ->regex('mestradoanoconclusao', '/^(19|20)[0-9]{2}$/', 'Insira um ano válido')
             ->allowEmptyString('mestradoanoconclusao');
 
         $validator
@@ -175,7 +177,7 @@ class ProfessoresTable extends Table
 
         $validator
             ->nonNegativeInteger('doutoradoanoconclusao')
-            ->regex('doutoradoanoconclusao', '/^[1-2][0-9]{3}$/', 'Insira um ano válido')
+            ->regex('doutoradoanoconclusao', '/^(19|20)[0-9]{2}$/', 'Insira um ano válido')
             ->allowEmptyString('doutoradoanoconclusao');
 
         $validator

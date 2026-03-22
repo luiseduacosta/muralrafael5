@@ -89,7 +89,7 @@ class AlunosTable extends Table
             ->regex(
                 'ingresso',
                 '/^(19|20)[0-9]{2}-[1-2]$/',
-                'Período de ingresso inválido',
+                'Ano e semestre de ingresso inválido',
             )
             ->allowEmptyString('ingresso');
 
@@ -152,7 +152,7 @@ class AlunosTable extends Table
         $validator
             ->scalar('cep')
             ->maxLength('cep', 9)
-            ->regex('cep', '/^[0-9]{5}\-[0-9]{3}$/', 'CEP inválido')
+            ->regex('cep', '/^[0-9]{5}-[0-9]{3}$/', 'CEP inválido')
             ->allowEmptyString('cep');
 
         $validator
