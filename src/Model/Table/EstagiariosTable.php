@@ -65,6 +65,10 @@ class EstagiariosTable extends Table
         $this->hasOne('Avaliacoes', [
             'foreignKey' => 'estagiario_id',
         ]);
+
+        $this->addBehavior('CounterCache', [
+            'Supervisores' => ['estagiarios_count'],
+        ]);
     }
 
     /**

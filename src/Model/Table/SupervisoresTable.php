@@ -173,6 +173,10 @@ class SupervisoresTable extends Table
             ->allowEmptyString('num_inscricao');
 
         $validator
+            ->integer('estagiarios_count')
+            ->allowEmptyString('estagiarios_count');
+
+        $validator
             ->scalar('curso_turma')
             ->maxLength('curso_turma', 1)
             ->allowEmptyString('curso_turma');
