@@ -72,7 +72,7 @@ $departamentos = [
                     <td><?= (string)$professor->siape ? $professor->siape : 'S/d' ?></td>
 
                     <td>
-                        <?php if (strlen($professor->celular) < 10) : ?>
+                        <?php if (!empty($professor->celular) && strlen($professor->celular) < 10) : ?>
                             <?= '(' . h($professor->ddd_celular) . ') ' . h($professor->celular) ?>
                         <?php else: ?>
                             <?= $professor->celular ?>
