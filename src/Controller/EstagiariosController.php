@@ -977,4 +977,48 @@ class EstagiariosController extends AppController
         $this->set('professor', $professor);
         $this->set('estagiarios', $estagiarios);
     }
+
+    public function relatorio()
+    {
+        $this->Authorization->authorize($this->Estagiarios, 'relatorio');
+
+        $estagiarios = $this->Estagiarios->find()
+            ->contain([
+                'Alunos' => ['fields' => ['id', 'nome']],
+                'Supervisores' => ['fields' => ['id', 'nome']],
+                'Instituicoes' => ['fields' => ['id', 'instituicao']],
+            ])
+            ->where([
+                'Estagiarios.instituicao_id IS NOT NULL',
+                'Estagiarios.instituicao_id !=' => 0,
+                'Estagiarios.supervisor_id IS NOT NULL',
+                'Estagiarios.supervisor_id !=' => 0,
+            ])
+            ->order(['Alunos.nome' => 'ASC'])
+            ->all();
+
+        $i = 0;
+        echo 'Relatório de supervisores em instituições nas quais não estão matriculados<br>';
+        echo '==========================================================================<br>';
+        foreach ($estagiarios as $estagiario) {
+
+            $instituicao = $this->fetchTable('Instituicoes')->find()
+                ->contain(['Supervisores'])
+                ->matching('Supervisores', function ($q) use ($estagiario) {
+                    return $q->where(['Supervisores.id' => $estagiario->supervisor_id]);
+                })
+                ->where(['Instituicoes.id' => $estagiario->instituicao_id])
+                ->first();
+
+            if (!$instituicao) {
+                echo $i . ' Estagiario: ' . $estagiario->id . ' ';
+                $i++;
+                echo 'Instituicao: ' . $estagiario->instituicao_id . ' ';
+                echo 'Supervisor: ' . $estagiario->supervisor_id . ' ';
+                echo 'Período: ' . $estagiario->periodo . '<br>';
+            } 
+        }
+        echo '============================================================================<br>';
+        die();
+    }
 }
