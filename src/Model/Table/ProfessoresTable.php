@@ -48,6 +48,7 @@ class ProfessoresTable extends Table
         $this->hasMany('Estagiarios', [
             'foreignKey' => 'professor_id',
         ]);
+
     }
 
     /**
@@ -237,6 +238,10 @@ class ProfessoresTable extends Table
         $validator
             ->scalar('observacoes')
             ->allowEmptyString('observacoes');
+
+        $validator
+            ->scalar('estagiarios_count')
+            ->allowEmptyString('estagiarios_count');
 
         return $validator;
     }

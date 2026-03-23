@@ -55,6 +55,8 @@ $departamentos = [
                     <th><?= $this->Paginator->sort('curriculolattes', 'Lattes') ?></th>
                     <th><?= $this->Paginator->sort('departamento') ?></th>
                     <th><?= $this->Paginator->sort('motivoegresso', 'Egresso') ?></th>
+                    <th><?= $this->Paginator->sort('estagiarios_count', 'Estagiarios') ?></th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -82,6 +84,7 @@ $departamentos = [
                     <td><?= $professor->curriculolattes ? $this->Html->link('http://lattes.cnpq.br/' . h($professor->curriculolattes)) : '' ?></td>
                     <td><?= h($professor->departamento) ?></td>
                     <td><?= h($professor->motivoegresso) ?></td>
+                    <td><?= h($professor->estagiarios_count) ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

@@ -46,6 +46,7 @@ class SupervisoresController extends AppController
                 'cpf',
                 'cress',
                 'email',
+                'estagiarios_count',
             ],
         ]);
 

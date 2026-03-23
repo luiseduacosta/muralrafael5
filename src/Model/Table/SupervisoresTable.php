@@ -55,6 +55,7 @@ class SupervisoresTable extends Table
             'targetForeignKey' => 'instituicao_id',
             'joinTable' => 'inst_super',
         ]);
+
     }
 
     /**
@@ -184,6 +185,10 @@ class SupervisoresTable extends Table
         $validator
             ->scalar('observacoes')
             ->allowEmptyString('observacoes');
+
+        $validator
+            ->scalar('estagiarios_count')
+            ->allowEmptyString('estagiarios_count');
 
         return $validator;
     }

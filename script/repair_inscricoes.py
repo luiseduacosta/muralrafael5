@@ -5,8 +5,8 @@ import sys
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
-    'password': '',
-    'database': 'ess_apps'
+    'password': 'root',
+    'database': 'mural5'
 }
 
 def verify_and_repair():

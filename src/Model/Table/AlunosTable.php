@@ -85,13 +85,11 @@ class AlunosTable extends Table
 
         $validator
             ->scalar('ingresso')
+            ->requirePresence('ingresso', 'create')
+            ->notEmptyString('ingresso', 'create')
             ->maxLength('ingresso', 6)
-            ->regex(
-                'ingresso',
-                '/^(19|20)[0-9]{2}-[1-2]$/',
-                'Ano e semestre de ingresso inválido',
-            )
-            ->allowEmptyString('ingresso');
+            ->regex('ingresso', '/^(19|20)[0-9]{2}-[1-2]$', 'Ano e semestre de ingresso inválido', 'create')
+            ->allowEmptyString('ingresso', 'create');
 
         $validator
             ->scalar('turno')

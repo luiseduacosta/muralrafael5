@@ -44,12 +44,11 @@ class InstituicoesController extends AppController
             'sortableFields' => [
                 'id',
                 'Instituicoes.instituicao',
-                'natureza',
                 'cnpj',
                 'convenio',
                 'expira',
                 'email',
-                'Areas.area',
+                'estagiarios_count'
             ],
         ]);
 

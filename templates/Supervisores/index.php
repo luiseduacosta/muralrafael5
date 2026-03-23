@@ -38,6 +38,7 @@
                     <th><?= $this->Paginator->sort('cpf', 'CPF') ?></th>
                     <th><?= $this->Paginator->sort('email', 'Email') ?></th>
                     <th><?= $this->Paginator->sort('cress', 'CRESS') ?></th>
+                    <th><?= $this->Paginator->sort('estagiarios_count', 'Estagiarios') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -53,6 +54,7 @@
                     <td><?= h($supervisor->cpf) ?></td>
                     <td><?= $supervisor->email ? $this->Text->autoLinkEmails($supervisor->email) : '' ?></td>
                     <td><?= h($supervisor->cress) ?></td>
+                    <td><?= h($supervisor->estagiarios_count) ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

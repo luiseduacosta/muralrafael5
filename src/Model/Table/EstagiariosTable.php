@@ -68,6 +68,8 @@ class EstagiariosTable extends Table
 
         $this->addBehavior('CounterCache', [
             'Supervisores' => ['estagiarios_count'],
+            'Professores' => ['estagiarios_count'],
+            'Instituicoes' => ['estagiarios_count'],
         ]);
     }
 

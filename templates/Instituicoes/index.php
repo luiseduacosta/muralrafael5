@@ -47,12 +47,11 @@ if ($user_session) {
                         <th><?= $this->Paginator->sort('id') ?></th>
                     <?php endif; ?>
                     <th><?= $this->Paginator->sort('Instituicoes.instituicao', 'Instituição') ?></th>
-                    <th><?= $this->Paginator->sort('Areas.area', 'Área') ?></th>
-                    <th><?= $this->Paginator->sort('natureza') ?></th>
                     <th><?= $this->Paginator->sort('cnpj', 'CNPJ') ?></th>
                     <th><?= $this->Paginator->sort('convenio', 'Nº de convênio') ?></th>
                     <th><?= $this->Paginator->sort('expira', 'Expira') ?></th>
                     <th><?= $this->Paginator->sort('email') ?></th>
+                    <th><?= $this->Paginator->sort('estagiarios_count', 'Estagiarios') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -67,12 +66,11 @@ if ($user_session) {
                         <td><?= $this->Html->link((string)$instituicao->id, ['action' => 'view', $instituicao->id]) ?></td>                    
                     <?php endif; ?>
                     <td><?= $this->Html->link($instituicao->instituicao, ['controller' => 'instituicoes', 'action' => 'view', $instituicao->id]) ?></td>
-                    <td><?= $instituicao->area ? $this->Html->link($instituicao->area->area, ['controller' => 'Areas', 'action' => 'view', $instituicao->area->id]) : '' ?></td>
-                    <td><?= h($instituicao->natureza) ?></td>
                     <td><?= h($instituicao->cnpj) ?></td>
                     <td><?= !empty($instituicao->convenio) ? $instituicao->convenio : '' ?></td>
                     <td><?= !empty($instituicao->expira) ? $instituicao->expira->format('d/m/Y') : '' ?></td>
                     <td><?= !empty($instituicao->email) ? $this->Text->autoLinkEmails($instituicao->email) : '' ?></td>
+                    <td><?= h($instituicao->estagiarios_count) ?></td>
 
                 </tr>
                 <?php endforeach; ?>

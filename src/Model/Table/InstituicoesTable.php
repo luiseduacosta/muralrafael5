@@ -177,6 +177,10 @@ class InstituicoesTable extends Table
             ->maxLength('observacoes', 255)
             ->allowEmptyString('observacoes');
 
+        $validator
+            ->scalar('estagiarios_count')
+            ->allowEmptyString('estagiarios_count');
+
         return $validator;
     }
 

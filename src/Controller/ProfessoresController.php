@@ -50,6 +50,7 @@ class ProfessoresController extends AppController
                 'curriculolattes',
                 'departamento',
                 'motivoegresso',
+                'estagiarios_count',
             ],
         ]);
 

@@ -30,7 +30,15 @@ class AlunosController extends AppController
 
         $alunos = $this->paginate($query, [
             'sortableFields' => [
-                'id', 'nome', 'registro', 'email', 'telefone', 'celular', 'cpf', 'nascimento', 'ingresso', 'turno',
+                'id', 
+                'nome', 
+                'registro', 
+                'email', 
+                'celular', 
+                'cpf', 
+                'ingresso', 
+                'turno',
+                'inscricao_count',
             ],
         ]);
         $this->set(compact('alunos'));
@@ -157,7 +165,17 @@ class AlunosController extends AppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $aluno = $this->Alunos->patchEntity($aluno, $this->request->getData());
+
+            $dados = $this->request->getData();
+            if (empty($this->request->getData('ingresso'))) {
+                if (strlen((string)$aluno->registro) == 9) {
+                    $dados['ingresso'] = '20' . substr((string)$aluno->registro, 1, 2);
+                } elseif (strlen((string)$aluno->registro) == 8) {
+                    $dados['ingresso'] = '19' . substr((string)$aluno->registro, 0, 2);
+                }
+            }
+
+            $aluno = $this->Alunos->patchEntity($aluno, $dados);
             if ($this->Alunos->save($aluno)) {
                 $this->Flash->success(__('A edição foi salva com sucesso.'));
 
