@@ -109,7 +109,7 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Observações') ?></th>
-                    <td><?= h($instituicao->observacoes) ?></td>
+                    <td><?= $this->Text->autoParagraph(h($instituicao->observacoes)) ?></td>
                 </tr>
             </table>
             <div class="related">
