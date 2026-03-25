@@ -116,15 +116,15 @@ class UsersController extends AppController
 
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData(), [
-                'fields' => ['categoria', 'registro', 'password', 'email'],
+                'fields' => ['categoria', 'numero', 'password', 'email'],
                 'accessibleFields' => ['password' => true],
             ]);
 
-            // Verify is registro has a valid value set. It is mandatory for all of the new users except admin
+            // Verify is numero has a valid value set. It is mandatory for all of the new users except admin
             if ($this->request->getData('categoria') !== '1') {
-                $registro = $this->request->getData('registro');
-                if (empty($registro)) {
-                    $this->Flash->error(__('O registro é obrigatório para o tipo de usuário selecionado.'));
+                $numero = $this->request->getData('numero');
+                if (empty($numero)) {
+                    $this->Flash->error(__('O número é obrigatório para o tipo de usuário selecionado.'));
 
                     return $this->redirect(['action' => 'add']);
                 }
@@ -134,7 +134,7 @@ class UsersController extends AppController
                 $this->Flash->success(__('The user has been saved.'));
                 // Update the entities with the user id and the user id with the entity id
                 if ($user->categoria == 2) {
-                    $aluno = $this->fetchTable('Alunos')->findByRegistro($user->registro)->first();
+                    $aluno = $this->fetchTable('Alunos')->findByRegistro($user->numero)->first();
                     if ($aluno) {
                         $this->fetchTable('Alunos')->updateAll(['user_id' => $user->id], ['id' => $aluno->id]);
                     } else {
@@ -143,7 +143,7 @@ class UsersController extends AppController
                         return $this->redirect(['controller' => 'Alunos', 'action' => 'add']);
                     }
                 } elseif ($user->categoria == 3) {
-                    $professor = $this->fetchTable('Professores')->findBySiape($user->registro)->first();
+                    $professor = $this->fetchTable('Professores')->findBySiape($user->numero)->first();
                     if ($professor) {
                         $this->fetchTable('Professores')->updateAll(['user_id' => $user->id], ['id' => $professor->id]);
                     } else {
@@ -152,7 +152,7 @@ class UsersController extends AppController
                         return $this->redirect(['controller' => 'Professores', 'action' => 'add']);
                     }
                 } elseif ($user->categoria == 4) {
-                    $supervisor = $this->fetchTable('Supervisores')->findByCress($user->registro)->first();
+                    $supervisor = $this->fetchTable('Supervisores')->findByCress($user->numero)->first();
                     if ($supervisor) {
                         $this->fetchTable('Supervisores')->updateAll(
                             ['user_id' => $user->id],
@@ -323,9 +323,9 @@ class UsersController extends AppController
 
                     return $this->redirect(['controller' => 'Administradores', 'action' => 'add']);
                 case '2':
-                    if ($user['registro']) {
+                    if ($user['numero']) {
                         try {
-                            $aluno = $this->fetchTable('Alunos')->findByRegistro($user['registro'])->first();
+                            $aluno = $this->fetchTable('Alunos')->findByRegistro($user['numero'])->first();
                         } catch (RecordNotFoundException $error) {
                             $this->Flash->error(__('Record not found: ' . $error->getMessage()));
 
@@ -346,9 +346,9 @@ class UsersController extends AppController
                     return $this->redirect(['controller' => 'Alunos', 'action' => 'add']);
 
                 case '3': // Professor: two ways to pair the user with a professor: professor_id or siape
-                    if ($user['registro']) {
+                    if ($user['numero']) {
                         try {
-                            $professor = $this->fetchTable('Professores')->findBySiape($user['registro'])->first();
+                            $professor = $this->fetchTable('Professores')->findBySiape($user['numero'])->first();
                         } catch (RecordNotFoundException $error) {
                             $this->Flash->error(__('Record not found: ' . $error->getMessage()));
 
@@ -367,9 +367,9 @@ class UsersController extends AppController
 
                     return $this->redirect(['controller' => 'Professores', 'action' => 'add']);
                 case '4': // Supervisor: two ways to pair the user with a supervisor: supervisor_id or cress
-                    if ($user['registro']) {
+                    if ($user['numero']) {
                         try {
-                            $supervisor = $this->fetchTable('Supervisores')->findByCress($user['registro'])->first();
+                            $supervisor = $this->fetchTable('Supervisores')->findByCress($user['numero'])->first();
                         } catch (RecordNotFoundException $error) {
                             $this->Flash->error(__('Record not found: ' . $error->getMessage()));
 

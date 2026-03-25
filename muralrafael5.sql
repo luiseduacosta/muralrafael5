@@ -171,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `estagiarios` (
   `aluno_id` int(11) NOT NULL,
   `alunoestagiario_id` smallint(6) NOT NULL COMMENT 'ID de tabela de aluno. Obsoleto.',
   `registro` int(11) NOT NULL,
-  `turno` char(1) NOT NULL COMMENT 'd=Diurno, n=Noturno, i=Indefinido',
+  `turno` char(1) NOT NULL COMMENT 'd=Diurno, n=Noturno, i=Indefinido. Obsoleto (O aluno já tem essa definição)',
   `nivel` char(1) NOT NULL,
   `tc` smallint(6) DEFAULT NULL COMMENT 'TC foi assinado e entrege na ESS?: 0=Nao, 1=Sim',
   `tc_solicitacao` date DEFAULT NULL COMMENT 'Data de solicitação do TC',
@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS `inscricoes` (
   `periodo` char(6) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `alunonovo_id` int(11) DEFAULT NULL COMMENT 'ID de tabela de alunos novos. Obsoleto',
-  `aluno_id` int(11) NOT NULL,
+  `aluno_id` int(11) NOT NULL COMMENT 'Igual ao alunonovo_id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Inscrições de alunos para seleção de estágios.';
 
@@ -235,7 +235,7 @@ CREATE TABLE IF NOT EXISTS `inscricoes` (
 
 CREATE TABLE IF NOT EXISTS `instituicoes` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
-  `areainstituicoes_id` smallint(3) DEFAULT NULL,
+  `areainstituicoes_id` smallint(3) DEFAULT NULL COMMENT 'Obsoleto, usar area_id',
   `area_id` smallint(3) DEFAULT NULL COMMENT 'Area da instituicao. Ex area. Igual a areainstituicoes_id',
   `natureza` varchar(50) DEFAULT NULL,
   `instituicao` varchar(120) NOT NULL DEFAULT '' COMMENT 'Nome da instituição',

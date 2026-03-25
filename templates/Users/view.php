@@ -45,7 +45,7 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Registro (DRE, Siape ou CRESS)') ?></th>
-                    <td><?= h($user->registro) ?></td>
+                    <td><?= h($user->numero) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Criado') ?></th>
