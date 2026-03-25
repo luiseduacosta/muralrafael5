@@ -33,9 +33,9 @@ if ($user_session) {
                     echo $this->Form->control('instituicao_id', ['options' => $instituicoes]);
                     echo $this->Form->control('data');
                     echo $this->Form->control('motivo');
-                    echo $this->Form->control('responsavel');
-                    echo $this->Form->control('descricao');
-                    echo $this->Form->control('avaliacao');
+                    echo $this->Form->control('responsavel', ['label' => 'Responsável']);
+                    echo $this->Form->control('descricao', ['label' => 'Descrição']);
+                    echo $this->Form->control('avaliacao', ['label' => 'Avaliação']);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Editar'), ['class' => 'button']) ?>

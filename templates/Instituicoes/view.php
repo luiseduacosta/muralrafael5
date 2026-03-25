@@ -205,9 +205,9 @@ if ($user_session) {
                             <th><?= __('Professor') ?></th>
                             <th><?= __('Beneficios') ?></th>
                             <th><?= __('Final De Semana') ?></th>
-                            <th><?= __('CargaHoraria') ?></th>
-                            <th><?= __('DataSelecao') ?></th>
-                            <th><?= __('DataInscricao') ?></th>
+                            <th><?= __('Carga Horaria') ?></th>
+                            <th><?= __('Data Selecao') ?></th>
+                            <th><?= __('Data Inscricao') ?></th>
                         </tr>
                         <?php foreach ($muralestagios as $muralestagio) : ?>
                         <tr>

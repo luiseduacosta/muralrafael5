@@ -35,20 +35,28 @@ if ($user_session) {
             <?php endif; ?>
         </div>
     </div>
+
+    <?= $this->Form->end() ?>
     
-    <aside>
+    <aside class='row d-flex justify-content-between'>
         <div class="nav">
             <?php if ($user_data['administrador_id']) : ?>
                 <?= $this->Html->link(__('Novo Estagiario'), ['action' => 'add'], ['class' => 'button']) ?>
             <?php endif; ?>
         </div>
+        
+        <div class="paginator">
+            <?= $this->element('paginator'); ?>
+        </div>
+
+        <div class='nav'>
+            <?php if ($user_data['administrador_id']) : ?>
+                <?= $this->Html->link(__('Relatório de erros'), ['action' => 'relatorio'], ['class' => 'button']) ?>
+            <?php endif; ?>    
+        </div>
     </aside>
-    
+
     <h3><?= __('Lista de Estagiarios') ?></h3>
-    
-    <div class="paginator">
-        <?= $this->element('paginator'); ?>
-    </div>
 
     <div class="table_wrap">
         <table>
@@ -67,6 +75,8 @@ if ($user_session) {
                     <th><?= $this->Paginator->sort('Estagiarios.nota', 'Nota') ?></th>
                     <th><?= $this->Paginator->sort('Estagiarios.ch', 'CH') ?></th>
                 </tr>
+
+                <?= $this->Form->create(null, ['type' => 'get', 'url' => ['controller' => 'Estagiarios', 'action' => 'index'], 'class' => 'form-inline']) ?>
                 <tr class='filters'>
                     <?php if ($user_data['administrador_id']) : ?>
                         <th></th>
@@ -81,6 +91,8 @@ if ($user_session) {
                     <th><?= $this->Form->select('nota', $notas, ['empty' => 'Todos', 'value' => $this->request->getQuery('nota'), 'onChange' => 'this.form.submit();'], ['class' => 'form-control']) ?></th>
                     <th><?= $this->Form->select('ch', $chs, ['empty' => 'Todos', 'value' => $this->request->getQuery('ch'), 'onChange' => 'this.form.submit();'], ['class' => 'form-control']) ?></th>
                 </tr>
+                <?= $this->Form->end() ?>
+
             </thead>
             <tbody>
                 <?php foreach ($estagiarios as $estagiario) : ?>
@@ -107,10 +119,9 @@ if ($user_session) {
         </table>
     </div>
 
-    <?= $this->Form->end(); ?>
-
     <div class="paginator">
         <?= $this->element('paginator'); ?>
         <?= $this->element('paginator_count'); ?>
     </div>
+
 </div>

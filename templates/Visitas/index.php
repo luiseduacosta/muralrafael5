@@ -35,11 +35,11 @@ if ($user_session) {
                 <tr>
                     <th class="actions"><?= __('Actions') ?></th>
                     <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('instituicao_id') ?></th>
+                    <th><?= $this->Paginator->sort('instituicao_id', 'Instiuição') ?></th>
                     <th><?= $this->Paginator->sort('data') ?></th>
                     <th><?= $this->Paginator->sort('motivo') ?></th>
-                    <th><?= $this->Paginator->sort('responsavel') ?></th>
-                    <th><?= $this->Paginator->sort('avaliacao') ?></th>
+                    <th><?= $this->Paginator->sort('responsavel', 'Responsável') ?></th>
+                    <th><?= $this->Paginator->sort('avaliacao', 'Avaliação') ?></th>
                 </tr>
             </thead>
             <tbody>

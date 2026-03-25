@@ -48,6 +48,7 @@ class MuralestagiosController extends AppController
 
         $this->set('muralestagios', $this->paginate($muralestagios, [
             'sortableFields' => [
+                'id',
                 'instituicao',
                 'vagas',
                 'beneficios',

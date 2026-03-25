@@ -48,11 +48,11 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Data') ?></th>
-                    <td><?= h($visita->data) ?></td>
+                    <td><?= empty($visita->data) ? '' : $visita->data->format('d/m/Y') ?></td>
                 </tr>
             </table>
             <div class="text">
-                <h2><?= __('Descricao') ?></h2>
+                <h2><?= __('Descrição') ?></h2>
                 <blockquote>
                     <?= $this->Text->autoParagraph(h($visita->descricao)); ?>
                 </blockquote>

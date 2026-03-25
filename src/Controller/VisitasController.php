@@ -41,22 +41,23 @@ class VisitasController extends AppController
      */
     public function view(?string $id = null)
     {
-        $instituicao_id = $this->request->getQuery('instituicao_id');
-        if (empty($instituicao_id)) {
-            $this->Flash->info(__('Sem parâmetro da instituição.'));
-
-            return $this->redirect($this->referer());
+        if ($id == null) {
+            $id = $this->request->getQuery('instituicao_id');
+            if (empty($id)) {
+                $this->Flash->info(__('Sem parâmetro da instituição.'));
+                return $this->redirect($this->referer());
+            }
         }
 
         try {
             $visita = $this->Visitas->find()
             ->contain(['Instituicoes'])
-            ->where(['Visitas.instituicao_id' => $instituicao_id])
+            ->where(['Visitas.id' => $id])
             ->firstOrFail();
         } catch (RecordNotFoundException $e) {
             $this->Flash->info(__('A visita que você tentou visualizar não existe.'));
 
-            return $this->redirect(['action' => 'index', '?' => ['instituicao_id' => $instituicao_id]]);
+            return $this->redirect(['action' => 'index', '?' => ['instituicao_id' => $id]]);
         }
 
         $this->Authorization->authorize($visita);
@@ -116,7 +117,7 @@ class VisitasController extends AppController
             if ($this->Visitas->save($visita)) {
                 $this->Flash->success(__('The visita has been saved.'));
 
-                return $this->redirect(['action' => 'view', $id]);
+                return $this->redirect(['action' => 'view', $visita->id]);
             }
             $this->Flash->error(__('The visita could not be saved. Please, try again.'));
         }

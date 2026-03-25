@@ -978,47 +978,60 @@ class EstagiariosController extends AppController
         $this->set('estagiarios', $estagiarios);
     }
 
+
     public function relatorio()
     {
         $this->Authorization->authorize($this->Estagiarios, 'relatorio');
 
-        $estagiarios = $this->Estagiarios->find()
-            ->contain([
-                'Alunos' => ['fields' => ['id', 'nome']],
-                'Supervisores' => ['fields' => ['id', 'nome']],
-                'Instituicoes' => ['fields' => ['id', 'instituicao']],
+        /*
+         * Supervisor “ligado errado”: não existe linha em inst_super para o par
+         * (instituicao_id, supervisor_id) daquele estágio.
+         *
+         * Uma query com LEFT JOIN evita carregar todos os estagiários + N consultas;
+         * isso reduz memória e o histórico SQL enorme que fazia o DebugKit estourar
+         * ao serializar os painéis (ToolbarService::serialize).
+         */
+        $supervisorseminstituicao = $this->Estagiarios->find()
+            ->select([
+                'aluno_nome' => 'Alunos.nome',
+                'estagiario_id' => 'Estagiarios.id',
+                'registro' => 'Estagiarios.registro',
+                'instituicao_id' => 'Estagiarios.instituicao_id',
+                'instituicao_nome' => 'Instituicoes.instituicao',
+                'supervisor_id' => 'Estagiarios.supervisor_id',
+                'supervisor_nome' => 'Supervisores.nome',
+                'periodo' => 'Estagiarios.periodo',
             ])
+            ->leftJoin(
+                ['Alunos' => 'alunos'],
+                ['Alunos.id = Estagiarios.aluno_id'],
+            )
+            ->leftJoin(
+                ['Instituicoes' => 'instituicoes'],
+                ['Instituicoes.id = Estagiarios.instituicao_id'],
+            )
+            ->leftJoin(
+                ['Supervisores' => 'supervisores'],
+                ['Supervisores.id = Estagiarios.supervisor_id'],
+            )
+            ->leftJoin(
+                ['InstSuper' => 'inst_super'],
+                [
+                    'InstSuper.instituicao_id = Estagiarios.instituicao_id',
+                    'InstSuper.supervisor_id = Estagiarios.supervisor_id',
+                ],
+            )
             ->where([
-                'Estagiarios.instituicao_id IS NOT NULL',
+                'Estagiarios.instituicao_id IS NOT' => null,
                 'Estagiarios.instituicao_id !=' => 0,
-                'Estagiarios.supervisor_id IS NOT NULL',
+                'Estagiarios.supervisor_id IS NOT' => null,
                 'Estagiarios.supervisor_id !=' => 0,
+                'InstSuper.instituicao_id IS' => null,
             ])
             ->order(['Alunos.nome' => 'ASC'])
-            ->all();
+            ->enableHydration(false)
+            ->toArray();
 
-        $i = 0;
-        echo 'Relatório de supervisores em instituições nas quais não estão matriculados<br>';
-        echo '==========================================================================<br>';
-        foreach ($estagiarios as $estagiario) {
-
-            $instituicao = $this->fetchTable('Instituicoes')->find()
-                ->contain(['Supervisores'])
-                ->matching('Supervisores', function ($q) use ($estagiario) {
-                    return $q->where(['Supervisores.id' => $estagiario->supervisor_id]);
-                })
-                ->where(['Instituicoes.id' => $estagiario->instituicao_id])
-                ->first();
-
-            if (!$instituicao) {
-                echo $i . ' Estagiario: ' . $estagiario->id . ' ';
-                $i++;
-                echo 'Instituicao: ' . $estagiario->instituicao_id . ' ';
-                echo 'Supervisor: ' . $estagiario->supervisor_id . ' ';
-                echo 'Período: ' . $estagiario->periodo . '<br>';
-            } 
-        }
-        echo '============================================================================<br>';
-        die();
+        $this->set('supervisorseminstituicao', $supervisorseminstituicao);
     }
 }
