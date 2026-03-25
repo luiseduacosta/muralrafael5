@@ -437,9 +437,7 @@ class AlunosController extends AppController
 
         $alunos = $this->Alunos->find()->contain(['Estagiarios']);
 
-        $this->set('alunos', $this->paginate($alunos, [
-            'sortableFields' => ['nome', 'registro'],
-        ]));
+        $this->set('alunos', $alunos);
     }
 
     /**

@@ -3,17 +3,21 @@
  * @var \App\View\AppView $this
  */
 ?>
+
+<!-- Picks datatables link from template -->
+<?= $this->Html->css('https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css', ['block' => true]); ?>
+<?= $this->Html->script('https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js', ['block' => true]); ?>
+<?= $this->Html->script('https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js', ['block' => true]); ?>
+
 <div class="alunos cargahoraria content">
     <h3><?= __('Carga Horária') ?></h3>
-    <div class="paginator">
-        <?= $this->element('paginator'); ?>
-    </div>
+
     <div class='table_wrap'>
-        <table>
+        <table id="cargahoraria">
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('nome') ?></th> 
-                    <th><?= $this->Paginator->sort('registro') ?></th>
+                    <th>Nome</th> 
+                    <th>Registro</th>
                     <th>Semestres</th>
                     <th>Nível</th>
                     <th>Período</th>
@@ -30,7 +34,7 @@
                     <th>Total</th>
                 </tr>
             </thead>
-
+            <tbody>
             <?php foreach ($alunos as $aluno) : ?>
                 <?php $carga_estagio = 0; ?>
                 <tr>
@@ -48,10 +52,22 @@
                     <td><?php echo $carga_estagio; ?></td>
                 </tr>
             <?php endforeach; ?>
+            </tbody>
         </table>
     </div>
-    <div class="paginator">
-        <?= $this->element('paginator'); ?>
-        <?= $this->element('paginator_count'); ?>
-    </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+            $('#cargahoraria').DataTable(
+                {
+                    "language": {
+                        "url": "https://cdn.datatables.net/plug-ins/1.13.7/i18n/pt-BR.json"
+                    },
+                    "order": [[0, 'asc']],
+                    "pageLength": 20,
+                }
+            );
+        }
+    );
+</script>
