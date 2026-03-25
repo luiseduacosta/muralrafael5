@@ -142,12 +142,12 @@ class SupervisoresTable extends Table
 
         $validator
             ->nonNegativeInteger('cress')
-            ->notEmptyString('cress');
+            ->notEmptyString('cress', null, 'create');
 
         $validator
             ->nonNegativeInteger('regiao')
             ->maxLength('regiao', 2)
-            ->notEmptyString('regiao');
+            ->notEmptyString('regiao', null, 'create');
 
         $validator
             ->scalar('outros_estudos')
