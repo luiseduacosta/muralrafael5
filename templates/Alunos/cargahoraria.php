@@ -13,7 +13,7 @@
     <h3><?= __('Carga Horária') ?></h3>
 
     <div class='table_wrap'>
-        <table id="cargahoraria">
+        <table id="cargahoraria" class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th>Nome</th> 

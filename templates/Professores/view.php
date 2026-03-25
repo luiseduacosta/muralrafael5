@@ -43,13 +43,13 @@ $departamentos = [
 
             <ul class='nav nav-tabs mb-3' id='professorTabs' role='tablist'>
                 <li class='nav-item' role='presentation'>
-                    <a class='nav-link active' id='pessoais-tab' data-toggle='tab' href='#tab-1' role='tab' aria-controls='tab-1' aria-selected='true'>Dados Pessoais</a>
+                    <button class='nav-link active' id='pessoais-tab' data-bs-toggle='tab' data-bs-target='#tab-1' type='button' role='tab' aria-controls='tab-1' aria-selected='true'>Dados Pessoais</button>
                 </li>
                 <li class='nav-item' role='presentation'>
-                    <a class='nav-link' id='academicos-tab' data-toggle='tab' href='#tab-2' role='tab' aria-controls='tab-2' aria-selected='false'>Dados Acadêmicos</a>
+                    <button class='nav-link' id='academicos-tab' data-bs-toggle='tab' data-bs-target='#tab-2' type='button' role='tab' aria-controls='tab-2' aria-selected='false'>Dados Acadêmicos</button>
                 </li>
                 <li class='nav-item' role='presentation'>
-                    <a class='nav-link' id='funcionais-tab' data-toggle='tab' href='#tab-3' role='tab' aria-controls='tab-3' aria-selected='false'>Dados Funcionais</a>
+                    <button class='nav-link' id='funcionais-tab' data-bs-toggle='tab' data-bs-target='#tab-3' type='button' role='tab' aria-controls='tab-3' aria-selected='false'>Dados Funcionais</button>
                 </li>
             </ul>
 

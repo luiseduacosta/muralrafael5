@@ -25,8 +25,9 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
 
             <?php if ($prazo->isFuture() || $prazo->isToday()) : ?>
                 <div class="alert alert-info alert-dismissible fade show" role="alert">
-                    <i class="fas fa-info-circle mr-2"></i>
+                    <i class="fas fa-info-circle me-2"></i>
                     <?= __('Inscrições abertas até {0}', $prazo->format('d/m/Y')) ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             <?php endif; ?>
             <aside>

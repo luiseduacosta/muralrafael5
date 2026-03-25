@@ -14,7 +14,7 @@ if ($user_session) {
 
 // DataTables CSS (layout already loads jQuery in <head> — do not load jQuery again here)
 $this->Html->css(
-    'https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css',
+    'https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css',
     ['block' => true],
 );
 ?>
@@ -22,7 +22,7 @@ $this->Html->css(
 <div class="estagiarios index content">
     <h3><?= __('Supervisores com instituição cadastrada errada') ?></h3>
     <div class="table-responsive">
-        <table id="supervisoresTable" class="display stripe hover" style="width:100%">
+        <table id="supervisoresTable" class="table table-striped table-bordered" style="width:100%">
             <thead>
                 <tr>
                     <th><?= __('Aluno(a)') ?></th>
@@ -47,7 +47,10 @@ $this->Html->css(
 
 <?php
 $this->Html->script(
-    'https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js',
+    [
+        'https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js',
+        'https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js'
+    ],
     ['block' => true],
 );
 $this->Html->scriptBlock(

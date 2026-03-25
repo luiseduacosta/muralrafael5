@@ -52,19 +52,10 @@ class UsersController extends AppController
         $this->Authorization->authorize($this->Users);
 
         if ($user_data['administrador_id']) {
-            $query = $this->Users->find('all')->contain($contained);
+            $users = $this->Users->find('all')->contain($contained);
         } else {
-            $query = $this->Authorization->applyScope($this->Users->find('all')->contain($contained));
+            $users = $this->Authorization->applyScope($this->Users->find('all')->contain($contained));
         }
-        $users = $this->paginate($query, [
-            'sortableFields' => [
-                'id',
-                'email',
-                'categoria',
-                'created',
-                'modified',
-            ],
-        ]);
         $this->set(compact('users'));
     }
 

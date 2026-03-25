@@ -12,6 +12,12 @@ if ($user_session) {
     $user_data = $user_session->getOriginalData();
 }
 ?>
+
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<!-- Load CSS bootstrap to the datatables //-->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+
 <div class="users index content">
     <aside>
         <?php if ($user_data['administrador_id']) : ?>
@@ -23,19 +29,16 @@ if ($user_session) {
     
     <h3><?= __('Lista de usuários') ?></h3>
     
-    <div class="paginator">
-        <?= $this->element('paginator'); ?>
-    </div>
     <div class="table_wrap">
-        <table>
+        <table class="table table-striped table-hover table-bordered" id="table-users">
             <thead>
                 <tr>
                     <th class="actions"><?= __('Actions') ?></th>
-                    <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('email') ?></th>
-                    <th><?= $this->Paginator->sort('categoria', 'Categorias') ?></th>
-                    <th><?= $this->Paginator->sort('created', 'Criado') ?></th>
-                    <th><?= $this->Paginator->sort('modified', 'Modificado') ?></th>
+                    <th>Id</th>
+                    <th>Email</th>
+                    <th>Categoria</th>
+                    <th>Criado</th>
+                    <th>Modificado</th>
                 </tr>
             </thead>
             <tbody>
@@ -64,15 +67,21 @@ if ($user_session) {
                         echo $categorias[$user->categoria] ?? $user->categoria;
                         ?>
                     </td>
-                    <td><?= $user->created ? h($user->created->format('d/m/Y H:i:s')) : '' ?></td>
-                    <td><?= $user->modified ? h($user->modified->format('d/m/Y H:i:s')) : '' ?></td>
+                    <td><?= $user->created ? $user->created->format('d/m/Y H:i:s') : '' ?></td>
+                    <td><?= $user->modified ? $user->modified->format('d/m/Y H:i:s') : '' ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
-    <div class="paginator">
-        <?= $this->element('paginator'); ?>
-        <?= $this->element('paginator_count'); ?>
-    </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#table-users').DataTable({
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.13.7/i18n/pt-BR.json"
+            }
+        });
+    });
+</script>
