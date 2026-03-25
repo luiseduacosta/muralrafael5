@@ -81,8 +81,8 @@ $departamentos = [
                         <?php endif; ?>
                     </td>
                     <td><?= $professor->email ? $this->Text->autoLinkEmails($professor->email) : '' ?></td>
-                    <td><?= $professor->curriculolattes ? $this->Html->link('http://lattes.cnpq.br/' . h($professor->curriculolattes)) : '' ?></td>
-                    <td><?= h($professor->departamento) ?></td>
+                    <td><?= $professor->curriculolattes ? $this->Html->link('http://lattes.cnpq.br/' . h($professor->curriculolattes), ['target' => '_blank']) : '' ?></td>
+                    <td><?= h($departamentos[$professor->departamento] ?? $professor->departamento) ?></td>
                     <td><?= h($professor->motivoegresso) ?></td>
                     <td><?= h($professor->estagiarios_count) ?></td>
                 </tr>
