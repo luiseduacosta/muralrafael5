@@ -53,6 +53,21 @@ if ($user_session) {
     });
 </script>
 
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+<!-- Needs this style to show the icons -->
+<style>
+    .editor-toolbar button {
+        color: #333 !important;
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<script>
+    $(document).ready(function () {
+        const easyMDE = new EasyMDE({element: document.getElementById('observacoes')});
+    });
+</script>
+
 <?php
 // May be this is a temporary solution. Put into de Configuracoes table in json data format is a better solution
 $departamentos = [

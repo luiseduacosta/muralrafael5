@@ -103,10 +103,10 @@ if ($user_session) {
                 <div class="row">
                     <dt class="col-2"><?= __('CH') ?></dt>
                     <dd><?= $this->Number->format($estagiario->ch ?? '') ?></dd>
-                </div>                
+                </div>                  
                 <div class="row">
                     <dt class="col-2"><?= __('Observações') ?></dt>
-                    <dd><?= $this->Markdown->render($estagiario->observacoes) ?></dd>
+                    <dd><?= $this->Markdown->parse($estagiario->observacoes) ?></dd>
                 </div>
             </dl>
         </div>

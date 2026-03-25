@@ -209,7 +209,7 @@ $departamentos = [
                     <div class="text">
                         <strong><?= __('Observações') ?></strong>
                         <blockquote>
-                            <?= $this->Markdown->render($professor->observacoes); ?>
+                            <?= $this->Markdown->parse($professor->observacoes); ?>
                         </blockquote>
                     </div>
                 </div>    

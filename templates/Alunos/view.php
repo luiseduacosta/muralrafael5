@@ -102,7 +102,7 @@ if ($user_session) {
             <div class="text">
                 <strong><?= __('Observacoes') ?></strong>
                 <blockquote>
-                    <?= $this->Markdown->render($aluno->observacoes); ?>
+                    <?= $this->Markdown->parse($aluno->observacoes); ?>
                 </blockquote>
             </div>
             <?php endif; ?>
