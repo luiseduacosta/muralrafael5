@@ -46,9 +46,6 @@ class VisitasTable extends Table
             'foreignKey' => 'instituicao_id',
         ]);
 
-        $this->belongsTo('Professores', [
-            'foreignKey' => 'professor_id',
-        ]);
     }
 
     /**
