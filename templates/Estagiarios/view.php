@@ -106,7 +106,7 @@ if ($user_session) {
                 </div>                
                 <div class="row">
                     <dt class="col-2"><?= __('Observações') ?></dt>
-                    <dd><?= h($estagiario->observacoes) ?></dd>
+                    <dd><?= $this->Markdown->render($estagiario->observacoes) ?></dd>
                 </div>
             </dl>
         </div>

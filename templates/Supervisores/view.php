@@ -128,7 +128,7 @@ if ($user_session) {
             <div class="text">
                 <strong><?= __('Observações') ?></strong>
                 <blockquote>
-                    <?= $this->Text->autoParagraph(h($supervisor->observacoes)); ?>
+                    <?= $this->Markdown->render($supervisor->observacoes); ?>
                 </blockquote>
             </div>
             

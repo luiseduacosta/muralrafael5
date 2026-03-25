@@ -14,7 +14,8 @@
         "cakephp/plugin-installer": "^2.0",
         "dompdf/dompdf": "^3.1",
         "friendsofcake/cakepdf": "^5.0",
-        "mobiledetect/mobiledetectlib": "^4.8.03"
+        "mobiledetect/mobiledetectlib": "^4.8.03",
+        "parsedown/parsedown": "^1.8"
     },
     "require-dev": {
         "cakephp/bake": "^3.0.0",

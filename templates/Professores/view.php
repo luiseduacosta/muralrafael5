@@ -209,7 +209,7 @@ $departamentos = [
                     <div class="text">
                         <strong><?= __('Observações') ?></strong>
                         <blockquote>
-                            <?= $this->Text->autoParagraph(h($professor->observacoes)); ?>
+                            <?= $this->Markdown->render($professor->observacoes); ?>
                         </blockquote>
                     </div>
                 </div>    
