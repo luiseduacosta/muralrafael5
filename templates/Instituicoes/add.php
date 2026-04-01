@@ -54,7 +54,7 @@ if ($user_session) {
                     echo $this->Form->control('endereco', ['label' => 'Endereço']);
                     echo $this->Form->control('bairro', ['label' => 'Bairro']);
                     echo $this->Form->control('municipio', ['label' => 'Município']);
-                    echo $this->Form->control('beneficio', ['label' => 'Benefícios oferecido pela instituição', 'required' => false]);
+                    echo $this->Form->control('beneficios', ['label' => 'Benefícios oferecido pela instituição', 'required' => false]);
                     echo $this->Form->control('fim_de_semana', ['label' => 'Estágio no fim de semana', 'options' => ['1' => 'Sim', '0' => 'Nao', '2' => 'Parcial']]);
                     echo $this->Form->control('local_inscricao', ['label' => 'Local de inscrição', 'options' => ['1' => 'Coordenação de Estágio/ESS/UFRJ', '0' => 'Instituição']]);
                     echo $this->Form->control('convenio', ['label' => 'Nº do convênio na UFRJ', 'required' => false]);

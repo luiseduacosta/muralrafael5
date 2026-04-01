@@ -52,7 +52,7 @@
                     echo $this->Form->control('municipio', ['label' => 'Município', 'required' => false]);
                     echo $this->Form->control('cep', ['label' => 'CEP', 'required' => false]);
                     echo $this->Form->control('telefone', ['label' => 'Telefone', 'required' => false]);
-                    echo $this->Form->control('beneficio', ['label' => 'Benefício', 'required' => false]);
+                    echo $this->Form->control('beneficios', ['label' => 'Beneficios', 'required' => false]);
                     echo $this->Form->control('fim_de_semana', ['label' => 'Fim de semana', 'options' => ['1' => 'Sim', '0' => 'Nao', '2' => 'Parcial'], 'required' => false]);
                     echo $this->Form->control('local_inscricao', ['label' => 'Local de inscrição', 'options' => ['1' => 'Coordenação de Estágio/ESS/UFRJ', '0' => 'Instituicao']]);
                     echo $this->Form->control('convenio', ['label' => 'Nº do convênio na UFRJ', 'required' => false]);

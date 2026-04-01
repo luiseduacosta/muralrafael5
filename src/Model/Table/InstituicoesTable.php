@@ -47,6 +47,7 @@ class InstituicoesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Areas', [
+            'propertyName' => 'Area',
             'foreignKey' => 'area_id',
         ]);
 
@@ -142,8 +143,8 @@ class InstituicoesTable extends Table
             ->allowEmptyString('fax');
 
         $validator
-            ->scalar('beneficio')
-            ->maxLength('beneficio', 50);
+            ->scalar('beneficios')
+            ->maxLength('beneficios', 50);
 
         $validator
             ->scalar('fim_de_semana')

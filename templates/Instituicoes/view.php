@@ -37,7 +37,7 @@ if ($user_session) {
                 <tr>
                     <th><?= __('Área') ?></th>
                     <!-- Area está definida em Instituicao.php //-->
-                    <td><?= empty($instituicao->area->area) ? '' : $this->Html->link($instituicao->area->area, ['controller' => 'Areas', 'action' => 'view', $instituicao->area->id]) ?></td>
+                    <td><?= empty($instituicao->Area->area) ? '' : $this->Html->link($instituicao->Area->area, ['controller' => 'Areas', 'action' => 'view', $instituicao->Area->id]) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Natureza') ?></th>
@@ -64,8 +64,8 @@ if ($user_session) {
                     <td><?= h($instituicao->telefone) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Beneficio') ?></th>
-                    <td><?= h($instituicao->beneficio) ?></td>
+                    <th><?= __('Beneficios') ?></th>
+                    <td><?= h($instituicao->beneficios) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Fim De Semana') ?></th>

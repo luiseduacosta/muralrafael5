@@ -11,6 +11,7 @@ if ($user_session) {
     $user_data = $user_session->getOriginalData();
 }
 ?>
+
 <div class="instituicoes index content">
     <aside>
         <div class="row">
