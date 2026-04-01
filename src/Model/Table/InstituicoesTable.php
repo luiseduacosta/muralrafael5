@@ -89,7 +89,7 @@ class InstituicoesTable extends Table
         $validator
             ->integer('area_id')
             ->allowEmptyString('area_id');
-    
+
         $validator
             ->scalar('natureza')
             ->maxLength('natureza', 50)

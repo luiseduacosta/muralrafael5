@@ -48,7 +48,6 @@ class ProfessoresTable extends Table
         $this->hasMany('Estagiarios', [
             'foreignKey' => 'professor_id',
         ]);
-
     }
 
     /**

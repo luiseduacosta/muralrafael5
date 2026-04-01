@@ -229,7 +229,12 @@ class InscricoesController extends AppController
             $this->Authorization->authorize($inscricao);
             if ($this->Inscricoes->delete($inscricao)) {
                 $this->Flash->success(__('The inscricao has been deleted.'));
-                return $this->redirect(['controller' => 'Inscricoes', 'action' => 'index', '?' => ['aluno_id' => $inscricao->aluno_id, 'periodo' => $inscricao->periodo]]);
+
+                return $this->redirect([
+                    'controller' => 'Inscricoes',
+                    'action' => 'index',
+                    '?' => ['aluno_id' => $inscricao->aluno_id, 'periodo' => $inscricao->periodo],
+                ]);
             } else {
                 $this->Flash->error(__('The inscricao could not be deleted. Please, try again.'));
             }

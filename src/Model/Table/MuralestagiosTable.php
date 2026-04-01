@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use ArrayObject;
 use Cake\Event\EventInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
@@ -66,12 +67,13 @@ class MuralestagiosTable extends Table
      * @param bool $primary Whether this is a primary query or not.
      * @return \Cake\ORM\Query
      */
-    public function beforeFind(EventInterface $event, Query $query, \ArrayObject $options, bool $primary)
+    public function beforeFind(EventInterface $event, Query $query, ArrayObject $options, bool $primary): Query
     {
         $query->order(['data_inscricao' => 'DESC']);
 
         return $query;
     }
+
     /**
      * Default validation rules.
      *
@@ -148,7 +150,7 @@ class MuralestagiosTable extends Table
         $validator
                 ->scalar('forma_selecao')
                 ->maxLength('forma_selecao', 1)
-                ->allowEmptyString('forma_selecao');    
+                ->allowEmptyString('forma_selecao');
 
         $validator
                 ->scalar('contato')

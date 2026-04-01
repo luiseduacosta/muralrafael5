@@ -35,7 +35,7 @@ if ($user_session) {
 
         <li><?php echo $this->Html->link('Mural', ['controller' => 'Muralestagios', 'action' => 'index']); ?></li>
 
-        <?php if ($user_data['administrador_id'] || $user_data['aluno_id']) : ?>
+        <?php if ($user_data['categoria'] == 1 || $user_data['categoria'] == 2) : ?>
         <li class="menu-declaracoes">
             <input id="menu-declaracoes-toggler" type="checkbox" class="toggle-input" />
             <label for="menu-declaracoes-toggler" class="toggle-label">Declarações <span class="toggle-more">▾</span><span class="toggle-less">◂</span></label>
@@ -52,7 +52,7 @@ if ($user_session) {
         </li>
         <?php endif; ?>
 
-        <?php if ($user_data['administrador_id']) : ?>
+        <?php if ($user_data['categoria'] == 1) : ?>
         <li class="menu-consulta">
             <input id="menu-consulta-toggler" type="checkbox" class="toggle-input" />
             <label for="menu-consulta-toggler" class="toggle-label">Consulta <span class="toggle-more">▾</span><span class="toggle-less">◂</span></label>
@@ -70,21 +70,21 @@ if ($user_session) {
         </li>
         <?php endif; ?>
 
-        <?php if ($user_data['aluno_id']) { ?>
+        <?php if ($user_data['categoria'] == 2) { ?>
                 <li><?php echo $this->Html->link('Meus dados', ['controller' => 'Alunos', 'action' => 'view', $user_data['aluno_id']]); ?></li>
         <?php } ?>
 
-        <?php if ($user_data['professor_id']) { ?>
+        <?php if ($user_data['categoria'] == 3) { ?>
                 <li><?php echo $this->Html->link('Meus dados', ['controller' => 'Professores', 'action' => 'view', $user_data['professor_id']]); ?></li>
         <?php } ?>
 
-        <?php if ($user_data['supervisor_id']) { ?>
+        <?php if ($user_data['categoria'] == 4) { ?>
                 <li><?php echo $this->Html->link('Meus dados', ['controller' => 'Supervisores', 'action' => 'view', $user_data['supervisor_id']]); ?></li>
         <?php } ?>
         
         <li><?php echo $this->Html->link('Grupo Google', 'https://groups.google.com/forum/#!forum/estagio_ess'); ?></li>
         
-        <?php if ($user_data['administrador_id']) : ?>
+        <?php if ($user_data['categoria'] == 1) : ?>
             <li class="menu-admin">
                 <input id="menu-admin-toggler" type="checkbox" class="toggle-input" />
                 <label for="menu-admin-toggler" class="toggle-label">Administração <span class="toggle-more">▾</span><span class="toggle-less">◂</span></label>

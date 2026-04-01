@@ -23,24 +23,27 @@ class AlunosController extends AppController
     {
         try {
             $this->Authorization->authorize($this->Alunos);
-            $query = $this->Alunos->find('all')->contain(['Users']);
+            $query = $this->Alunos->find('all');
+            $query->contain(['Users', 'Turnos']);
         } catch (ForbiddenException $error) {
-            $query = $this->Authorization->applyScope($this->Alunos->find('all')->contain(['Users']));
+            $query = $this->Authorization->applyScope($this->Alunos->find('all')->contain(['Users', 'Turnos']));
         }
 
         $alunos = $this->paginate($query, [
             'sortableFields' => [
-                'id', 
-                'nome', 
-                'registro', 
-                'email', 
-                'celular', 
-                'cpf', 
-                'ingresso', 
-                'turno',
+                'id',
+                'nome',
+                'registro',
+                'email',
+                'telefone',
+                'celular',
+                'cpf',
+                'ingresso',
+                'Turnos.turno',
                 'inscricao_count',
             ],
         ]);
+
         $this->set(compact('alunos'));
     }
 
@@ -57,6 +60,7 @@ class AlunosController extends AppController
             'Estagiarios' => ['Alunos', 'Instituicoes', 'Supervisores', 'Professores'],
             'Inscricoes' => ['Muralestagios' => ['Instituicoes']],
             'Users',
+            'Turnos',
         ];
 
         if (empty($id)) {
@@ -131,6 +135,7 @@ class AlunosController extends AppController
 
             if ($this->Alunos->save($aluno)) {
                 $this->Flash->success(__('O aluno foi adicionado com sucesso.'));
+
                 return $this->redirect(['action' => 'view', $aluno->id]);
             }
             $this->Flash->error(__('Erro ao adicionar: não foi possível salvar os dados.'));
@@ -142,7 +147,8 @@ class AlunosController extends AppController
             $aluno->email = $email;
             $aluno->registro = $registro;
         }
-        $this->set(compact('aluno'));
+        $turnos = $this->Alunos->Turnos->find('list', limit: 200)->all();
+        $this->set(compact('aluno', 'turnos'));
     }
 
     /**
@@ -165,7 +171,6 @@ class AlunosController extends AppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-
             $dados = $this->request->getData();
             if (empty($this->request->getData('ingresso'))) {
                 if (strlen((string)$aluno->registro) == 9) {
@@ -183,7 +188,8 @@ class AlunosController extends AppController
             }
             $this->Flash->error(__('Erro ao salvar: não foi possível salvar os dados.'));
         }
-        $this->set(compact('aluno'));
+        $turnos = $this->Alunos->Turnos->find('list', limit: 200)->all();
+        $this->set(compact('aluno', 'turnos'));
     }
 
     /**
@@ -311,7 +317,7 @@ class AlunosController extends AppController
             return $this->redirect(['controller' => 'Alunos', 'action' => 'index']);
         }
 
-        $aluno = $this->Alunos->get($id);
+        $aluno = $this->Alunos->get($id, ['contain' => ['Turnos']]);
 
         try {
             $this->Authorization->authorize($aluno);
@@ -320,6 +326,8 @@ class AlunosController extends AppController
 
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
+
+        $turnos = $this->Alunos->Turnos->find('list', limit: 200)->all();
 
         // Incomplete field ingresso on record of alunos
         if (strlen($aluno->ingresso) < 6) {
@@ -366,7 +374,7 @@ class AlunosController extends AppController
             ]);
         }
 
-        $this->set(compact('aluno', 'totalperiodos', 'novoperiodo'));
+        $this->set(compact('aluno', 'totalperiodos', 'novoperiodo', 'turnos'));
     }
 
     /**
@@ -398,7 +406,7 @@ class AlunosController extends AppController
             return $this->redirect(['action' => 'index']);
         }
 
-        $aluno = $this->Alunos->get($id);
+        $aluno = $this->Alunos->get($id, ['contain' => ['Turnos']]);
 
         try {
             $this->Authorization->authorize($aluno);

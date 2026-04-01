@@ -73,7 +73,7 @@ if ($user_session) {
                             <td><?= $estagiarios->aluno ? $this->Html->link(h($estagiarios->aluno->nome), ['controller' => 'alunos', 'action' => 'view', $estagiarios->alunonovo_id]) : '' ?></td>
                             <td><?= h($estagiarios->registro) ?></td>
                             <td><?= h($estagiarios->ajustecurricular2020) ?></td>
-                            <td><?= h($estagiarios->aluno->turno ?? __('N/A')) ?></td>
+                            <td><?= h($estagiarios->aluno->turno->turno ?? __('N/A')) ?></td>
                             <td><?= h($estagiarios->nivel) ?></td>
                             <td><?= h($estagiarios->tc) ?></td>
                             <td><?= h($estagiarios->tc_solicitacao) ?></td>

@@ -13,7 +13,8 @@ use Cake\ORM\Entity;
  * @property string|null $nomesocial
  * @property int $registro
  * @property int|null $ingresso
- * @property string|null $turno
+ * @property int|null $turno_id
+ * @property \App\Model\Entity\Turno|null $turno
  * @property int $codigo_telefone
  * @property string|null $telefone
  * @property int $codigo_celular
@@ -35,6 +36,7 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\User $user
  * @property \App\Model\Entity\Estagiario[] $estagiarios
  * @property \App\Model\Entity\Inscricao[] $inscricoes
+ * @property \App\Model\Entity\Turno $turno
  */
 class Aluno extends Entity
 {
@@ -52,7 +54,7 @@ class Aluno extends Entity
         'nomesocial' => true,
         'registro' => true,
         'ingresso' => true,
-        'turno' => true,
+        'turno_id' => true,
         'codigo_telefone' => true,
         'telefone' => true,
         'codigo_celular' => true,
@@ -73,5 +75,6 @@ class Aluno extends Entity
         'user' => true,
         'estagiarios' => true,
         'inscricoes' => true,
+        'turno' => true,
     ];
 }

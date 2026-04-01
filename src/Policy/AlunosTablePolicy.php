@@ -26,8 +26,7 @@ final class AlunosTablePolicy implements BeforePolicyInterface
             if (
                 $user_data
                 && (
-                    $user_data['administrador_id']
-                    || $user_data['professor_id']
+                    $user_data['administrador_id'] || $user_data['professor_id']
                 )
             ) {
                 return true;

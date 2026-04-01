@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `alunos` (
   `nomesocial` varchar(50) DEFAULT NULL,
   `ingresso` char(6) NOT NULL,
   `turno` varchar(10) DEFAULT NULL  COMMENT 'd=Diurno, n=Noturno, i=Indefinido, o=Outro',
+  `turno_id` smallint(3) DEFAULT NULL,
   `registro` int(9) NOT NULL DEFAULT 0,
   `codigo_telefone` tinyint(2) NOT NULL DEFAULT 21,
   `telefone` varchar(15) DEFAULT NULL COMMENT 'Formato: (xx) xxxx.xxxx)',
@@ -407,9 +408,9 @@ CREATE TABLE IF NOT EXISTS `turmas` (
 
 CREATE TABLE IF NOT EXISTS `turnos` (
   `id` smallint(3) NOT NULL AUTO_INCREMENT,
-  `turno` varchar(70) NOT NULL,
+  `turno` varchar(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Turnos de estagiários. Obsoleta';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Turnos dos(as) alunos(as).';
 
 -- --------------------------------------------------------
 

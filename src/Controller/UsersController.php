@@ -304,6 +304,7 @@ class UsersController extends AppController
                             $administrador->user_id = $user['id'];
                             $this->fetchTable('Administradores')->save($administrador);
                             $this->Flash->success(__('Administrador e usuário associados.'));
+
                             return $this->redirect([
                                 'controller' => 'Administradores',
                                 'action' => 'view',
@@ -348,11 +349,12 @@ class UsersController extends AppController
                         if ($professor) {
                             if ($professor->user_id !== $user['id']) {
                             // Update professor with the user->id
-                            $professor->user_id = $user['id'];
-                            $this->fetchTable('Professores')->save($professor);
-                            $this->Flash->success(__('Professor e usuário associados.'));
+                                $professor->user_id = $user['id'];
+                                $this->fetchTable('Professores')->save($professor);
+                                $this->Flash->success(__('Professor e usuário associados.'));
                             }
                         }
+
                         return $this->redirect(['controller' => 'Professores', 'action' => 'view', $professor->id]);
                     }
 
@@ -381,6 +383,7 @@ class UsersController extends AppController
                             ]);
                         }
                     }
+
                     return $this->redirect(['controller' => 'Supervisores', 'action' => 'add']);
                 default:
                     return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);

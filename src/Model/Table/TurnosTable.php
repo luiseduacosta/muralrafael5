@@ -39,6 +39,10 @@ class TurnosTable extends Table
         $this->setAlias('Turnos');
         $this->setDisplayField('turno');
         $this->setPrimaryKey('id');
+
+        $this->hasMany('Alunos', [
+            'foreignKey' => 'turno_id',
+        ]);
     }
 
     /**

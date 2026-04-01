@@ -48,7 +48,7 @@ class InstituicoesController extends AppController
                 'convenio',
                 'expira',
                 'email',
-                'estagiarios_count'
+                'estagiarios_count',
             ],
         ]);
 
@@ -72,6 +72,7 @@ class InstituicoesController extends AppController
 
         if (!$instituicao) {
             $this->Flash->error(__('Instituição não encontrada.'));
+
             return $this->redirect(['action' => 'index']);
         }
 

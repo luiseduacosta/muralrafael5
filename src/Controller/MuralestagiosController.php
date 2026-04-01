@@ -57,7 +57,7 @@ class MuralestagiosController extends AppController
                 'data_inscricao',
                 'data_selecao',
             ],
-          'order' => ['data_inscricao' => 'desc'],
+            'order' => ['data_inscricao' => 'desc'],
         ]));
 
         $periodototal = $this->Muralestagios->find('list', [

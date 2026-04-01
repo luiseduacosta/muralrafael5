@@ -148,7 +148,7 @@ class EstagiariosController extends AppController
         $niveis = $this->Estagiarios->find('list', [
             'keyField' => 'nivel',
             'valueField' => 'nivel',
-            'order' => ['Estagiarios.nivel' => 'asc']
+            'order' => ['Estagiarios.nivel' => 'asc'],
         ])
         ->where(['Estagiarios.periodo' => $periodo])
         ->distinct(['Estagiarios.nivel']);
@@ -353,7 +353,10 @@ class EstagiariosController extends AppController
 
             $aluno = $this->fetchTable('Alunos')->find()->where(['id' => $id])->first();
             $instituicoes = $this->fetchTable('Instituicoes')->find('list')->order(['instituicao' => 'ASC']);
-            $professores = $this->fetchTable('Professores')->find('list')->where(['motivoegresso' => ''])->order(['nome' => 'ASC']);
+            $professores = $this->fetchTable('Professores')
+                ->find('list')
+                ->where(['motivoegresso' => ''])
+                ->order(['nome' => 'ASC']);
             if (!empty($estagiario->instituicao_id)) {
                 $supervisores = $this->fetchTable('Supervisores')
                     ->find('list')
@@ -436,7 +439,10 @@ class EstagiariosController extends AppController
 
         $alunos = $this->fetchTable('Alunos')->find('list')->order(['nome' => 'ASC']);
         $instituicoes = $this->fetchTable('Instituicoes')->find('list')->order(['instituicao' => 'ASC']);
-        $professores = $this->fetchTable('Professores')->find('list')->where(['motivoegresso' => ''])->order(['nome' => 'ASC']);
+        $professores = $this->fetchTable('Professores')
+            ->find('list')
+            ->where(['motivoegresso' => ''])
+            ->order(['nome' => 'ASC']);
         if (!empty($estagiario->instituicao_id)) {
             $supervisores = $this->fetchTable('Supervisores')
                 ->find('list')
@@ -978,7 +984,14 @@ class EstagiariosController extends AppController
         $this->set('estagiarios', $estagiarios);
     }
 
-
+    /**
+     * Generate report for supervisor-institution linkage issues.
+     *
+     * Identifies estagiarios where the supervisor is incorrectly linked
+     * to the institution (missing inst_super record for the pair).
+     *
+     * @return \Cake\Http\Response|null
+     */
     public function relatorio()
     {
         $this->Authorization->authorize($this->Estagiarios, 'relatorio');

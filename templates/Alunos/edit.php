@@ -15,10 +15,12 @@ if ($user_session) {
 <?= $this->Html->script('jquery.mask.min'); ?>
 
 <script>
+
     $(document).ready(function () {
         $('#cpf').mask('000.000.000-00');
         $('#cep').mask('00000-000');
-        $('#ingresso').mask('0000-S', { translation: { 'S': { pattern: '[12]', optional: false } } }); // last digit is only 1 or 2
+        
+        // $('#ingresso').mask('0000-S', { translation: { 'S': { pattern: '[12]', optional: true } } }); // last digit is only 1 or 2
         if ($('#codigo-telefone').val() == null) {
             codigo = '21';
         } else {
@@ -103,8 +105,8 @@ if ($user_session) {
                     echo $this->Form->control('identidade', ['label' => 'Identidade - RG', 'required' => false]);
                     echo $this->Form->control('orgao', ['label' => 'Orgão expedidor', 'title' => 'Máximo 20 caracteres', 'required' => false]);
                     echo $this->Form->control('nascimento', ['label' => 'Data de Nascimento', 'type' => 'date', 'required' => false]);
-                    echo $this->Form->control('ingresso', ['label' => 'Período de Ingresso', 'pattern' => '(19|20)[0-9]{2}-[1-2]', 'placeholder' => '0000-0', 'required' => false]);
-                    echo $this->Form->control('turno', ['options' => ['diurno' => 'Diurno', 'noturno' => 'Noturno', 'indefinido' => 'Indefinido'], 'empty' => true, 'required' => false]);
+                    echo $this->Form->control('ingresso', ['label' => 'Período de Ingresso', 'pattern' => '(19|20)[0-9]{2}(-[1-2])?', 'placeholder' => '0000 or 0000-0', 'required' => false]);
+                    echo $this->Form->control('turno_id', ['options' => $turnos, 'empty' => true, 'required' => false]);
                     echo $this->Form->control('cep', ['label' => 'CEP', 'pattern' => '[0-9]{5}-[0-9]{3}', 'placeholder' => '00000-000', 'required' => false]);
                     echo $this->Form->control('endereco', ['label' => 'Endereço', 'required' => false]);
                     echo $this->Form->control('municipio', ['label' => 'Município', 'required' => false]);

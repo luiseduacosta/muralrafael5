@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use ArrayObject;
 use Cake\Event\EventInterface;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
@@ -58,7 +59,7 @@ class FolhadeatividadesTable extends Table
      * @param bool $primary Whether this is a primary query or not.
      * @return \Cake\ORM\Query
      */
-    public function beforeFind(EventInterface $event, Query $query, \ArrayObject $options, bool $primary)
+    public function beforeFind(EventInterface $event, Query $query, ArrayObject $options, bool $primary): Query
     {
         $query->orderBy(['dia' => 'ASC']);
 

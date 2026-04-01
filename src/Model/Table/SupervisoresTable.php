@@ -55,7 +55,6 @@ class SupervisoresTable extends Table
             'targetForeignKey' => 'instituicao_id',
             'joinTable' => 'inst_super',
         ]);
-
     }
 
     /**

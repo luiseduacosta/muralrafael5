@@ -41,7 +41,7 @@ if ($user_session) {
                     <th><?= $this->Paginator->sort('celular') ?></th>
                     <th><?= $this->Paginator->sort('cpf', 'CPF') ?></th>
                     <th><?= $this->Paginator->sort('ingresso', 'Ingresso') ?></th>
-                    <th><?= $this->Paginator->sort('turno', 'Turno') ?></th>
+                    <th><?= $this->Paginator->sort('Turnos.turno', 'Turno') ?></th>
                     <th><?= $this->Paginator->sort('inscricao_count', 'Inscrições') ?></th>
                 </tr>
             </thead>
@@ -71,7 +71,7 @@ if ($user_session) {
                     <?php endif; ?>
                     <td><?= h($aluno->cpf) ?></td>
                     <td><?= h($aluno->ingresso) ?? 's/d' ?></td>
-                    <td><?= h($aluno->turno) ?></td>
+                    <td><?= h($aluno->Turno->turno ?? '') ?></td>
                     <td><?= h($aluno->inscricao_count) ?></td>
                 </tr>
                 <?php endforeach; ?>

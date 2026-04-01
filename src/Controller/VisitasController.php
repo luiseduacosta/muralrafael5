@@ -45,6 +45,7 @@ class VisitasController extends AppController
             $id = $this->request->getQuery('instituicao_id');
             if (empty($id)) {
                 $this->Flash->info(__('Sem parâmetro da instituição.'));
+
                 return $this->redirect($this->referer());
             }
         }

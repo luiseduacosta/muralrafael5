@@ -13,6 +13,7 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\EstagiariosTable&\Cake\ORM\Association\HasMany $Estagiarios
  * @property \App\Model\Table\InscricoesTable&\Cake\ORM\Association\HasMany $Inscricoes
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\TurnosTable&\Cake\ORM\Association\BelongsTo $Turnos
  * @method \App\Model\Entity\Aluno newEmptyEntity()
  * @method \App\Model\Entity\Aluno newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Aluno[] newEntities(array $data, array $options = [])
@@ -54,6 +55,12 @@ class AlunosTable extends Table
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
         ]);
+
+        $this->belongsTo('Turnos', [
+            'foreignKey' => 'turno_id',
+            'propertyName' => 'Turno',
+            'joinType' => 'LEFT',
+        ]);
     }
 
     /**
@@ -88,17 +95,12 @@ class AlunosTable extends Table
             ->requirePresence('ingresso', 'create')
             ->notEmptyString('ingresso', 'create')
             ->maxLength('ingresso', 6)
-            ->regex('ingresso', '/^(19|20)[0-9]{2}-[1-2]$', 'Ano e semestre de ingresso inválido', 'create')
+            ->regex('ingresso', '/^(19|20)[0-9]{2}-[1-2]{1}$/', 'Ano e semestre de ingresso inválido', 'create')
             ->allowEmptyString('ingresso', 'create');
 
         $validator
-            ->scalar('turno')
-            ->add('turno', 'inList', [
-                'rule' => ['inList', ['diurno', 'noturno', 'indefinido', 'outro']],
-                'message' => 'Turno inválido',
-            ])
-            ->maxLength('turno', 10)
-            ->allowEmptyString('turno');
+            ->integer('turno_id')
+            ->allowEmptyString('turno_id');
 
         $validator
             ->notEmptyString('codigo_telefone');

@@ -131,6 +131,7 @@ class ProfessoresController extends AppController
 
             if ($this->Professores->save($professor)) {
                 $this->Flash->success(__('The professor has been saved.'));
+
                 return $this->redirect(['action' => 'view', $professor->id]);
             }
             $this->Flash->error(__('The professor could not be saved. Please, try again.'));
@@ -208,7 +209,13 @@ class ProfessoresController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    public function busca($nome = null)
+    /**
+     * Search for professors by name, CPF, SIAPE, email, or celular.
+     *
+     * @param string|null $nome Search term
+     * @return \Cake\Http\Response|null
+     */
+    public function busca(?string $nome = null)
     {
         $this->Authorization->authorize($this->Professores);
 
