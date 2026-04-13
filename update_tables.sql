@@ -16,17 +16,17 @@ UPDATE `users` SET `role` = 'aluno' WHERE `categoria` = '2';
 UPDATE `users` SET `role` = 'professor' WHERE `categoria` = '3';
 UPDATE `users` SET `role` = 'supervisor' WHERE `categoria` = '4';
 
--- Change the name of the estagio table to instituicoes
+-- Table INSTITUICOES: Change the name of the estagio table to instituicoes
 ALTER TABLE `estagio` RENAME TO `instituicoes`;
 ALTER TABLE `instituicoes` RENAME COLUMN `area` TO `area_id`;
 ALTER TABLE `instituicoes` DROP COLUMN `avaliacao`;
 ALTER TABLE `instituicoes` DROP COLUMN `localInscricao`;
 ALTER TABLE `instituicoes` DROP COLUMN `fax`;
 
--- Change the name of the configuracao table to configuracoes
+-- Table CONFIGURACOES: Change the name of the configuracao table to configuracoes
 ALTER TABLE `configuracao` RENAME TO `configuracoes`;
 
--- Change the name of the mural_estagio table to mural_estagios
+-- Table MURAL_ESTAGIOS: Change the name of the mural_estagio table to mural_estagios
 ALTER TABLE `mural_estagio` RENAME TO `mural_estagios`;
 ALTER TABLE `mural_estagios` RENAME COLUMN `dataSelecao` TO `data_selecao`;
 ALTER TABLE `mural_estagios` RENAME COLUMN `cargaHoraria` TO `carga_horaria`;
@@ -39,7 +39,7 @@ ALTER TABLE `mural_estagios` RENAME COLUMN `id_estagio` TO `instituicao_id`;
 ALTER TABLE `mural_estagios` DROP COLUMN `id_area`;
 ALTER TABLE `mural_estagios` DROP COLUMN `datafax`;
 
--- Create table turnos
+-- Table TURNOS: Create table turnos
 CREATE TABLE IF NOT EXISTS `turnos` (
   `id` smallint(3) NOT NULL AUTO_INCREMENT,
   `turno` varchar(70) DEFAULT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `turnos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Turnos de estagiários.';
 INSERT INTO `turnos` (`turno`) VALUES ('diurno'), ('noturno'), ('integral'), ('outro');
 
--- Alter table estagiarios
+-- Table ESTAGIARIOS: Alter table estagiarios
 ALTER TABLE `estagiarios` RENAME COLUMN `alunonovo_id` TO `aluno_id`;
 ALTER TABLE `estagiarios` RENAME COLUMN `id_instituicao` TO `instituicao_id`;
 ALTER TABLE `estagiarios` RENAME COLUMN `id_supervisor` TO `supervisor_id`;
@@ -56,10 +56,10 @@ ALTER TABLE `estagiarios` DROP COLUMN `id_aluno`;
 ALTER TABLE `estagiarios` DROP COLUMN `id_area`;
 ALTER TABLE `estagiarios` DROP COLUMN `turno`;
 
--- Alter table areas_estagio 
+-- Table TURMA_ESTAGIOS: Rename to turma_estagios
 ALTER TABLE `areas_estagio` RENAME TO `turma_estagios`;
 
--- Alter table professores
+-- Table PROFESSORES: Alter table professores
 ALTER TABLE `professores` ADD COLUMN `cress` varchar(10) NULL AFTER `siape`;
 ALTER TABLE `professores` ADD COLUMN `regiao` varchar(2) NULL AFTER `cress`;
 ALTER TABLE `professores` CHANGE COLUMN `cpf` varchar(15) NULL;
@@ -94,7 +94,7 @@ SET `telefone` = CONCAT('(', codigo_telefone, ') ', telefone);
 UPDATE `professores` 
 SET `celular` = CONCAT('(', codigo_celular, ') ', celular);
 
--- Questionários.
+-- Table Questionários.
 CREATE TABLE IF NOT EXISTS `questionarios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL COMMENT 'O título do questionário',
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `questionarios` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Questionários.';
 
--- Questões de avaliação. Substitui a tabela avaliacao.
+-- Table Questões de avaliação. Substitui a tabela avaliacao.
 CREATE TABLE IF NOT EXISTS `questoes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `questionario_id` int(11) NOT NULL,
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `questoes` (
   KEY `questionnaire_id` (`questionario_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Questões de avaliação.';
 
--- Respostas às perguntas de avaliação. Substitui a tabela avaliacao.
+-- Table Respostas às perguntas de avaliação. Substitui a tabela avaliacao.
 CREATE TABLE IF NOT EXISTS `respostas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `questionario_id` int(11) NOT NULL COMMENT 'The questionnaire id',
@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `respostas` (
   KEY `estagiarios_id` (`estagiario_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Respostas às perguntas de avaliação. Substitui a tabela avaliacao.';
 
--- Alter table visita
+-- Table VISITAS: Alter table visita
 ALTER TABLE `visita` RENAME `visitas`;
 ALTER TABLE `visitas` CHANGE COLUMN `estagio_id` `instituicao_id` int(11) NOT NULL;
 
@@ -151,7 +151,7 @@ SET `telefone` = CONCAT('(', codigo_telefone, ') ', telefone);
 UPDATE `alunos` 
 SET `celular` = CONCAT('(', codigo_celular, ') ', celular);
 
--- Change supervisores table
+-- Table SUPERVISORES: Change supervisores table
 ALTER TABLE `supervisores` MODIFY COLUMN `cpf`  varchar(15) NULL;
 ALTER TABLE `supervisores` MODIFY COLUMN `telefone`  varchar(15) NULL;
 ALTER TABLE `supervisores` MODIFY COLUMN `celular`  varchar(15) NULL;
@@ -164,6 +164,10 @@ ALTER TABLE `supervisores` DROP COLUMN `area_curso`;
 ALTER TABLE `supervisores` DROP COLUMN `ano_curso`;
 ALTER TABLE `supervisores` DROP COLUMN `num_inscricao`;
 ALTER TABLE `supervisores` DROP COLUMN `curso_turma`;
+ALTER TABLE `supervisores` DROP COLUMN `endereco`;
+ALTER TABLE `supervisores` DROP COLUMN `bairro`;
+ALTER TABLE `supervisores` DROP COLUMN `municipio`;
+ALTER TABLE `supervisores` DROP COLUMN `cep`;
 
 UPDATE `supervisores` 
 SET `telefone` = CONCAT('(', codigo_telefone, ') ', telefone);
@@ -171,11 +175,11 @@ SET `telefone` = CONCAT('(', codigo_telefone, ') ', telefone);
 UPDATE `supervisores` 
 SET `celular` = CONCAT('(', codigo_celular, ') ', celular);
 
--- Alter inst_super table
+-- Table INST_SUPER: Alter inst_super table
 ALTER TABLE `inst_super` RENAME COLUMN `id_supervisor` TO `supervisor_id`;
 ALTER TABLE `inst_super` RENAME COLUMN `id_instituicao` TO `instituicao_id`;
 
--- Alter mural_inscricao table
+-- Table INSCRICOES: Alter mural_inscricao table
 ALTER TABLE `mural_inscricao` RENAME TO `inscricoes`;
 ALTER TABLE `inscricoes` RENAME COLUMN `id_aluno` TO `registro`;
 ALTER TABLE `inscricoes` RENAME COLUMN `id_instituicao` TO `muralestagio_id`;
