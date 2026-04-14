@@ -1,9 +1,17 @@
 -- =====================================================
 -- MIGRATION SCRIPT: ess_apps to mural5_com_avaliacao
--- WITH FOREIGN KEY VALIDATION
+-- WITH FOREIGN KEY VALIDATION AND SAFE COLUMN OPERATIONS
 -- =====================================================
 
 START TRANSACTION;
+
+-- Create temporary table before transaction (Temp tables DDL auto-commits)
+CREATE TEMPORARY TABLE IF NOT EXISTS validation_errors (
+    error_id INT AUTO_INCREMENT PRIMARY KEY,
+    error_type VARCHAR(100),
+    error_message TEXT,
+    severity VARCHAR(20)
+);
 
 -- =====================================================
 -- PART 1: PRE-MIGRATION VALIDATION CHECKS
@@ -11,13 +19,29 @@ START TRANSACTION;
 
 DELIMITER //
 
--- Create temporary tables to store validation results
-CREATE TEMPORARY TABLE IF NOT EXISTS validation_errors (
-    error_id INT AUTO_INCREMENT PRIMARY KEY,
-    error_type VARCHAR(100),
-    error_message TEXT,
-    severity VARCHAR(20)
-);
+-- Procedure to safely change column name (only if old column exists)
+CREATE PROCEDURE SafeChangeColumn(IN tbl VARCHAR(64), IN old_col VARCHAR(64), IN new_col VARCHAR(64), IN col_def TEXT)
+BEGIN
+    SET @col_exists = (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = tbl AND COLUMN_NAME = old_col);
+    IF @col_exists > 0 THEN
+        SET @sql = CONCAT('ALTER TABLE `', tbl, '` CHANGE COLUMN `', old_col, '` `', new_col, '` ', col_def);
+        PREPARE stmt FROM @sql;
+        EXECUTE stmt;
+        DEALLOCATE PREPARE stmt;
+    END IF;
+END //
+
+-- Procedure to safely modify column (only if column exists)
+CREATE PROCEDURE SafeModifyColumn(IN tbl VARCHAR(64), IN col VARCHAR(64), IN col_def TEXT)
+BEGIN
+    SET @col_exists = (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = tbl AND COLUMN_NAME = col);
+    IF @col_exists > 0 THEN
+        SET @sql = CONCAT('ALTER TABLE `', tbl, '` MODIFY COLUMN `', col, '` ', col_def);
+        PREPARE stmt FROM @sql;
+        EXECUTE stmt;
+        DEALLOCATE PREPARE stmt;
+    END IF;
+END //
 
 -- Procedure to check foreign key relationships
 CREATE PROCEDURE ValidateForeignKeyRelationships()
@@ -202,24 +226,29 @@ SELECT 'Migration started at ' AS backup_time, NOW() AS timestamp;
 ALTER TABLE IF EXISTS `users`
   ADD COLUMN IF NOT EXISTS `nome` varchar(128) NOT NULL COMMENT 'Nome do usuário' AFTER `password`,
   ADD COLUMN IF NOT EXISTS `role` enum('admin','aluno','professor','supervisor') NOT NULL DEFAULT 'aluno' COMMENT 'roles' AFTER `nome`,
-  MODIFY COLUMN `numero` int(9) DEFAULT NULL COMMENT 'Registro do aluno, SIAPE do professor ou CRESS do supervisor',
-  ADD COLUMN IF NOT EXISTS `entidade_id` int(11) DEFAULT NULL COMMENT 'id da entidade: aluno, professor ou supervisor' AFTER `numero`,
+  ADD COLUMN IF NOT EXISTS `identificacao` int(9) DEFAULT NULL COMMENT 'Registro do aluno, SIAPE do professor ou CRESS do supervisor' AFTER `role`,
+  ADD COLUMN IF NOT EXISTS `entidade_id` int(11) DEFAULT NULL COMMENT 'id da entidade: aluno, professor ou supervisor' AFTER `identificacao`,
   ADD COLUMN IF NOT EXISTS `ativo` tinyint(1) DEFAULT 1 AFTER `entidade_id`,
   ADD COLUMN IF NOT EXISTS `criado_em` timestamp NOT NULL DEFAULT current_timestamp() AFTER `ativo`,
   CHANGE COLUMN `timestamp` `atualizado_em` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp();
 
--- Note: Rename numero to identificacao after modifying
-ALTER TABLE `users` 
-  CHANGE COLUMN `numero` `identificacao` int(9) DEFAULT NULL COMMENT 'Registro do aluno, SIAPE do professor ou CRESS do supervisor';
+-- Safely rename users columns (Using our Helper Procedure)
+CALL SafeChangeColumn('users', 'numero', 'identificacao', 'int(9) DEFAULT NULL COMMENT "Registro do aluno, SIAPE do professor ou CRESS do supervisor"');
 
 -- Update user roles
 UPDATE `users` SET `role` = CASE `categoria` 
-    WHEN '1' THEN 'admin' 
-    WHEN '2' THEN 'aluno' 
-    WHEN '3' THEN 'professor' 
-    WHEN '4' THEN 'supervisor' 
-    ELSE `role` 
+    WHEN '1' THEN 'admin' WHEN '2' THEN 'aluno' WHEN '3' THEN 'professor' WHEN '4' THEN 'supervisor' ELSE `role` 
 END WHERE `categoria` IN ('1','2','3','4');
+
+-- Set entidade_id based on role
+UPDATE `users` SET `entidade_id` = `aluno_id` WHERE `role` = 'aluno';
+UPDATE `users` SET `entidade_id` = `professor_id` WHERE `role` = 'professor';
+UPDATE `users` SET `entidade_id` = `supervisor_id` WHERE `role` = 'supervisor';
+
+-- Populate nome from related tables
+UPDATE `users` u JOIN `alunos` a ON u.`aluno_id` = a.`id` SET u.`nome` = a.`nome`;
+UPDATE `users` u JOIN `professores` p ON u.`professor_id` = p.`id` SET u.`nome` = p.`nome`;
+UPDATE `users` u JOIN `supervisores` s ON u.`supervisor_id` = s.`id` SET u.`nome` = s.`nome`;
 
 -- Table INSTITUICOES
 ALTER TABLE IF EXISTS `estagio` RENAME TO `instituicoes`;
@@ -272,15 +301,20 @@ ALTER TABLE IF EXISTS `areas_estagio` RENAME TO `turma_estagios`;
 -- Table PROFESSORES
 ALTER TABLE IF EXISTS `professores`
     ADD COLUMN IF NOT EXISTS `cress` varchar(10) NULL AFTER `siape`,
-    ADD COLUMN IF NOT EXISTS `regiao` varchar(2) NULL AFTER `cress`,
-    MODIFY COLUMN `cpf` varchar(15) NULL,
-    MODIFY COLUMN `telefone` varchar(15) NULL,
-    MODIFY COLUMN `celular` varchar(15) NULL,
+    ADD COLUMN IF NOT EXISTS `regiao` varchar(2) NULL AFTER `cress`;
+
+-- Safely modify and rename professors columns
+CALL SafeModifyColumn('professores', 'cpf', 'varchar(15) NULL');
+CALL SafeModifyColumn('professores', 'telefone', 'varchar(15) NULL');
+CALL SafeModifyColumn('professores', 'celular', 'varchar(15) NULL');
+CALL SafeChangeColumn('professores', 'ddd_telefone', 'codigo_telefone', 'tinyint(2) NULL DEFAULT 21 AFTER `telefone`');
+CALL SafeChangeColumn('professores', 'ddd_celular', 'codigo_celular', 'tinyint(2) NULL DEFAULT 21 AFTER `celular`');
+
+-- Drop unnecessary columns from professores
+ALTER TABLE `professores`
     DROP COLUMN IF EXISTS `datanascimento`,
     DROP COLUMN IF EXISTS `localnascimento`,
     DROP COLUMN IF EXISTS `sexo`,
-    CHANGE COLUMN `ddd_telefone` `codigo_telefone` tinyint(2) NULL DEFAULT 21 AFTER `telefone`,
-    CHANGE COLUMN `ddd_celular` `codigo_celular` tinyint(2) NULL DEFAULT 21 AFTER `celular`,
     DROP COLUMN IF EXISTS `homepage`,
     DROP COLUMN IF EXISTS `redesocial`,
     DROP COLUMN IF EXISTS `curriculosigma`,
@@ -300,12 +334,9 @@ ALTER TABLE IF EXISTS `professores`
     DROP COLUMN IF EXISTS `regimetrabalho`;
 
 -- Update professors phone numbers
-UPDATE `professores` 
-SET `telefone` = CONCAT('(', COALESCE(codigo_telefone, ''), ') ', COALESCE(telefone, ''))
+UPDATE `professores` SET `telefone` = CONCAT('(', COALESCE(codigo_telefone, ''), ') ', COALESCE(telefone, ''))
 WHERE codigo_telefone IS NOT NULL AND telefone IS NOT NULL;
-
-UPDATE `professores` 
-SET `celular` = CONCAT('(', COALESCE(codigo_celular, ''), ') ', COALESCE(celular, ''))
+UPDATE `professores` SET `celular` = CONCAT('(', COALESCE(codigo_celular, ''), ') ', COALESCE(celular, ''))
 WHERE codigo_celular IS NOT NULL AND celular IS NOT NULL;
 
 -- Table Questionários
@@ -353,39 +384,25 @@ ALTER TABLE `visitas` CHANGE COLUMN `estagio_id` `instituicao_id` INT(11) NOT NU
 
 -- Table ALUNOS
 ALTER TABLE IF EXISTS `alunos` 
-    ADD COLUMN IF NOT EXISTS `turno_id` SMALLINT(3) NOT NULL AFTER `turno`,
-    MODIFY COLUMN `cpf` VARCHAR(15) NULL,
-    MODIFY COLUMN `telefone` VARCHAR(15) NULL,
-    MODIFY COLUMN `celular` VARCHAR(15) NULL;
+    ADD COLUMN IF NOT EXISTS `turno_id` SMALLINT(3) NOT NULL AFTER `turno`;
 
--- Reposition columns after modifications
-ALTER TABLE `alunos`
-    MODIFY COLUMN `cpf` VARCHAR(15) NULL AFTER `registro`,
-    MODIFY COLUMN `telefone` VARCHAR(15) NULL AFTER `codigo_telefone`,
-    MODIFY COLUMN `celular` VARCHAR(15) NULL AFTER `codigo_celular`;
+-- Safely modify alunos columns
+CALL SafeModifyColumn('alunos', 'cpf', 'VARCHAR(15) NULL AFTER `registro`');
+CALL SafeModifyColumn('alunos', 'telefone', 'VARCHAR(15) NULL AFTER `codigo_telefone`');
+CALL SafeModifyColumn('alunos', 'celular', 'VARCHAR(15) NULL AFTER `codigo_celular`');
 
 -- Update turno_id
-UPDATE `alunos` a
-INNER JOIN `turnos` t ON t.`turno` = a.`turno`
-SET a.`turno_id` = t.`id`;
+UPDATE `alunos` a INNER JOIN `turnos` t ON t.`turno` = a.`turno` SET a.`turno_id` = t.`id`;
 
 -- Update alunos phone numbers
 UPDATE `alunos` 
-SET 
-    `telefone` = CONCAT('(', COALESCE(codigo_telefone, ''), ') ', COALESCE(telefone, '')),
+SET `telefone` = CONCAT('(', COALESCE(codigo_telefone, ''), ') ', COALESCE(telefone, '')),
     `celular` = CONCAT('(', COALESCE(codigo_celular, ''), ') ', COALESCE(celular, ''))
 WHERE (codigo_telefone IS NOT NULL AND telefone IS NOT NULL)
    OR (codigo_celular IS NOT NULL AND celular IS NOT NULL);
 
 -- Table SUPERVISORES
 ALTER TABLE IF EXISTS `supervisores` 
-    MODIFY COLUMN IF EXISTS `cpf` VARCHAR(15) NULL,
-    MODIFY COLUMN IF EXISTS `telefone` VARCHAR(15) NULL,
-    MODIFY COLUMN IF EXISTS `celular` VARCHAR(15) NULL,
-    MODIFY COLUMN IF EXISTS `escola` VARCHAR(70) NULL,
-    CHANGE COLUMN IF EXISTS `codigo_cel` `codigo_celular` VARCHAR(2) NOT NULL DEFAULT '21',
-    CHANGE COLUMN IF EXISTS `codigo_tel` `codigo_telefone` VARCHAR(2) NOT NULL DEFAULT '21',
-    CHANGE COLUMN IF EXISTS `ano_formatura` `ano_formacao` SMALLINT(4) NULL,
     DROP COLUMN IF EXISTS `outros_estudos`,
     DROP COLUMN IF EXISTS `area_curso`,
     DROP COLUMN IF EXISTS `ano_curso`,
@@ -396,18 +413,20 @@ ALTER TABLE IF EXISTS `supervisores`
     DROP COLUMN IF EXISTS `municipio`,
     DROP COLUMN IF EXISTS `cep`;
 
--- Update supervisores phone numbers
-UPDATE `supervisores` 
-SET `telefone` = CONCAT('(', COALESCE(codigo_telefone, ''), ') ', COALESCE(telefone, ''))
-WHERE codigo_telefone IS NOT NULL 
-  AND telefone IS NOT NULL 
-  AND telefone NOT LIKE CONCAT('(', codigo_telefone, ')%');
+-- Safely modify and rename supervisores columns
+CALL SafeModifyColumn('supervisores', 'cpf', 'VARCHAR(15) NULL');
+CALL SafeModifyColumn('supervisores', 'telefone', 'VARCHAR(15) NULL');
+CALL SafeModifyColumn('supervisores', 'celular', 'VARCHAR(15) NULL');
+CALL SafeModifyColumn('supervisores', 'escola', 'VARCHAR(70) NULL');
+CALL SafeChangeColumn('supervisores', 'codigo_cel', 'codigo_celular', 'VARCHAR(2) NOT NULL DEFAULT "21"');
+CALL SafeChangeColumn('supervisores', 'codigo_tel', 'codigo_telefone', 'VARCHAR(2) NOT NULL DEFAULT "21"');
+CALL SafeChangeColumn('supervisores', 'ano_formatura', 'ano_formacao', 'SMALLINT(4) NULL');
 
-UPDATE `supervisores` 
-SET `celular` = CONCAT('(', COALESCE(codigo_celular, ''), ') ', COALESCE(celular, ''))
-WHERE codigo_celular IS NOT NULL 
-  AND celular IS NOT NULL 
-  AND celular NOT LIKE CONCAT('(', codigo_celular, ')%');
+-- Update supervisores phone numbers
+UPDATE `supervisores` SET `telefone` = CONCAT('(', COALESCE(codigo_telefone, ''), ') ', COALESCE(telefone, ''))
+WHERE codigo_telefone IS NOT NULL AND telefone IS NOT NULL AND telefone NOT LIKE CONCAT('(', codigo_telefone, ')%');
+UPDATE `supervisores` SET `celular` = CONCAT('(', COALESCE(codigo_celular, ''), ') ', COALESCE(celular, ''))
+WHERE codigo_celular IS NOT NULL AND celular IS NOT NULL AND celular NOT LIKE CONCAT('(', codigo_celular, ')%');
 
 -- Table INST_SUPER
 ALTER TABLE `inst_super` 
@@ -506,11 +525,13 @@ COMMIT;
 -- PART 6: CLEAN UP (Optional - comment out if you want to keep procedures)
 -- =====================================================
 
--- DROP TEMPORARY TABLE IF EXISTS validation_errors;
--- DROP PROCEDURE IF EXISTS ValidateForeignKeyRelationships;
--- DROP PROCEDURE IF EXISTS ValidateRequiredTables;
--- DROP PROCEDURE IF EXISTS DisplayValidationResults;
--- DROP PROCEDURE IF EXISTS PostMigrationValidation;
+DROP TEMPORARY TABLE IF EXISTS validation_errors;
+DROP PROCEDURE IF EXISTS ValidateForeignKeyRelationships;
+DROP PROCEDURE IF EXISTS ValidateRequiredTables;
+DROP PROCEDURE IF EXISTS DisplayValidationResults;
+DROP PROCEDURE IF EXISTS PostMigrationValidation;
+DROP PROCEDURE IF EXISTS SafeChangeColumn;
+DROP PROCEDURE IF EXISTS SafeModifyColumn;
 
 -- Uncomment below to drop backup table after confirming migration
 -- DROP TABLE IF EXISTS migration_backup_20260414;
