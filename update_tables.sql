@@ -10,8 +10,28 @@ ALTER TABLE IF EXISTS `users`
   ADD COLUMN `criado_em` timestamp NOT NULL DEFAULT current_timestamp() AFTER `ativo`,
   CHANGE COLUMN `timestamp` `atualizado_em` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp();
 
+-- Note: Rename numero to identificacao after modifying the table structure
 -- Table USERS: Update the values of the new 'role' field based on the old 'categoria' field
 UPDATE `users` SET `role` = CASE `categoria` WHEN '1' THEN 'admin' WHEN '2' THEN 'aluno' WHEN '3' THEN 'professor' WHEN '4' THEN 'supervisor' ELSE `role` END WHERE `categoria` IN ('1','2','3','4');
+
+-- Table USERS: Update the values of the new 'entidade_id' field based on the old 'role' field
+UPDATE `users` 
+SET `entidade_id` = `aluno_id` WHERE `role` = 'aluno';
+
+UPDATE `users` 
+SET `entidade_id` = `professor_id` WHERE `role` = 'professor';
+
+UPDATE `users` 
+SET `entidade_id` = `supervisor_id` WHERE `role` = 'supervisor';
+
+UPDATE `users` 
+SET `nome` = `alunos`.`nome` FROM `alunos` WHERE `users`.`aluno_id` = `alunos`.`id`;
+
+UPDATE `users` 
+SET `nome` = `professores`.`nome` FROM `professores` WHERE `users`.`professor_id` = `professores`.`id`;
+
+UPDATE `users` 
+SET `nome` = `supervisores`.`nome` FROM `supervisores` WHERE `users`.`supervisor_id` = `supervisores`.`id`;
 
 -- Table INSTITUICOES: Change the name of the estagio table to instituicoes
 ALTER TABLE IF EXISTS `estagio` RENAME TO `instituicoes`;
@@ -152,6 +172,16 @@ ALTER TABLE IF EXISTS `alunos`
     MODIFY COLUMN `cpf` VARCHAR(15) NULL AFTER `registro`,
     MODIFY COLUMN `telefone` VARCHAR(15) NULL AFTER `codigo_telefone`,
     MODIFY COLUMN `celular` VARCHAR(15) NULL AFTER `codigo_celular`;
+    CHANGE COLUMN `estudante_id` `aluno_id` INT(11) NOT NULL;
+    CHANGE COLUMN `docente_id` `professor_id` INT(11) NOT NULL;
+
+-- Reposition columnsSMALLINT(3) NOT NULL;
+ALTER TABLE `alunos`
+    MODIFY COLUMN `cpf` VARCHAR(15) NULL AFTER `registro`,
+    MODIFY COLUMN `telefone` VARCHAR(15) NULL AFTER `codigo_telefone`,
+    MODIFY COLUMN `celular` VARCHAR(15) NULL AFTER `codigo_celular`;
+        
+-- Verify the changes
 
 -- Update turno_id with proper join
 UPDATE `alunos` a
