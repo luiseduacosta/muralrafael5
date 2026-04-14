@@ -1,7 +1,7 @@
 -- Script to update tables structure and data from old ess_apps to new mural5_com_avaliacao.sql
 
 -- Table USERS: Add new columns and change types of existing columns, except for 'categoria' which we will handle later.
-ALTER TABLE `users` 
+ALTER TABLE IF EXISTS `users`
   ADD COLUMN `nome` varchar(128) NOT NULL COMMENT 'Nome do usuário' AFTER `password`,
   ADD COLUMN `role` enum('admin','aluno','professor','supervisor') NOT NULL DEFAULT 'aluno' COMMENT 'roles' AFTER `nome`,
   CHANGE COLUMN `numero` `identificacao` int(9) DEFAULT NULL COMMENT 'Registro do aluno, SIAPE do professor ou CRESS do supervisor',
@@ -11,33 +11,36 @@ ALTER TABLE `users`
   CHANGE COLUMN `timestamp` `atualizado_em` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp();
 
 -- Table USERS: Update the values of the new 'role' field based on the old 'categoria' field
-UPDATE `users` SET `role` = 'admin' WHERE `categoria` = '1';
-UPDATE `users` SET `role` = 'aluno' WHERE `categoria` = '2';
-UPDATE `users` SET `role` = 'professor' WHERE `categoria` = '3';
-UPDATE `users` SET `role` = 'supervisor' WHERE `categoria` = '4';
+UPDATE `users` SET `role` = CASE `categoria` WHEN '1' THEN 'admin' WHEN '2' THEN 'aluno' WHEN '3' THEN 'professor' WHEN '4' THEN 'supervisor' ELSE `role` END WHERE `categoria` IN ('1','2','3','4');
 
 -- Table INSTITUICOES: Change the name of the estagio table to instituicoes
-ALTER TABLE `estagio` RENAME TO `instituicoes`;
-ALTER TABLE `instituicoes` RENAME COLUMN `area` TO `area_id`;
-ALTER TABLE `instituicoes` DROP COLUMN `avaliacao`;
-ALTER TABLE `instituicoes` DROP COLUMN `localInscricao`;
-ALTER TABLE `instituicoes` DROP COLUMN `fax`;
+ALTER TABLE IF EXISTS `estagio` RENAME TO `instituicoes`;
+
+-- Drop columns only if they exist
+ALTER TABLE `instituicoes`
+    RENAME COLUMN IF EXISTS `area` TO `area_id`,
+    DROP COLUMN IF EXISTS `avaliacao`,
+    DROP COLUMN IF EXISTS `localInscricao`,
+    DROP COLUMN IF EXISTS `fax`;
 
 -- Table CONFIGURACOES: Change the name of the configuracao table to configuracoes
-ALTER TABLE `configuracao` RENAME TO `configuracoes`;
+ALTER TABLE IF EXISTS `configuracao` RENAME TO `configuracoes`; 
+ALTER TABLE `configuracoes` ADD COLUMN IF NOT EXISTS `instituicao` varchar(50) NOT NULL;
 
--- Table MURAL_ESTAGIOS: Change the name of the mural_estagio table to mural_estagios
-ALTER TABLE `mural_estagio` RENAME TO `mural_estagios`;
-ALTER TABLE `mural_estagios` RENAME COLUMN `dataSelecao` TO `data_selecao`;
-ALTER TABLE `mural_estagios` RENAME COLUMN `cargaHoraria` TO `carga_horaria`;
-ALTER TABLE `mural_estagios` RENAME COLUMN `dataInscricao` TO `data_inscricao`;
-ALTER TABLE `mural_estagios` RENAME COLUMN `horarioSelecao` TO `horario_selecao`;
-ALTER TABLE `mural_estagios` RENAME COLUMN `localSelecao` TO `local_selecao`;
-ALTER TABLE `mural_estagios` RENAME COLUMN `formaSelecao` TO `forma_selecao`;
-ALTER TABLE `mural_estagios` RENAME COLUMN `localInscricao` TO `local_inscricao`;
-ALTER TABLE `mural_estagios` RENAME COLUMN `id_estagio` TO `instituicao_id`;
-ALTER TABLE `mural_estagios` DROP COLUMN `id_area`;
-ALTER TABLE `mural_estagios` DROP COLUMN `datafax`;
+-- Table MURAL_ESTAGIOS: Change the name of the mural_estagio table to mural_estagios and rename columns
+ALTER TABLE IF EXISTS `mural_estagio` RENAME TO `mural_estagios`;
+
+ALTER TABLE `mural_estagios` 
+    RENAME COLUMN IF EXISTS `dataSelecao` TO `data_selecao`,
+    RENAME COLUMN IF EXISTS `cargaHoraria` TO `carga_horaria`,
+    RENAME COLUMN IF EXISTS `dataInscricao` TO `data_inscricao`,
+    RENAME COLUMN IF EXISTS `horarioSelecao` TO `horario_selecao`,
+    RENAME COLUMN IF EXISTS `localSelecao` TO `local_selecao`,
+    RENAME COLUMN IF EXISTS `formaSelecao` TO `forma_selecao`,
+    RENAME COLUMN IF EXISTS `localInscricao` TO `local_inscricao`,
+    RENAME COLUMN IF EXISTS `id_estagio` TO `instituicao_id`,
+    DROP COLUMN IF EXISTS `id_area`,
+    DROP COLUMN IF EXISTS `datafax`;
 
 -- Table TURNOS: Create table turnos
 CREATE TABLE IF NOT EXISTS `turnos` (
@@ -45,56 +48,62 @@ CREATE TABLE IF NOT EXISTS `turnos` (
   `turno` varchar(70) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Turnos de estagiários.';
+
 INSERT INTO `turnos` (`turno`) VALUES ('diurno'), ('noturno'), ('integral'), ('outro');
 
 -- Table ESTAGIARIOS: Alter table estagiarios
-ALTER TABLE `estagiarios` RENAME COLUMN `alunonovo_id` TO `aluno_id`;
-ALTER TABLE `estagiarios` RENAME COLUMN `id_instituicao` TO `instituicao_id`;
-ALTER TABLE `estagiarios` RENAME COLUMN `id_supervisor` TO `supervisor_id`;
-ALTER TABLE `estagiarios` RENAME COLUMN `id_professor` TO `professor_id`;
-ALTER TABLE `estagiarios` DROP COLUMN `id_aluno`;
-ALTER TABLE `estagiarios` DROP COLUMN `id_area`;
-ALTER TABLE `estagiarios` DROP COLUMN `turno`;
+ALTER TABLE `estagiarios` 
+    RENAME COLUMN IF EXISTS `alunonovo_id` TO `aluno_id`,
+    RENAME COLUMN IF EXISTS `id_instituicao` TO `instituicao_id`,
+    RENAME COLUMN IF EXISTS `id_supervisor` TO `supervisor_id`,
+    RENAME COLUMN IF EXISTS `id_professor` TO `professor_id`,
+    DROP COLUMN IF EXISTS `id_aluno`,
+    DROP COLUMN IF EXISTS `id_area`,
+    DROP COLUMN IF EXISTS `turno`;
 
 -- Table TURMA_ESTAGIOS: Rename to turma_estagios
-ALTER TABLE `areas_estagio` RENAME TO `turma_estagios`;
+ALTER TABLE IF EXISTS `areas_estagio` RENAME TO `turma_estagios`;
 
 -- Table PROFESSORES: Alter table professores
-ALTER TABLE `professores` ADD COLUMN `cress` varchar(10) NULL AFTER `siape`;
-ALTER TABLE `professores` ADD COLUMN `regiao` varchar(2) NULL AFTER `cress`;
-ALTER TABLE `professores` CHANGE COLUMN `cpf` varchar(15) NULL;
-ALTER TABLE `professores` CHANGE COLUMN `telefone` varchar(15) NULL;
-ALTER TABLE `professores` CHANGE COLUMN `celular` varchar(15) NULL;
-ALTER TABLE `professores` DROP COLUMN `datanascimento`;
-ALTER TABLE `professores` DROP COLUMN `localnascimento`;
-ALTER TABLE `professores` DROP COLUMN `sexo`;
-ALTER TABLE `professores` change COLUMN `ddd_telefone` `codigo_telefone` tinyint(2) NULL DEFAULT 21 AFTER `telefone`;
-ALTER TABLE `professores` change COLUMN `ddd_celular` `codigo_celular` tinyint(2) NULL DEFAULT 21 AFTER `celular`;
-ALTER TABLE `professores` DROP COLUMN `homepage`;
-ALTER TABLE `professores` DROP COLUMN `redesocial`;
-ALTER TABLE `professores` DROP COLUMN `curriculosigma`;
-ALTER TABLE `professores` DROP COLUMN `pesquisadordgp`;
-ALTER TABLE `professores` DROP COLUMN `formacaoprofissional`;
-ALTER TABLE `professores` DROP COLUMN `universidadedegraduacao`;
-ALTER TABLE `professores` DROP COLUMN `anoformacao`;
-ALTER TABLE `professores` DROP COLUMN `mestradoarea`;
-ALTER TABLE `professores` DROP COLUMN `mestradouniversidade`;
-ALTER TABLE `professores` DROP COLUMN `mestradoanoconclusao`;
-ALTER TABLE `professores` DROP COLUMN `doutoradoarea`;
-ALTER TABLE `professores` DROP COLUMN `doutoradouniversidade`;
-ALTER TABLE `professores` DROP COLUMN `doutoradoanoconclusao`;
-ALTER TABLE `professores` DROP COLUMN `formaingresso`;
-ALTER TABLE `professores` DROP COLUMN `tipocargo`;
-ALTER TABLE `professores` DROP COLUMN `categoria`;
-ALTER TABLE `professores` DROP COLUMN `regimetrabalho`;
+ALTER TABLE IF EXISTS `professores`
+    ADD COLUMN IF NOT EXISTS `cress` varchar(10) NULL AFTER `siape`,
+    ADD COLUMN IF NOT EXISTS `regiao` varchar(2) NULL AFTER `cress`,
+    MODIFY COLUMN `cpf` varchar(15) NULL,
+    MODIFY COLUMN `telefone` varchar(15) NULL,
+    MODIFY COLUMN `celular` varchar(15) NULL,
+    DROP COLUMN IF EXISTS `datanascimento`,
+    DROP COLUMN IF EXISTS `localnascimento`,
+    DROP COLUMN IF EXISTS `sexo`,
+    CHANGE COLUMN `ddd_telefone` `codigo_telefone` tinyint(2) NULL DEFAULT 21 AFTER `telefone`,
+    CHANGE COLUMN `ddd_celular` `codigo_celular` tinyint(2) NULL DEFAULT 21 AFTER `celular`,
+    DROP COLUMN IF EXISTS `homepage`,
+    DROP COLUMN IF EXISTS `redesocial`,
+    DROP COLUMN IF EXISTS `curriculosigma`,
+    DROP COLUMN IF EXISTS `pesquisadordgp`,
+    DROP COLUMN IF EXISTS `formacaoprofissional`,
+    DROP COLUMN IF EXISTS `universidadedegraduacao`,
+    DROP COLUMN IF EXISTS `anoformacao`,
+    DROP COLUMN IF EXISTS `mestradoarea`,
+    DROP COLUMN IF EXISTS `mestradouniversidade`,
+    DROP COLUMN IF EXISTS `mestradoanoconclusao`,
+    DROP COLUMN IF EXISTS `doutoradoarea`,
+    DROP COLUMN IF EXISTS `doutoradouniversidade`,
+    DROP COLUMN IF EXISTS `doutoradoanoconclusao`,
+    DROP COLUMN IF EXISTS `formaingresso`,
+    DROP COLUMN IF EXISTS `tipocargo`,
+    DROP COLUMN IF EXISTS `categoria`,
+    DROP COLUMN IF EXISTS `regimetrabalho`;
+
+-- Update professores phone numbers
+UPDATE `professores` 
+SET `telefone` = CONCAT('(', COALESCE(codigo_telefone, ''), ') ', COALESCE(telefone, ''))
+WHERE codigo_telefone IS NOT NULL AND telefone IS NOT NULL;
 
 UPDATE `professores` 
-SET `telefone` = CONCAT('(', codigo_telefone, ') ', telefone);
+SET `celular` = CONCAT('(', COALESCE(codigo_celular, ''), ') ', COALESCE(celular, ''))
+WHERE codigo_celular IS NOT NULL AND celular IS NOT NULL;
 
-UPDATE `professores` 
-SET `celular` = CONCAT('(', codigo_celular, ') ', celular);
-
--- Table Questionários.
+-- Table Questionários
 CREATE TABLE IF NOT EXISTS `questionarios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL COMMENT 'O título do questionário',
@@ -107,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `questionarios` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Questionários.';
 
--- Table Questões de avaliação. Substitui a tabela avaliacao.
+-- Table Questões de avaliação
 CREATE TABLE IF NOT EXISTS `questoes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `questionario_id` int(11) NOT NULL,
@@ -121,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `questoes` (
   KEY `questionnaire_id` (`questionario_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Questões de avaliação.';
 
--- Table Respostas às perguntas de avaliação. Substitui a tabela avaliacao.
+-- Table Respostas às perguntas de avaliação
 CREATE TABLE IF NOT EXISTS `respostas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `questionario_id` int(11) NOT NULL COMMENT 'The questionnaire id',
@@ -134,53 +143,80 @@ CREATE TABLE IF NOT EXISTS `respostas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Respostas às perguntas de avaliação. Substitui a tabela avaliacao.';
 
 -- Table VISITAS: Alter table visita
-ALTER TABLE `visita` RENAME `visitas`;
-ALTER TABLE `visitas` CHANGE COLUMN `estagio_id` `instituicao_id` int(11) NOT NULL;
+ALTER TABLE IF EXISTS `visita` RENAME TO `visitas`;
+ALTER TABLE `visitas` CHANGE COLUMN `estagio_id` `instituicao_id` INT(11) NOT NULL;
 
--- Change alunos table
-ALTER TABLE `alunos` ADD COLUMN `turno_id` smallint(3) NOT NULL AFTER `turno`;
-UPDATE `alunos` SET `turno_id` = (SELECT `id` FROM `turnos` WHERE `turno` = `alunos`.`turno`);
+-- Table ALUNOS: Alter alunos table
+ALTER TABLE IF EXISTS `alunos` 
+    ADD COLUMN `turno_id` SMALLINT(3) NOT NULL AFTER `turno`,
+    MODIFY COLUMN `cpf` VARCHAR(15) NULL AFTER `registro`,
+    MODIFY COLUMN `telefone` VARCHAR(15) NULL AFTER `codigo_telefone`,
+    MODIFY COLUMN `celular` VARCHAR(15) NULL AFTER `codigo_celular`;
 
-ALTER TABLE `alunos` CHANGE COLUMN `cpf`  varchar(15) NULL AFTER `registro`;
-ALTER TABLE `alunos` CHANGE COLUMN `telefone`  varchar(15) NULL AFTER `codigo_telefone`;
-ALTER TABLE `alunos` CHANGE COLUMN `celular`  varchar(15) NULL AFTER `codigo_celular`;
+-- Update turno_id with proper join
+UPDATE `alunos` a
+INNER JOIN `turnos` t ON t.`turno` = a.`turno`
+SET a.`turno_id` = t.`id`;
 
+-- Update alunos phone numbers
 UPDATE `alunos` 
-SET `telefone` = CONCAT('(', codigo_telefone, ') ', telefone);
+SET 
+    `telefone` = CONCAT('(', COALESCE(codigo_telefone, ''), ') ', COALESCE(telefone, '')),
+    `celular` = CONCAT('(', COALESCE(codigo_celular, ''), ') ', COALESCE(celular, ''))
+WHERE 
+    (codigo_telefone IS NOT NULL AND telefone IS NOT NULL)
+    OR (codigo_celular IS NOT NULL AND celular IS NOT NULL);
 
-UPDATE `alunos` 
-SET `celular` = CONCAT('(', codigo_celular, ') ', celular);
+-- Table SUPERVISORES: Alter supervisores table
+ALTER TABLE IF EXISTS `supervisores` 
+    MODIFY COLUMN IF EXISTS `cpf` VARCHAR(15) NULL,
+    MODIFY COLUMN IF EXISTS `telefone` VARCHAR(15) NULL,
+    MODIFY COLUMN IF EXISTS `celular` VARCHAR(15) NULL,
+    MODIFY COLUMN IF EXISTS `escola` VARCHAR(70) NULL,
+    CHANGE COLUMN IF EXISTS `codigo_cel` `codigo_celular` VARCHAR(2) NOT NULL DEFAULT '21',
+    CHANGE COLUMN IF EXISTS `codigo_tel` `codigo_telefone` VARCHAR(2) NOT NULL DEFAULT '21',
+    CHANGE COLUMN IF EXISTS `ano_formatura` `ano_formacao` SMALLINT(4) NULL,
+    DROP COLUMN IF EXISTS `outros_estudos`,
+    DROP COLUMN IF EXISTS `area_curso`,
+    DROP COLUMN IF EXISTS `ano_curso`,
+    DROP COLUMN IF EXISTS `num_inscricao`,
+    DROP COLUMN IF EXISTS `curso_turma`,
+    DROP COLUMN IF EXISTS `endereco`,
+    DROP COLUMN IF EXISTS `bairro`,
+    DROP COLUMN IF EXISTS `municipio`,
+    DROP COLUMN IF EXISTS `cep`;
 
--- Table SUPERVISORES: Change supervisores table
-ALTER TABLE `supervisores` MODIFY COLUMN `cpf`  varchar(15) NULL;
-ALTER TABLE `supervisores` MODIFY COLUMN `telefone`  varchar(15) NULL;
-ALTER TABLE `supervisores` MODIFY COLUMN `celular`  varchar(15) NULL;
-ALTER TABLE `supervisores` MODIFY COLUMN `escola`  varchar(70) NULL;
-ALTER TABLE `supervisores` CHANGE COLUMN `codigo_cel` 'codigo_celular' varchar(2) NOT NULL DEFAULT 21;
-ALTER TABLE `supervisores` CHANGE COLUMN `codigo_tel` 'codigo_telefone' varchar(2) NOT NULL DEFAULT 21;
-ALTER TABLE `supervisores` CHANGE COLUMN `ano_formatura` 'ano_formacao' smallint(4) NULL;
-ALTER TABLE `supervisores` DROP COLUMN `outros_estudos`;
-ALTER TABLE `supervisores` DROP COLUMN `area_curso`;
-ALTER TABLE `supervisores` DROP COLUMN `ano_curso`;
-ALTER TABLE `supervisores` DROP COLUMN `num_inscricao`;
-ALTER TABLE `supervisores` DROP COLUMN `curso_turma`;
-ALTER TABLE `supervisores` DROP COLUMN `endereco`;
-ALTER TABLE `supervisores` DROP COLUMN `bairro`;
-ALTER TABLE `supervisores` DROP COLUMN `municipio`;
-ALTER TABLE `supervisores` DROP COLUMN `cep`;
+-- Update supervisores phone numbers
+UPDATE `supervisores` 
+SET `telefone` = CONCAT('(', COALESCE(codigo_telefone, ''), ') ', COALESCE(telefone, ''))
+WHERE codigo_telefone IS NOT NULL 
+  AND telefone IS NOT NULL 
+  AND telefone NOT LIKE CONCAT('(', codigo_telefone, ')%');
 
 UPDATE `supervisores` 
-SET `telefone` = CONCAT('(', codigo_telefone, ') ', telefone);
+SET `celular` = CONCAT('(', COALESCE(codigo_celular, ''), ') ', COALESCE(celular, ''))
+WHERE codigo_celular IS NOT NULL 
+  AND celular IS NOT NULL 
+  AND celular NOT LIKE CONCAT('(', codigo_celular, ')%');
 
-UPDATE `supervisores` 
-SET `celular` = CONCAT('(', codigo_celular, ') ', celular);
-
--- Table INST_SUPER: Alter inst_super table
-ALTER TABLE `inst_super` RENAME COLUMN `id_supervisor` TO `supervisor_id`;
-ALTER TABLE `inst_super` RENAME COLUMN `id_instituicao` TO `instituicao_id`;
+-- Table INST_SUPER: Alter inst_super 
+ALTER TABLE `inst_super` 
+    RENAME COLUMN IF EXISTS `id_supervisor` TO `supervisor_id`,
+    RENAME COLUMN IF EXISTS `id_instituicao` TO `instituicao_id`;
 
 -- Table INSCRICOES: Alter mural_inscricao table
-ALTER TABLE `mural_inscricao` RENAME TO `inscricoes`;
-ALTER TABLE `inscricoes` RENAME COLUMN `id_aluno` TO `registro`;
-ALTER TABLE `inscricoes` RENAME COLUMN `id_instituicao` TO `muralestagio_id`;
-ALTER TABLE `inscricoes` DROP COLUMN `alunonovo_id`;
+ALTER TABLE IF EXISTS `mural_inscricao` RENAME TO `inscricoes`;
+
+ALTER TABLE `inscricoes` 
+    RENAME COLUMN IF EXISTS `id_aluno` TO `aluno_id`,
+    RENAME COLUMN IF EXISTS `id_instituicao` TO `muralestagio_id`,
+    DROP COLUMN IF EXISTS `alunonovo_id`;
+
+-- Verify the changes
+SELECT COLUMN_NAME, DATA_TYPE 
+FROM information_schema.COLUMNS 
+WHERE TABLE_NAME = 'inscricoes'
+ORDER BY ORDINAL_POSITION;
+
+-- Table AREA_INSTITUICOES: Alter area_instituicoes table
+ALTER TABLE IF EXISTS `area_instituicoes` RENAME TO `areas`;

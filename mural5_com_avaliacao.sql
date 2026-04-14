@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `complementos` (
 
 CREATE TABLE IF NOT EXISTS `configuracoes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `instituicao_curso` varchar(50) NOT NULL,
+  `instituicao` varchar(50) NOT NULL,
   `mural_periodo_atual` char(6) NOT NULL,
   `curso_turma_atual` smallint(2) DEFAULT NULL,
   `curso_abertura_inscricoes` date DEFAULT NULL,
@@ -427,6 +427,10 @@ CREATE TABLE IF NOT EXISTS `turnos` (
 
 -- --------------------------------------------------------
 
+--
+-- Estrutura para tabela `users`
+--
+
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` char(50) NOT NULL,
@@ -469,8 +473,8 @@ INSERT INTO `users` (`id`, `email`, `password`, `categoria`, `numero`, `timestam
 (1, 'admin@ess.ufrj.br', '$2y$10$YourHashedPasswordHere', '1', 1, CURRENT_TIMESTAMP, NULL, NULL, NULL);
 
 -- Default system configuration
-INSERT INTO `configuracoes` (`id`, `mural_periodo_atual`, `curso_turma_atual`, `curso_abertura_inscricoes`, `curso_encerramento_inscricoes`, `termo_compromisso_periodo`, `termo_compromisso_inicio`, `termo_compromisso_final`, `periodo_calendario_academico`) VALUES
-(1, '2025-1', 1, NULL, NULL, '2025-1', '2025-03-01', '2025-07-31', '2025-1');
+INSERT INTO `configuracoes` (`id`, `instituicao`, `mural_periodo_atual`, `curso_turma_atual`, `curso_abertura_inscricoes`, `curso_encerramento_inscricoes`, `termo_compromisso_periodo`, `termo_compromisso_inicio`, `termo_compromisso_final`, `periodo_calendario_academico`) VALUES
+(1, 'ESS/UFRJ', '2025-1', 1, NULL, NULL, '2025-1', '2025-03-01', '2025-07-31', '2025-1');
 
 -- Default user categories
 INSERT INTO `categorias` (`id`, `categoria`) VALUES
