@@ -77,9 +77,9 @@ $user_session = $this->request->getAttribute('identity');
     <?= $this->fetch('script') ?>
 </head>
 <body>
-    
+
     <?= $this->element('submenu_navegacao'); ?>
-    
+
     <div id="content">
         <?= $this->Flash->render() ?>
         <header>
@@ -88,7 +88,7 @@ $user_session = $this->request->getAttribute('identity');
                     <div class="col">
                         <h1 class="text-center">Boas vindas ao <a href="muralestagios">Mural de Estágios</a></h1>
                         <h2 class="text-center">
-                                
+
                             <?php if (!$user_session) : ?>
                                 <?= $this->Html->link(__('Login'), ['controller' => 'users', 'action' => 'login'], ['class' => 'button btn-info']) ?>
                                 <?= $this->Html->link(__('Novo usuário'), ['controller' => 'users', 'action' => 'add'], ['class' => 'button']) ?>
@@ -110,10 +110,10 @@ $user_session = $this->request->getAttribute('identity');
                 </div>
             </div>
         </header>
-    
+
         <?php if (Configure::read('debug')) : ?>
         <main class="main">
-            
+
             <div class="message default-cursor default text-center" >
                 <p>Atenção: a seção abaixo não irá aparecer se o modo debug estiver desligado.</p>
             </div>
@@ -155,7 +155,7 @@ $user_session = $this->request->getAttribute('identity');
                         <a href="./visitas">visitas</a> | <a href="./visitas/view/1">view</a> | <a href="./visitas/edit/1">edit</a> | <a href="./visitas/add">add</a><br />
                     </p>
 
-                    
+
                     <div class="row">
                         <div class="column">
                             <h4>Environment</h4>
@@ -165,13 +165,13 @@ $user_session = $this->request->getAttribute('identity');
                             <?php else : ?>
                                 <li class="bullet problem">Your version of PHP is too low. You need PHP 8.1.0 or higher to use CakePHP (detected <?= PHP_VERSION ?>).</li>
                             <?php endif; ?>
-    
+
                             <?php if (extension_loaded('mbstring')) : ?>
                                 <li class="bullet success">Your version of PHP has the mbstring extension loaded.</li>
                             <?php else : ?>
                                 <li class="bullet problem">Your version of PHP does NOT have the mbstring extension loaded.</li>
                             <?php endif; ?>
-    
+
                             <?php if (extension_loaded('openssl')) : ?>
                                 <li class="bullet success">Your version of PHP has the openssl extension loaded.</li>
                             <?php elseif (extension_loaded('mcrypt')) : ?>
@@ -179,13 +179,13 @@ $user_session = $this->request->getAttribute('identity');
                             <?php else : ?>
                                 <li class="bullet problem">Your version of PHP does NOT have the openssl or mcrypt extension loaded.</li>
                             <?php endif; ?>
-    
+
                             <?php if (extension_loaded('intl')) : ?>
                                 <li class="bullet success">Your version of PHP has the intl extension loaded.</li>
                             <?php else : ?>
                                 <li class="bullet problem">Your version of PHP does NOT have the intl extension loaded.</li>
                             <?php endif; ?>
-    
+
                             <?php if (ini_get('zend.assertions') !== '1') : ?>
                                 <li class="bullet problem">You should set <code>zend.assertions</code> to <code>1</code> in your <code>php.ini</code> for your development environment.</li>
                             <?php endif; ?>
@@ -199,13 +199,13 @@ $user_session = $this->request->getAttribute('identity');
                             <?php else : ?>
                                 <li class="bullet problem">Your tmp directory is NOT writable.</li>
                             <?php endif; ?>
-    
+
                             <?php if (is_writable(LOGS)) : ?>
                                 <li class="bullet success">Your logs directory is writable.</li>
                             <?php else : ?>
                                 <li class="bullet problem">Your logs directory is NOT writable.</li>
                             <?php endif; ?>
-    
+
                             <?php $settings = Cache::getConfig('_cake_core_'); ?>
                             <?php if (!empty($settings)) : ?>
                                 <li class="bullet success">The <em><?= h($settings['className']) ?></em> is being used for core caching. To change the config edit config/app.php</li>
