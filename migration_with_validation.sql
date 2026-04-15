@@ -328,6 +328,12 @@ main: BEGIN
     DECLARE hasTurno INT DEFAULT 0;
     DECLARE hasAlunonovoId INT DEFAULT 0;
     DECLARE hasAlunoIdInscricoes INT DEFAULT 0;
+    DECLARE hasProfDddTelefone INT DEFAULT 0;
+    DECLARE hasProfDddCelular INT DEFAULT 0;
+    DECLARE hasSupCodigoCelOld INT DEFAULT 0;
+    DECLARE hasSupCodigoTelOld INT DEFAULT 0;
+    DECLARE hasAlunoCodigoTelefone INT DEFAULT 0;
+    DECLARE hasAlunoCodigoCelular INT DEFAULT 0;
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
@@ -488,6 +494,7 @@ main: BEGIN
     CALL SafeRenameColumn('mural_estagios', 'formaSelecao', 'forma_selecao');
     CALL SafeRenameColumn('mural_estagios', 'localInscricao', 'local_inscricao');
     CALL SafeRenameColumn('mural_estagios', 'id_estagio', 'instituicao_id');
+    CALL SafeDropColumn('mural_estagios', 'area');
     CALL SafeDropColumn('mural_estagios', 'id_area');
     CALL SafeDropColumn('mural_estagios', 'datafax');
 
@@ -514,6 +521,8 @@ main: BEGIN
     SET @migration_step = 'professores';
     CALL SafeAddColumn('professores', 'cress', 'varchar(10) NULL');
     CALL SafeAddColumn('professores', 'regiao', 'varchar(2) NULL');
+    CALL SafeAddColumn('professores', 'user_id', 'int(11) NULL');
+
     CALL SafeDropColumn('professores', 'datanascimento');
     CALL SafeDropColumn('professores', 'localnascimento');
     CALL SafeDropColumn('professores', 'sexo');
@@ -536,16 +545,61 @@ main: BEGIN
     CALL SafeDropColumn('professores', 'regimetrabalho');
 
     CALL SafeModifyColumn('professores', 'cpf', 'varchar(15) NULL');
-    CALL SafeModifyColumn('professores', 'telefone', 'varchar(50) NULL');
-    CALL SafeModifyColumn('professores', 'celular', 'varchar(50) NULL');
+    CALL SafeModifyColumn('professores', 'telefone', 'varchar(15) NULL');
+    CALL SafeModifyColumn('professores', 'celular', 'varchar(15) NULL');
+
+    SET hasProfDddTelefone = (SELECT COUNT(*) FROM information_schema.COLUMNS
+                             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'professores' AND COLUMN_NAME = 'ddd_telefone');
+    IF hasProfDddTelefone > 0 THEN
+        UPDATE `professores`
+        SET `ddd_telefone` = NULL
+        WHERE TRIM(CAST(`ddd_telefone` AS CHAR)) = '';
+    END IF;
+
+    SET hasProfDddCelular = (SELECT COUNT(*) FROM information_schema.COLUMNS
+                             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'professores' AND COLUMN_NAME = 'ddd_celular');
+    IF hasProfDddCelular > 0 THEN
+        UPDATE `professores`
+        SET `ddd_celular` = NULL
+        WHERE TRIM(CAST(`ddd_celular` AS CHAR)) = '';
+    END IF;
+
     CALL SafeChangeColumn('professores', 'ddd_telefone', 'codigo_telefone', 'tinyint(2) NULL DEFAULT 21');
     CALL SafeChangeColumn('professores', 'ddd_celular', 'codigo_celular', 'tinyint(2) NULL DEFAULT 21');
 
-    UPDATE `professores` SET `telefone` = CONCAT('(', COALESCE(codigo_telefone, ''), ') ', COALESCE(telefone, ''))
-    WHERE codigo_telefone IS NOT NULL AND telefone IS NOT NULL;
+    -- Professores: Atualizar telefone
+    UPDATE `professores` 
+    SET `telefone` = CONCAT(
+        '(', 
+        LPAD(CAST(codigo_telefone AS CHAR), 2, '0'), 
+        ') ', 
+        LPAD(CAST(telefone AS CHAR), 
+            CASE WHEN LENGTH(CAST(telefone AS CHAR)) = 8 THEN 8 ELSE 9 END, 
+            '0')
+    )
+    WHERE codigo_telefone IS NOT NULL 
+    AND LENGTH(CAST(codigo_telefone AS CHAR)) = 2
+    AND telefone IS NOT NULL 
+    AND telefone != ''
+    AND LENGTH(CAST(telefone AS CHAR)) IN (8, 9)
+    AND CAST(telefone AS CHAR) REGEXP '^[0-9]+$';
 
-    UPDATE `professores` SET `celular` = CONCAT('(', COALESCE(codigo_celular, ''), ') ', COALESCE(celular, ''))
-    WHERE codigo_celular IS NOT NULL AND celular IS NOT NULL;
+    -- Professores: Atualizar celular
+    UPDATE `professores` 
+    SET `celular` = CONCAT(
+        '(', 
+        LPAD(CAST(codigo_celular AS CHAR), 2, '0'), 
+        ') ', 
+        LPAD(CAST(celular AS CHAR), 
+            CASE WHEN LENGTH(CAST(celular AS CHAR)) = 8 THEN 8 ELSE 9 END, 
+            '0')
+    )
+    WHERE codigo_celular IS NOT NULL 
+    AND LENGTH(CAST(codigo_celular AS CHAR)) = 2
+    AND celular IS NOT NULL 
+    AND celular != ''
+    AND LENGTH(CAST(celular AS CHAR)) IN (8, 9)
+    AND CAST(celular AS CHAR) REGEXP '^[0-9]+$';
 
     SET @migration_step = 'questionarios';
     CREATE TABLE IF NOT EXISTS `questionarios` (
@@ -590,9 +644,11 @@ main: BEGIN
 
     SET @migration_step = 'alunos';
     CALL SafeAddColumn('alunos', 'turno_id', 'smallint(3) NULL');
+    CALL SafeAddColumn('alunos', 'user_id', 'int(11) NULL');
+    
     CALL SafeModifyColumn('alunos', 'cpf', 'varchar(15) NULL');
-    CALL SafeModifyColumn('alunos', 'telefone', 'varchar(50) NULL');
-    CALL SafeModifyColumn('alunos', 'celular', 'varchar(50) NULL');
+    CALL SafeModifyColumn('alunos', 'telefone', 'varchar(15) NULL');
+    CALL SafeModifyColumn('alunos', 'celular', 'varchar(15) NULL');
 
     SET hasTurno = (SELECT COUNT(*) FROM information_schema.COLUMNS
                     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'alunos' AND COLUMN_NAME = 'turno');
@@ -602,13 +658,36 @@ main: BEGIN
         SET a.`turno_id` = t.`id`;
     END IF;
 
-    UPDATE `alunos`
-    SET `telefone` = CONCAT('(', COALESCE(codigo_telefone, ''), ') ', COALESCE(telefone, '')),
-        `celular` = CONCAT('(', COALESCE(codigo_celular, ''), ') ', COALESCE(celular, ''))
-    WHERE (codigo_telefone IS NOT NULL AND telefone IS NOT NULL)
-       OR (codigo_celular IS NOT NULL AND celular IS NOT NULL);
+    -- Atualiza telefone e celular de Alunos
+    SET hasAlunoCodigoTelefone = (SELECT COUNT(*) FROM information_schema.COLUMNS
+                                 WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'alunos' AND COLUMN_NAME = 'codigo_telefone');
+    IF hasAlunoCodigoTelefone > 0 THEN
+        UPDATE `alunos`
+        SET `telefone` = CONCAT('(', LPAD(codigo_telefone, 2, '0'), ') ', telefone)
+        WHERE codigo_telefone IS NOT NULL
+          AND codigo_telefone REGEXP '^[0-9]{2}$'
+          AND telefone IS NOT NULL
+          AND telefone != ''
+          AND LENGTH(telefone) IN (8, 9)
+          AND telefone NOT LIKE CONCAT('(', codigo_telefone, ')%');
+    END IF;
+
+    SET hasAlunoCodigoCelular = (SELECT COUNT(*) FROM information_schema.COLUMNS
+                                WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'alunos' AND COLUMN_NAME = 'codigo_celular');
+    IF hasAlunoCodigoCelular > 0 THEN
+        UPDATE `alunos`
+        SET `celular` = CONCAT('(', LPAD(codigo_celular, 2, '0'), ') ', celular)
+        WHERE codigo_celular IS NOT NULL
+          AND codigo_celular REGEXP '^[0-9]{2}$'
+          AND celular IS NOT NULL
+          AND celular != ''
+          AND LENGTH(celular) IN (8, 9)
+          AND celular NOT LIKE CONCAT('(', codigo_celular, ')%');
+    END IF;
 
     SET @migration_step = 'supervisores';
+    CALL SafeAddColumn('supervisores', 'user_id', 'int(11) NULL');
+
     CALL SafeDropColumn('supervisores', 'outros_estudos');
     CALL SafeDropColumn('supervisores', 'area_curso');
     CALL SafeDropColumn('supervisores', 'ano_curso');
@@ -620,19 +699,50 @@ main: BEGIN
     CALL SafeDropColumn('supervisores', 'cep');
 
     CALL SafeModifyColumn('supervisores', 'cpf', 'varchar(15) NULL');
-    CALL SafeModifyColumn('supervisores', 'telefone', 'varchar(50) NULL');
-    CALL SafeModifyColumn('supervisores', 'celular', 'varchar(50) NULL');
+    CALL SafeModifyColumn('supervisores', 'telefone', 'varchar(15) NULL');
+    CALL SafeModifyColumn('supervisores', 'celular', 'varchar(15) NULL');
     CALL SafeModifyColumn('supervisores', 'escola', 'varchar(70) NULL');
-    CALL SafeChangeColumn('supervisores', 'codigo_cel', 'codigo_celular', 'varchar(2) NOT NULL DEFAULT ''21''');
-    CALL SafeChangeColumn('supervisores', 'codigo_tel', 'codigo_telefone', 'varchar(2) NOT NULL DEFAULT ''21''');
+
+    SET hasSupCodigoCelOld = (SELECT COUNT(*) FROM information_schema.COLUMNS
+                             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'supervisores' AND COLUMN_NAME = 'codigo_cel');
+    IF hasSupCodigoCelOld > 0 THEN
+        UPDATE `supervisores`
+        SET `codigo_cel` = NULL
+        WHERE TRIM(CAST(`codigo_cel` AS CHAR)) = '';
+    END IF;
+
+    SET hasSupCodigoTelOld = (SELECT COUNT(*) FROM information_schema.COLUMNS
+                             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'supervisores' AND COLUMN_NAME = 'codigo_tel');
+    IF hasSupCodigoTelOld > 0 THEN
+        UPDATE `supervisores`
+        SET `codigo_tel` = NULL
+        WHERE TRIM(CAST(`codigo_tel` AS CHAR)) = '';
+    END IF;
+
+    CALL SafeChangeColumn('supervisores', 'codigo_cel', 'codigo_celular', 'tinyint(2) NULL DEFAULT 21');
+    CALL SafeChangeColumn('supervisores', 'codigo_tel', 'codigo_telefone', 'tinyint(2) NULL DEFAULT 21');
     CALL SafeChangeColumn('supervisores', 'ano_formatura', 'ano_formacao', 'smallint(4) NULL');
 
-    UPDATE `supervisores` SET `telefone` = CONCAT('(', COALESCE(codigo_telefone, ''), ') ', COALESCE(telefone, ''))
-    WHERE codigo_telefone IS NOT NULL AND telefone IS NOT NULL AND telefone NOT LIKE CONCAT('(', codigo_telefone, ')%');
+    -- Atualiza telefone e celular de Supervisores
+    UPDATE `supervisores` 
+    SET `telefone` = CONCAT('(', LPAD(codigo_telefone, 2, '0'), ') ', telefone)
+    WHERE codigo_telefone IS NOT NULL 
+    AND codigo_telefone REGEXP '^[0-9]{2}$'
+    AND telefone IS NOT NULL 
+    AND telefone != ''
+    AND LENGTH(telefone) IN (8, 9)
+    AND telefone NOT LIKE CONCAT('(', codigo_telefone, ')%');
 
-    UPDATE `supervisores` SET `celular` = CONCAT('(', COALESCE(codigo_celular, ''), ') ', COALESCE(celular, ''))
-    WHERE codigo_celular IS NOT NULL AND celular IS NOT NULL AND celular NOT LIKE CONCAT('(', codigo_celular, ')%');
+    UPDATE `supervisores` 
+    SET `celular` = CONCAT('(', LPAD(codigo_celular, 2, '0'), ') ', celular)
+    WHERE codigo_celular IS NOT NULL 
+    AND codigo_celular REGEXP '^[0-9]{2}$'
+    AND celular IS NOT NULL 
+    AND celular != ''
+    AND LENGTH(celular) IN (8, 9)
+    AND celular NOT LIKE CONCAT('(', codigo_celular, ')%');
 
+    -- Inst_super
     SET @migration_step = 'inst_super';
     CALL SafeRenameColumn('inst_super', 'id_supervisor', 'supervisor_id');
     CALL SafeRenameColumn('inst_super', 'id_instituicao', 'instituicao_id');
