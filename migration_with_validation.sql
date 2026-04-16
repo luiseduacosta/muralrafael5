@@ -645,7 +645,7 @@ main: BEGIN
     SET @migration_step = 'alunos';
     CALL SafeAddColumn('alunos', 'turno_id', 'smallint(3) NULL');
     CALL SafeAddColumn('alunos', 'user_id', 'int(11) NULL');
-    CALL SafeAddColumn('alunos', 'inscricao_count', 'int(11) NULL COMMENT 'Quantidade de inscrições do aluno');
+    CALL SafeAddColumn('alunos', 'inscricao_count', 'int(11) NULL COMMENT "Quantidade de inscrições do aluno"');
 
     CALL SafeModifyColumn('alunos', 'cpf', 'varchar(15) NULL');
     CALL SafeModifyColumn('alunos', 'telefone', 'varchar(15) NULL');
