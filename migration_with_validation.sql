@@ -503,7 +503,7 @@ main: BEGIN
       `id` smallint(3) NOT NULL AUTO_INCREMENT,
       `turno` varchar(70) DEFAULT NULL,
       PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     INSERT IGNORE INTO `turnos` (`turno`) VALUES ('diurno'), ('noturno'), ('integral'), ('outro');
 
     SET @migration_step = 'estagiarios';
@@ -612,7 +612,7 @@ main: BEGIN
       `category` varchar(100) NOT NULL,
       `target_user_type` varchar(50) NOT NULL,
       PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
     CREATE TABLE IF NOT EXISTS `questoes` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -625,7 +625,7 @@ main: BEGIN
       `ordem` int(11) NOT NULL,
       PRIMARY KEY (`id`),
       KEY `questionnaire_id` (`questionario_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
     CREATE TABLE IF NOT EXISTS `respostas` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -636,7 +636,7 @@ main: BEGIN
       `modified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
       PRIMARY KEY (`id`),
       KEY `estagiarios_id` (`estagiario_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
     SET @migration_step = 'visitas';
     CALL SafeRenameTable('visita', 'visitas');
@@ -768,6 +768,22 @@ main: BEGIN
 
     SET @migration_step = 'areas';
     CALL SafeRenameTable('area_instituicoes', 'areas');
+
+    SET @migration_step = 'impersonations';
+    CREATE TABLE IF NOT EXISTS `impersonations` (
+        `id` int(11) NOT NULL,
+        `admin_id` int(11) NOT NULL,
+        `impersonated_user_id` int(11) NOT NULL,
+        `started_at` timestamp NULL DEFAULT current_timestamp(),
+        `ended_at` timestamp NULL DEFAULT NULL,
+        `is_active` tinyint(1) DEFAULT 1,
+        PRIMARY KEY (`id`),
+        KEY `admin_id` (`admin_id`),
+        KEY `impersonated_user_id` (`impersonated_user_id`),
+        CONSTRAINT `impersonations_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `users` (`id`),
+        CONSTRAINT `impersonations_ibfk_2` FOREIGN KEY (`impersonated_user_id`) REFERENCES `users` (`id`),
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
     SET @migration_step = 'post_validation';
     SELECT '========================================' AS '';
@@ -1290,7 +1306,7 @@ FROM (
 
     UNION ALL
     SELECT 280 AS seq,
-           'CREATE TABLE `turnos` (`id` smallint(3) NOT NULL AUTO_INCREMENT, `turno` varchar(70) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;' AS ddl
+           'CREATE TABLE `turnos` (`id` smallint(3) NOT NULL AUTO_INCREMENT, `turno` varchar(70) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;' AS ddl
     WHERE NOT EXISTS (SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'turnos')
 
     UNION ALL
@@ -1556,17 +1572,17 @@ FROM (
 
     UNION ALL
     SELECT 640 AS seq,
-           'CREATE TABLE `questionarios` (`id` int(11) NOT NULL AUTO_INCREMENT, `title` varchar(255) NOT NULL, `description` text NOT NULL, `created` datetime NOT NULL, `modified` datetime NOT NULL, `is_active` tinyint(1) NOT NULL, `category` varchar(100) NOT NULL, `target_user_type` varchar(50) NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;' AS ddl
+           'CREATE TABLE `questionarios` (`id` int(11) NOT NULL AUTO_INCREMENT, `title` varchar(255) NOT NULL, `description` text NOT NULL, `created` datetime NOT NULL, `modified` datetime NOT NULL, `is_active` tinyint(1) NOT NULL, `category` varchar(100) NOT NULL, `target_user_type` varchar(50) NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;' AS ddl
     WHERE NOT EXISTS (SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'questionarios')
 
     UNION ALL
     SELECT 650 AS seq,
-           'CREATE TABLE `questoes` (`id` int(11) NOT NULL AUTO_INCREMENT, `questionario_id` int(11) NOT NULL, `text` text NOT NULL, `type` varchar(50) NOT NULL, `options` text NOT NULL, `created` timestamp NOT NULL DEFAULT current_timestamp(), `modified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(), `ordem` int(11) NOT NULL, PRIMARY KEY (`id`), KEY `questionnaire_id` (`questionario_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;' AS ddl
+           'CREATE TABLE `questoes` (`id` int(11) NOT NULL AUTO_INCREMENT, `questionario_id` int(11) NOT NULL, `text` text NOT NULL, `type` varchar(50) NOT NULL, `options` text NOT NULL, `created` timestamp NOT NULL DEFAULT current_timestamp(), `modified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(), `ordem` int(11) NOT NULL, PRIMARY KEY (`id`), KEY `questionnaire_id` (`questionario_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;' AS ddl
     WHERE NOT EXISTS (SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'questoes')
 
     UNION ALL
     SELECT 660 AS seq,
-           'CREATE TABLE `respostas` (`id` int(11) NOT NULL AUTO_INCREMENT, `questionario_id` int(11) NOT NULL, `estagiario_id` int(11) NOT NULL, `response` text NOT NULL, `created` timestamp NOT NULL DEFAULT current_timestamp(), `modified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(), PRIMARY KEY (`id`), KEY `estagiarios_id` (`estagiario_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;' AS ddl
+           'CREATE TABLE `respostas` (`id` int(11) NOT NULL AUTO_INCREMENT, `questionario_id` int(11) NOT NULL, `estagiario_id` int(11) NOT NULL, `response` text NOT NULL, `created` timestamp NOT NULL DEFAULT current_timestamp(), `modified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(), PRIMARY KEY (`id`), KEY `estagiarios_id` (`estagiario_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;' AS ddl
     WHERE NOT EXISTS (SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'respostas')
 
     UNION ALL

@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `turnos` (
   `id` smallint(3) NOT NULL AUTO_INCREMENT,
   `turno` varchar(70) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Turnos de estagiários.';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT 'Turnos de estagiários.';
 
 INSERT INTO `turnos` (`turno`) VALUES ('diurno'), ('noturno'), ('integral'), ('outro');
 
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `questionarios` (
   `category` varchar(100) NOT NULL COMMENT 'Categoria opcional para agrupar questionários (por exemplo, "Feedback de Aluno", "Avaliação de Curso")',
   `target_user_type` varchar(50) NOT NULL COMMENT 'Tipo de usuário alvo para o questionário',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Questionários.';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT 'Questionários.';
 
 -- Table Questões de avaliação
 CREATE TABLE IF NOT EXISTS `questoes` (
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `questoes` (
   `ordem` int(11) NOT NULL COMMENT 'The order in which the question should appear in the questionnaire',
   PRIMARY KEY (`id`),
   KEY `questionnaire_id` (`questionario_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Questões de avaliação.';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT 'Questões de avaliação.';
 
 -- Table Respostas às perguntas de avaliação
 CREATE TABLE IF NOT EXISTS `respostas` (
@@ -160,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `respostas` (
   `modified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Timestamp when the response was last modified',
   PRIMARY KEY (`id`),
   KEY `estagiarios_id` (`estagiario_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT 'Respostas às perguntas de avaliação. Substitui a tabela avaliacao.';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT 'Respostas às perguntas de avaliação. Substitui a tabela avaliacao.';
 
 -- Table VISITAS: Alter table visita
 ALTER TABLE IF EXISTS `visita` RENAME TO `visitas`;

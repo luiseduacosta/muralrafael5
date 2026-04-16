@@ -52,3 +52,51 @@ O input tem que ser definido como -> "type=>text"
 
 Ex. de DRE
 107379689
+
+// Change the collation of the database
+USE `ess_apps`;
+
+ALTER DATABASE `ess_apps`
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+DELIMITER //
+
+DROP PROCEDURE IF EXISTS ConvertEssAppsToUtf8mb4UnicodeCi//
+CREATE PROCEDURE ConvertEssAppsToUtf8mb4UnicodeCi()
+BEGIN
+  DECLARE done INT DEFAULT 0;
+  DECLARE tbl VARCHAR(256);
+
+  DECLARE cur CURSOR FOR
+    SELECT TABLE_NAME
+    FROM information_schema.TABLES
+    WHERE TABLE_SCHEMA = 'ess_apps'
+      AND TABLE_TYPE = 'BASE TABLE';
+
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+  OPEN cur;
+
+  read_loop: LOOP
+    FETCH cur INTO tbl;
+    IF done = 1 THEN
+      LEAVE read_loop;
+    END IF;
+
+    SET @sql = CONCAT(
+      'ALTER TABLE `', tbl, '` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
+    );
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+  END LOOP;
+
+  CLOSE cur;
+END//
+
+DELIMITER ;
+
+CALL ConvertEssAppsToUtf8mb4UnicodeCi();
+
+DROP PROCEDURE IF EXISTS ConvertEssAppsToUtf8mb4UnicodeCi;
