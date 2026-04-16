@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `alunos` (
   `estagiario_count` int(10) DEFAULT NULL,
   `inscricao_count` int(11) DEFAULT NULL,
   `user_id` int(11) NOT NULL COMMENT 'ID da tabela users',
+  `inscricao_count` int(11) DEFAULT NULL COMMENT 'Quantidade de inscrições do aluno',
   PRIMARY KEY (`id`),
   UNIQUE KEY `registro` (`registro`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Alunos.';
@@ -216,7 +217,6 @@ CREATE TABLE IF NOT EXISTS `inscricoes` (
   `data` timestamp default current_timestamp(),
   `periodo` char(6) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `alunonovo_id` int(11) DEFAULT NULL COMMENT 'ID de tabela de alunos novos. Obsoleto',
   `aluno_id` int(11) NOT NULL COMMENT 'Igual ao alunonovo_id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Inscrições de alunos para seleção de estágios.';
