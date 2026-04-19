@@ -413,6 +413,7 @@ main: BEGIN
     SET @migration_step = 'backup_insert';
     INSERT INTO migration_backup_20260414 (backup_info) VALUES ('Migration started at');
 
+    -- Alunos
     SET @migration_step = 'alunos';
     -- Only drop alunos and rename from alunosnovos if alunosnovos exists (migration scenario)
     IF EXISTS (SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'alunos')
@@ -470,122 +471,7 @@ main: BEGIN
               AND celular NOT LIKE CONCAT('(', codigo_celular, ')%');
     END IF;
 
-    SET @migration_step = 'users_add_columns';
-    CALL SafeAddColumn('users', 'nome', 'varchar(128) NOT NULL COMMENT ''Nome do usuário''');
-    CALL SafeAddColumn('users', 'role', 'enum(''admin'',''aluno'',''professor'',''supervisor'') NOT NULL DEFAULT ''aluno'' COMMENT ''roles''');
-    CALL SafeAddColumn('users', 'entidade_id', 'int(11) DEFAULT NULL COMMENT ''id da entidade''');
-    CALL SafeAddColumn('users', 'ativo', 'tinyint(1) DEFAULT 1');
-    CALL SafeAddColumn('users', 'criado_em', 'timestamp NOT NULL DEFAULT current_timestamp()');
-
-    SET @migration_step = 'users_rename_columns';
-    CALL SafeChangeColumn('users', 'numero', 'identificacao', 'int(9) DEFAULT NULL COMMENT ''Registro do aluno, SIAPE do professor ou CRESS do supervisor''');
-    CALL SafeChangeColumn('users', 'timestamp', 'atualizado_em', 'timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()');
-    CALL SafeChangeColumn('users', 'estudante_id', 'aluno_id', 'int(11) DEFAULT NULL');
-    CALL SafeChangeColumn('users', 'docente_id', 'professor_id', 'int(11) DEFAULT NULL');
-
-    SET @migration_step = 'users_update_roles';
-    SET hasCategoria = (SELECT COUNT(*) FROM information_schema.COLUMNS
-                       WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'categoria');
-    IF hasCategoria > 0 THEN
-        UPDATE `users` SET `role` = CASE `categoria`
-            WHEN '1' THEN 'admin'
-            WHEN '2' THEN 'aluno'
-            WHEN '3' THEN 'professor'
-            WHEN '4' THEN 'supervisor'
-            ELSE `role`
-        END WHERE `categoria` IN ('1', '2', '3', '4');
-    END IF;
-
-    SET @migration_step = 'users_update_entidade_id';
-    SET hasEntidadeId = (SELECT COUNT(*) FROM information_schema.COLUMNS
-                         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'entidade_id');
-    SET hasAlunoId = (SELECT COUNT(*) FROM information_schema.COLUMNS
-                      WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'aluno_id');
-    SET hasProfessorId = (SELECT COUNT(*) FROM information_schema.COLUMNS
-                          WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'professor_id');
-    SET hasSupervisorId = (SELECT COUNT(*) FROM information_schema.COLUMNS
-                           WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'supervisor_id');
-
-    IF hasEntidadeId > 0 AND hasAlunoId > 0 THEN
-        UPDATE `users` SET `entidade_id` = `aluno_id` WHERE `role` = 'aluno' AND `aluno_id` IS NOT NULL;
-    END IF;
-    IF hasEntidadeId > 0 AND hasProfessorId > 0 THEN
-        UPDATE `users` SET `entidade_id` = `professor_id` WHERE `role` = 'professor' AND `professor_id` IS NOT NULL;
-    END IF;
-    IF hasEntidadeId > 0 AND hasSupervisorId > 0 THEN
-        UPDATE `users` SET `entidade_id` = `supervisor_id` WHERE `role` = 'supervisor' AND `supervisor_id` IS NOT NULL;
-    END IF;
-
-    SET @migration_step = 'users_update_nome';
-    IF EXISTS (SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'alunos')
-       AND hasAlunoId > 0 THEN
-        UPDATE `users` u
-        JOIN `alunos` a ON u.`aluno_id` = a.`id`
-        SET u.`nome` = a.`nome`
-        WHERE u.`role` = 'aluno';
-    END IF;
-
-    IF EXISTS (SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'professores')
-       AND hasProfessorId > 0 THEN
-        UPDATE `users` u
-        JOIN `professores` p ON u.`professor_id` = p.`id`
-        SET u.`nome` = p.`nome`
-        WHERE u.`role` = 'professor';
-    END IF;
-
-    IF EXISTS (SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'supervisores')
-       AND hasSupervisorId > 0 THEN
-        UPDATE `users` u
-        JOIN `supervisores` s ON u.`supervisor_id` = s.`id`
-        SET u.`nome` = s.`nome`
-        WHERE u.`role` = 'supervisor';
-    END IF;
-
-    SET @migration_step = 'instituicoes';
-    CALL SafeRenameTable('estagio', 'instituicoes');
-    CALL SafeRenameColumn('instituicoes', 'area', 'area_id');
-    CALL SafeDropColumn('instituicoes', 'avaliacao');
-    CALL SafeDropColumn('instituicoes', 'localInscricao');
-    CALL SafeDropColumn('instituicoes', 'fax');
-
-    SET @migration_step = 'configuracoes';
-    CALL SafeRenameTable('configuracao', 'configuracoes');
-    CALL SafeAddColumn('configuracoes', 'instituicao', 'varchar(50) NOT NULL');
-
-    SET @migration_step = 'mural_estagios';
-    CALL SafeRenameTable('mural_estagio', 'mural_estagios');
-    CALL SafeRenameColumn('mural_estagios', 'dataSelecao', 'data_selecao');
-    CALL SafeRenameColumn('mural_estagios', 'cargaHoraria', 'carga_horaria');
-    CALL SafeRenameColumn('mural_estagios', 'dataInscricao', 'data_inscricao');
-    CALL SafeRenameColumn('mural_estagios', 'horarioSelecao', 'horario_selecao');
-    CALL SafeRenameColumn('mural_estagios', 'localSelecao', 'local_selecao');
-    CALL SafeRenameColumn('mural_estagios', 'formaSelecao', 'forma_selecao');
-    CALL SafeRenameColumn('mural_estagios', 'localInscricao', 'local_inscricao');
-    CALL SafeRenameColumn('mural_estagios', 'id_estagio', 'instituicao_id');
-    CALL SafeDropColumn('mural_estagios', 'area');
-    CALL SafeDropColumn('mural_estagios', 'id_area');
-    CALL SafeDropColumn('mural_estagios', 'datafax');
-
-    SET @migration_step = 'turnos';
-    CREATE TABLE IF NOT EXISTS `turnos` (
-      `id` smallint(3) NOT NULL AUTO_INCREMENT,
-      `turno` varchar(70) DEFAULT NULL,
-      PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    INSERT IGNORE INTO `turnos` (`turno`) VALUES ('diurno'), ('noturno'), ('integral'), ('outro');
-
-    SET @migration_step = 'estagiarios';
-    CALL SafeRenameColumn('estagiarios', 'alunonovo_id', 'aluno_id');
-    CALL SafeRenameColumn('estagiarios', 'id_instituicao', 'instituicao_id');
-    CALL SafeRenameColumn('estagiarios', 'id_supervisor', 'supervisor_id');
-    CALL SafeRenameColumn('estagiarios', 'id_professor', 'professor_id');
-    CALL SafeDropColumn('estagiarios', 'id_aluno');
-    CALL SafeDropColumn('estagiarios', 'id_area');
-    CALL SafeDropColumn('estagiarios', 'turno');
-
-    SET @migration_step = 'turma_estagios';
-    CALL SafeRenameTable('areas_estagio', 'turma_estagios');
-
+    -- Professores
     SET @migration_step = 'professores';
     CALL SafeAddColumn('professores', 'cress', 'varchar(10) NULL');
     CALL SafeAddColumn('professores', 'regiao', 'varchar(2) NULL');
@@ -665,47 +551,7 @@ main: BEGIN
           AND LENGTH(celular) IN (8, 9, 10)
           AND celular NOT LIKE CONCAT('(', codigo_celular, ')%');
 
-    SET @migration_step = 'questionarios';
-    CREATE TABLE IF NOT EXISTS `questionarios` (
-      `id` int(11) NOT NULL AUTO_INCREMENT,
-      `title` varchar(255) NOT NULL,
-      `description` text NOT NULL,
-      `created` datetime NOT NULL,
-      `modified` datetime NOT NULL,
-      `is_active` tinyint(1) NOT NULL,
-      `category` varchar(100) NOT NULL,
-      `target_user_type` varchar(50) NOT NULL,
-      PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-    CREATE TABLE IF NOT EXISTS `questoes` (
-      `id` int(11) NOT NULL AUTO_INCREMENT,
-      `questionario_id` int(11) NOT NULL,
-      `text` text NOT NULL,
-      `type` varchar(50) NOT NULL,
-      `options` text NOT NULL,
-      `created` timestamp NOT NULL DEFAULT current_timestamp(),
-      `modified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-      `ordem` int(11) NOT NULL,
-      PRIMARY KEY (`id`),
-      KEY `questionnaire_id` (`questionario_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-    CREATE TABLE IF NOT EXISTS `respostas` (
-      `id` int(11) NOT NULL AUTO_INCREMENT,
-      `questionario_id` int(11) NOT NULL,
-      `estagiario_id` int(11) NOT NULL,
-      `response` text NOT NULL,
-      `created` timestamp NOT NULL DEFAULT current_timestamp(),
-      `modified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-      PRIMARY KEY (`id`),
-      KEY `estagiarios_id` (`estagiario_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-    SET @migration_step = 'visitas';
-    CALL SafeRenameTable('visita', 'visitas');
-    CALL SafeChangeColumn('visitas', 'estagio_id', 'instituicao_id', 'int(11) NOT NULL');
-
+    -- Supervisores
     SET @migration_step = 'supervisores';
     CALL SafeAddColumn('supervisores', 'user_id', 'int(11) NULL');
 
@@ -760,11 +606,182 @@ main: BEGIN
 
     CALL SafeChangeColumn('supervisores', 'ano_formatura', 'ano_formacao', 'smallint(4) NULL');
 
+    -- Users
+    SET @migration_step = 'users';
+    SET @migration_step = 'users_add_columns';
+    CALL SafeAddColumn('users', 'nome', 'varchar(128) NOT NULL COMMENT ''Nome do usuário''');
+    CALL SafeAddColumn('users', 'role', 'enum(''admin'',''aluno'',''professor'',''supervisor'') NOT NULL DEFAULT ''aluno'' COMMENT ''roles''');
+    CALL SafeAddColumn('users', 'entidade_id', 'int(11) DEFAULT NULL COMMENT ''id da entidade''');
+    CALL SafeAddColumn('users', 'ativo', 'tinyint(1) DEFAULT 1');
+    CALL SafeAddColumn('users', 'criado_em', 'timestamp NOT NULL DEFAULT current_timestamp()');
+
+    SET @migration_step = 'users_rename_columns';
+    CALL SafeChangeColumn('users', 'numero', 'identificacao', 'int(9) DEFAULT NULL COMMENT ''Registro do aluno, SIAPE do professor ou CRESS do supervisor''');
+    CALL SafeChangeColumn('users', 'timestamp', 'atualizado_em', 'timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()');
+    CALL SafeChangeColumn('users', 'estudante_id', 'aluno_id', 'int(11) DEFAULT NULL');
+    CALL SafeChangeColumn('users', 'docente_id', 'professor_id', 'int(11) DEFAULT NULL');
+
+    SET @migration_step = 'users_update_roles';
+    SET hasCategoria = (SELECT COUNT(*) FROM information_schema.COLUMNS
+                       WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'categoria');
+    IF hasCategoria > 0 THEN
+        UPDATE `users` SET `role` = CASE `categoria`
+            WHEN '1' THEN 'admin'
+            WHEN '2' THEN 'aluno'
+            WHEN '3' THEN 'professor'
+            WHEN '4' THEN 'supervisor'
+            ELSE `role`
+        END WHERE `categoria` IN ('1', '2', '3', '4');
+    END IF;
+
+    SET @migration_step = 'users_update_entidade_id';
+    SET hasEntidadeId = (SELECT COUNT(*) FROM information_schema.COLUMNS
+                         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'entidade_id');
+    SET hasAlunoId = (SELECT COUNT(*) FROM information_schema.COLUMNS
+                      WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'aluno_id');
+    SET hasProfessorId = (SELECT COUNT(*) FROM information_schema.COLUMNS
+                          WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'professor_id');
+    SET hasSupervisorId = (SELECT COUNT(*) FROM information_schema.COLUMNS
+                           WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'supervisor_id');
+
+    IF hasEntidadeId > 0 AND hasAlunoId > 0 THEN
+        UPDATE `users` SET `entidade_id` = `aluno_id` WHERE `role` = 'aluno' AND `aluno_id` IS NOT NULL;
+    END IF;
+    IF hasEntidadeId > 0 AND hasProfessorId > 0 THEN
+        UPDATE `users` SET `entidade_id` = `professor_id` WHERE `role` = 'professor' AND `professor_id` IS NOT NULL;
+    END IF;
+    IF hasEntidadeId > 0 AND hasSupervisorId > 0 THEN
+        UPDATE `users` SET `entidade_id` = `supervisor_id` WHERE `role` = 'supervisor' AND `supervisor_id` IS NOT NULL;
+    END IF;
+
+    SET @migration_step = 'users_update_nome';
+    IF EXISTS (SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'alunos')
+       AND hasAlunoId > 0 THEN
+        UPDATE `users` u
+        JOIN `alunos` a ON u.`aluno_id` = a.`id`
+        SET u.`nome` = a.`nome`
+        WHERE u.`role` = 'aluno';
+    END IF;
+
+    IF EXISTS (SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'professores')
+       AND hasProfessorId > 0 THEN
+        UPDATE `users` u
+        JOIN `professores` p ON u.`professor_id` = p.`id`
+        SET u.`nome` = p.`nome`
+        WHERE u.`role` = 'professor';
+    END IF;
+
+    IF EXISTS (SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'supervisores')
+       AND hasSupervisorId > 0 THEN
+        UPDATE `users` u
+        JOIN `supervisores` s ON u.`supervisor_id` = s.`id`
+        SET u.`nome` = s.`nome`
+        WHERE u.`role` = 'supervisor';
+    END IF;
+
+    -- Instituicoes
+    SET @migration_step = 'instituicoes';
+    CALL SafeRenameTable('estagio', 'instituicoes');
+    CALL SafeRenameColumn('instituicoes', 'area', 'area_id');
+    CALL SafeModifyColumn('instituicoes', 'convenio', 'int(4) NULL');
+    CALL SafeDropColumn('instituicoes', 'avaliacao');
+    CALL SafeDropColumn('instituicoes', 'localInscricao');
+    CALL SafeDropColumn('instituicoes', 'fax');
+
     -- Inst_super
     SET @migration_step = 'inst_super';
     CALL SafeRenameColumn('inst_super', 'id_supervisor', 'supervisor_id');
     CALL SafeRenameColumn('inst_super', 'id_instituicao', 'instituicao_id');
 
+    -- Configuracoes
+    SET @migration_step = 'configuracoes';
+    CALL SafeRenameTable('configuracao', 'configuracoes');
+    CALL SafeAddColumn('configuracoes', 'instituicao', 'varchar(50) NOT NULL');
+
+    -- Mural_estagios
+    SET @migration_step = 'mural_estagios';
+    CALL SafeRenameTable('mural_estagio', 'mural_estagios');
+    CALL SafeRenameColumn('mural_estagios', 'dataSelecao', 'data_selecao');
+    CALL SafeRenameColumn('mural_estagios', 'cargaHoraria', 'carga_horaria');
+    CALL SafeRenameColumn('mural_estagios', 'dataInscricao', 'data_inscricao');
+    CALL SafeRenameColumn('mural_estagios', 'horarioSelecao', 'horario_selecao');
+    CALL SafeRenameColumn('mural_estagios', 'localSelecao', 'local_selecao');
+    CALL SafeRenameColumn('mural_estagios', 'formaSelecao', 'forma_selecao');
+    CALL SafeRenameColumn('mural_estagios', 'localInscricao', 'local_inscricao');
+    CALL SafeRenameColumn('mural_estagios', 'id_estagio', 'instituicao_id');
+    CALL SafeDropColumn('mural_estagios', 'area');
+    CALL SafeDropColumn('mural_estagios', 'id_area');
+    CALL SafeDropColumn('mural_estagios', 'datafax');
+
+    -- Turnos
+    SET @migration_step = 'turnos';
+    CREATE TABLE IF NOT EXISTS `turnos` (
+      `id` smallint(3) NOT NULL AUTO_INCREMENT,
+      `turno` varchar(70) DEFAULT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    -- INSERT IGNORE INTO `turnos` (`turno`) VALUES ('diurno'), ('noturno'), ('integral'), ('outro');
+
+    -- Estagiarios
+    SET @migration_step = 'estagiarios';
+    CALL SafeRenameColumn('estagiarios', 'alunonovo_id', 'aluno_id');
+    CALL SafeRenameColumn('estagiarios', 'id_instituicao', 'instituicao_id');
+    CALL SafeRenameColumn('estagiarios', 'id_supervisor', 'supervisor_id');
+    CALL SafeRenameColumn('estagiarios', 'id_professor', 'professor_id');
+    CALL SafeDropColumn('estagiarios', 'id_aluno');
+    CALL SafeDropColumn('estagiarios', 'id_area');
+    CALL SafeDropColumn('estagiarios', 'turno');
+
+    -- Turma_estagios
+    SET @migration_step = 'turma_estagios';
+    CALL SafeRenameTable('areas_estagio', 'turma_estagios');
+
+    -- Questionarios
+    SET @migration_step = 'questionarios';
+    CREATE TABLE IF NOT EXISTS `questionarios` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `title` varchar(255) NOT NULL,
+      `description` text NOT NULL,
+      `created` datetime NOT NULL,
+      `modified` datetime NOT NULL,
+      `is_active` tinyint(1) NOT NULL,
+      `category` varchar(100) NOT NULL,
+      `target_user_type` varchar(50) NOT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    -- Questoes
+    CREATE TABLE IF NOT EXISTS `questoes` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `questionario_id` int(11) NOT NULL,
+      `text` text NOT NULL,
+      `type` varchar(50) NOT NULL,
+      `options` text NOT NULL,
+      `created` timestamp NOT NULL DEFAULT current_timestamp(),
+      `modified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+      `ordem` int(11) NOT NULL,
+      PRIMARY KEY (`id`),
+      KEY `questionnaire_id` (`questionario_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    -- Respostas
+    CREATE TABLE IF NOT EXISTS `respostas` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `questionario_id` int(11) NOT NULL,
+      `estagiario_id` int(11) NOT NULL,
+      `response` text NOT NULL,
+      `created` timestamp NOT NULL DEFAULT current_timestamp(),
+      `modified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+      PRIMARY KEY (`id`),
+      KEY `estagiarios_id` (`estagiario_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    -- Visitas
+    SET @migration_step = 'visitas';
+    CALL SafeRenameTable('visita', 'visitas');
+    CALL SafeChangeColumn('visitas', 'estagio_id', 'instituicao_id', 'int(11) NOT NULL');
+
+    -- Inscricoes
     SET @migration_step = 'inscricoes';
     CALL SafeRenameTable('mural_inscricao', 'inscricoes');
     CALL SafeRenameColumn('inscricoes', 'id_aluno', 'registro');
@@ -781,9 +798,11 @@ main: BEGIN
     END IF;
     CALL SafeDropColumn('inscricoes', 'alunonovo_id');
 
+    -- Areas
     SET @migration_step = 'areas';
     CALL SafeRenameTable('area_instituicoes', 'areas');
 
+    -- Impersonations
     SET @migration_step = 'impersonations';
     CREATE TABLE IF NOT EXISTS `impersonations` (
         `id` int(11) NOT NULL,
@@ -798,7 +817,6 @@ main: BEGIN
         CONSTRAINT `impersonations_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `users` (`id`),
         CONSTRAINT `impersonations_ibfk_2` FOREIGN KEY (`impersonated_user_id`) REFERENCES `users` (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 
     SET @migration_step = 'post_validation';
     SELECT '========================================' AS '';
