@@ -720,7 +720,12 @@ main: BEGIN
       `turno` varchar(70) DEFAULT NULL,
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    -- INSERT IGNORE INTO `turnos` (`turno`) VALUES ('diurno'), ('noturno'), ('integral'), ('outro');
+    -- INSERT IGNORE INTO `turnos` (`id`, `turno`) VALUES (1, 'diurno'), (2, 'noturno'), (3, 'integral'), (4, 'outro');
+
+    -- Turmas
+    SET @migration_step = 'turmas';
+    CALL SafeRenameTable('turma_estagios', 'turmas');
+    CALL SafeRenameColumn('turmas', 'turam', 'turma');
 
     -- Estagiarios
     SET @migration_step = 'estagiarios';
