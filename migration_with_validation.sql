@@ -807,6 +807,16 @@ main: BEGIN
     SET @migration_step = 'areas';
     CALL SafeRenameTable('area_instituicoes', 'areas');
 
+    -- Administradores
+    SET @migration_step = 'administradores';
+    CREATE TABLE IF NOT EXISTS `administradores` (
+      `id` INT(11) NOT NULL AUTO_INCREMENT,
+      `nome` VARCHAR(128) NOT NULL,
+      `user_id` INT(11) NULL DEFAULT NULL,
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `user_id` (`user_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
     -- Impersonations
     SET @migration_step = 'impersonations';
     CREATE TABLE IF NOT EXISTS `impersonations` (
