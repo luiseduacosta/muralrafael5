@@ -17,7 +17,7 @@ DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
     'password': 'root',
-    'database': 'mural5'
+    'database': 'ess_apps'
 }
 
 
@@ -37,7 +37,7 @@ def print_record(record: dict, index: int) -> None:
 def generate_report() -> None:
     """Generate the complete report for estagiarios table."""
     print(f"\nReport generated at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("Database: mural5")
+    print("Database: ess_apps")
     print("Table: estagiarios")
 
     try:
