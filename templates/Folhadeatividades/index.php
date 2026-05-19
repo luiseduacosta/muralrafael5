@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Folhadeatividade> $folhadeatividades
+ * @var iterable<\App\Model\Entity\Folhadeatividade> $folhadeatividades
  */
 declare(strict_types=1);
 

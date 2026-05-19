@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Avaliacao> $avaliacoes
+ * @var iterable<\App\Model\Entity\Avaliacao> $avaliacoes
  */
 
 $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];

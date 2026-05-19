@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Turma> $turmas
+ * @var iterable<\App\Model\Entity\Turma> $turmas
  */
 ?>
 <div class="turmas index content">

@@ -2,7 +2,7 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Avaliacao $avaliacao
- * @var \Cake\Collection\CollectionInterface|array<string> $estagiarios
+ * @var iterable<string> $estagiarios
  */
 declare(strict_types=1);
 

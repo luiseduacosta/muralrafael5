@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \Cake\Collection\CollectionInterface|array<\App\Model\Entity\Estagiario> $estagiarios
+ * @var iterable<\App\Model\Entity\Estagiario> $estagiarios
  */
 
 declare(strict_types=1);
