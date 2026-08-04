@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-$user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0, 'categoria' => '0'];
+$user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
 $user_session = $this->request->getAttribute('identity');
 if ($user_session) {
     $user_data = $user_session->getOriginalData();
@@ -17,7 +17,7 @@ if ($user_session) {
             <aside>
                 <div class="nav">
                     <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
-                    <?php if ($user_data['administrador_id']) : ?>
+                    <?php if ($user_data['administrador_id'] || $this->request->getSession()->check('Auth.impersonating')) : ?>
                         <?= $this->Form->postLink(__('Excluir Aluno(a)'), ['action' => 'delete', $aluno->id], ['confirm' => __('Are you sure you want to delete {0}?', $aluno->nome), 'class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Novo Aluno(a)'), ['action' => 'add'], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Listar Alunos(as)'), ['action' => 'index'], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>

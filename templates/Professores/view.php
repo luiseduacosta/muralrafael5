@@ -26,7 +26,7 @@ $departamentos = [
                 <div class="nav">
                     <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                     <?= $this->Html->link(__('Listar Professores'), ['action' => 'index'], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
-                    <?php if ($user_data['administrador_id']) : ?>
+                    <?php if ($user_data['administrador_id'] || $this->request->getSession()->check('Auth.impersonating')) : ?>
                         <?= $this->Html->link(__('Editar Professor(a)'), ['action' => 'edit', $professor->id], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Form->postLink(__('Excluir Professor(a)'), ['action' => 'delete', $professor->id], ['confirm' => __('Are you sure you want to delete {0}?', $professor->nome), 'class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
                         <?= $this->Html->link(__('Novo(a) Professor(a)'), ['action' => 'add'], ['class' => 'button mb-1' , 'style' => 'width: 20%;']) ?>
@@ -279,14 +279,14 @@ $departamentos = [
                                 <?php endif; ?>
                             </td>
                             <td><?= h($estagiario->id) ?></td>
-                            <td><?= $estagiario->aluno ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
+                            <td><?= (!empty($estagiario->aluno) && !empty($estagiario->aluno->nome)) ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
                             <td><?= h($estagiario->registro) ?></td>
                             <td style="min-width: 80px; max-width: 120px;"><?= h($estagiario->aluno->turno->turno ?? '') ?></td>
                             <td><?= h($estagiario->nivel) ?></td>
                             <td><?= $estagiario->tc ='1' ? 'Sim' : 'Não' ?></td>
                             <td><?= $estagiario->tc_solicitacao ? $estagiario->tc_solicitacao->format('d/m/Y') : '' ?></td>
-                            <td><?= $estagiario->instituicao ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario->instituicao->id]) : '' ?></td>
-                            <td><?= $estagiario->supervisor ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
+                            <td><?= (!empty($estagiario->instituicao) && !empty($estagiario->instituicao->instituicao)) ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario->instituicao->id]) : '' ?></td>
+                            <td><?= (!empty($estagiario->supervisor) && !empty($estagiario->supervisor->nome)) ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
                             <td><?= h($estagiario->periodo) ?></td>
                             <td><?= h($estagiario->nota) ?></td>
                             <td><?= h($estagiario->ch) ?></td>

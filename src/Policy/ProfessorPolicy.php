@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Policy;
@@ -22,7 +23,7 @@ final class ProfessorPolicy implements BeforePolicyInterface
         if ($identity) {
             $user_data = $identity->getOriginalData();
 
-            if ($user_data && $user_data['administrador_id']) {
+            if ($user_data && !empty($user_data['administrador_id'])) {
                 return true;
             }
         }
@@ -75,6 +76,14 @@ final class ProfessorPolicy implements BeforePolicyInterface
      */
     protected function sameUser(IdentityInterface $userSession, Professor $professorData): bool
     {
-        return $userSession->id === $professorData->user_id;
+        if ($userSession->entidade_id !== null && (int)$userSession->entidade_id === (int)$professorData->id) {
+            return true;
+        }
+
+        $userData = $userSession->getOriginalData();
+        $professorId = $userData['professor_id'] ?? null;
+
+        return ((int)$userSession->id === (int)$professorData->user_id)
+            || ($professorId && (int)$professorId === (int)$professorData->id);
     }
 }

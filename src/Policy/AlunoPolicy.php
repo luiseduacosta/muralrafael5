@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Policy;
@@ -25,9 +26,9 @@ final class AlunoPolicy implements BeforePolicyInterface
             if (
                 $user_data
                 && (
-                    $user_data['administrador_id']
-                    || $user_data['professor_id']
-                    || $user_data['supervisor_id']
+                    !empty($user_data['administrador_id'])
+                    || !empty($user_data['professor_id'])
+                    || !empty($user_data['supervisor_id'])
                 )
             ) {
                 return true;
@@ -44,17 +45,26 @@ final class AlunoPolicy implements BeforePolicyInterface
      */
     public function canView(IdentityInterface $userSession, Aluno $alunoData): Result
     {
+        $userData = $userSession->getOriginalData();
+        $categoria = $userData['categoria'] ?? null;
+        $supervisorId = $userData['supervisor_id'] ?? null;
+        $professorId = $userData['professor_id'] ?? null;
+
         // Supervisor pode ver alunos estagiarios
-        if ($userSession->getOriginalData()['categoria'] == '4') {
-            if ($alunoData->estagiarios->supervisores->id == $userSession->getOriginalData()['supervisor_id']) {
-                return new Result(true);
+        if ($categoria == '4' && $supervisorId && !empty($alunoData->estagiarios)) {
+            foreach ($alunoData->estagiarios as $estagiario) {
+                if (isset($estagiario->supervisor_id) && $estagiario->supervisor_id == $supervisorId) {
+                    return new Result(true);
+                }
             }
         }
 
         // Professor pode ver alunos estagiarios
-        if ($userSession->getOriginalData()['categoria'] == '3') {
-            if ($alunoData->estagiarios->professores->id == $userSession->getOriginalData()['professor_id']) {
-                return new Result(true);
+        if ($categoria == '3' && $professorId && !empty($alunoData->estagiarios)) {
+            foreach ($alunoData->estagiarios as $estagiario) {
+                if (isset($estagiario->professor_id) && $estagiario->professor_id == $professorId) {
+                    return new Result(true);
+                }
             }
         }
 
@@ -110,12 +120,21 @@ final class AlunoPolicy implements BeforePolicyInterface
     }
 
     /**
-     * @param \Authorization\IdentityInterface $userSession
-     * @param \App\Model\Entity\Aluno $alunoData
+     * Check if the identity user owns the Aluno resource.
+     *
+     * Primary: user.entidade_id (unified entity ID) matches Aluno.id.
+     * Fallback: user.id matches Aluno.user_id (for legacy records).
+     *
+     * @param \Authorization\IdentityInterface $userSession The logged-in identity (User entity).
+     * @param \App\Model\Entity\Aluno $alunoData The Aluno resource being authorized.
      * @return bool
      */
     protected function sameUser(IdentityInterface $userSession, Aluno $alunoData): bool
     {
+        if ($userSession->entidade_id !== null && (int)$userSession->entidade_id === (int)$alunoData->id) {
+            return true;
+        }
+
         return $userSession->id === $alunoData->user_id;
     }
 }

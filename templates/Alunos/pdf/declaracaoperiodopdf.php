@@ -16,9 +16,9 @@ $dia = $hoje->i18nFormat('d');
 $mes = $hoje->i18nFormat('MMMM');
 $ano = $hoje->i18nFormat('Y');
 
-if ($aluno->turno && $aluno->turno->turno == 'diurno') {
+if ($aluno->Turno && $aluno->Turno->turno == 'diurno') {
     $duracaocurso = '8';
-} elseif ($aluno->turno && $aluno->turno->turno == 'noturno') {
+} elseif ($aluno->Turno && $aluno->Turno->turno == 'noturno') {
     $duracaocurso = '10';
 }
 
@@ -40,12 +40,12 @@ $this->assign('title', 'Certificado de Período');
     expedido por <?= h($aluno->orgao) ?>, 
     matriculado(a) no Curso de Serviço Social da 
     Universidade Federal do Rio de Janeiro com o número <?= h($aluno->registro) ?>, 
-    ingressou em <?= h($aluno->ingresso) ?> no turno <?= ucfirst(h($aluno->turno->turno ?? '')) ?>
+    ingressou em <?= h($aluno->ingresso) ?> no turno <?= ucfirst(h($aluno->Turno->turno ?? '')) ?>
     cursando atualmente <?= $totalperiodos ?><sup>o</sup> período.
 </p>
 
 <p style="text-align:justify; line-height: 2.5;">
-    O turno <?= ucfirst(h($aluno->turno->turno ?? '')) ?> do curso de Serviço Social consta de <?= ($aluno->turno && $aluno->turno->turno == 'diurno') ? '8' : '10' ?> semestres.
+    O turno <?= ucfirst(h($aluno->Turno->turno ?? '')) ?> do curso de Serviço Social consta de <?= ($aluno->Turno && $aluno->Turno->turno == 'diurno') ? '8' : '10' ?> semestres.
 </p>
 <br />
 <br />

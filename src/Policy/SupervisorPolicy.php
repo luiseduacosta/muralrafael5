@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Policy;
@@ -22,7 +23,7 @@ final class SupervisorPolicy implements BeforePolicyInterface
         if ($identity) {
             $user_data = $identity->getOriginalData();
 
-            if ($user_data && $user_data['administrador_id']) {
+            if ($user_data && !empty($user_data['administrador_id'])) {
                 return true;
             }
         }
@@ -48,7 +49,7 @@ final class SupervisorPolicy implements BeforePolicyInterface
 
     /**
      * @param \Authorization\IdentityInterface $userSession
-     * @param \App\Model\Entity\Supervisor $userData
+     * @param \App\Model\Entity\Supervisor $supervisorData
      * @return \Authorization\Policy\Result
      */
     public function canEdit(IdentityInterface $userSession, Supervisor $supervisorData): Result
@@ -75,6 +76,14 @@ final class SupervisorPolicy implements BeforePolicyInterface
      */
     protected function sameUser(IdentityInterface $userSession, Supervisor $supervisorData): bool
     {
-        return $userSession->id === $supervisorData->user_id;
+        if ($userSession->entidade_id !== null && (int)$userSession->entidade_id === (int)$supervisorData->id) {
+            return true;
+        }
+
+        $userData = $userSession->getOriginalData();
+        $supervisorId = $userData['supervisor_id'] ?? null;
+
+        return ((int)$userSession->id === (int)$supervisorData->user_id)
+            || ($supervisorId && (int)$supervisorId === (int)$supervisorData->id);
     }
 }

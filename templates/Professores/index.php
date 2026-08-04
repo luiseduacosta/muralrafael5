@@ -70,7 +70,7 @@ $departamentos = [
                         <?php endif; ?>
                      </td>
                     <td><?= $this->Html->link((string)$professor->id, ['action' => 'view', $professor->id]) ?></td>
-                    <td><?= $this->Html->link(h($professor->nome), ['action' => 'view', $professor->id]) ?></td>
+                    <td><?= $this->Html->link(h($professor->nome ?? 'Não informado'), ['action' => 'view', $professor->id]) ?></td>
                     <td><?= (string)$professor->siape ? $professor->siape : 'S/d' ?></td>
 
                     <td>

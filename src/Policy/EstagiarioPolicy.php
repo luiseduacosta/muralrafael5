@@ -143,6 +143,6 @@ final class EstagiarioPolicy implements BeforePolicyInterface
      */
     protected function sameUser(IdentityInterface $userSession, Estagiario $estagiarioData): bool
     {
-        return $userSession->id === $estagiarioData->aluno->user_id;
+        return $userSession->entidade_id === $estagiarioData->aluno->id;
     }
 }

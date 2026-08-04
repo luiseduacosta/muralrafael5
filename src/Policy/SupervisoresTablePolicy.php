@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Policy;
@@ -7,7 +8,6 @@ use Authorization\IdentityInterface;
 use Authorization\Policy\BeforePolicyInterface;
 use Authorization\Policy\Result;
 use Authorization\Policy\ResultInterface;
-
 final class SupervisoresTablePolicy implements BeforePolicyInterface
 {
     /**
@@ -21,7 +21,7 @@ final class SupervisoresTablePolicy implements BeforePolicyInterface
         if ($identity) {
             $user_data = $identity->getOriginalData();
 
-            if ($user_data && $user_data['administrador_id']) {
+            if ($user_data && !empty($user_data['administrador_id'])) {
                 return true;
             }
         }

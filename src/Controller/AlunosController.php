@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -213,7 +214,7 @@ class AlunosController extends AppController
         try {
             $this->Authorization->authorize($aluno);
             if ($this->Alunos->delete($aluno)) {
-                $this->Flash->success(__('O aluno foi deletado com sucesso.'));
+                $this->Flash->success(__('O aluno foi excluído com sucesso.'));
             } else {
                 $this->Flash->error(__('Erro ao Excluir: Não foi possível Excluir o aluno.'));
             }
@@ -330,7 +331,7 @@ class AlunosController extends AppController
         $turnos = $this->Alunos->Turnos->find('list', limit: 200)->all();
 
         // Incomplete field ingresso on record of alunos
-        if (strlen($aluno->ingresso) < 6) {
+        if (empty($aluno->ingresso) || strlen((string)$aluno->ingresso) < 6) {
             $this->Flash->error(__('Período de ingresso incompleto.'));
 
             return $this->redirect(['action' => 'view', $id]);

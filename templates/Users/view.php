@@ -11,7 +11,6 @@ $user_session = $this->request->getAttribute('identity');
 if ($user_session) {
     $user_data = $user_session->getOriginalData();
 }
-
 ?>
 <div>
     <div class="column-responsive column-80">
@@ -21,7 +20,7 @@ if ($user_session) {
                     <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
                     <?= $this->Html->link(__('Editar Email'), ['action' => 'edit', $user->id], ['class' => 'button']) ?>
                     <?= $this->Html->link(__('Editar Senha'), ['action' => 'editpassword', $user->id], ['class' => 'button']) ?> 
-                    <?php if ($user_data['administrador_id']) : ?>
+                    <?php if ($user_data['administrador_id'] || $this->request->getSession()->check('Auth.impersonating')) : ?>
                         <?= $this->Html->link(__('Listar Usuários'), ['action' => 'index'], ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Excluir Usuário'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete {0}?', $user->email), 'class' => 'button']) ?>
                         <?= $this->Html->link(__('Novo Usuário'), ['action' => 'add'], ['class' => 'button']) ?>
@@ -44,16 +43,22 @@ if ($user_session) {
                     <td><?= $user->email ? $this->Text->autoLinkEmails($user->email) : '' ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Registro (DRE, Siape ou CRESS)') ?></th>
-                    <td><?= h($user->numero) ?></td>
+                    <th><?= __('Registro (DRE, SIAPE ou CRESS)') ?></th>
+                    <?php if ($user->categoria == '2') : ?>
+                        <td><?= $this->Html->link((string)$user->identificacao, ['controller' => 'Alunos', 'action' => 'view', $user->entidade_id]) ?></td>
+                    <?php elseif ($user->categoria == '3') : ?>
+                        <td><?= $this->Html->link((string)$user->identificacao, ['controller' => 'Professores', 'action' => 'view', $user->entidade_id]) ?></td>
+                    <?php elseif ($user->categoria == '4') : ?>
+                        <td><?= $this->Html->link((string)$user->identificacao, ['controller' => 'Supervisores', 'action' => 'view', $user->entidade_id]) ?></td>
+                    <?php endif; ?>
                 </tr>
                 <tr>
                     <th><?= __('Criado') ?></th>
-                    <td><?= h($user->timestamp?->format('d/m/Y H:i:s')) ?></td>
+                    <td><?= h($user->criado_em?->format('d/m/Y H:i:s')) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Modificado') ?></th>
-                    <td><?= h($user->modified?->format('d/m/Y H:i:s')) ?></td>
+                    <td><?= h($user->atualizado_em?->format('d/m/Y H:i:s')) ?></td>
                 </tr>
             </table>
 
@@ -80,7 +85,7 @@ if ($user_session) {
             </div>
             <?php endif; ?>
             
-            <?php if (($user->categoria == '2' && $user_data['aluno_id'] == $user->id)) : ?>
+            <?php if ($user->categoria == '2' && !empty($user->aluno->id)) : ?>
             <div class="related">
                 <h4><?= __('Aluno') ?></h4>
                 <div class="table_wrap">
@@ -100,7 +105,7 @@ if ($user_session) {
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'alunos', 'action' => 'view', $user->aluno->id]) ?>
                                 <?= $this->Html->link(__('Editar'), ['controller' => 'alunos', 'action' => 'edit', $user->aluno->id]) ?>
-                                <?php if ($user_data['administrador_id']) : ?>
+                                <?php if ($user_data['administrador_id'] || $this->request->getSession()->check('Auth.impersonating')) : ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'alunos', 'action' => 'delete', $user->aluno->id], ['confirm' => __('Are you sure you want to delete aluno_{0}?', $user->aluno->id)]) ?>
                                 <?php endif; ?>
                             </td>
@@ -179,7 +184,7 @@ if ($user_session) {
                             <td class="actions">
                                 <?= $this->Html->link(__('Ver'), ['controller' => 'supervisores', 'action' => 'view', $user->supervisor->id]) ?>
                                 <?= $this->Html->link(__('Editar'), ['controller' => 'supervisores', 'action' => 'edit', $user->supervisor->id]) ?>
-                                <?php if ($user_data['administrador_id']) : ?>
+                                <?php if ($user_data['administrador_id'] || $this->request->getSession()->check('Auth.impersonating')) : ?>
                                     <?= $this->Form->postLink(__('Excluir'), ['controller' => 'supervisores', 'action' => 'delete', $user->supervisor->id], ['confirm' => __('Are you sure you want to delete supervisor_{0}?', $user->supervisor->id)]) ?>
                                 <?php endif; ?>
                             </td>

@@ -429,7 +429,7 @@ class UsersController extends AppController
         $user_data = $identity->getOriginalData();
 
         // Only administrators can impersonate
-        if ($user_data['categoria'] !== '1' && !$this->request->getSession()->check('Auth.impersonating')) {
+        if ($user_data['categoria'] !== '1') {
             $this->Flash->error(__('Acesso negado. Apenas administradores podem alternar usuários.'));
 
             return $this->redirect(['action' => 'index']);
@@ -450,12 +450,10 @@ class UsersController extends AppController
             return $this->redirect('/');
         } else {
             // Stop impersonating if no ID is provided and we are currently impersonating
-            if ($this->request->getSession()->check('Auth.impersonating')) {
-                $originalId = $this->request->getSession()->read('Auth.impersonating');
-                $originalUser = $this->Users->get($originalId);
-
-                $this->Authentication->impersonate($originalUser);
+            if ($this->Authentication->isImpersonating()) {
+                // Clean up the custom impersonation tracking key before stopping
                 $this->request->getSession()->delete('Auth.impersonating');
+                $this->Authentication->stopImpersonating();
 
                 $this->Flash->success(__('Identidade restaurada para administrador.'));
 

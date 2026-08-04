@@ -15,7 +15,7 @@ if ($user_session) {
             <aside>
                 <div class="nav">
                     <?= $this->Html->link(__('Voltar'), 'javascript:history.back()', ['class' => 'button']) ?>
-                    <?php if ($user_data['administrador_id']) : ?>
+                    <?php if ($user_data['administrador_id'] || $this->request->getSession()->check('Auth.impersonating')) : ?>
                         <?= $this->Html->link(__('Listar Supervisores'), ['action' => 'index'], ['class' => 'button']) ?>
                         <?= $this->Html->link(__('Editar Supervisor(a)'), ['action' => 'edit', $supervisor->id], ['class' => 'button']) ?>
                         <?= $this->Form->postLink(__('Excluir Supervisor(a)'), ['action' => 'delete', $supervisor->id], ['confirm' => __('Are you sure you want to delete {0}?', $supervisor->nome), 'class' => 'button']) ?>
@@ -188,11 +188,11 @@ if ($user_session) {
                                         <?php endif; ?>
                                     </td>
                                     <td><?= h($instituicao->id) ?></td>
-                                    <td><?= $this->Html->link($instituicao->instituicao, ['controller' => 'instituicoes', 'action' => 'view', $instituicao->id]) ?></td>
-                                    <td><?= $instituicao->area ? $this->Html->link(h($instituicao->area->area), ['controller' => 'Areas', 'action' => 'view', $instituicao->area->id]) : '' ?></td>
+                                    <td><?= (!empty($instituicao->instituicao)) ? $this->Html->link($instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $instituicao->id]) : '' ?></td>
+                                    <td><?= (!empty($instituicao->area) && !empty($instituicao->area->area)) ? $this->Html->link(h($instituicao->area->area), ['controller' => 'Areas', 'action' => 'view', $instituicao->area->id]) : '' ?></td>
                                     <td><?= h($instituicao->natureza) ?></td>
                                     <td><?= h($instituicao->cnpj) ?></td>
-                                    <td><?= $this->Text->autoLinkEmails($instituicao->email) ?></td>
+                                    <td><?= $instituicao->email ? $this->Text->autoLinkEmails($instituicao->email) : '' ?></td>
                                     <td><?= $instituicao->url ? $this->Html->link($instituicao->url) : '' ?></td>
                                     <td><?= h($instituicao->convenio) == '1' ? __('Sim') : __('Não') ?></td>
                                 </tr>
@@ -233,15 +233,15 @@ if ($user_session) {
                                     <?php endif; ?>
                                 </td>
                                 <td><?= h($estagiario->id) ?></td>
-                                <td><?= $estagiario->aluno ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
+                                <td><?= (!empty($estagiario->aluno) && !empty($estagiario->aluno->nome)) ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
                                 <td><?= h($estagiario->registro) ?></td>
                                 <td><?= empty($estagiario->aluno->turno) ? __('N/A') : h($estagiario->aluno->turno->turno) ?></td>
                                 <td><?= h($estagiario->nivel) ?></td>
                                 <td><?= h($estagiario->tc_assinado) == '1' ? __('Sim') : __('Não') ?></td>
                                 <td><?= $estagiario->tc_solicitacao ? $estagiario->tc_solicitacao->format('d/m/Y') : '' ?></td>
-                                <td><?= $estagiario->instituicao ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario->instituicao->id]) : '' ?></td>
-                                <td><?= ($estagiario->supervisor and $estagiario->supervisor->nome) ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
-                                <td><?= $estagiario->professor ? $this->Html->link($estagiario->professor->nome, ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id]) : '' ?></td>
+                                <td><?= (!empty($estagiario->instituicao) && !empty($estagiario->instituicao->instituicao)) ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario->instituicao->id]) : '' ?></td>
+                                <td><?= (!empty($estagiario->supervisor) && !empty($estagiario->supervisor->nome)) ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>
+                                <td><?= (!empty($estagiario->professor) && !empty($estagiario->professor->nome)) ? $this->Html->link($estagiario->professor->nome, ['controller' => 'Professores', 'action' => 'view', $estagiario->professor->id]) : '' ?></td>
                                 <td><?= h($estagiario->periodo) ?></td>
                                 <td><?= $estagiario->nota ? $this->Number->format($estagiario->nota) : '' ?></td>
                                 <td><?= $estagiario->ch ? $this->Number->format($estagiario->ch) : '' ?></td>

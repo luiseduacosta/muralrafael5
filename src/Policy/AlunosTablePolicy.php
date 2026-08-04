@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Policy;
@@ -9,7 +10,6 @@ use Authorization\Policy\BeforePolicyInterface;
 use Authorization\Policy\Result;
 use Authorization\Policy\ResultInterface;
 use Cake\ORM\Query;
-
 final class AlunosTablePolicy implements BeforePolicyInterface
 {
     /**
@@ -26,7 +26,8 @@ final class AlunosTablePolicy implements BeforePolicyInterface
             if (
                 $user_data
                 && (
-                    $user_data['administrador_id'] || $user_data['professor_id']
+                    !empty($user_data['administrador_id'])
+                    || !empty($user_data['professor_id'])
                 )
             ) {
                 return true;

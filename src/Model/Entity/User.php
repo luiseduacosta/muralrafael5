@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Entity;
@@ -103,6 +104,8 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
         $this->aluno_id = false;
         if (!empty($aluno)) {
             $this->aluno_id = $aluno->id;
+        } elseif ($this->categoria == 2 && !empty($this->entidade_id)) {
+            $this->aluno_id = $this->entidade_id;
         }
 
         $professores = TableRegistry::getTableLocator()->get('Professores');
@@ -110,6 +113,8 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
         $this->professor_id = false;
         if (!empty($professor)) {
             $this->professor_id = $professor->id;
+        } elseif ($this->categoria == 3 && !empty($this->entidade_id)) {
+            $this->professor_id = $this->entidade_id;
         }
 
         $supervisores = TableRegistry::getTableLocator()->get('Supervisores');
@@ -117,6 +122,8 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
         $this->supervisor_id = false;
         if (!empty($supervisor)) {
             $this->supervisor_id = $supervisor->id;
+        } elseif ($this->categoria == 4 && !empty($this->entidade_id)) {
+            $this->supervisor_id = $this->entidade_id;
         }
 
         $administradores = TableRegistry::getTableLocator()->get('Administradores');
