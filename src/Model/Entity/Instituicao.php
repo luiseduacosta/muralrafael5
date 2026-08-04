@@ -73,5 +73,6 @@ class Instituicao extends Entity
         'muralestagios' => true,
         'visitas' => true,
         'supervisores' => true,
+        'estagiarios_count' => true,
     ];
 }

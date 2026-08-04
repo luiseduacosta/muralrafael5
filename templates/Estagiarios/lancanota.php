@@ -13,20 +13,20 @@ if ($user_session) {
 
 ?>
 
-<div class="row justify-content-between mb-3">
-    <div class="col-auto">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3 gap-2">
+    <div class="col-12 col-md-auto">
         <?= $this->Html->link('Voltar', 'javascript:history.back()', ['class' => 'button']); ?>
     </div>    
-    <div class="col-auto">
+    <div class="col-12 col-md-auto text-center">
         <h1 class="h3 mb-0 text-gray-800">Alunos estagiários: <?= h($professor->nome); ?></h1>
     </div>
-    <div class="col-auto">
+    <div class="col-12 col-md-auto text-md-end">
         <?= $this->Html->link(__('Imprimir'), ['action' => 'lancanotapdf', '?' => ['periodo' => $periodo, 'professor_id' => $professor->id]], ['class' => 'button']) ?>
     </div>
 </div>
 
 <div class="estagiarios index content">
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
         <?= $this->Form->create($estagiarios, ['type' => 'get', 'class' => 'form-inline']); ?>
         <div class="form-group mb-2">
             <?= $this->Form->control('professor_id', [
@@ -46,26 +46,26 @@ if ($user_session) {
     </div>
 </div>
 
-<div class="container">
+<div class="container-fluid">
     <h3><?= __('Estagiários') ?></h3>
     <div class="table-responsive">
-        <table class="table table-striped table-hover table-responsive" id="table-estagiarios">
+        <table class="table table-striped table-hover align-middle" id="table-estagiarios">
             <thead>
                 <tr id="table-estagiarios-header">
                     <?php if ($user_data['administrador_id'] || $user_data['professor_id']) : ?>
-                        <th><?= $this->Paginator->sort('Estagiarios.id', 'Id') ?></th>
+                        <th class="text-nowrap"><?= $this->Paginator->sort('Estagiarios.id', 'Id') ?></th>
                     <?php endif; ?>
-                    <th><?= $this->Paginator->sort('Alunos.nome', 'Aluno(a)') ?></th>
-                    <th><?= $this->Paginator->sort('Estagiarios.registro', 'Registro') ?></th>
-                    <th><?= $this->Paginator->sort('Instituicoes.instituicao', 'Instituição') ?></th>
-                    <th><?= $this->Paginator->sort('Supervisores.nome', 'Supervisor(a)') ?></th>
-                    <th><?= $this->Paginator->sort('Estagiarios.periodo', 'Período') ?></th>
-                    <th><?= $this->Paginator->sort('Estagiarios.nivel', 'Nível') ?></th>
-                    <th><?= $this->Paginator->sort('Estagiarios.nota', 'Nota') ?></th>
-                    <th><?= $this->Paginator->sort('Estagiarios.ch', 'CH') ?></th>
-                    <th><?= __('Atividades') ?></th>
-                    <th><?= __('Avaliação discente') ?></th>
-                    <th class="actions"><?= __('Ações') ?></th>
+                    <th class="text-nowrap"><?= $this->Paginator->sort('Alunos.nome', 'Aluno(a)') ?></th>
+                    <th class="text-nowrap"><?= $this->Paginator->sort('Estagiarios.registro', 'Registro') ?></th>
+                    <th class="text-nowrap"><?= $this->Paginator->sort('Instituicoes.instituicao', 'Instituição') ?></th>
+                    <th class="text-nowrap"><?= $this->Paginator->sort('Supervisores.nome', 'Supervisor(a)') ?></th>
+                    <th class="text-nowrap"><?= $this->Paginator->sort('Estagiarios.periodo', 'Período') ?></th>
+                    <th class="text-nowrap"><?= $this->Paginator->sort('Estagiarios.nivel', 'Nível') ?></th>
+                    <th class="text-nowrap"><?= $this->Paginator->sort('Estagiarios.nota', 'Nota') ?></th>
+                    <th class="text-nowrap"><?= $this->Paginator->sort('Estagiarios.ch', 'CH') ?></th>
+                    <th class="text-nowrap"><?= __('Atividades') ?></th>
+                    <th class="text-nowrap"><?= __('Avaliação discente') ?></th>
+                    <th class="actions text-nowrap"><?= __('Ações') ?></th>
                 </tr>
             </thead>
             <tbody id="table-estagiarios-body">
@@ -94,24 +94,24 @@ if ($user_session) {
                             }
                             ?>
                         </td>
-                        <td><?= $estagiario['periodo'] ?></td>
-                        <td><?= $estagiario['nivel'] ?></td>
+                        <td class="text-nowrap"><?= $estagiario['periodo'] ?></td>
+                        <td class="text-nowrap"><?= $estagiario['nivel'] ?></td>
                         <td class="editable-field" data-field="nota"><?= empty($estagiario['nota']) ? '' : $this->Number->format($estagiario['nota'], ['precision' => 2]) ?></td>
                         <td class="editable-field" data-field="ch"><?= empty($estagiario['ch']) ? '' : $this->Number->format($estagiario['ch']) ?></td>
                         <?php if (isset($estagiario['folha_id'])) : ?>
-                            <td><?= $this->Html->link('Folha de atividades', ['controller' => 'Folhadeatividades', 'action' => 'index', $estagiario['id']]) ?>
+                            <td class="text-nowrap"><?= $this->Html->link('Folha de atividades', ['controller' => 'Folhadeatividades', 'action' => 'index', $estagiario['id']]) ?>
                             </td>
                         <?php else : ?>
                             <td></td>
                         <?php endif; ?>
                         <?php if (isset($estagiario['avaliacao_id'])) : ?>
-                            <td><?= $this->Html->link('Ver avaliação', ['controller' => 'avaliacoes', 'action' => 'view', $estagiario['avaliacao_id']]) ?>
+                            <td class="text-nowrap"><?= $this->Html->link('Ver avaliação', ['controller' => 'avaliacoes', 'action' => 'view', $estagiario['avaliacao_id']]) ?>
                             </td>
                         <?php else : ?>
                             <td></td>
                         <?php endif; ?>
-                        <td class="actions">
-                            <?= $this->Html->link(__('Ver'), ['action' => 'view', $estagiario['id']]) ?>
+                        <td class="actions text-nowrap">
+                            <?= $this->Html->link(__('Ver'), ['action' => 'view', $estagiario['id']], ['class' => 'btn btn-sm btn-info']) ?>
                             <?php if ($user_data['administrador_id'] || $user_data['professor_id'] && ($user_data['professor_id'] == $estagiario->professor_id)) : ?>
                                 <button type="button" class="btn btn-sm btn-warning btn-edit"><?= __('Editar') ?></button>
                                 <button type="button" class="btn btn-sm btn-primary btn-save" style="display:none">Salvar</button>
@@ -122,6 +122,11 @@ if ($user_session) {
                 <?php endforeach; ?>
             </tbody>
         </table>
+    </div>
+
+    <div class="paginator d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+        <?= $this->element('paginator'); ?>
+        <?= $this->element('paginator_count'); ?>
     </div>
 </div>
 
@@ -211,7 +216,7 @@ function saveRow(row) {
         },
         error: function(xhr, status, error) {
             console.error('Error details:', xhr.responseText);
-            // console.error('Error:', error);
+            console.error('Error:', error);
             alert('Erro ao salvar as alterações. Verifique o console para mais detalhes.');
             // Revert state if needed or keep editable
         }
