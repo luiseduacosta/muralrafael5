@@ -88,6 +88,10 @@ ALTER TABLE IF EXISTS `areas_estagio` RENAME TO `turma_estagios`;
 ALTER TABLE IF EXISTS `professores`
     ADD COLUMN IF NOT EXISTS `cress` varchar(10) NULL AFTER `siape`,
     ADD COLUMN IF NOT EXISTS `regiao` varchar(2) NULL AFTER `cress`,
+    ADD COLUMN IF NOT EXISTS `user_id` int(11) NULL AFTER `regiao`,
+    ADD COLUMN IF NOT EXISTS `status` varchar(10) NULL DEFAULT 'ativo' AFTER `user_id`,
+    ADD COLUMN IF NOT EXISTS `estagiarios_count` int(11) NULL AFTER `status`,
+    
     MODIFY COLUMN `cpf` varchar(15) NULL,
     MODIFY COLUMN `telefone` varchar(15) NULL,
     MODIFY COLUMN `celular` varchar(15) NULL,

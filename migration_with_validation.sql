@@ -474,8 +474,9 @@ main: BEGIN
     -- Professores
     SET @migration_step = 'professores';
     CALL SafeAddColumn('professores', 'cress', 'varchar(10) NULL');
-    CALL SafeAddColumn('professores', 'regiao', 'varchar(2) NULL');
+    CALL SafeAddColumn('professores', 'regiao', 'varchar(2) NULL');    
     CALL SafeAddColumn('professores', 'user_id', 'int(11) NULL');
+    CALL SafeAddColumn('professores', 'status', 'tinyint(1) NULL DEFAULT 1');
 
     CALL SafeDropColumn('professores', 'datanascimento');
     CALL SafeDropColumn('professores', 'localnascimento');

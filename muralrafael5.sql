@@ -315,8 +315,10 @@ CREATE TABLE IF NOT EXISTS `professores` (
   `departamento` varchar(30) DEFAULT NULL COMMENT 'Departamento do professor: Fundamentos, Métodos e técnicas, Política social',
   `dataegresso` date DEFAULT NULL,
   `motivoegresso` varchar(100) DEFAULT NULL,
-  `observacoes` text DEFAULT NULL,
+  `status` varchar(10) NOT NULL DEFAULT 'ativo' COMMENT 'Status do professor: "ativo", "inativo"',
   `user_id` int(11) DEFAULT NULL COMMENT 'ID da tabela users',
+  'estagiarios_count' int(11) DEFAULT NULL COMMENT 'Quantidade de estagiários do professor',
+  `observacoes` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Professores.';
 
