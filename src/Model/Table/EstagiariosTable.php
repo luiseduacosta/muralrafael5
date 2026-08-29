@@ -70,6 +70,7 @@ class EstagiariosTable extends Table
             'Supervisores' => ['estagiarios_count'],
             'Professores' => ['estagiarios_count'],
             'Instituicoes' => ['estagiarios_count'],
+            'Alunos' => ['estagiarios_count'],
         ]);
     }
 

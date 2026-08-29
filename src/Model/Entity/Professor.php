@@ -28,6 +28,7 @@ use Cake\ORM\Entity;
  * @property int|null $regiao
  * @property string|null $email
  * @property int $user_id
+ * @property int|null $estagiarios_count
  *
  * @property \App\Model\Entity\User $user
  * @property \App\Model\Entity\Estagiario[] $estagiarios

@@ -29,7 +29,7 @@ use Cake\ORM\Entity;
  * @property string|null $municipio
  * @property string|null $bairro
  * @property string|null $observacoes
- * @property int|null $estagiario_count
+ * @property int|null $estagiarios_count
  * @property int|null $inscricao_count
  * @property int $user_id
  *
@@ -69,7 +69,7 @@ class Aluno extends Entity
         'municipio' => true,
         'bairro' => true,
         'observacoes' => true,
-        'estagiario_count' => true,
+        'estagiarios_count' => true,
         'inscricao_count' => true,
         'user_id' => true,
         'user' => true,

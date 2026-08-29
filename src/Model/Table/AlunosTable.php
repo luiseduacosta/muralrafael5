@@ -171,8 +171,8 @@ class AlunosTable extends Table
             ->allowEmptyString('observacoes');
 
         $validator
-            ->integer('estagiario_count')
-            ->allowEmptyString('estagiario_count');
+            ->integer('estagiarios_count')
+            ->allowEmptyString('estagiarios_count');
 
         $validator
             ->integer('inscricao_count')

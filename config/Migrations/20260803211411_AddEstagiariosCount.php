@@ -4,7 +4,7 @@ declare(strict_types=1);
 use Migrations\BaseMigration;
 
 /**
- * Add estagiarios_count column to supervisores, professores and instituicoes
+ * Add estagiarios_count column to supervisores, professores, instituicoes and alunos
  * tables for the CounterCache behavior configured in EstagiariosTable.
  */
 class AddEstagiariosCount extends BaseMigration
@@ -12,7 +12,7 @@ class AddEstagiariosCount extends BaseMigration
     /**
      * Up Method.
      *
-     * Adds the estagiarios_count column to the three related tables and
+     * Adds the estagiarios_count column to the four related tables and
      * populates it with the current count of estagiarios per record.
      *
      * @return void
@@ -23,6 +23,7 @@ class AddEstagiariosCount extends BaseMigration
             'supervisores' => 'supervisor_id',
             'professores' => 'professor_id',
             'instituicoes' => 'instituicao_id',
+            'alunos' => 'aluno_id',
         ];
 
         foreach ($foreignKeyMap as $tableName => $foreignKey) {
@@ -51,13 +52,13 @@ class AddEstagiariosCount extends BaseMigration
     /**
      * Down Method.
      *
-     * Removes the estagiarios_count column from the three related tables.
+     * Removes the estagiarios_count column from the four related tables.
      *
      * @return void
      */
     public function down(): void
     {
-        foreach (['supervisores', 'professores', 'instituicoes'] as $tableName) {
+        foreach (['supervisores', 'professores', 'instituicoes', 'alunos'] as $tableName) {
             $table = $this->table($tableName);
 
             if ($table->hasColumn('estagiarios_count')) {

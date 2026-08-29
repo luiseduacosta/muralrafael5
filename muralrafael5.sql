@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `alunos` (
   `municipio` varchar(30) DEFAULT NULL,
   `bairro` varchar(30) DEFAULT NULL,
   `observacoes` varchar(250) DEFAULT NULL,
-  `estagiario_count` int(10) DEFAULT NULL,
+  `estagiarios_count` int(11) DEFAULT NULL COMMENT 'Quantidade de estágios do aluno',
   `inscricao_count` int(11) DEFAULT NULL,
   `user_id` int(11) NOT NULL COMMENT 'ID da tabela users',
   `inscricao_count` int(11) DEFAULT NULL COMMENT 'Quantidade de inscrições do aluno',
