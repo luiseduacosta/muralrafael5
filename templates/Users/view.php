@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\User $user
@@ -151,7 +152,7 @@ if ($user_session) {
                             <td>
                                 <?php
                                 if (strlen($user->professor->celular) < 9) {
-                                    echo '(' . h($user->professor->ddd_celular) . ') ' . h($user->professor->celular);
+                                    echo '(' . h($user->professor->codigo_celular) . ') ' . h($user->professor->celular);
                                 } else {
                                     echo $user->professor->celular;
                                 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -78,17 +79,9 @@ class ProfessoresTable extends Table
             ->allowEmptyString('siape');
 
         $validator
-            ->date('datanascimento')
-            ->allowEmptyDate('datanascimento');
-
-        $validator
-            ->scalar('localnascimento')
-            ->maxLength('localnascimento', 30)
-            ->allowEmptyString('localnascimento');
-
-        $validator
-            ->nonNegativeInteger('ddd_telefone')
-            ->notEmptyString('ddd_telefone');
+            ->scalar('codigo_telefone')
+            ->maxLength('codigo_telefone', 2)
+            ->allowEmptyString('codigo_telefone');
 
         $validator
             ->scalar('telefone')
@@ -97,24 +90,15 @@ class ProfessoresTable extends Table
             ->allowEmptyString('telefone');
 
         $validator
-            ->nonNegativeInteger('ddd_celular')
-            ->notEmptyString('ddd_celular');
+            ->scalar('codigo_celular')
+            ->maxLength('codigo_celular', 2)
+            ->allowEmptyString('codigo_celular');
 
         $validator
             ->scalar('celular')
             ->maxLength('celular', 15)
             ->regex('celular', '/^\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}$/', 'Insira um número de celular válido')
             ->allowEmptyString('celular');
-
-        $validator
-            ->scalar('homepage')
-            ->maxLength('homepage', 120)
-            ->allowEmptyString('homepage');
-
-        $validator
-            ->scalar('redesocial')
-            ->maxLength('redesocial', 50)
-            ->allowEmptyString('redesocial');
 
         $validator
             ->scalar('curriculolattes')
@@ -126,83 +110,8 @@ class ProfessoresTable extends Table
             ->allowEmptyDate('atualizacaolattes');
 
         $validator
-            ->scalar('curriculosigma')
-            ->maxLength('curriculosigma', 7)
-            ->allowEmptyString('curriculosigma'); // Obsoleto. Sistema da UFRJ destivado
-
-        $validator
-            ->scalar('pesquisadordgp')
-            ->maxLength('pesquisadordgp', 20)
-            ->allowEmptyString('pesquisadordgp'); // Diretorio de grupos de pesquisa do CNPq
-
-        $validator
-            ->scalar('formacaoprofissional')
-            ->maxLength('formacaoprofissional', 30)
-            ->allowEmptyString('formacaoprofissional');
-
-        $validator
-            ->scalar('universidadedegraduacao')
-            ->maxLength('universidadedegraduacao', 50)
-            ->allowEmptyString('universidadedegraduacao');
-
-        $validator
-            ->nonNegativeInteger('anoformacao')
-            ->regex('anoformacao', '/^(19|20)[0-9]{2}$/', 'Insira um ano válido')
-            ->allowEmptyString('anoformacao');
-
-        $validator
-            ->scalar('mestradoarea')
-            ->maxLength('mestradoarea', 40)
-            ->allowEmptyString('mestradoarea');
-
-        $validator
-            ->scalar('mestradouniversidade')
-            ->maxLength('mestradouniversidade', 50)
-            ->allowEmptyString('mestradouniversidade');
-
-        $validator
-            ->nonNegativeInteger('mestradoanoconclusao')
-            ->regex('mestradoanoconclusao', '/^(19|20)[0-9]{2}$/', 'Insira um ano válido')
-            ->allowEmptyString('mestradoanoconclusao');
-
-        $validator
-            ->scalar('doutoradoarea')
-            ->maxLength('doutoradoarea', 40)
-            ->allowEmptyString('doutoradoarea');
-
-        $validator
-            ->scalar('doutoradouniversidade')
-            ->maxLength('doutoradouniversidade', 50)
-            ->allowEmptyString('doutoradouniversidade');
-
-        $validator
-            ->nonNegativeInteger('doutoradoanoconclusao')
-            ->regex('doutoradoanoconclusao', '/^(19|20)[0-9]{2}$/', 'Insira um ano válido')
-            ->allowEmptyString('doutoradoanoconclusao');
-
-        $validator
             ->date('dataingresso')
             ->allowEmptyDate('dataingresso');
-
-        $validator
-            ->scalar('formaingresso')
-            ->maxLength('formaingresso', 100)
-            ->allowEmptyString('formaingresso');
-
-        $validator
-            ->scalar('tipocargo')
-            ->maxLength('tipocargo', 10)
-            ->allowEmptyString('tipocargo'); // Tipo de cargo do professor: efetivo, subtituto, temporario, convidado
-
-        $validator
-            ->scalar('categoria')
-            ->maxLength('categoria', 10)
-            ->allowEmptyString('categoria'); // Categoria do professor: titular, associado, adjunto, auxiliar
-
-        $validator
-            ->scalar('regimetrabalho')
-            ->maxLength('regimetrabalho', 5)
-            ->allowEmptyString('regimetrabalho'); // Regime de trabalho do professor: 20, 40, 40DE
 
         $validator
             ->scalar('departamento')
@@ -225,10 +134,6 @@ class ProfessoresTable extends Table
         $validator
             ->nonNegativeInteger('regiao')
             ->allowEmptyString('regiao');
-
-        $validator
-            ->scalar('sexo')
-            ->allowEmptyString('sexo');
 
         $validator
             ->email('email')

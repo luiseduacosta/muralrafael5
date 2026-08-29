@@ -46,9 +46,6 @@ $departamentos = [
                     <button class='nav-link active' id='pessoais-tab' data-bs-toggle='tab' data-bs-target='#tab-1' type='button' role='tab' aria-controls='tab-1' aria-selected='true'>Dados Pessoais</button>
                 </li>
                 <li class='nav-item' role='presentation'>
-                    <button class='nav-link' id='academicos-tab' data-bs-toggle='tab' data-bs-target='#tab-2' type='button' role='tab' aria-controls='tab-2' aria-selected='false'>Dados Acadêmicos</button>
-                </li>
-                <li class='nav-item' role='presentation'>
                     <button class='nav-link' id='funcionais-tab' data-bs-toggle='tab' data-bs-target='#tab-3' type='button' role='tab' aria-controls='tab-3' aria-selected='false'>Dados Funcionais</button>
                 </li>
             </ul>
@@ -70,27 +67,20 @@ $departamentos = [
                 </tr>
                 <tr>
                     <th><?= __('CRESS') ?></th>
-                    <td><?php if (empty($professor->cress))
+                    <td><?php if (empty($professor->cress)) {
                             echo '';
-                        else
-                            echo h($professor->cress) . ' ' . $professor->regiao . ' região' ?></td>
+                        } else {
+                            echo h($professor->cress) . ' ' . $professor->regiao . ' região';
+                        } ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Siape') ?></th>
                     <td><?= h($professor->siape) ?></td>
                 </tr>
-               <tr>
-                    <th><?= __('Data de nascimento') ?></th>
-                    <td><?= empty($professor->datanascimento) ? '' : $professor->datanascimento->format('d/m/Y') ?></td>
-                </tr>
-                <tr> 
-                    <th><?= __('Local de nascimento') ?></th>
-                    <td><?= empty($professor->localnascimento) ? '' : h($professor->localnascimento) ?></td>
-                </tr>
                 <tr>
                     <th><?= __('Telefone') ?></th>
                     <?php if (strlen($professor->telefone) < 10) : ?>
-                        <td><?= $professor->telefone ? h('(' . $professor->ddd_telefone . ') ' . $professor->telefone) : '' ?></td>
+                        <td><?= $professor->telefone ? h('(' . $professor->codigo_telefone . ') ' . $professor->telefone) : '' ?></td>
                     <?php else : ?>
                         <td><?= empty($professor->telefone) ? '' : h($professor->telefone) ?></td>
                     <?php endif ?>    
@@ -98,7 +88,7 @@ $departamentos = [
                 <tr>
                     <th><?= __('Celular') ?></th>
                     <?php if (strlen($professor->celular) < 10) : ?>
-                        <td><?= $professor->celular ? h('(' . $professor->ddd_celular . ') ' . $professor->celular) : '' ?></td>
+                        <td><?= $professor->celular ? h('(' . $professor->codigo_celular . ') ' . $professor->celular) : '' ?></td>
                     <?php else : ?>
                         <td><?= empty($professor->celular) ? '' : h($professor->celular) ?></td>
                     <?php endif ?>    
@@ -108,14 +98,6 @@ $departamentos = [
                     <td><?= empty($professor->email) ? '' : $this->Text->autoLinkEmails($professor->email) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Home page') ?></th>
-                    <td><?= empty($professor->homepage) ? '' : h($professor->homepage) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Rede social') ?></th>
-                    <td><?= empty($professor->redesocial) ? '' : h($professor->redesocial) ?></td>
-                </tr>
-                <tr>
                     <th><?= __('Curriculo lattes') ?></th>
                     <td><?= empty($professor->curriculolattes) ? '' : $this->Html->link('http://lattes.cnpq.br/' . h($professor->curriculolattes)) ?></td>
                 </tr>
@@ -123,58 +105,9 @@ $departamentos = [
                     <th><?= __('Atualização lattes') ?></th>
                     <td><?= empty($professor->atualizacaolattes) ? '' : $professor->atualizacaolattes->format('d/m/Y') ?></td>
                 </tr>
-                <tr>
-                    <th><?= __('Curriculo sigma') ?></th>
-                    <td><?= empty($professor->curriculosigma) ? '' : h($professor->curriculosigma) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Diretorio de Grupos de Pesquisa') ?></th>
-                    <td><?= h($professor->pesquisadordgp) ?></td>
-                </tr>
                 </table>
                 </div>
 
-                <div id='tab-2' class='tab-pane fade' role='tabpanel' aria-labelledby='academicos-tab'>
-                <table>
-                <tr>
-                    <th><?= __('Formação profissional') ?></th>
-                    <td><?= h($professor->formacaoprofissional) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Graduação Universidade') ?></th>
-                    <td><?= h($professor->universidadedegraduacao) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Ano de formação') ?></th>
-                    <td><?= h($professor->anoformacao) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Mestrado área') ?></th>
-                    <td><?= h($professor->mestradoarea) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Mestrado universidade') ?></th>
-                    <td><?= h($professor->mestradouniversidade) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Ano de conclusão do Mestrado') ?></th>
-                    <td><?= h($professor->mestradoanoconclusao) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Doutorado área') ?></th>
-                    <td><?= h($professor->doutoradoarea) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Doutorado universidade') ?></th>
-                    <td><?= h($professor->doutoradouniversidade) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Ano de conclusão do Doutorado') ?></th>
-                    <td><?= h($professor->doutoradoanoconclusao) ?></td>
-                </tr>
-                </table>
-                </div>
-                
                 <div id='tab-3' class='tab-pane fade' role='tabpanel' aria-labelledby='funcionais-tab'>
                 <table>
                 <tr>
@@ -184,18 +117,6 @@ $departamentos = [
                 <tr>
                     <th><?= __('Data de ingresso') ?></th>
                     <td><?= empty($professor->dataingresso) ? '' : $professor->dataingresso->format('d/m/Y') ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Forma de ingresso') ?></th>
-                    <td><?= h($professor->formaingresso) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Tipo do cargo') ?></th>
-                    <td><?= h($professor->tipocargo) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Regime de trabalho') ?></th>
-                    <td><?= h($professor->regimetrabalho) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Data de egresso') ?></th>
@@ -283,7 +204,7 @@ $departamentos = [
                             <td><?= h($estagiario->registro) ?></td>
                             <td style="min-width: 80px; max-width: 120px;"><?= h($estagiario->aluno->turno->turno ?? '') ?></td>
                             <td><?= h($estagiario->nivel) ?></td>
-                            <td><?= $estagiario->tc ='1' ? 'Sim' : 'Não' ?></td>
+                            <td><?= $estagiario->tc = '1' ? 'Sim' : 'Não' ?></td>
                             <td><?= $estagiario->tc_solicitacao ? $estagiario->tc_solicitacao->format('d/m/Y') : '' ?></td>
                             <td><?= (!empty($estagiario->instituicao) && !empty($estagiario->instituicao->instituicao)) ? $this->Html->link($estagiario->instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $estagiario->instituicao->id]) : '' ?></td>
                             <td><?= (!empty($estagiario->supervisor) && !empty($estagiario->supervisor->nome)) ? $this->Html->link($estagiario->supervisor->nome, ['controller' => 'Supervisores', 'action' => 'view', $estagiario->supervisor->id]) : '' ?></td>

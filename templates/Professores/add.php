@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Professor $professor
@@ -108,31 +109,13 @@ $departamentos = [
                 } else {
                     echo $this->Form->control('email', ['type' => 'email', 'required' => true]);
                 }
-                    echo $this->Form->control('datanascimento', ['type' => 'date', 'empty' => true, 'required' => false]);
-                    echo $this->Form->control('localnascimento', ['label' => 'Local Nascimento', 'required' => false]);
-                    echo $this->Form->control('ddd_telefone', ['label' => 'DDD', 'required' => false]);
+                    echo $this->Form->control('codigo_telefone', ['label' => 'Código Telefone', 'required' => false]);
                     echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)\s[0-9]{4}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'required' => false]);
-                    echo $this->Form->control('ddd_celular', ['label' => 'DDD', 'required' => false]);
+                    echo $this->Form->control('codigo_celular', ['label' => 'Código Celular', 'required' => false]);
                     echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 00000.0000', 'required' => false]);
-                    echo $this->Form->control('homepage', ['label' => 'Homepage', 'required' => false]);
-                    echo $this->Form->control('redesocial', ['label' => 'Rede Social', 'required' => false]);
                     echo $this->Form->control('curriculolattes', ['label' => 'Curriculo Lattes', 'required' => false]);
                     echo $this->Form->control('atualizacaolattes', ['type' => 'date', 'empty' => true, 'required' => false]);
-                    echo $this->Form->control('curriculosigma', ['label' => 'Curriculo Sigma', 'required' => false]);
-                    echo $this->Form->control('pesquisadordgp', ['label' => 'Diretorio de Grupos de Pesquisa', 'required' => false]);
-                    echo $this->Form->control('formacaoprofissional', ['label' => 'Formacao Profissional', 'required' => false]);
-                    echo $this->Form->control('universidadedegraduacao', ['label' => 'Universidade de Graduacao', 'required' => false]);
-                    echo $this->Form->control('anoformacao', ['label' => 'Ano de Formação', 'pattern' => '(19|20)[0-9]{2}', 'placeholder' => '0000', 'required' => false]);
-                    echo $this->Form->control('mestradoarea', ['label' => 'Mestrado Área', 'required' => false]);
-                    echo $this->Form->control('mestradouniversidade', ['label' => 'Mestrado Universidade', 'required' => false]);
-                    echo $this->Form->control('mestradoanoconclusao', ['label' => 'Mestrado Ano Conclusão', 'pattern' => '(19|20)[0-9]{2}', 'placeholder' => '0000', 'required' => false]);
-                    echo $this->Form->control('doutoradoarea', ['label' => 'Doutorado Área', 'required' => false]);
-                    echo $this->Form->control('doutoradouniversidade', ['label' => 'Doutorado Universidade', 'required' => false]);
-                    echo $this->Form->control('doutoradoanoconclusao', ['label' => 'Doutorado Ano Conclussão', 'pattern' => '(19|20)[0-9]{2}', 'placeholder' => '0000', 'required' => false]);
                     echo $this->Form->control('dataingresso', ['type' => 'date', 'empty' => true, 'required' => false]);
-                    echo $this->Form->control('formaingresso', ['label' => 'Forma Ingresso', 'required' => false]);
-                    echo $this->Form->control('tipocargo', ['label' => 'Tipo Cargo', 'required' => false]);
-                    echo $this->Form->control('regimetrabalho', ['label' => 'Regime Trabalho', 'required' => false]);
                     echo $this->Form->control('departamento', ['label' => 'Departamento', 'options' => $departamentos, 'empty' => true, 'required' => true]);
                     echo $this->Form->control('dataegresso', ['type' => 'date', 'empty' => true, 'required' => false]);
                     echo $this->Form->control('motivoegresso', ['label' => 'Motivo Egresso', 'required' => false]);

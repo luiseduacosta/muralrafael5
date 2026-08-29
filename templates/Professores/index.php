@@ -75,8 +75,8 @@ $departamentos = [
 
                     <td>
                         <?php if (!empty($professor->celular) && strlen($professor->celular) < 10) : ?>
-                            <?= '(' . h($professor->ddd_celular) . ') ' . h($professor->celular) ?>
-                        <?php else: ?>
+                            <?= '(' . h($professor->codigo_celular) . ') ' . h($professor->celular) ?>
+                        <?php else : ?>
                             <?= $professor->celular ?>
                         <?php endif; ?>
                     </td>
