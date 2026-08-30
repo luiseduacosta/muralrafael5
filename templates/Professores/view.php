@@ -111,6 +111,14 @@ $departamentos = [
                 <div id='tab-3' class='tab-pane fade' role='tabpanel' aria-labelledby='funcionais-tab'>
                 <table>
                 <tr>
+                    <th><?= __('Status') ?></th>
+                    <td><?= h(ucfirst($professor->status ?? 'ativo')) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Tipo de Cargo') ?></th>
+                    <td><?= h($professor->tipocargo) ?></td>
+                </tr>
+                <tr>
                     <th><?= __('Departamento') ?></th>
                     <td><?= h($professor->departamento) ?></td>
                 </tr>

@@ -4022,7 +4022,7 @@ class Initial extends BaseMigration
             ->addColumn('nome', 'string', [
                 'collation' => 'utf8mb4_unicode_ci',
                 'default' => '',
-                'limit' => 50,
+                'limit' => 200,
                 'null' => false,
             ])
             ->addColumn('cpf', 'string', [
@@ -4030,11 +4030,10 @@ class Initial extends BaseMigration
                 'limit' => 15,
                 'null' => true,
             ])
-            ->addColumn('siape', 'integer', [
+            ->addColumn('siape', 'string', [
                 'default' => null,
-                'limit' => null,
+                'limit' => 8,
                 'null' => true,
-                'signed' => true,
             ])
             ->addColumn('cress', 'string', [
                 'default' => null,
@@ -4046,22 +4045,20 @@ class Initial extends BaseMigration
                 'limit' => 2,
                 'null' => true,
             ])
-            ->addColumn('codigo_telefone', 'tinyinteger', [
+            ->addColumn('codigo_telefone', 'string', [
                 'default' => '21',
-                'limit' => null,
+                'limit' => 2,
                 'null' => true,
-                'signed' => true,
             ])
             ->addColumn('telefone', 'string', [
                 'default' => null,
                 'limit' => 15,
                 'null' => true,
             ])
-            ->addColumn('codigo_celular', 'tinyinteger', [
+            ->addColumn('codigo_celular', 'string', [
                 'default' => '21',
-                'limit' => null,
+                'limit' => 2,
                 'null' => true,
-                'signed' => true,
             ])
             ->addColumn('celular', 'string', [
                 'default' => null,
@@ -4090,6 +4087,11 @@ class Initial extends BaseMigration
                 'limit' => null,
                 'null' => true,
             ])
+            ->addColumn('tipocargo', 'string', [
+                'default' => null,
+                'limit' => 20,
+                'null' => true,
+            ])
             ->addColumn('departamento', 'string', [
                 'collation' => 'utf8mb4_unicode_ci',
                 'default' => null,
@@ -4107,23 +4109,36 @@ class Initial extends BaseMigration
                 'limit' => 100,
                 'null' => true,
             ])
+            ->addColumn('status', 'string', [
+                'default' => 'ativo',
+                'limit' => 10,
+                'null' => false,
+            ])
             ->addColumn('observacoes', 'text', [
                 'collation' => 'utf8mb4_unicode_ci',
                 'default' => null,
                 'limit' => null,
                 'null' => true,
             ])
-            ->addColumn('usser_id', 'integer', [
-                'default' => null,
-                'limit' => null,
-                'null' => true,
-                'signed' => true,
-            ])
             ->addColumn('user_id', 'integer', [
                 'default' => null,
                 'limit' => null,
                 'null' => true,
                 'signed' => true,
+            ])
+            ->addColumn('estagiarios_count', 'integer', [
+                'default' => 0,
+                'limit' => null,
+                'null' => true,
+                'signed' => false,
+            ])
+            ->addColumn('created', 'datetime', [
+                'default' => 'CURRENT_TIMESTAMP',
+                'null' => false,
+            ])
+            ->addColumn('modified', 'datetime', [
+                'default' => 'CURRENT_TIMESTAMP',
+                'null' => false,
             ])
             ->create();
 

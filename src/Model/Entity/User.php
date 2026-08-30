@@ -132,9 +132,12 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
                 ],
             ])
             ->first();
-        $this->administrador_id = false;
         if (!empty($administrador)) {
             $this->administrador_id = $administrador->id;
+        } elseif ((string)$this->categoria === '1' || !empty($this->get('administrador_id'))) {
+            $this->administrador_id = $this->get('administrador_id') ?: 1;
+        } else {
+            $this->administrador_id = false;
         }
 
         return $this;

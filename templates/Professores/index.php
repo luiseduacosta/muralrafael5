@@ -28,6 +28,17 @@ $departamentos = [
             </div>
             <div class="col-sm-6 d-flex justify-content-end">
                 <?= $this->Form->create(null, ['type' => 'get', 'url' => ['action' => 'index'], 'class' => 'form-inline']) ?>
+                    <div class="form-group mr-2">
+                        <?= $this->Form->control('status', [
+                            'type' => 'select',
+                            'options' => $statusList ?? ['ativo' => 'Ativo', 'aposentado' => 'Aposentado', 'inativo' => 'Inativo'],
+                            'empty' => 'Todos os status',
+                            'value' => $statusFilter ?? '',
+                            'label' => false,
+                            'onChange' => 'this.form.submit();',
+                            'class' => 'form-control mr-2',
+                        ]) ?>
+                    </div>
                     <div class="form-group">
                         <?= $this->Form->label('busca', 'Busca', ['class' => 'button mr-2 mb-4']) ?>
                         <?= $this->Form->control('busca', ['placeholder' => 'Busca professor(a)', 'label' => false, 'onKeyDown' => 'if (event.keyCode == 13) {this.form.submit();}', 'class' => 'form-control']) ?>
@@ -49,6 +60,7 @@ $departamentos = [
                     <th class="actions"><?= __('Actions') ?></th>
                     <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('Professores.nome', 'Nome') ?></th>
+                    <th><?= $this->Paginator->sort('status', 'Status') ?></th>
                     <th><?= $this->Paginator->sort('siape', 'SIAPE') ?></th>
                     <th><?= $this->Paginator->sort('celular') ?></th>
                     <th><?= $this->Paginator->sort('email', 'Email') ?></th>
@@ -56,7 +68,6 @@ $departamentos = [
                     <th><?= $this->Paginator->sort('departamento') ?></th>
                     <th><?= $this->Paginator->sort('motivoegresso', 'Egresso') ?></th>
                     <th><?= $this->Paginator->sort('estagiarios_count', 'Estagiarios') ?></th>
-                    
                 </tr>
             </thead>
             <tbody>
@@ -71,6 +82,7 @@ $departamentos = [
                      </td>
                     <td><?= $this->Html->link((string)$professor->id, ['action' => 'view', $professor->id]) ?></td>
                     <td><?= $this->Html->link(h($professor->nome ?? 'Não informado'), ['action' => 'view', $professor->id]) ?></td>
+                    <td><?= h(ucfirst($professor->status ?? 'ativo')) ?></td>
                     <td><?= (string)$professor->siape ? $professor->siape : 'S/d' ?></td>
 
                     <td>

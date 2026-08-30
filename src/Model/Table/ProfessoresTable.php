@@ -3,8 +3,11 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use ArrayObject;
+use Cake\Event\EventInterface;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use function is_string;
 
 /**
  * Professores Model
@@ -27,6 +30,18 @@ use Cake\Validation\Validator;
  */
 class ProfessoresTable extends Table
 {
+    public const STATUS_ATIVO = 'ativo';
+    public const STATUS_APOSENTADO = 'aposentado';
+    public const STATUS_INATIVO = 'inativo';
+
+    private const STATUS_NORMALIZATION_MAP = [
+        'active' => self::STATUS_ATIVO,
+        'activo' => self::STATUS_ATIVO,
+        'retired' => self::STATUS_APOSENTADO,
+        'inactive' => self::STATUS_INATIVO,
+        'inactivo' => self::STATUS_INATIVO,
+    ];
+
     /**
      * Initialize method
      *
@@ -41,6 +56,15 @@ class ProfessoresTable extends Table
         $this->setAlias('Professores');
         $this->setDisplayField('nome');
         $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'created' => 'new',
+                    'modified' => 'always',
+                ],
+            ],
+        ]);
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
@@ -64,18 +88,30 @@ class ProfessoresTable extends Table
 
         $validator
             ->scalar('nome')
-            ->maxLength('nome', 50)
+            ->maxLength('nome', 200)
+            ->requirePresence('nome', 'create')
             ->notEmptyString('nome');
 
         $validator
             ->scalar('cpf')
-            ->maxLength('cpf', 14)
+            ->maxLength('cpf', 15)
             ->allowEmptyString('cpf');
 
         $validator
-            ->scalar('siape') // SIAPE: 8 dígitos. Pode começar com 0. Não pode ter pontos ou hífens
+            ->scalar('siape')
             ->maxLength('siape', 8)
+            ->regex('siape', '/^[0-9]{7,8}$/', 'O Siape deve conter apenas números e ter entre 7 e 8 dígitos.')
             ->allowEmptyString('siape');
+
+        $validator
+            ->scalar('cress')
+            ->maxLength('cress', 10)
+            ->allowEmptyString('cress');
+
+        $validator
+            ->scalar('regiao')
+            ->maxLength('regiao', 2)
+            ->allowEmptyString('regiao');
 
         $validator
             ->scalar('codigo_telefone')
@@ -85,7 +121,6 @@ class ProfessoresTable extends Table
         $validator
             ->scalar('telefone')
             ->maxLength('telefone', 15)
-            ->regex('telefone', '/^\([0-9]{2}\)\s[0-9]{4}\.[0-9]{4}$/', 'Insira um número de telefone válido')
             ->allowEmptyString('telefone');
 
         $validator
@@ -96,8 +131,13 @@ class ProfessoresTable extends Table
         $validator
             ->scalar('celular')
             ->maxLength('celular', 15)
-            ->regex('celular', '/^\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}$/', 'Insira um número de celular válido')
             ->allowEmptyString('celular');
+
+        $validator
+            ->scalar('email')
+            ->email('email')
+            ->maxLength('email', 255)
+            ->allowEmptyString('email');
 
         $validator
             ->scalar('curriculolattes')
@@ -111,6 +151,11 @@ class ProfessoresTable extends Table
         $validator
             ->date('dataingresso')
             ->allowEmptyDate('dataingresso');
+
+        $validator
+            ->scalar('tipocargo')
+            ->maxLength('tipocargo', 20)
+            ->allowEmptyString('tipocargo');
 
         $validator
             ->scalar('departamento')
@@ -127,25 +172,49 @@ class ProfessoresTable extends Table
             ->allowEmptyString('motivoegresso');
 
         $validator
-            ->nonNegativeInteger('cress')
-            ->allowEmptyString('cress');
-
-        $validator
-            ->nonNegativeInteger('regiao')
-            ->allowEmptyString('regiao');
-
-        $validator
-            ->email('email')
-            ->allowEmptyString('email');
-
-        $validator
             ->scalar('observacoes')
             ->allowEmptyString('observacoes');
 
         $validator
-            ->scalar('estagiarios_count')
+            ->scalar('status')
+            ->maxLength('status', 10)
+            ->inList('status', [
+                self::STATUS_ATIVO,
+                self::STATUS_APOSENTADO,
+                self::STATUS_INATIVO,
+            ], 'Status deve ser um de: ativo, aposentado, inativo.')
+            ->allowEmptyString('status');
+
+        $validator
+            ->integer('user_id')
+            ->allowEmptyString('user_id');
+
+        $validator
+            ->integer('estagiarios_count')
             ->allowEmptyString('estagiarios_count');
 
         return $validator;
+    }
+
+    /**
+     * Normalizes status aliases ("active" -> "ativo"...) before validation.
+     * An empty status is dropped so the current value (or the "ativo"
+     * default) is kept instead of overwriting it with an empty string.
+     */
+    public function beforeMarshal(EventInterface $_event, ArrayObject $data, ArrayObject $_options): void
+    {
+        unset($_event, $_options);
+
+        $status = $data['status'] ?? null;
+        if ($status === '') {
+            unset($data['status']);
+
+            return;
+        }
+        if (!is_string($status)) {
+            return;
+        }
+
+        $data['status'] = self::STATUS_NORMALIZATION_MAP[$status] ?? $status;
     }
 }

@@ -117,6 +117,8 @@ $departamentos = [
                     echo $this->Form->control('atualizacaolattes', ['type' => 'date', 'empty' => true, 'required' => false]);
                     echo $this->Form->control('dataingresso', ['type' => 'date', 'empty' => true, 'required' => false]);
                     echo $this->Form->control('departamento', ['label' => 'Departamento', 'options' => $departamentos, 'empty' => true, 'required' => true]);
+                    echo $this->Form->control('tipocargo', ['label' => 'Tipo de Cargo', 'required' => false]);
+                    echo $this->Form->control('status', ['label' => 'Status', 'options' => $statusOptions ?? ['ativo' => 'Ativo', 'aposentado' => 'Aposentado', 'inativo' => 'Inativo'], 'required' => true]);
                     echo $this->Form->control('dataegresso', ['type' => 'date', 'empty' => true, 'required' => false]);
                     echo $this->Form->control('motivoegresso', ['label' => 'Motivo Egresso', 'required' => false]);
                     echo $this->Form->control('observacoes', ['label' => 'Observações', 'required' => false]);

@@ -6,6 +6,7 @@ namespace App\Controller;
 use Authorization\Exception\ForbiddenException;
 use Cake\Http\Response;
 use Cake\ORM\Query;
+use function in_array;
 
 /**
  * Professores Controller
@@ -15,6 +16,18 @@ use Cake\ORM\Query;
  */
 class ProfessoresController extends AppController
 {
+    private const STATUS_LABELS = [
+        'ativo' => 'Ativo',
+        'aposentado' => 'Aposentado',
+        'inativo' => 'Inativo',
+    ];
+
+    private const STATUS_ALIASES = [
+        'ativo' => ['ativo', 'active', 'activo'],
+        'aposentado' => ['aposentado', 'retired'],
+        'inativo' => ['inativo', 'inactive', 'inactivo'],
+    ];
+
     /**
      * Index method
      *
@@ -30,14 +43,27 @@ class ProfessoresController extends AppController
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
+        $query = $this->Professores->find()->contain(['Users']);
+
         $busca = $this->request->getQuery('busca');
         if ($busca) {
-            $condition = ['OR' => ['Professores.nome LIKE' => '%' . $busca . '%']];
+            $query->where([
+                'OR' => [
+                    'Professores.nome LIKE' => '%' . $busca . '%',
+                    'Professores.cpf LIKE' => '%' . $busca . '%',
+                    'Professores.siape LIKE' => '%' . $busca . '%',
+                    'Professores.email LIKE' => '%' . $busca . '%',
+                    'Professores.celular LIKE' => '%' . $busca . '%',
+                ],
+            ]);
         }
-        if (!isset($condition)) {
-            $condition = [];
+
+        $statusFilter = $this->request->getQuery('status');
+        if ($statusFilter) {
+            $canonical = $this->canonicalStatus((string)$statusFilter);
+            $aliases = self::STATUS_ALIASES[$canonical] ?? [$canonical];
+            $query->where(['Professores.status IN' => $aliases]);
         }
-        $query = $this->Professores->find()->where($condition)->contain(['Users']);
 
         $professores = $this->paginate($query, [
             'order' => ['Professores.nome' => 'ASC'],
@@ -50,12 +76,16 @@ class ProfessoresController extends AppController
                 'celular',
                 'curriculolattes',
                 'departamento',
+                'tipocargo',
+                'status',
                 'motivoegresso',
                 'estagiarios_count',
             ],
         ]);
 
-        $this->set(compact('professores'));
+        $statusList = self::STATUS_LABELS;
+
+        $this->set(compact('professores', 'statusFilter', 'statusList'));
     }
 
     /**
@@ -122,6 +152,8 @@ class ProfessoresController extends AppController
         }
 
         $professor = $this->Professores->newEmptyEntity();
+        $professor->status = 'ativo';
+
         if ($this->request->is('post')) {
             $professor = $this->Professores->patchEntity($professor, $this->request->getData());
 
@@ -144,7 +176,9 @@ class ProfessoresController extends AppController
             $professor->email = $email;
             $professor->siape = $siape;
         }
-        $this->set(compact('professor'));
+
+        $statusOptions = self::STATUS_LABELS;
+        $this->set(compact('professor', 'statusOptions'));
     }
 
     /**
@@ -157,6 +191,7 @@ class ProfessoresController extends AppController
     public function edit(?string $id = null)
     {
         $professor = $this->Professores->get($id);
+        $professor->status = $this->canonicalStatus((string)$professor->status);
 
         try {
             $this->Authorization->authorize($professor);
@@ -175,7 +210,9 @@ class ProfessoresController extends AppController
             }
             $this->Flash->error(__('The professor could not be saved. Please, try again.'));
         }
-        $this->set(compact('professor'));
+
+        $statusOptions = self::STATUS_LABELS;
+        $this->set(compact('professor', 'statusOptions'));
     }
 
     /**
@@ -235,5 +272,21 @@ class ProfessoresController extends AppController
         $professores = $this->paginate($query, ['limit' => 25]);
 
         $this->set(compact('professores'));
+
+        return null;
+    }
+
+    /**
+     * Map status alias to canonical status.
+     */
+    private function canonicalStatus(string $status): string
+    {
+        foreach (self::STATUS_ALIASES as $canonicalStatus => $aliases) {
+            if (in_array($status, $aliases, true)) {
+                return $canonicalStatus;
+            }
+        }
+
+        return $status;
     }
 }
