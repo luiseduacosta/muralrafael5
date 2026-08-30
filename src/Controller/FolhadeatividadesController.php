@@ -31,33 +31,56 @@ class FolhadeatividadesController extends AppController
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
+        $user_data = ['administrador_id' => 0, 'aluno_id' => 0, 'professor_id' => 0, 'supervisor_id' => 0];
+        $user_session = $this->request->getAttribute('identity');
+        if ($user_session) {
+            $user_data = $user_session->getOriginalData();
+        }
+
         $estagiario_id = $this->getRequest()->getQuery('estagiario_id');
+
+        // Se for aluno, procura o estagiário
+        if ($user_data['aluno_id']) {
+            $estagiario = $this->fetchTable('Estagiarios')
+                ->find()
+                ->where(['Estagiarios.aluno_id' => $user_data['aluno_id']])
+                ->first();
+
+            if (!$estagiario) {
+                $this->Flash->error(__('Sem estagio cadastrado.'));
+                return $this->redirect(['controller' => 'alunos', 'action' => 'view', $user_data['aluno_id']]);
+            }
+
+            $estagiario_id = $estagiario->id;
+        }
+
+        // Se não tiver o estagiário, retorna erro
         if (empty($estagiario_id)) {
             $this->Flash->error(__('Selecione o estagiário'));
-
             return $this->redirect(['controller' => 'Estagiarios', 'action' => 'index']);
         }
 
-        if ($estagiario_id) {
-            $folhadeatividades = $this->Folhadeatividades
-                ->find()
-                ->contain(['Estagiarios' => ['Alunos', 'Instituicoes', 'Supervisores']])
-                ->find('all')
-                ->order(['Folhadeatividades.id'])
-                ->where(['estagiario_id' => $estagiario_id]);
+        $estagiario = $this->fetchTable('Estagiarios')
+            ->find()
+            ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Professores', 'Folhadeatividades'])
+            ->where(['Estagiarios.id' => $estagiario_id])
+            ->first();
 
-            $estagiario = $this->fetchTable('Estagiarios')
-                ->find()
-                ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Professores', 'Folhadeatividades'])
-                ->where(['Estagiarios.id' => $estagiario_id])
-                ->first();
+        if (!$estagiario) {
+            $this->Flash->error(__('Estagiário não localizado.'));
+            return $this->redirect(['controller' => 'Estagiarios', 'action' => 'index']);
         }
 
-        if (empty($folhadeatividades)) {
-            $this->Flash->error(
-                __('Selecione o estagiário e o período da folha de atividades'),
-            );
+        $folhadeatividades = $this->Folhadeatividades
+            ->find()
+            ->contain(['Estagiarios' => ['Alunos', 'Instituicoes', 'Supervisores']])
+            ->order(['Folhadeatividades.id' => 'ASC'])
+            ->where(['estagiario_id' => $estagiario_id]);
+
+        if ($folhadeatividades->count() === 0) {
+            $this->Flash->info(__('Nenhuma folha de atividades cadastrada para este estagiário.'));
         }
+
         $folhadeatividades = $this->paginate($folhadeatividades);
 
         $this->set(compact('estagiario', 'folhadeatividades'));
@@ -111,7 +134,7 @@ class FolhadeatividadesController extends AppController
                     'controller' => 'Folhadeatividades',
                     'action' => 'view',
                     $folhadeatividaderesposta->id,
-                    ],);
+                ], );
             }
             $this->Flash->error(
                 __('Atividade não foi cadastrada. Tente mais uma vez.'),

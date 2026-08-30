@@ -55,7 +55,7 @@ final class InscricoesTablePolicy implements BeforePolicyInterface
      */
     public function scopeIndex(IdentityInterface $user, Query $query): Query
     {
-        return $query->where(['Inscricoes.user_id' => $user->getIdentifier()]);
+        return $query->where(['Inscricoes.aluno_id' => $user->aluno_id]);
     }
 
     /**

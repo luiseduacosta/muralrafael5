@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -8,8 +9,8 @@ use Authorization\Exception\ForbiddenException;
 /**
  * Avaliacoes Controller
  *
- * @property \App\Controller\AvaliacoesTable $Avaliacoes
- * @method \App\Model\Entity\Avaliaco[]|\App\Controller\ResultSetInterface paginate($object = null, array $settings = [])
+ * @property \App\Model\Table\AvaliacoesTable $Avaliacoes
+ * @method \App\Model\Entity\Avaliacao[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class AvaliacoesController extends AppController
 {
@@ -82,21 +83,21 @@ class AvaliacoesController extends AppController
                     return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
                 }
             } else {
-                 $query = $this->fetchTable('Estagiarios')->find()
+                $query = $this->fetchTable('Estagiarios')->find()
                     ->contain(['Alunos', 'Instituicoes', 'Supervisores', 'Avaliacoes'])
                     ->where(['Estagiarios.aluno_id' => $user_data['aluno_id']]);
-                 $estagiarios = $this->paginate($query, [
-                     'sortableFields' => [
-                         'id',
-                         'Alunos.nome',
-                         'periodo',
-                         'nivel',
-                         'Instituicoes.instituicao',
-                         'Supervisores.nome',
-                         'ch',
-                         'nota',
-                     ],
-                 ]);
+                $estagiarios = $this->paginate($query, [
+                    'sortableFields' => [
+                        'id',
+                        'Alunos.nome',
+                        'periodo',
+                        'nivel',
+                        'Instituicoes.instituicao',
+                        'Supervisores.nome',
+                        'ch',
+                        'nota',
+                    ],
+                ]);
             }
         } elseif ($categoria == '3') {
             $query = $this->fetchTable('Estagiarios')->find()
@@ -141,9 +142,8 @@ class AvaliacoesController extends AppController
      * View method
      *
      * @param string|null $id Avaliaco id.
-     * @param mixed $estagiario_id
-     * @return \App\Controller\Response|null|void Renders view
-     * @throws \App\Controller\RecordNotFoundException When record not found.
+     * @return \Cake\Http\Response|null|void Renders view
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view(?string $id = null)
     {
@@ -174,9 +174,9 @@ class AvaliacoesController extends AppController
             $estagiario_id = $this->getRequest()->getQuery('estagiario_id');
 
             return $this->redirect([
-                'controller' => 'Avaliacoes',
-                'action' => 'imprimeavaliacaopdf',
-                '?' => ['estagiario_id' => $estagiario_id],
+                'controller' => 'Estagiarios',
+                'action' => 'view',
+                $estagiario_id,
             ]);
         }
     }
@@ -237,8 +237,8 @@ class AvaliacoesController extends AppController
      * Edit method
      *
      * @param string|null $id Avaliaco id.
-     * @return \App\Controller\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \App\Controller\RecordNotFoundException When record not found.
+     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function edit(?string $id = null)
     {
@@ -275,8 +275,8 @@ class AvaliacoesController extends AppController
      * Delete method
      *
      * @param string|null $id Avaliaco id.
-     * @return \App\Controller\Response|null|void Redirects to index.
-     * @throws \App\Controller\RecordNotFoundException When record not found.
+     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete(?string $id = null)
     {

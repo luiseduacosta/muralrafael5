@@ -128,10 +128,10 @@ class EstagiariosController extends AppController
             'valueField' => 'nome',
             'order' => ['Alunos.nome' => 'asc'],
         ])
-        ->matching('Estagiarios', function ($q) use ($periodo) {
-            return $q->where(['Estagiarios.periodo' => $periodo]);
-        })
-        ->distinct(['Alunos.id']);
+            ->matching('Estagiarios', function ($q) use ($periodo) {
+                return $q->where(['Estagiarios.periodo' => $periodo]);
+            })
+            ->distinct(['Alunos.id']);
 
         // Filter by instituicao_id on the first row of the table
         $instituicoes = $this->Estagiarios->Instituicoes->find('list', [
@@ -139,10 +139,10 @@ class EstagiariosController extends AppController
             'valueField' => 'instituicao',
             'order' => ['Instituicoes.instituicao' => 'asc'],
         ])
-        ->matching('Estagiarios', function ($q) use ($periodo) {
-            return $q->where(['Estagiarios.periodo' => $periodo]);
-        })
-        ->distinct(['Instituicoes.id']);
+            ->matching('Estagiarios', function ($q) use ($periodo) {
+                return $q->where(['Estagiarios.periodo' => $periodo]);
+            })
+            ->distinct(['Instituicoes.id']);
 
         // Filter by nivel on the first row of the table
         $niveis = $this->Estagiarios->find('list', [
@@ -150,8 +150,8 @@ class EstagiariosController extends AppController
             'valueField' => 'nivel',
             'order' => ['Estagiarios.nivel' => 'asc'],
         ])
-        ->where(['Estagiarios.periodo' => $periodo])
-        ->distinct(['Estagiarios.nivel']);
+            ->where(['Estagiarios.periodo' => $periodo])
+            ->distinct(['Estagiarios.nivel']);
 
         // Filter by supervisor_id on the first row of the table
         $supervisores = $this->Estagiarios->Supervisores->find('list', [
@@ -159,10 +159,10 @@ class EstagiariosController extends AppController
             'valueField' => 'nome',
             'order' => ['Supervisores.nome' => 'asc'],
         ])
-        ->matching('Estagiarios', function ($q) use ($periodo) {
-            return $q->where(['Estagiarios.periodo' => $periodo]);
-        })
-        ->distinct(['Supervisores.id']);
+            ->matching('Estagiarios', function ($q) use ($periodo) {
+                return $q->where(['Estagiarios.periodo' => $periodo]);
+            })
+            ->distinct(['Supervisores.id']);
 
         // Filter by professor_id on the first row of the table
         $professores = $this->Estagiarios->Professores->find('list', [
@@ -170,10 +170,10 @@ class EstagiariosController extends AppController
             'valueField' => 'nome',
             'order' => ['Professores.nome' => 'asc'],
         ])
-        ->matching('Estagiarios', function ($q) use ($periodo) {
-            return $q->where(['Estagiarios.periodo' => $periodo]);
-        })
-        ->distinct(['Professores.id']);
+            ->matching('Estagiarios', function ($q) use ($periodo) {
+                return $q->where(['Estagiarios.periodo' => $periodo]);
+            })
+            ->distinct(['Professores.id']);
 
         // Filter by nota on the first row of the table
         $notas = $this->Estagiarios->find('list', [
@@ -181,8 +181,8 @@ class EstagiariosController extends AppController
             'valueField' => 'nota',
             'order' => ['Estagiarios.nota' => 'asc'],
         ])
-        ->where(['Estagiarios.periodo' => $periodo, 'Estagiarios.nota IS NOT NULL'])
-        ->distinct(['Estagiarios.nota']);
+            ->where(['Estagiarios.periodo' => $periodo, 'Estagiarios.nota IS NOT NULL'])
+            ->distinct(['Estagiarios.nota']);
 
         // Filter by ch on the first row of the table
         $chs = $this->Estagiarios->find('list', [
@@ -190,8 +190,8 @@ class EstagiariosController extends AppController
             'valueField' => 'ch',
             'order' => ['Estagiarios.ch' => 'asc'],
         ])
-        ->where(['Estagiarios.periodo' => $periodo, 'Estagiarios.ch IS NOT NULL'])
-        ->distinct(['Estagiarios.ch']);
+            ->where(['Estagiarios.periodo' => $periodo, 'Estagiarios.ch IS NOT NULL'])
+            ->distinct(['Estagiarios.ch']);
 
         $this->set('alunos', $alunos);
         $this->set('instituicoes', $instituicoes);
@@ -209,7 +209,7 @@ class EstagiariosController extends AppController
      *
      * @param string|null $id Estagiario id.
      * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @throws RecordNotFoundException When record not found.
      */
     public function view(?string $id = null)
     {
@@ -256,7 +256,7 @@ class EstagiariosController extends AppController
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
-        $periodoatual = $this->configuracao->termo_compromisso_periodo;
+        $periodo = $this->configuracao->termo_compromisso_periodo;
 
         $id = $this->request->getQuery('aluno_id');
         if (empty($id)) {
@@ -283,7 +283,7 @@ class EstagiariosController extends AppController
                         'O aluno é estagiário ' .
                         $ultimo_estagio->nivel .
                         ' no periodo ' .
-                            $ultimo_estagio->periodo,
+                        $ultimo_estagio->periodo,
                     ),
                 );
                 // Go to next nivel
@@ -303,13 +303,13 @@ class EstagiariosController extends AppController
 
                 // Check period validity. Mesmo ou maior período significa edição, não um novo passo
                 $compare = $this->comparePeriodo(
-                    (string)$ultimo_estagio->periodo,
-                    (string)$periodoatual,
+                    (string) $ultimo_estagio->periodo,
+                    (string) $periodo,
                 );
 
                 if ($compare >= 0) {
                     $periodoMsg = 'O período de estágio do aluno tem que ser igual ou maior que o período atual ';
-                    $periodoMsg .= $periodoatual->mural_periodo_atual;
+                    $periodoMsg .= $periodo;
                     $this->Flash->info(__($periodoMsg));
 
                     return $this->redirect([
@@ -330,7 +330,7 @@ class EstagiariosController extends AppController
 
                 $estagiarioexiste = $this->Estagiarios->find()
                     ->where([
-                        'periodo' => $periodoatual,
+                        'periodo' => $periodo,
                         'aluno_id' => $this->request->getData('aluno_id'),
                     ])
                     ->first();
@@ -385,7 +385,7 @@ class EstagiariosController extends AppController
      *
      * @param string|null $id Estagiario id.
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @throws RecordNotFoundException When record not found.
      */
     public function edit(?string $id = null)
     {
@@ -427,7 +427,7 @@ class EstagiariosController extends AppController
             }
 
             if ($this->request->is('ajax')) {
-                 return $this->response->withStatus(400)
+                return $this->response->withStatus(400)
                     ->withType('application/json')
                     ->withStringBody(json_encode(['status' => 'error', 'errors' => $estagiario->getErrors()]));
             }
@@ -469,7 +469,7 @@ class EstagiariosController extends AppController
      *
      * @param string|null $id Estagiario id.
      * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @throws RecordNotFoundException When record not found.
      */
     public function delete(?string $id = null)
     {
@@ -509,7 +509,7 @@ class EstagiariosController extends AppController
      *
      * @param string|null $id Estagiario id.
      * @return \Cake\Http\Response|null|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @throws RecordNotFoundException When record not found.
      */
     public function termocompromisso(?string $id = null)
     {
@@ -560,7 +560,7 @@ class EstagiariosController extends AppController
         if ($estagiario) {
             $periodoatual = $this->configuracao->termo_compromisso_periodo;
 
-            $compare = $this->comparePeriodo((string)$periodoatual, (string)$estagiario->periodo);
+            $compare = $this->comparePeriodo((string) $periodoatual, (string) $estagiario->periodo);
 
             // Mesmo período: editar o estágio do período atual
             if ($compare === 0) {
@@ -582,8 +582,8 @@ class EstagiariosController extends AppController
             $this->Flash->error(
                 __(
                     'Período atual ({0}) não pode ser anterior ao último período de estágio ({1}).',
-                    (string)$periodoatual,
-                    (string)$estagiario->periodo,
+                    (string) $periodoatual,
+                    (string) $estagiario->periodo,
                 ),
             );
 
@@ -619,8 +619,8 @@ class EstagiariosController extends AppController
             return 0;
         }
 
-        $year = (int)trim($parts[0]);
-        $half = (int)trim($parts[1]);
+        $year = (int) trim($parts[0]);
+        $half = (int) trim($parts[1]);
 
         if ($year <= 0 || ($half !== 1 && $half !== 2)) {
             return 0;
@@ -653,7 +653,7 @@ class EstagiariosController extends AppController
      *
      * @param string|null $id Estagiario id.
      * @return \Cake\Http\Response|null|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @throws RecordNotFoundException When record not found.
      */
     public function termocompromissopdf(?string $id = null)
     {
@@ -713,65 +713,70 @@ class EstagiariosController extends AppController
             $user_data = $user_session->getOriginalData();
         }
 
+        // Pega o id do estagiário
         $id = $this->request->getQuery('estagiario_id');
 
+        // Se for aluno, procura o estagiário
         if ($user_data['aluno_id']) {
-            $id = $user_data['aluno_id'];
+            $estagiario = $this->Estagiarios
+                ->find()
+                ->where(['Estagiarios.aluno_id IS' => $user_data['aluno_id']])
+                ->first();
+
+            if (!$estagiario) {
+                $this->Flash->error(__('Sem estagio cadastrado.'));
+                return $this->redirectBack(['controller' => 'alunos', 'action' => 'view', $user_data['aluno_id']]);
+            }
+
+            $id = $estagiario->id;
         }
 
+        // Se não tiver o id, retorna erro
         if (empty($id)) {
             $this->Flash->error(__('Sem parâmetros para localizar o estagiário'));
-
             return $this->redirectBack(['action' => 'index']);
         }
 
+        // Procura o estagiário
         $estagiario = $this->Estagiarios
             ->find()
             ->contain(['Alunos', 'Supervisores', 'Instituicoes'])
             ->where(['Estagiarios.id IS' => $id])
             ->first();
 
+        // Se não tiver o estagiário, retorna erro
         if (!$estagiario) {
             $this->Flash->error(__('Sem estagio cadastrado.'));
-
-            return $this->redirectBack([
-                'controller' => 'estagiarios',
-                'action' => 'view',
-                $id,
-            ]);
+            return $this->redirectBack(['controller' => 'alunos', 'action' => 'view', $user_data['aluno_id']]);
         }
 
+        // Se não tiver o RG, retorna erro
         if (empty($estagiario->aluno->identidade)) {
             $this->Flash->error(__('Aluno sem RG'));
-
-            return $this->redirect(
-                '/alunos/view/' . $estagiario->aluno->id,
-            );
+            return $this->redirect(['controller' => 'alunos', 'action' => 'view', $estagiario->aluno->id]);
         }
 
+        // Se não tiver o orgão, retorna erro
         if (empty($estagiario->aluno->orgao)) {
             $this->Flash->error(
                 __('Aluno não especifica o orgão emisor do documento'),
             );
-
-            return $this->redirect(
-                '/alunos/view/' . $estagiario->aluno->id,
-            );
+            return $this->redirect(['controller' => 'alunos', 'action' => 'view', $estagiario->aluno->id]);
         }
+
+        // Se não tiver o CPF, retorna erro
         if (empty($estagiario->aluno->cpf)) {
             $this->Flash->error(__('Aluno sem CPF'));
-
-            return $this->redirect(
-                '/alunos/view/' . $estagiario->aluno->id,
-            );
+            return $this->redirect(['controller' => 'alunos', 'action' => 'view', $estagiario->aluno->id]);
         }
 
+        // Se não tiver o supervisor, retorna erro
         if (empty($estagiario->supervisor->id)) {
             $this->Flash->error(__('Falta o supervisor de estágio'));
-
-            return $this->redirect('/estagiarios/view/' . $estagiario->id);
+            return $this->redirect(['controller' => 'alunos', 'action' => 'view', $estagiario->aluno->id]);
         }
 
+        // Configura o PDF
         $this->viewBuilder()->setLayout('pdf/default');
         $this->viewBuilder()->setClassName('CakePdf.Pdf');
         $this->viewBuilder()->setOption('pdfConfig', [
@@ -794,7 +799,7 @@ class EstagiariosController extends AppController
         /* Se o periodo atual é o mesmo do periodo cadastrado no estagiário deixa o nivel como está */
         if ($periodoatual == $ultimoestagio->periodo) {
             $nivel = $ultimoestagio->nivel;
-        /** Se o periodo atual é maior que o cadastrado então passa para o próximo nivel e insere um novo registro */
+            /** Se o periodo atual é maior que o cadastrado então passa para o próximo nivel e insere um novo registro */
         } elseif ($periodoatual > $ultimoestagio->periodo) {
             $nivel = $ultimoestagio->nivel + 1;
             /** Calculo o ultimo nível de estágio possível a partir do ajuste curricular. */
@@ -840,7 +845,7 @@ class EstagiariosController extends AppController
         if ($user_data['professor_id']) {
             $professor_id = $user_data['professor_id'];
         } else {
-            $professor_id = (int)$this->request->getQuery('professor_id') ?? $this->request->getData('professor_id');
+            $professor_id = (int) $this->request->getQuery('professor_id') ?? $this->request->getData('professor_id');
         }
 
         if (empty($professor_id)) {
@@ -877,13 +882,13 @@ class EstagiariosController extends AppController
 
         $estagiariosQuery = $this->Estagiarios->find()
             ->contain([
-                    'Alunos' => [
-                        'fields' => ['id', 'nome'],
-                    ],
-                    'Professores' => ['fields' => ['id', 'nome', 'siape']],
-                    'Supervisores' => ['fields' => ['id', 'nome']],
-                    'Instituicoes' => ['fields' => ['id', 'instituicao']],
-                    'Avaliacoes' => ['fields' => ['id', 'estagiario_id']],
+                'Alunos' => [
+                    'fields' => ['id', 'nome'],
+                ],
+                'Professores' => ['fields' => ['id', 'nome', 'siape']],
+                'Supervisores' => ['fields' => ['id', 'nome']],
+                'Instituicoes' => ['fields' => ['id', 'instituicao']],
+                'Avaliacoes' => ['fields' => ['id', 'estagiario_id']],
             ])
             ->where(['Estagiarios.professor_id' => $professor_id]);
 
@@ -927,7 +932,7 @@ class EstagiariosController extends AppController
         if ($user_data['professor_id']) {
             $professor_id = $user_data['professor_id'];
         } else {
-            $professor_id = (int)$this->request->getQuery('professor_id');
+            $professor_id = (int) $this->request->getQuery('professor_id');
         }
 
         if (empty($professor_id)) {
