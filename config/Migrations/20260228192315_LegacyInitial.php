@@ -1,0 +1,49 @@
+<?php
+declare(strict_types=1);
+
+use Migrations\BaseMigration;
+
+/**
+ * Legacy migration from the original app (2026-02-28), recreated on 2026-08-30
+ * because the file was lost from the repository.
+ *
+ * The visitas table must exist before AddProfessorIdForeignKeyToVisitas
+ * (20260325200335) runs. The 20260416052454 Initial snapshot drops and
+ * recreates it with the full definition, so only a placeholder is created
+ * here.
+ */
+class LegacyInitial extends BaseMigration
+{
+    public bool $autoId = false;
+
+    /**
+     * @return void
+     */
+    public function up(): void
+    {
+        $this->table('visitas')
+            ->addColumn('id', 'integer', [
+                'autoIncrement' => true,
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addPrimaryKey(['id'])
+            ->addColumn('instituicao_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->create();
+    }
+
+    /**
+     * @return void
+     */
+    public function down(): void
+    {
+        $this->table('visitas')->drop()->save();
+    }
+}

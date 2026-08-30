@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -17,6 +16,15 @@ use Cake\Datasource\Exception\RecordNotFoundException;
  */
 class QuestionariosController extends AppController
 {
+    /**
+     * Initialization hook method.
+     *
+     * Use this method to add common initialization code like loading components.
+     *
+     * e.g. `$this->loadComponent('FormProtection');`
+     *
+     * @return void
+     */
     public function initialize(): void
     {
         parent::initialize();
@@ -166,7 +174,10 @@ class QuestionariosController extends AppController
             ->count();
 
         if ($respostasCount > 0) {
-            $this->Flash->error(__('Este questionário possui respostas associadas. Exclua as respostas antes de excluir o questionário.'));
+            $this->Flash->error(
+                __('Este questionário possui respostas associadas.') . ' '
+                . __('Exclua as respostas antes de excluir o questionário.'),
+            );
 
             return $this->redirect(['controller' => 'Questionarios', 'action' => 'view', $questionario->id]);
         }

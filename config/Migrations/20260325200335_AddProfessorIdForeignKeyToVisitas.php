@@ -33,7 +33,7 @@ class AddProfessorIdForeignKeyToVisitas extends BaseMigration
             [
                 'delete' => 'SET_NULL',
                 'update' => 'CASCADE',
-            ]
+            ],
         );
 
         $table->update();

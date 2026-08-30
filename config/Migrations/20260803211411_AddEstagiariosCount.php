@@ -44,7 +44,7 @@ class AddEstagiariosCount extends BaseMigration
                 "UPDATE {$tableName} SET estagiarios_count = (
                     SELECT COUNT(*) FROM estagiarios
                     WHERE estagiarios.{$foreignKey} = {$tableName}.id
-                )"
+                )",
             );
         }
     }

@@ -18,7 +18,7 @@ class QuestoesTablePolicy
      * @param \App\Model\Table\QuestoesTable $questoes
      * @return bool
      */
-    public function canIndex(?IdentityInterface $user, QuestoesTable $questoes)
+    public function canIndex(?IdentityInterface $user, QuestoesTable $questoes): bool
     {
         return isset($user) && $user->categoria == 1;
     }

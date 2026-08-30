@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -7,7 +6,6 @@ namespace App\Controller;
 use Authorization\Exception\ForbiddenException;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Exception;
-use PhpParser\Node\Expr\Cast\Object_;
 
 /**
  * Respostas Controller
@@ -63,7 +61,11 @@ class RespostasController extends AppController
                 if (!$resposta) {
                     $this->Flash->error(__('Nenhuma avaliação encontrada para o estagiário ID {0}.', $estagiario_id));
 
-                    return $this->redirect(['controller' => 'Respostas', 'action' => 'add', '?' => ['estagiario_id' => $estagiario_id]]);
+                    return $this->redirect([
+                        'controller' => 'Respostas',
+                        'action' => 'add',
+                        '?' => ['estagiario_id' => $estagiario_id],
+                    ]);
                 }
             }
         }
@@ -75,7 +77,11 @@ class RespostasController extends AppController
             if (!$resposta) {
                 $this->Flash->error(__('Nenhuma avaliação encontrada para o estagiário ID {0}.', $estagiario_id));
 
-                return $this->redirect(['controller' => 'Respostas', 'action' => 'add', '?' => ['estagiario_id' => $estagiario_id]]);
+                return $this->redirect([
+                    'controller' => 'Respostas',
+                    'action' => 'add',
+                    '?' => ['estagiario_id' => $estagiario_id],
+                ]);
             }
         }
 
@@ -410,7 +416,8 @@ class RespostasController extends AppController
         // Nothing happens if no resposta found, but we want to generate an empty PDF with student info
         if ($resposta === null) {
             $this->Flash->error(__('Avaliação não realizada.'));
-            echo 'Nenhuma avaliação encontrada para este estagiário. Gerando PDF vazio com as informações do estagiário...';
+            echo 'Nenhuma avaliação encontrada para este estagiário. '
+                . 'Gerando PDF vazio com as informações do estagiário...';
             // Fetch a empty record resposta with question and without answers to avoid errors in the template
             $questoes = $this->fetchTable('Questoes')->find()
                 ->where(['Questoes.questionario_id' => 1])

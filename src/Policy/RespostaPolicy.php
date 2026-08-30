@@ -18,7 +18,7 @@ class RespostaPolicy
      * @param \App\Model\Entity\Resposta $resposta
      * @return bool
      */
-    public function canAdd(?IdentityInterface $user, Resposta $resposta)
+    public function canAdd(?IdentityInterface $user, Resposta $resposta): bool
     {
         return isset($user->categoria) && in_array($user->categoria, [1, 4]);
     }
@@ -30,7 +30,7 @@ class RespostaPolicy
      * @param \App\Model\Entity\Resposta $resposta
      * @return bool
      */
-    public function canEdit(?IdentityInterface $user, Resposta $resposta)
+    public function canEdit(?IdentityInterface $user, Resposta $resposta): bool
     {
         return isset($user->categoria) && in_array($user->categoria, [1, 4]);
     }
@@ -42,7 +42,7 @@ class RespostaPolicy
      * @param \App\Model\Entity\Resposta $resposta
      * @return bool
      */
-    public function canDelete(?IdentityInterface $user, Resposta $resposta)
+    public function canDelete(?IdentityInterface $user, Resposta $resposta): bool
     {
         return isset($user->categoria) && in_array($user->categoria, [1, 4]);
     }
@@ -54,7 +54,7 @@ class RespostaPolicy
      * @param \App\Model\Entity\Resposta $resposta
      * @return bool
      */
-    public function canView(?IdentityInterface $user, Resposta $resposta)
+    public function canView(?IdentityInterface $user, Resposta $resposta): bool
     {
         return isset($user);
     }

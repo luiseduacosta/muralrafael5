@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Http\Response;
 
 /**
  * Application Controller
@@ -64,7 +65,7 @@ class AppController extends Controller
      * @param array|string $fallback Fallback URL if no referer is available
      * @return \Cake\Http\Response
      */
-    protected function redirectBack(array|string $fallback = ['action' => 'index'])
+    protected function redirectBack(array|string $fallback = ['action' => 'index']): Response
     {
         $referer = $this->request->referer();
 

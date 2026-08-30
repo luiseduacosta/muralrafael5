@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -382,7 +381,7 @@ class AlunosController extends AppController
      * Gera o PDF do certificado de período do aluno.
      *
      * @param string|null $id
-     * @return void
+     * @return \Cake\Http\Response|null|void Renders view
      */
     public function declaracaoperiodopdf(?string $id = null)
     {

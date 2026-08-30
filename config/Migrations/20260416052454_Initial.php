@@ -17,6 +17,22 @@ class Initial extends BaseMigration
      */
     public function up(): void
     {
+        // instituicoes, professores and visitas are created by the legacy
+        // migrations (20260228193002, 20260228192937, 20260228192315) that run
+        // before this snapshot, so recreate them from the snapshot definition
+        // to keep the final schema identical to production. visitas must be
+        // dropped before professores because of the professor_id foreign key
+        // added by 20260325200335.
+        if ($this->hasTable('visitas')) {
+            $this->table('visitas')->drop()->save();
+        }
+        if ($this->hasTable('professores')) {
+            $this->table('professores')->drop()->save();
+        }
+        if ($this->hasTable('instituicoes')) {
+            $this->table('instituicoes')->drop()->save();
+        }
+
         $this->table('acos')
             ->addColumn('id', 'integer', [
                 'autoIncrement' => true,
@@ -87,7 +103,7 @@ class Initial extends BaseMigration
             ->addIndex(
                 $this->index('user_id')
                     ->setName('user_id')
-                    ->setType('unique')
+                    ->setType('unique'),
             )
             ->create();
 
@@ -272,7 +288,7 @@ class Initial extends BaseMigration
             ->addIndex(
                 $this->index('registro')
                     ->setName('registro')
-                    ->setType('unique')
+                    ->setType('unique'),
             )
             ->create();
 
@@ -715,7 +731,7 @@ class Initial extends BaseMigration
             ->addIndex(
                 $this->index('registro')
                     ->setName('registro')
-                    ->setType('unique')
+                    ->setType('unique'),
             )
             ->create();
 
@@ -841,7 +857,7 @@ class Initial extends BaseMigration
             ->addIndex(
                 $this->index('registro')
                     ->setName('registro')
-                    ->setType('unique')
+                    ->setType('unique'),
             )
             ->create();
 
@@ -1135,7 +1151,7 @@ class Initial extends BaseMigration
             ->addIndex(
                 $this->index('email')
                     ->setName('email')
-                    ->setType('unique')
+                    ->setType('unique'),
             )
             ->create();
 
@@ -1324,7 +1340,7 @@ class Initial extends BaseMigration
             ->addIndex(
                 $this->index('id')
                     ->setName('complementos_id_IDX')
-                    ->setType('unique')
+                    ->setType('unique'),
             )
             ->create();
 
@@ -1337,7 +1353,7 @@ class Initial extends BaseMigration
                 'signed' => true,
             ])
             ->addPrimaryKey(['id'])
-            ->addColumn('instituicao', 'string', [
+            ->addColumn('instituicao_curso', 'string', [
                 'default' => null,
                 'limit' => 50,
                 'null' => true,
@@ -2216,7 +2232,7 @@ class Initial extends BaseMigration
                         'uid',
                     ])
                     ->setName('login')
-                    ->setType('unique')
+                    ->setType('unique'),
             )
             ->create();
 
@@ -2482,7 +2498,7 @@ class Initial extends BaseMigration
             ->addIndex(
                 $this->index('id')
                     ->setName('extensao_id_IDX')
-                    ->setType('unique')
+                    ->setType('unique'),
             )
             ->create();
 
@@ -2707,14 +2723,14 @@ class Initial extends BaseMigration
                         'admin_id',
                         'is_active',
                     ])
-                    ->setName('idx_admin_active')
+                    ->setName('idx_admin_active'),
             )
             ->addIndex(
                 $this->index([
                         'impersonated_user_id',
                         'is_active',
                     ])
-                    ->setName('idx_impersonated_active')
+                    ->setName('idx_impersonated_active'),
             )
             ->create();
 
@@ -3770,7 +3786,7 @@ class Initial extends BaseMigration
             ->addIndex(
                 $this->index('nome')
                     ->setName('nome')
-                    ->setType('fulltext')
+                    ->setType('fulltext'),
             )
             ->create();
 
@@ -4276,13 +4292,15 @@ class Initial extends BaseMigration
                 'null' => false,
             ])
             ->addColumn('category', 'string', [
-                'comment' => 'Optional category for grouping questionnaires (e.g., \"Student Feedback\", \"Course Evaluation\")',
+                'comment' => 'Optional category for grouping questionnaires '
+                    . '(e.g., \"Student Feedback\", \"Course Evaluation\")',
                 'default' => null,
                 'limit' => 100,
                 'null' => true,
             ])
             ->addColumn('target_user_type', 'string', [
-                'comment' => 'Optional: Specifies the type of user this questionnaire is intended for (e.g., \"student\", \"supervisor\", \"professor\")',
+                'comment' => 'Optional: Specifies the type of user this questionnaire is intended for '
+                    . '(e.g., \"student\", \"supervisor\", \"professor\")',
                 'default' => null,
                 'limit' => 50,
                 'null' => true,
@@ -4343,7 +4361,7 @@ class Initial extends BaseMigration
             ])
             ->addIndex(
                 $this->index('questionario_id')
-                    ->setName('questionnaire_id')
+                    ->setName('questionnaire_id'),
             )
             ->create();
 
@@ -4390,7 +4408,7 @@ class Initial extends BaseMigration
             ])
             ->addIndex(
                 $this->index('estagiario_id')
-                    ->setName('estagiarios_id')
+                    ->setName('estagiarios_id'),
             )
             ->create();
 
@@ -4658,7 +4676,7 @@ class Initial extends BaseMigration
             ])
             ->create();
 
-        $this->table('turma_estagios')
+        $this->table('turmas')
             ->addColumn('id', 'smallinteger', [
                 'autoIncrement' => true,
                 'default' => null,
@@ -4667,9 +4685,9 @@ class Initial extends BaseMigration
                 'signed' => true,
             ])
             ->addPrimaryKey(['id'])
-            ->addColumn('area', 'string', [
+            ->addColumn('turma', 'string', [
                 'collation' => 'utf8mb4_unicode_ci',
-                'default' => '',
+                'default' => null,
                 'limit' => 70,
                 'null' => false,
             ])
@@ -4689,7 +4707,7 @@ class Initial extends BaseMigration
             ])
             ->addIndex(
                 $this->index('id')
-                    ->setName('id')
+                    ->setName('id'),
             )
             ->create();
 
@@ -4962,7 +4980,7 @@ class Initial extends BaseMigration
             ->addIndex(
                 $this->index('cpf')
                     ->setName('cpf')
-                    ->setType('unique')
+                    ->setType('unique'),
             )
             ->create();
 
@@ -4980,6 +4998,12 @@ class Initial extends BaseMigration
                 'default' => null,
                 'limit' => null,
                 'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('professor_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
                 'signed' => true,
             ])
             ->addColumn('data', 'date', [
@@ -5009,6 +5033,18 @@ class Initial extends BaseMigration
             ])
             ->create();
 
+        $this->table('visitas')
+            ->addForeignKey(
+                'professor_id',
+                'professores',
+                'id',
+                [
+                    'delete' => 'SET_NULL',
+                    'update' => 'CASCADE',
+                ],
+            )
+            ->update();
+
         $this->table('impersonations')
             ->addForeignKey(
                 $this->foreignKey('impersonated_user_id')
@@ -5016,7 +5052,7 @@ class Initial extends BaseMigration
                     ->setReferencedColumns('id')
                     ->setOnDelete('CASCADE')
                     ->setOnUpdate('RESTRICT')
-                    ->setName('impersonations_fk2')
+                    ->setName('impersonations_fk2'),
             )
             ->addForeignKey(
                 $this->foreignKey('admin_id')
@@ -5024,9 +5060,650 @@ class Initial extends BaseMigration
                     ->setReferencedColumns('id')
                     ->setOnDelete('CASCADE')
                     ->setOnUpdate('RESTRICT')
-                    ->setName('impersonations_fk1')
+                    ->setName('impersonations_fk1'),
             )
             ->update();
+        // Legacy tables still present in production but absent from the
+        // original snapshot; kept so fresh installs match the live schema.
+        $this->table('categorias')
+            ->addColumn('id', 'integer', [
+                'autoIncrement' => true,
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addPrimaryKey(['id'])
+            ->addColumn('categoria', 'string', [
+                'default' => null,
+                'limit' => 50,
+                'null' => false,
+            ])
+            ->create();
+
+        $this->table('agendamentotccs')
+            ->addColumn('id', 'integer', [
+                'autoIncrement' => true,
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addPrimaryKey(['id'])
+            ->addColumn('estudante_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('docente_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('convidado', 'string', [
+                'default' => null,
+                'limit' => 30,
+                'null' => false,
+            ])
+            ->addColumn('banca1', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('banca2', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('data', 'date', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('horario', 'time', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('sala', 'string', [
+                'default' => null,
+                'limit' => 15,
+                'null' => false,
+            ])
+            ->addColumn('titulo', 'string', [
+                'default' => null,
+                'limit' => 180,
+                'null' => false,
+            ])
+            ->addColumn('avaliacao', 'string', [
+                'default' => null,
+                'limit' => 10,
+                'null' => false,
+            ])
+            ->create();
+
+        $this->table('areamonografias')
+            ->addColumn('id', 'smallinteger', [
+                'autoIncrement' => true,
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addPrimaryKey(['id'])
+            ->addColumn('area', 'string', [
+                'default' => '',
+                'limit' => 50,
+                'null' => false,
+            ])
+            ->addColumn('q_monografia', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->create();
+
+        $this->table('areamonografias_docentes')
+            ->addColumn('id', 'integer', [
+                'autoIncrement' => false,
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addPrimaryKey(['id'])
+            ->addColumn('docente_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->addColumn('areamonografia_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->create();
+
+        $this->table('atendentes')
+            ->addColumn('id', 'integer', [
+                'autoIncrement' => true,
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addPrimaryKey(['id'])
+            ->addColumn('docente_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->addColumn('tae_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->addColumn('nome', 'string', [
+                'default' => null,
+                'limit' => 50,
+                'null' => false,
+            ])
+            ->addColumn('observacoes', 'string', [
+                'default' => null,
+                'limit' => 255,
+                'null' => true,
+            ])
+            ->create();
+
+        $this->table('balcao_users')
+            ->addColumn('id', 'integer', [
+                'autoIncrement' => true,
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addPrimaryKey(['id'])
+            ->addColumn('email', 'char', [
+                'default' => null,
+                'limit' => 50,
+                'null' => true,
+            ])
+            ->addColumn('password', 'char', [
+                'default' => null,
+                'limit' => 80,
+                'null' => true,
+            ])
+            ->addColumn('categoria', 'enum', [
+                'default' => '1',
+                'null' => false,
+                'values' => ['1', '2', '3', '4'],
+            ])
+            ->addColumn('numero', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('timestamp', 'timestamp', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('estudante_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->addColumn('supervisor_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->addColumn('docente_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->create();
+
+        $this->table('demandas')
+            ->addColumn('id', 'integer', [
+                'autoIncrement' => true,
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addPrimaryKey(['id'])
+            ->addColumn('setor', 'string', [
+                'default' => null,
+                'limit' => 15,
+                'null' => false,
+            ])
+            ->addColumn('datademanda', 'date', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('estudante_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('atendente_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('assunto', 'string', [
+                'default' => null,
+                'limit' => 50,
+                'null' => false,
+            ])
+            ->addColumn('descripcao', 'text', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('parecer', 'text', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('encaminhamento', 'string', [
+                'default' => null,
+                'limit' => 70,
+                'null' => true,
+            ])
+            ->addColumn('encerramento', 'string', [
+                'default' => null,
+                'limit' => 30,
+                'null' => true,
+            ])
+            ->addColumn('dataencerramento', 'date', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->create();
+
+        $this->table('historicos')
+            ->addColumn('id', 'integer', [
+                'autoIncrement' => true,
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addPrimaryKey(['id'])
+            ->addColumn('estudante_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('demanda_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('datahistorico', 'date', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('atendente_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('relato', 'text', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('encaminhamento', 'string', [
+                'default' => null,
+                'limit' => 70,
+                'null' => true,
+            ])
+            ->addColumn('observacao', 'text', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->create();
+
+        $this->table('historicos')
+            ->addIndex(['demanda_id'], ['name' => 'historicos_demanda_id'])
+            ->addForeignKey(
+                'demanda_id',
+                'demandas',
+                'id',
+                [
+                    'constraint' => 'historicos_demanda_id',
+                    'delete' => 'RESTRICT',
+                    'update' => 'RESTRICT',
+                ],
+            )
+            ->update();
+
+        $this->table('anexos')
+            ->addColumn('id', 'integer', [
+                'autoIncrement' => true,
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addPrimaryKey(['id'])
+            ->addColumn('demanda_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('historico_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->addColumn('estudante_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('nome_original', 'string', [
+                'default' => null,
+                'limit' => 255,
+                'null' => false,
+            ])
+            ->addColumn('arquivo', 'string', [
+                'default' => null,
+                'limit' => 255,
+                'null' => false,
+            ])
+            ->addColumn('tipo_documento', 'string', [
+                'default' => 'Outros',
+                'limit' => 50,
+                'null' => false,
+            ])
+            ->addColumn('mime_type', 'string', [
+                'default' => null,
+                'limit' => 100,
+                'null' => true,
+            ])
+            ->addColumn('tamanho', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->addColumn('created', 'datetime', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('modified', 'datetime', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->create();
+
+        $this->table('anexos')
+            ->addIndex(['demanda_id'], ['name' => 'anexos_demanda_id'])
+            ->addIndex(['historico_id'], ['name' => 'anexos_historico_id'])
+            ->addIndex(['estudante_id'], ['name' => 'anexos_estudante_id'])
+            ->addForeignKey(
+                'demanda_id',
+                'demandas',
+                'id',
+                [
+                    'constraint' => 'fk_anexos_demandas',
+                    'delete' => 'CASCADE',
+                    'update' => 'RESTRICT',
+                ],
+            )
+            ->addForeignKey(
+                'historico_id',
+                'historicos',
+                'id',
+                [
+                    'constraint' => 'fk_anexos_historicos',
+                    'delete' => 'SET_NULL',
+                    'update' => 'RESTRICT',
+                ],
+            )
+            ->addForeignKey(
+                'estudante_id',
+                'alunos',
+                'id',
+                [
+                    'constraint' => 'fk_anexos_estudantes',
+                    'delete' => 'CASCADE',
+                    'update' => 'RESTRICT',
+                ],
+            )
+            ->update();
+
+        $this->table('monografias')
+            ->addColumn('id', 'integer', [
+                'autoIncrement' => true,
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addPrimaryKey(['id'])
+            ->addColumn('catalogo', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('titulo', 'string', [
+                'default' => '',
+                'limit' => 160,
+                'null' => false,
+            ])
+            ->addColumn('resumo', 'text', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('data', 'date', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('periodo', 'string', [
+                'default' => '',
+                'limit' => 6,
+                'null' => false,
+            ])
+            ->addColumn('professor_id', 'smallinteger', [
+                'default' => 0,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->addColumn('num_co_orienta', 'smallinteger', [
+                'default' => 0,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->addColumn('areamonografia_id', 'smallinteger', [
+                'default' => 0,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->addColumn('areamonografia', 'integer', [
+                'default' => 0,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('data_defesa', 'date', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->addColumn('banca1', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('banca2', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('banca3', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('convidado', 'string', [
+                'default' => null,
+                'limit' => 70,
+                'null' => false,
+            ])
+            ->addColumn('url', 'string', [
+                'default' => null,
+                'limit' => 15,
+                'null' => true,
+            ])
+            ->addColumn('timestamp', 'timestamp', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+            ])
+            ->create();
+
+        $this->table('tccestudantes')
+            ->addColumn('id', 'integer', [
+                'autoIncrement' => true,
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addPrimaryKey(['id'])
+            ->addColumn('nome', 'string', [
+                'default' => '',
+                'limit' => 50,
+                'null' => false,
+            ])
+            ->addColumn('monografia_id', 'smallinteger', [
+                'default' => 0,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('registro', 'char', [
+                'default' => null,
+                'limit' => 10,
+                'null' => true,
+            ])
+            ->addIndex(['id'], ['name' => 'id', 'unique' => true])
+            ->create();
+
+        $this->table('turmaotps')
+            ->addColumn('id', 'integer', [
+                'autoIncrement' => true,
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addPrimaryKey(['id'])
+            ->addColumn('configuraplanejamento_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => false,
+                'signed' => true,
+            ])
+            ->addColumn('turno', 'string', [
+                'default' => null,
+                'limit' => 10,
+                'null' => true,
+            ])
+            ->addColumn('periodo', 'tinyinteger', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->addColumn('turmaotp', 'string', [
+                'default' => null,
+                'limit' => 20,
+                'null' => false,
+            ])
+            ->addColumn('docente_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->addColumn('dia_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->addColumn('horario_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->addColumn('sala_id', 'integer', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+                'signed' => true,
+            ])
+            ->addColumn('observacoes', 'string', [
+                'default' => null,
+                'limit' => 255,
+                'null' => true,
+            ])
+            ->addColumn('created', 'datetime', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->addColumn('modified', 'datetime', [
+                'default' => null,
+                'limit' => null,
+                'null' => true,
+            ])
+            ->create();
     }
 
     /**
@@ -5041,10 +5718,10 @@ class Initial extends BaseMigration
     {
         $this->table('impersonations')
             ->dropForeignKey(
-                'impersonated_user_id'
+                'impersonated_user_id',
             )
             ->dropForeignKey(
-                'admin_id'
+                'admin_id',
             )->save();
 
         $this->table('acos')->drop()->save();
@@ -5129,7 +5806,19 @@ class Initial extends BaseMigration
         $this->table('tcc_alunos')->drop()->save();
         $this->table('test_cast')->drop()->save();
         $this->table('test_test')->drop()->save();
-        $this->table('turma_estagios')->drop()->save();
+        $this->table('agendamentotccs')->drop()->save();
+        $this->table('anexos')->drop()->save();
+        $this->table('historicos')->drop()->save();
+        $this->table('demandas')->drop()->save();
+        $this->table('areamonografias')->drop()->save();
+        $this->table('areamonografias_docentes')->drop()->save();
+        $this->table('atendentes')->drop()->save();
+        $this->table('balcao_users')->drop()->save();
+        $this->table('categorias')->drop()->save();
+        $this->table('monografias')->drop()->save();
+        $this->table('tccestudantes')->drop()->save();
+        $this->table('turmaotps')->drop()->save();
+        $this->table('turmas')->drop()->save();
         $this->table('turnos')->drop()->save();
         $this->table('universidades')->drop()->save();
         $this->table('users')->drop()->save();

@@ -18,7 +18,7 @@ class QuestionarioPolicy
      * @param \App\Model\Entity\questionario $questionario
      * @return bool
      */
-    public function canAdd(?IdentityInterface $user, Questionario $questionario)
+    public function canAdd(?IdentityInterface $user, Questionario $questionario): bool
     {
         return $user->categoria === 1;
     }
@@ -30,7 +30,7 @@ class QuestionarioPolicy
      * @param \App\Model\Entity\questionario $questionario
      * @return bool
      */
-    public function canEdit(?IdentityInterface $user, Questionario $questionario)
+    public function canEdit(?IdentityInterface $user, Questionario $questionario): bool
     {
         return $user->categoria === 1;
     }
@@ -42,7 +42,7 @@ class QuestionarioPolicy
      * @param \App\Model\Entity\questionario $questionario
      * @return bool
      */
-    public function canDelete(?IdentityInterface $user, Questionario $questionario)
+    public function canDelete(?IdentityInterface $user, Questionario $questionario): bool
     {
         return $user->categoria === 1;
     }
@@ -54,7 +54,7 @@ class QuestionarioPolicy
      * @param \App\Model\Entity\questionario $questionario
      * @return bool
      */
-    public function canView(?IdentityInterface $user, Questionario $questionario)
+    public function canView(?IdentityInterface $user, Questionario $questionario): bool
     {
         return isset($user);
     }

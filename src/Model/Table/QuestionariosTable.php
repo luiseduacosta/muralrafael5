@@ -1,11 +1,8 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -13,7 +10,6 @@ use Cake\Validation\Validator;
  * Questionarios Model
  *
  * @property \App\Model\Table\QuestoesTable&\Cake\ORM\Association\HasMany $Questoes
- *
  * @method \App\Model\Entity\Questionario newEmptyEntity()
  * @method \App\Model\Entity\Questionario newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Questionario[] newEntities(array $data, array $options = [])
@@ -27,7 +23,6 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Questionario[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
  * @method \App\Model\Entity\Questionario[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Questionario[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class QuestionariosTable extends Table

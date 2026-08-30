@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Policy;
@@ -10,6 +9,7 @@ use Authorization\Policy\BeforePolicyInterface;
 use Authorization\Policy\Result;
 use Authorization\Policy\ResultInterface;
 use Cake\ORM\Query;
+
 final class AlunosTablePolicy implements BeforePolicyInterface
 {
     /**

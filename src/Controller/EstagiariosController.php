@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Http\Response;
 
 /**
  * Estagiarios Controller
@@ -209,7 +210,7 @@ class EstagiariosController extends AppController
      *
      * @param string|null $id Estagiario id.
      * @return \Cake\Http\Response|null|void Renders view
-     * @throws RecordNotFoundException When record not found.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view(?string $id = null)
     {
@@ -303,8 +304,8 @@ class EstagiariosController extends AppController
 
                 // Check period validity. Mesmo ou maior período significa edição, não um novo passo
                 $compare = $this->comparePeriodo(
-                    (string) $ultimo_estagio->periodo,
-                    (string) $periodo,
+                    (string)$ultimo_estagio->periodo,
+                    (string)$periodo,
                 );
 
                 if ($compare >= 0) {
@@ -385,7 +386,7 @@ class EstagiariosController extends AppController
      *
      * @param string|null $id Estagiario id.
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws RecordNotFoundException When record not found.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function edit(?string $id = null)
     {
@@ -469,7 +470,7 @@ class EstagiariosController extends AppController
      *
      * @param string|null $id Estagiario id.
      * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws RecordNotFoundException When record not found.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete(?string $id = null)
     {
@@ -509,7 +510,7 @@ class EstagiariosController extends AppController
      *
      * @param string|null $id Estagiario id.
      * @return \Cake\Http\Response|null|void
-     * @throws RecordNotFoundException When record not found.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function termocompromisso(?string $id = null)
     {
@@ -560,7 +561,7 @@ class EstagiariosController extends AppController
         if ($estagiario) {
             $periodoatual = $this->configuracao->termo_compromisso_periodo;
 
-            $compare = $this->comparePeriodo((string) $periodoatual, (string) $estagiario->periodo);
+            $compare = $this->comparePeriodo((string)$periodoatual, (string)$estagiario->periodo);
 
             // Mesmo período: editar o estágio do período atual
             if ($compare === 0) {
@@ -582,8 +583,8 @@ class EstagiariosController extends AppController
             $this->Flash->error(
                 __(
                     'Período atual ({0}) não pode ser anterior ao último período de estágio ({1}).',
-                    (string) $periodoatual,
-                    (string) $estagiario->periodo,
+                    (string)$periodoatual,
+                    (string)$estagiario->periodo,
                 ),
             );
 
@@ -619,8 +620,8 @@ class EstagiariosController extends AppController
             return 0;
         }
 
-        $year = (int) trim($parts[0]);
-        $half = (int) trim($parts[1]);
+        $year = (int)trim($parts[0]);
+        $half = (int)trim($parts[1]);
 
         if ($year <= 0 || ($half !== 1 && $half !== 2)) {
             return 0;
@@ -653,7 +654,7 @@ class EstagiariosController extends AppController
      *
      * @param string|null $id Estagiario id.
      * @return \Cake\Http\Response|null|void
-     * @throws RecordNotFoundException When record not found.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function termocompromissopdf(?string $id = null)
     {
@@ -725,6 +726,7 @@ class EstagiariosController extends AppController
 
             if (!$estagiario) {
                 $this->Flash->error(__('Sem estagio cadastrado.'));
+
                 return $this->redirectBack(['controller' => 'alunos', 'action' => 'view', $user_data['aluno_id']]);
             }
 
@@ -734,6 +736,7 @@ class EstagiariosController extends AppController
         // Se não tiver o id, retorna erro
         if (empty($id)) {
             $this->Flash->error(__('Sem parâmetros para localizar o estagiário'));
+
             return $this->redirectBack(['action' => 'index']);
         }
 
@@ -747,12 +750,14 @@ class EstagiariosController extends AppController
         // Se não tiver o estagiário, retorna erro
         if (!$estagiario) {
             $this->Flash->error(__('Sem estagio cadastrado.'));
+
             return $this->redirectBack(['controller' => 'alunos', 'action' => 'view', $user_data['aluno_id']]);
         }
 
         // Se não tiver o RG, retorna erro
         if (empty($estagiario->aluno->identidade)) {
             $this->Flash->error(__('Aluno sem RG'));
+
             return $this->redirect(['controller' => 'alunos', 'action' => 'view', $estagiario->aluno->id]);
         }
 
@@ -761,18 +766,21 @@ class EstagiariosController extends AppController
             $this->Flash->error(
                 __('Aluno não especifica o orgão emisor do documento'),
             );
+
             return $this->redirect(['controller' => 'alunos', 'action' => 'view', $estagiario->aluno->id]);
         }
 
         // Se não tiver o CPF, retorna erro
         if (empty($estagiario->aluno->cpf)) {
             $this->Flash->error(__('Aluno sem CPF'));
+
             return $this->redirect(['controller' => 'alunos', 'action' => 'view', $estagiario->aluno->id]);
         }
 
         // Se não tiver o supervisor, retorna erro
         if (empty($estagiario->supervisor->id)) {
             $this->Flash->error(__('Falta o supervisor de estágio'));
+
             return $this->redirect(['controller' => 'alunos', 'action' => 'view', $estagiario->aluno->id]);
         }
 
@@ -794,12 +802,12 @@ class EstagiariosController extends AppController
      * @param \App\Controller\Estagiario $ultimoestagio Ultimo estagio
      * @return int Nivel de estagio
      */
-    private function nivelestagio(string $periodoatual, Estagiario $ultimoestagio)
+    private function nivelestagio(string $periodoatual, Estagiario $ultimoestagio): int
     {
         /* Se o periodo atual é o mesmo do periodo cadastrado no estagiário deixa o nivel como está */
         if ($periodoatual == $ultimoestagio->periodo) {
             $nivel = $ultimoestagio->nivel;
-            /** Se o periodo atual é maior que o cadastrado então passa para o próximo nivel e insere um novo registro */
+        /** Se o periodo atual é maior que o cadastrado então passa para o próximo nivel e insere um novo registro */
         } elseif ($periodoatual > $ultimoestagio->periodo) {
             $nivel = $ultimoestagio->nivel + 1;
             /** Calculo o ultimo nível de estágio possível a partir do ajuste curricular. */
@@ -845,7 +853,7 @@ class EstagiariosController extends AppController
         if ($user_data['professor_id']) {
             $professor_id = $user_data['professor_id'];
         } else {
-            $professor_id = (int) $this->request->getQuery('professor_id') ?? $this->request->getData('professor_id');
+            $professor_id = (int)$this->request->getQuery('professor_id') ?? $this->request->getData('professor_id');
         }
 
         if (empty($professor_id)) {
@@ -932,7 +940,7 @@ class EstagiariosController extends AppController
         if ($user_data['professor_id']) {
             $professor_id = $user_data['professor_id'];
         } else {
-            $professor_id = (int) $this->request->getQuery('professor_id');
+            $professor_id = (int)$this->request->getQuery('professor_id');
         }
 
         if (empty($professor_id)) {
@@ -997,7 +1005,7 @@ class EstagiariosController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function relatorio()
+    public function relatorio(): ?Response
     {
         $this->Authorization->authorize($this->Estagiarios, 'relatorio');
 

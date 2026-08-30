@@ -1,11 +1,10 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Policy;
 
-use App\Model\Table\RespostasTable;
 use Authorization\IdentityInterface;
+use Cake\ORM\Table;
 
 /**
  * RespostasTable policy
@@ -19,7 +18,7 @@ class RespostasTablePolicy
      * @param \Cake\ORM\Table $respostas
      * @return bool
      */
-    public function canIndex(?IdentityInterface $user, \Cake\ORM\Table $respostas)
+    public function canIndex(?IdentityInterface $user, Table $respostas): bool
     {
         return isset($user);
     }

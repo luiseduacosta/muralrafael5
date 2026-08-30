@@ -18,7 +18,7 @@ class QuestionariosTablePolicy
      * @param \App\Model\Table\QuestionariosTable $questionarios
      * @return bool
      */
-    public function canIndex(?IdentityInterface $user, QuestionariosTable $questionarios)
+    public function canIndex(?IdentityInterface $user, QuestionariosTable $questionarios): bool
     {
         return true;
     }

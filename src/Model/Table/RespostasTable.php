@@ -1,10 +1,8 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -14,7 +12,6 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\QuestionariosTable&\Cake\ORM\Association\BelongsTo $Questionarios
  * @property \App\Model\Table\EstagiariosTable&\Cake\ORM\Association\BelongsTo $Estagiarios
- *
  * @method \App\Model\Entity\Resposta newEmptyEntity()
  * @method \App\Model\Entity\Resposta newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Resposta[] newEntities(array $data, array $options = [])
@@ -28,7 +25,6 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Resposta[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
  * @method \App\Model\Entity\Resposta[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \App\Model\Entity\Resposta[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class RespostasTable extends Table

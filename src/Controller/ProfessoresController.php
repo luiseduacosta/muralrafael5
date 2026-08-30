@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Authorization\Exception\ForbiddenException;
+use Cake\Http\Response;
 use Cake\ORM\Query;
 
 /**
@@ -215,7 +216,7 @@ class ProfessoresController extends AppController
      * @param string|null $nome Search term
      * @return \Cake\Http\Response|null
      */
-    public function busca(?string $nome = null)
+    public function busca(?string $nome = null): ?Response
     {
         $this->Authorization->authorize($this->Professores);
 

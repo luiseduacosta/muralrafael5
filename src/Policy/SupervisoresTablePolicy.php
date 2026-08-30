@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Policy;
@@ -8,6 +7,7 @@ use Authorization\IdentityInterface;
 use Authorization\Policy\BeforePolicyInterface;
 use Authorization\Policy\Result;
 use Authorization\Policy\ResultInterface;
+
 final class SupervisoresTablePolicy implements BeforePolicyInterface
 {
     /**

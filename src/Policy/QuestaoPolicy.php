@@ -18,7 +18,7 @@ class QuestaoPolicy
      * @param \App\Model\Entity\Questao $questao
      * @return bool
      */
-    public function canAdd(?IdentityInterface $user, Questao $questao)
+    public function canAdd(?IdentityInterface $user, Questao $questao): bool
     {
         return $user->categoria === 1;
     }
@@ -30,7 +30,7 @@ class QuestaoPolicy
      * @param \App\Model\Entity\Questao $questao
      * @return bool
      */
-    public function canEdit(?IdentityInterface $user, Questao $questao)
+    public function canEdit(?IdentityInterface $user, Questao $questao): bool
     {
         return $user->categoria === 1;
     }
@@ -42,7 +42,7 @@ class QuestaoPolicy
      * @param \App\Model\Entity\Questao $questao
      * @return bool
      */
-    public function canDelete(?IdentityInterface $user, Questao $questao)
+    public function canDelete(?IdentityInterface $user, Questao $questao): bool
     {
         return $user->categoria === 1;
     }
@@ -54,7 +54,7 @@ class QuestaoPolicy
      * @param \App\Model\Entity\Questao $questao
      * @return bool
      */
-    public function canView(?IdentityInterface $user, Questao $questao)
+    public function canView(?IdentityInterface $user, Questao $questao): bool
     {
         return isset($user);
     }

@@ -48,6 +48,7 @@ class FolhadeatividadesController extends AppController
 
             if (!$estagiario) {
                 $this->Flash->error(__('Sem estagio cadastrado.'));
+
                 return $this->redirect(['controller' => 'alunos', 'action' => 'view', $user_data['aluno_id']]);
             }
 
@@ -57,6 +58,7 @@ class FolhadeatividadesController extends AppController
         // Se não tiver o estagiário, retorna erro
         if (empty($estagiario_id)) {
             $this->Flash->error(__('Selecione o estagiário'));
+
             return $this->redirect(['controller' => 'Estagiarios', 'action' => 'index']);
         }
 
@@ -68,6 +70,7 @@ class FolhadeatividadesController extends AppController
 
         if (!$estagiario) {
             $this->Flash->error(__('Estagiário não localizado.'));
+
             return $this->redirect(['controller' => 'Estagiarios', 'action' => 'index']);
         }
 
@@ -134,7 +137,7 @@ class FolhadeatividadesController extends AppController
                     'controller' => 'Folhadeatividades',
                     'action' => 'view',
                     $folhadeatividaderesposta->id,
-                ], );
+                ],);
             }
             $this->Flash->error(
                 __('Atividade não foi cadastrada. Tente mais uma vez.'),
