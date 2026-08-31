@@ -166,8 +166,8 @@ $departamentos = [
                             </td>
                             <td><?= h($professor->user->id) ?></td>
                             <td><?= $professor->email ? $this->Text->autoLinkEmails($professor->email) : '' ?></td>
-                            <td><?= h($professor->user->numero) ?></td>
-                            <td><?= $professor->user->timestamp ? h($professor->user->timestamp) : '' ?></td>
+                            <td><?= h($professor->user->identificacao) ?></td>
+                            <td><?= $professor->user->atualizado_em ? $professor->user->atualizado_em->format('d/m/Y H:i:s') : '' ?></td>
                         </tr>
                     </table>
                 </div>

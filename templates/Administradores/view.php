@@ -44,7 +44,7 @@
                             </td>
                             <td><?= $this->Html->link((string)$administrador->user->id, ['controller' => 'Users', 'action' => 'view', $administrador->user->id]) ?></td>
                             <td><?= $administrador->user->email ? $this->Text->autoLinkEmails($administrador->user->email) : '' ?></td>
-                            <td><?= h($administrador->user->timestamp) ?></td>
+                            <td><?= $administrador->user->atualizado_em ? $administrador->user->atualizado_em->format('d/m/Y H:i:s') : '' ?></td>
                         </tr>
                     </table>
                 </div>

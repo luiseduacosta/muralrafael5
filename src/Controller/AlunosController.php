@@ -143,7 +143,7 @@ class AlunosController extends AppController
 
         if ($user_data['aluno_id']) {
             $email = $user_data['email'];
-            $registro = $user_data['numero'];
+            $registro = $user_data['identificacao'];
             $aluno->email = $email;
             $aluno->registro = $registro;
         }

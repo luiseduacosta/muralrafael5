@@ -36,7 +36,9 @@ if ($user_session) {
                     <th class="actions"><?= __('Actions') ?></th>
                     <th>Id</th>
                     <th>Email</th>
+                    <th>Nome</th>
                     <th>Categoria</th>
+                    <th>Ativo</th>
                     <th>Criado</th>
                     <th>Modificado</th>
                 </tr>
@@ -56,6 +58,7 @@ if ($user_session) {
                     </td>
                     <td><?= $this->Html->link((string)$user->id, ['action' => 'view', $user->id]) ?></td>
                     <td><?= $user->email ? $this->Text->autoLinkEmails($user->email) : '' ?></td>
+                    <td><?= h($user->nome) ?></td>
                     <td>
                     <?php
                         $categorias = [
@@ -67,8 +70,9 @@ if ($user_session) {
                         echo $categorias[$user->categoria] ?? $user->categoria;
                         ?>
                     </td>
-                    <td><?= $user->created ? $user->created->format('d/m/Y H:i:s') : '' ?></td>
-                    <td><?= $user->modified ? $user->modified->format('d/m/Y H:i:s') : '' ?></td>
+                    <td><?= $user->ativo ? __('Sim') : __('Não') ?></td>
+                    <td><?= $user->criado_em ? $user->criado_em->format('d/m/Y H:i:s') : '' ?></td>
+                    <td><?= $user->atualizado_em ? $user->atualizado_em->format('d/m/Y H:i:s') : '' ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

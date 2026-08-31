@@ -172,7 +172,7 @@ class ProfessoresController extends AppController
 
         if ($user_data['professor_id']) {
             $email = $user_data['email'];
-            $siape = $user_data['numero'];
+            $siape = $user_data['identificacao'];
             $professor->email = $email;
             $professor->siape = $siape;
         }

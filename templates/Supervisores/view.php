@@ -110,8 +110,8 @@ if ($user_session) {
                                     <th class="actions"><?= __('Actions') ?></th>
                                     <th><?= __('Id') ?></th>
                                     <th><?= __('Email') ?></th>
-                                    <th><?= __('Registro') ?></th>
-                                    <th><?= __('Timestamp') ?></th>
+                                    <th><?= __('Identificação') ?></th>
+                                    <th><?= __('Atualização') ?></th>
                                 </tr>
                                 <tr>
                                     <td class="actions">
@@ -121,8 +121,8 @@ if ($user_session) {
                                     </td>
                                     <td><?= h($supervisor->user->id) ?></td>
                                     <td><?= $supervisor->user->email ? $this->Text->autoLinkEmails($supervisor->user->email) : '' ?></td>
-                                    <td><?= h($supervisor->user->registro) ?></td>
-                                    <td><?= $supervisor->user->timestamp ? h($supervisor->user->timestamp) : '' ?></td>
+                                    <td><?= h($supervisor->user->identificacao) ?></td>
+                                    <td><?= $supervisor->user->atualizado_em ? $supervisor->user->atualizado_em->format('d/m/Y H:i:s') : '' ?></td>
                                 </tr>
                             </table>
                         </div>

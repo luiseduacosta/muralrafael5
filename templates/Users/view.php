@@ -33,7 +33,25 @@ if ($user_session) {
             <table>
                 <tr>
                     <th><?= __('Categoria') ?></th>
-                    <td><?= h($user->categoria) ?></td>
+                    <td>
+                        <?php
+                        $categorias = [
+                            '1' => 'Administrador',
+                            '2' => 'Aluno',
+                            '3' => 'Professor',
+                            '4' => 'Supervisor',
+                        ];
+                        echo h($categorias[$user->categoria] ?? $user->categoria);
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?= __('Role') ?></th>
+                    <td><?= h($user->role) ?></td>
+                </tr>
+                <tr>
+                    <th><?= __('Ativo') ?></th>
+                    <td><?= $user->ativo ? __('Sim') : __('Não') ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Id') ?></th>
@@ -44,6 +62,10 @@ if ($user_session) {
                     <td><?= $user->email ? $this->Text->autoLinkEmails($user->email) : '' ?></td>
                 </tr>
                 <tr>
+                    <th><?= __('Nome') ?></th>
+                    <td><?= h($user->nome) ?></td>
+                </tr>
+                <tr>
                     <th><?= __('Registro (DRE, SIAPE ou CRESS)') ?></th>
                     <?php if ($user->categoria == '2') : ?>
                         <td><?= $this->Html->link((string)$user->identificacao, ['controller' => 'Alunos', 'action' => 'view', $user->entidade_id]) ?></td>
@@ -51,6 +73,8 @@ if ($user_session) {
                         <td><?= $this->Html->link((string)$user->identificacao, ['controller' => 'Professores', 'action' => 'view', $user->entidade_id]) ?></td>
                     <?php elseif ($user->categoria == '4') : ?>
                         <td><?= $this->Html->link((string)$user->identificacao, ['controller' => 'Supervisores', 'action' => 'view', $user->entidade_id]) ?></td>
+                    <?php else : ?>
+                        <td><?= h($user->identificacao) ?></td>
                     <?php endif; ?>
                 </tr>
                 <tr>

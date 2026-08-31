@@ -150,7 +150,7 @@ class SupervisoresController extends AppController
         }
         if ($user_data['supervisor_id']) {
             $email = $user_data['email'];
-            $cress = $user_data['numero'];
+            $cress = $user_data['identificacao'];
             $supervisor->email = $email;
             $supervisor->cress = $cress;
         }

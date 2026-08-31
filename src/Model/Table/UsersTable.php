@@ -45,7 +45,14 @@ class UsersTable extends Table
         $this->setDisplayField('email');
         $this->setPrimaryKey('id');
 
-        $this->addBehavior('Timestamp');
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'criado_em' => 'new',
+                    'atualizado_em' => 'always',
+                ],
+            ],
+        ]);
 
         $this->hasOne('Administradores', [
             'foreignKey' => 'user_id',
@@ -64,8 +71,8 @@ class UsersTable extends Table
     /**
      * Default validation rules.
      *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
+     * @param Validator $validator Validator instance.
+     * @return Validator
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -74,6 +81,8 @@ class UsersTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
+            ->scalar('email')
+            ->maxLength('email', 50)
             ->email('email')
             ->notEmptyString('email', 'Erro: Email vazio');
 
@@ -83,13 +92,31 @@ class UsersTable extends Table
             ->notEmptyString('password', 'Erro: senha vazia');
 
         $validator
-            ->integer('categoria')
-            ->inList('categoria', [1, 2, 3, 4], 'Erro: categoria inválida')
+            ->scalar('nome')
+            ->maxLength('nome', 128)
+            ->allowEmptyString('nome');
+
+        $validator
+            ->scalar('role')
+            ->inList('role', ['admin', 'supervisor', 'professor', 'aluno'], 'Erro: role inválida')
+            ->allowEmptyString('role');
+
+        $validator
+            ->scalar('categoria')
+            ->inList('categoria', ['1', '2', '3', '4'], 'Erro: categoria inválida')
             ->notEmptyString('categoria', 'Erro: categoria vazia');
 
         $validator
-            ->integer('numero')
-            ->allowEmptyString('numero');
+            ->integer('identificacao')
+            ->allowEmptyString('identificacao');
+
+        $validator
+            ->integer('entidade_id')
+            ->allowEmptyString('entidade_id');
+
+        $validator
+            ->boolean('ativo')
+            ->allowEmptyString('ativo');
 
         $validator
             ->integer('aluno_id')
@@ -104,12 +131,12 @@ class UsersTable extends Table
             ->allowEmptyString('professor_id');
 
         $validator
-            ->dateTime('created')
-            ->notEmptyDateTime('created');
+            ->dateTime('criado_em')
+            ->allowEmptyDateTime('criado_em');
 
         $validator
-            ->dateTime('modified')
-            ->notEmptyDateTime('modified');
+            ->dateTime('atualizado_em')
+            ->allowEmptyDateTime('atualizado_em');
 
         return $validator;
     }
@@ -118,8 +145,8 @@ class UsersTable extends Table
      * Returns a rules checker object that will be used for validating
      * application integrity.
      *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
+     * @param RulesChecker $rules The rules object to be modified.
+     * @return RulesChecker
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {

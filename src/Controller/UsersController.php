@@ -30,7 +30,9 @@ class UsersController extends AppController
      */
     protected array $paginate = [
         'sortableFields' => [
-            'id', 'email', 'Alunos.nome', 'Professores.nome', 'Supervisores.nome', 'created', 'modified',
+            'id', 'email', 'nome', 'categoria', 'ativo',
+            'Alunos.nome', 'Professores.nome', 'Supervisores.nome',
+            'criado_em', 'atualizado_em',
         ],
     ];
 
@@ -106,15 +108,38 @@ class UsersController extends AppController
         $user = $this->Users->newEmptyEntity();
 
         if ($this->request->is('post')) {
+            $isAdmin = $user_session && !empty($user_data['administrador_id']);
+
+            $publicFields = ['categoria', 'identificacao', 'password', 'email', 'nome'];
+            $adminFields = [
+                'categoria',
+                'identificacao',
+                'password',
+                'email',
+                'nome',
+                'ativo',
+                'role',
+                'entidade_id',
+                'aluno_id',
+                'supervisor_id',
+                'professor_id',
+            ];
+
             $user = $this->Users->patchEntity($user, $this->request->getData(), [
-                'fields' => ['categoria', 'numero', 'password', 'email'],
+                'fields' => $isAdmin ? $adminFields : $publicFields,
                 'accessibleFields' => ['password' => true],
             ]);
 
-            // Verify is numero has a valid value set. It is mandatory for all of the new users except admin
+            // Role derived from categoria when not explicitly set (admin override).
+            if (empty($user->role)) {
+                $roles = ['1' => 'admin', '2' => 'aluno', '3' => 'professor', '4' => 'supervisor'];
+                $user->role = $roles[(string)$user->categoria] ?? 'aluno';
+            }
+
+            // Verify is identificacao has a valid value set. It is mandatory for all of the new users except admin
             if ($this->request->getData('categoria') !== '1') {
-                $numero = $this->request->getData('numero');
-                if (empty($numero)) {
+                $identificacao = $this->request->getData('identificacao');
+                if (empty($identificacao)) {
                     $this->Flash->error(__('O número é obrigatório para o tipo de usuário selecionado.'));
 
                     return $this->redirect(['action' => 'add']);
@@ -125,7 +150,7 @@ class UsersController extends AppController
                 $this->Flash->success(__('The user has been saved.'));
                 // Update the entities with the user id and the user id with the entity id
                 if ($user->categoria == 2) {
-                    $aluno = $this->fetchTable('Alunos')->findByRegistro($user->numero)->first();
+                    $aluno = $this->fetchTable('Alunos')->findByRegistro($user->identificacao)->first();
                     if ($aluno) {
                         $this->fetchTable('Alunos')->updateAll(['user_id' => $user->id], ['id' => $aluno->id]);
                     } else {
@@ -134,7 +159,7 @@ class UsersController extends AppController
                         return $this->redirect(['controller' => 'Alunos', 'action' => 'add']);
                     }
                 } elseif ($user->categoria == 3) {
-                    $professor = $this->fetchTable('Professores')->findBySiape($user->numero)->first();
+                    $professor = $this->fetchTable('Professores')->findBySiape($user->identificacao)->first();
                     if ($professor) {
                         $this->fetchTable('Professores')->updateAll(['user_id' => $user->id], ['id' => $professor->id]);
                     } else {
@@ -143,7 +168,7 @@ class UsersController extends AppController
                         return $this->redirect(['controller' => 'Professores', 'action' => 'add']);
                     }
                 } elseif ($user->categoria == 4) {
-                    $supervisor = $this->fetchTable('Supervisores')->findByCress($user->numero)->first();
+                    $supervisor = $this->fetchTable('Supervisores')->findByCress($user->identificacao)->first();
                     if ($supervisor) {
                         $this->fetchTable('Supervisores')->updateAll(
                             ['user_id' => $user->id],
@@ -219,17 +244,36 @@ class UsersController extends AppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $opt = ['fields' => ['email']];
+            $isAdmin = !empty($user_data['administrador_id']);
             $data = $this->request->getData();
 
-            if (array_key_exists('password', $data)) {
-                $opt = [
-                    'fields' => ['email', 'password'],
-                    'accessibleFields' => ['password' => ($user_data['administrador_id'] || $sameUser)],
-                ];
+            $baseFields = ['email', 'nome'];
+            $adminFields = [
+                'email',
+                'nome',
+                'ativo',
+                'role',
+                'categoria',
+                'identificacao',
+                'entidade_id',
+                'aluno_id',
+                'supervisor_id',
+                'professor_id',
+            ];
+
+            $fields = $isAdmin ? $adminFields : $baseFields;
+            $hasPassword = array_key_exists('password', $data);
+
+            if ($hasPassword) {
+                $fields[] = 'password';
             } else {
                 unset($data['password']);
             }
+
+            $opt = [
+                'fields' => $fields,
+                'accessibleFields' => ['password' => ($isAdmin || $sameUser)],
+            ];
 
             $user = $this->Users->patchEntity($user, $data, $opt);
 
@@ -290,7 +334,7 @@ class UsersController extends AppController
             $this->Flash->success(__('Usuário logado.'));
             // Redirect based on category
             switch ($user['categoria']) {
-                case 1: // Admin
+                case '1': // Admin
                     $administrador = $this->fetchTable('Administradores')->findByUserId($user['id'])->first();
                     if ($administrador) {
                         if ($administrador->user_id == $user['id']) {
@@ -315,9 +359,9 @@ class UsersController extends AppController
 
                     return $this->redirect(['controller' => 'Administradores', 'action' => 'add']);
                 case '2':
-                    if ($user['numero']) {
+                    if ($user['identificacao']) {
                         try {
-                            $aluno = $this->fetchTable('Alunos')->findByRegistro($user['numero'])->first();
+                            $aluno = $this->fetchTable('Alunos')->findByRegistro($user['identificacao'])->first();
                         } catch (RecordNotFoundException $error) {
                             $this->Flash->error(__('Record not found: ' . $error->getMessage()));
 
@@ -338,9 +382,9 @@ class UsersController extends AppController
                     return $this->redirect(['controller' => 'Alunos', 'action' => 'add']);
 
                 case '3': // Professor: two ways to pair the user with a professor: professor_id or siape
-                    if ($user['numero']) {
+                    if ($user['identificacao']) {
                         try {
-                            $professor = $this->fetchTable('Professores')->findBySiape($user['numero'])->first();
+                            $professor = $this->fetchTable('Professores')->findBySiape($user['identificacao'])->first();
                         } catch (RecordNotFoundException $error) {
                             $this->Flash->error(__('Record not found: ' . $error->getMessage()));
 
@@ -360,9 +404,9 @@ class UsersController extends AppController
 
                     return $this->redirect(['controller' => 'Professores', 'action' => 'add']);
                 case '4': // Supervisor: two ways to pair the user with a supervisor: supervisor_id or cress
-                    if ($user['numero']) {
+                    if ($user['identificacao']) {
                         try {
-                            $supervisor = $this->fetchTable('Supervisores')->findByCress($user['numero'])->first();
+                            $supervisor = $this->fetchTable('Supervisores')->findByCress($user['identificacao'])->first();
                         } catch (RecordNotFoundException $error) {
                             $this->Flash->error(__('Record not found: ' . $error->getMessage()));
 

@@ -13,7 +13,7 @@ if ($user_session) {
     <?= $this->Html->link('Configurações', '/configuracaos/view/1', ['role' => 'button', 'class' => 'button']) ?>
     <?= $this->Html->link('Lista de usuários', '/users/listausuarios/', ['role' => 'button', 'class' => 'button']) ?>
     <?= $this->Html->link('Usuários', '/users/index/', ['role' => 'button', 'class' => 'button']) ?>
-    <?= $this->Html->link('Busca por numero', '/users/busca_numero', ['role' => 'button', 'class' => 'button']) ?>
+    <?= $this->Html->link('Busca por identificação', '/users/busca_numero', ['role' => 'button', 'class' => 'button']) ?>
     <?= $this->Html->link('Busca por Email', '/users/busca_email', ['role' => 'button', 'class' => 'button']) ?>
     <?= $this->Html->link('Alterna usuário', '/users/alternarusuario', ['role' => 'button', 'class' => 'button']) ?>
 
@@ -21,7 +21,7 @@ if ($user_session) {
 
 <?php
 echo $this->Form->create();
-echo $this->Form->input('numero', ['label' => ['text' => 'DRE, SIAPE ou CRESS respectivamente', 'class' => 'label-control col-2'], 'class' => 'form-control']);
+echo $this->Form->control('identificacao', ['label' => ['text' => 'DRE, SIAPE ou CRESS respectivamente', 'class' => 'label-control col-2'], 'class' => 'form-control']);
 ?>
 
 <div class='row justify-content-between'>

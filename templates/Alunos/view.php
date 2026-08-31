@@ -130,8 +130,8 @@ if ($user_session) {
                                 </td>   
                                 <td><?= $this->Html->link((string)$aluno->user->id, ['controller' => 'Users', 'action' => 'view', $aluno->user->id]) ?></td>
                                 <td><?= $aluno->user->email ? $this->Text->autoLinkEmails($aluno->user->email) : '' ?></td>
-                                <td><?= h($aluno->user->created ? $aluno->user->created->format('d/m/Y H:i:s') : 's/d') ?></td>
-                                <td><?= h($aluno->user->modified ? $aluno->user->modified->format('d/m/Y H:i:s') : 's/d') ?></td>
+                                <td><?= h($aluno->user->criado_em ? $aluno->user->criado_em->format('d/m/Y H:i:s') : 's/d') ?></td>
+                                <td><?= h($aluno->user->atualizado_em ? $aluno->user->atualizado_em->format('d/m/Y H:i:s') : 's/d') ?></td>
                             </tr>
                         </table>
                     </div>

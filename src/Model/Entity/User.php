@@ -18,13 +18,17 @@ use Cake\ORM\TableRegistry;
  * @property int $id
  * @property string|null $email
  * @property string|null $password
+ * @property string|null $nome
+ * @property string|null $role
  * @property string $categoria
- * @property int|null $numero
+ * @property int|null $identificacao
+ * @property int|null $entidade_id
+ * @property bool|null $ativo
+ * @property \Cake\I18n\FrozenTime $criado_em
+ * @property \Cake\I18n\FrozenTime $atualizado_em
  * @property int|null $aluno_id
  * @property int|null $supervisor_id
  * @property int|null $professor_id
- * @property \Cake\I18n\FrozenTime $created
- * @property \Cake\I18n\FrozenTime $modified
  *
  * @property \App\Model\Entity\Aluno $aluno
  * @property \App\Model\Entity\Supervisor $supervisor
@@ -50,13 +54,17 @@ class User extends Entity implements AuthorizationIdentity, AuthenticationIdenti
     protected array $_accessible = [
         'email' => true,
         'password' => true,
+        'nome' => true,
+        'role' => true,
         'categoria' => true,
-        'numero' => true,
+        'identificacao' => true,
+        'entidade_id' => true,
+        'ativo' => true,
+        'criado_em' => true,
+        'atualizado_em' => true,
         'aluno_id' => true,
         'supervisor_id' => true,
         'professor_id' => true,
-        'created' => true,
-        'modified' => true,
         'aluno' => true,
         'supervisor' => true,
         'professor' => true,
