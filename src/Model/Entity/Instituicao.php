@@ -11,26 +11,26 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property string $instituicao
  * @property int|null $area_id
+ * @property int|null $area
  * @property string|null $natureza
  * @property string $cnpj
- * @property string $email
+ * @property string|null $email
  * @property string|null $url
- * @property string $endereco
- * @property string $bairro
- * @property string $municipio
- * @property string $cep
- * @property string $telefone
- * @property string|null $fax
+ * @property string|null $endereco
+ * @property string|null $bairro
+ * @property string|null $municipio
+ * @property string|null $cep
+ * @property string|null $telefone
  * @property string|null $beneficios
  * @property string|null $fim_de_semana
- * @property string $localInscricao
- * @property int $convenio
- * @property \Cake\I18n\FrozenDate|null $expira
- * @property string $seguro
- * @property string $avaliacao
+ * @property int|null $convenio
+ * @property \Cake\I18n\Date|null $expira
+ * @property string|null $seguro
  * @property string|null $observacoes
+ * @property int $user_id
+ * @property int|null $estagiarios_count
  *
- * @property \App\Model\Entity\Area $area
+ * @property \App\Model\Entity\Area $Area
  * @property \App\Model\Entity\Estagiario[] $estagiarios
  * @property \App\Model\Entity\Muralestagio[] $muralestagios
  * @property \App\Model\Entity\Visita[] $visitas
@@ -45,11 +45,12 @@ class Instituicao extends Entity
      * be mass assigned. For security purposes, it is advised to set '*' to false
      * (or remove it), and explicitly make individual fields accessible as needed.
      *
-     * @var array
+     * @var array<string, bool>
      */
     protected array $_accessible = [
         'instituicao' => true,
         'area_id' => true,
+        'area' => true,
         'natureza' => true,
         'cnpj' => true,
         'email' => true,
@@ -59,16 +60,13 @@ class Instituicao extends Entity
         'municipio' => true,
         'cep' => true,
         'telefone' => true,
-        'fax' => true,
         'beneficios' => true,
         'fim_de_semana' => true,
-        'localInscricao' => true,
         'convenio' => true,
         'expira' => true,
         'seguro' => true,
-        'avaliacao' => true,
         'observacoes' => true,
-        'area' => true,
+        'user_id' => true,
         'estagiarios' => true,
         'muralestagios' => true,
         'visitas' => true,

@@ -71,7 +71,7 @@ if ($user_session) {
                     <th><?= $this->Paginator->sort('instituicao', 'Instituição') ?></th>
                     <th><?= $this->Paginator->sort('vagas') ?></th>
                     <th><?= $this->Paginator->sort('beneficios') ?></th>
-                    <th><?= $this->Paginator->sort('fim_de_semana', 'Fim de semana') ?></th>
+                    <th><?= $this->Paginator->sort('final_de_semana', 'Fim de semana') ?></th>
                     <th><?= $this->Paginator->sort('carga_horaria', 'Carga Horária') ?></th>
                     <th><?= $this->Paginator->sort('data_selecao', 'Seleção') ?></th>
                     <th><?= $this->Paginator->sort('data_inscricao', 'Inscrição') ?></th>
@@ -94,7 +94,7 @@ if ($user_session) {
                         <td>
                             <?php
                             $fim_de_semana = '';
-                            switch ($muralestagio->fim_de_semana) {
+                            switch ($muralestagio->final_de_semana) {
                                 case 0:
                                     $fim_de_semana = 'Não';
                                     break;

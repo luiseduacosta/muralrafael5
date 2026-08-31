@@ -11,32 +11,23 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property string $nome
  * @property string|null $cpf
- * @property string|null $endereco
- * @property string|null $bairro
- * @property string|null $municipio
- * @property string|null $cep
- * @property string|null $codigo_tel
+ * @property int|null $codigo_telefone
  * @property string|null $telefone
- * @property string|null $codigo_cel
+ * @property int|null $codigo_celular
  * @property string|null $celular
  * @property string|null $email
  * @property string|null $escola
- * @property string|null $ano_formatura
- * @property int $cress
+ * @property string|null $ano_formacao
+ * @property string|null $cress
  * @property int $regiao
- * @property string|null $outros_estudos
- * @property string|null $area_curso
- * @property string|null $ano_curso
  * @property string|null $cargo
- * @property int|null $num_inscricao
- * @property string|null $curso_turma
  * @property string|null $observacoes
- * @property int $user_id
+ * @property int|null $user_id
  * @property int|null $estagiarios_count
  *
  * @property \App\Model\Entity\Estagiario[] $estagiarios
- * @property \App\Model\Entity\User[] $users
- * @property \App\Model\Entity\Instituicao[] $instituicao
+ * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\Instituicao[] $instituicoes
  */
 class Supervisor extends Entity
 {
@@ -47,35 +38,26 @@ class Supervisor extends Entity
      * be mass assigned. For security purposes, it is advised to set '*' to false
      * (or remove it), and explicitly make individual fields accessible as needed.
      *
-     * @var array
+     * @var array<string, bool>
      */
     protected array $_accessible = [
         'nome' => true,
         'cpf' => true,
-        'endereco' => true,
-        'bairro' => true,
-        'municipio' => true,
-        'cep' => true,
-        'codigo_tel' => true,
+        'codigo_telefone' => true,
         'telefone' => true,
-        'codigo_cel' => true,
+        'codigo_celular' => true,
         'celular' => true,
         'email' => true,
         'escola' => true,
-        'ano_formatura' => true,
+        'ano_formacao' => true,
         'cress' => true,
         'regiao' => true,
-        'outros_estudos' => true,
-        'area_curso' => true,
-        'ano_curso' => true,
         'cargo' => true,
-        'num_inscricao' => true,
-        'curso_turma' => true,
         'observacoes' => true,
         'user_id' => true,
         'estagiarios_count' => true,
         'estagiarios' => true,
-        'users' => true,
-        'instituicao' => true,
+        'user' => true,
+        'instituicoes' => true,
     ];
 }

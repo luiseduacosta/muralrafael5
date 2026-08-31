@@ -55,12 +55,10 @@ if ($user_session) {
                     echo $this->Form->control('bairro', ['label' => 'Bairro']);
                     echo $this->Form->control('municipio', ['label' => 'Município']);
                     echo $this->Form->control('beneficios', ['label' => 'Benefícios oferecido pela instituição', 'required' => false]);
-                    echo $this->Form->control('fim_de_semana', ['label' => 'Estágio no fim de semana', 'options' => ['1' => 'Sim', '0' => 'Nao', '2' => 'Parcial']]);
-                    echo $this->Form->control('local_inscricao', ['label' => 'Local de inscrição', 'options' => ['1' => 'Coordenação de Estágio/ESS/UFRJ', '0' => 'Instituição']]);
+                    echo $this->Form->control('fim_de_semana', ['label' => 'Estágio no fim de semana', 'options' => ['1' => 'Sim', '0' => 'Nao', '2' => 'Parcial'], 'empty' => true]);
                     echo $this->Form->control('convenio', ['label' => 'Nº do convênio na UFRJ', 'required' => false]);
                     echo $this->Form->control('expira', ['label' => 'Data de expiração do convênio', 'empty' => true]);
-                    echo $this->Form->control('seguro', ['label' => 'Seguro (S/N)', 'options' => ['1' => 'Sim', '0' => 'Nao'], 'default' => '0']);
-                    echo $this->Form->control('avaliacao', ['label' => 'Avaliação', 'options' => ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5'], 'default' => '3']);
+                    echo $this->Form->control('seguro', ['label' => 'Seguro (S/N)', 'options' => ['1' => 'Sim', '0' => 'Nao'], 'empty' => true]);
                     echo $this->Form->control('observacoes', ['label' => 'Observações']);
                     echo $this->Form->control('supervisores._ids', ['options' => $supervisores]);
                 ?>

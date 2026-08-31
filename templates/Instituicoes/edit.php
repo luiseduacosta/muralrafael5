@@ -53,12 +53,10 @@
                     echo $this->Form->control('cep', ['label' => 'CEP', 'required' => false]);
                     echo $this->Form->control('telefone', ['label' => 'Telefone', 'required' => false]);
                     echo $this->Form->control('beneficios', ['label' => 'Beneficios', 'required' => false]);
-                    echo $this->Form->control('fim_de_semana', ['label' => 'Fim de semana', 'options' => ['1' => 'Sim', '0' => 'Nao', '2' => 'Parcial'], 'required' => false]);
-                    echo $this->Form->control('local_inscricao', ['label' => 'Local de inscrição', 'options' => ['1' => 'Coordenação de Estágio/ESS/UFRJ', '0' => 'Instituicao']]);
+                    echo $this->Form->control('fim_de_semana', ['label' => 'Fim de semana', 'options' => ['1' => 'Sim', '0' => 'Nao', '2' => 'Parcial'], 'empty' => true, 'required' => false]);
                     echo $this->Form->control('convenio', ['label' => 'Nº do convênio na UFRJ', 'required' => false]);
                     echo $this->Form->control('expira', ['label' => 'Data de expiração', 'empty' => true, 'required' => false]);
-                    echo $this->Form->control('seguro', ['options' => ['1' => 'Sim', '0' => 'Nao'], 'default' => '0', 'required' => false]);
-                    echo $this->Form->control('avaliacao', ['options' => ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5'], 'default' => '3']);
+                    echo $this->Form->control('seguro', ['options' => ['1' => 'Sim', '0' => 'Nao'], 'empty' => true, 'required' => false]);
                     echo $this->Form->control('observacoes', ['label' => 'Observações', 'required' => false]);
                     echo $this->Form->control('supervisores._ids', ['options' => $supervisores]);
                 ?>

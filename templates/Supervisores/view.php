@@ -50,27 +50,27 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Codigo Tel') ?></th>
-                    <td><?= h($supervisor->codigo_tel) ?></td>
+                    <td><?= h($supervisor->codigo_telefone) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Telefone') ?></th>
                     <?php if ($supervisor->telefone && (strlen($supervisor->telefone) < 8)) : ?>
-                        <td><?= '(' . $supervisor->codigo_tel . ') ' . $supervisor->telefone ?></td>
+                        <td><?= '(' . $supervisor->codigo_telefone . ') ' . $supervisor->telefone ?></td>
                     <?php else : ?>
                         <td><?= $supervisor->telefone ?>
-                    <?php endif ?>    
+                    <?php endif ?>
                 </tr>
                 <tr>
                     <th><?= __('Codigo Cel') ?></th>
-                    <td><?= h($supervisor->codigo_cel) ?></td>
+                    <td><?= h($supervisor->codigo_celular) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Celular') ?></th>
                     <?php if ($supervisor->celular && (strlen($supervisor->celular) < 8)) : ?>
-                            <td><?= '(' . $supervisor->codigo_cel . ') ' . $supervisor->celular ?></td>
-                    <?php else : ?>        
-                        <td><?= h($supervisor->celular) ?></td>
-                    <?php endif ?>    
+                            <td><?= '(' . $supervisor->codigo_celular . ') ' . $supervisor->celular ?></td>
+                    <?php else : ?>
+                        <td><?= h($supervisor->celular) ?>
+                    <?php endif ?>
                 </tr>
                 <tr>
                     <th><?= __('Email') ?></th>
@@ -86,43 +86,11 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Ano Formatura') ?></th>
-                    <td><?= h($supervisor->ano_formatura) ?></td>
+                    <td><?= h($supervisor->ano_formacao) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Outros Estudos') ?></th>
-                    <td><?= h($supervisor->outros_estudos) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Área do outro estudo') ?></th>
-                    <td><?= h($supervisor->area_curso) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Ano de conclusão') ?></th>
-                    <td><?= h($supervisor->ano_curso) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('CEP') ?></th>
-                    <td><?= h($supervisor->cep) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Endereço') ?></th>
-                    <td><?= h($supervisor->endereco) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Bairro') ?></th>
-                    <td><?= h($supervisor->bairro) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Município') ?></th>
-                    <td><?= h($supervisor->municipio) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Turma do curso de supervisores') ?></th>
-                    <td><?= h($supervisor->curso_turma) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Num de inscrição no curso de supervisores') ?></th>
-                    <td><?= $supervisor->num_inscricao ? $this->Number->format($supervisor->num_inscricao) : '' ?></td>
+                    <th><?= __('Estagiários') ?></th>
+                    <td><?= h($supervisor->estagiarios_count) ?></td>
                 </tr>
             </table>
             <div class="text">

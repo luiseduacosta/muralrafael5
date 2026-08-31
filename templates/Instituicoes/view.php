@@ -88,16 +88,8 @@ if ($user_session) {
                     </td>
                 </tr>
                 <tr>
-                    <th><?= __('Local de inscrição') ?></th>
-                    <td><?= h($instituicao->local_inscricao) ? 'Inscrição somente no mural da Coordenação de Estágio da ESS' : 'Inscrição na Instituição e no mural da Coordenação de Estágio da ESS' ?></td>
-                </tr>
-                <tr>
                     <th><?= __('Seguro') ?></th>
                     <td><?= h($instituicao->seguro) == '0' ? 'Não' : 'Sim' ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Avaliação') ?></th>
-                    <td><?= h($instituicao->avaliacao) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Nº de convênio') ?></th>

@@ -72,61 +72,37 @@ class SupervisoresTable extends Table
         $validator
             ->scalar('nome')
             ->maxLength('nome', 70)
+            ->requirePresence('nome', 'create')
             ->notEmptyString('nome');
 
         $validator
             ->scalar('cpf')
-            ->maxLength('cpf', 14)
-            ->regex('cpf', '/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/', 'CPF inválido')
+            ->maxLength('cpf', 15)
             ->allowEmptyString('cpf');
 
         $validator
-            ->scalar('endereco')
-            ->maxLength('endereco', 100)
-            ->allowEmptyString('endereco');
-
-        $validator
-            ->scalar('bairro')
-            ->maxLength('bairro', 30)
-            ->allowEmptyString('bairro');
-
-        $validator
-            ->scalar('municipio')
-            ->maxLength('municipio', 30)
-            ->allowEmptyString('municipio');
-
-        $validator
-            ->scalar('cep')
-            ->maxLength('cep', 9)
-            ->regex('cep', '/^[0-9]{5}-[0-9]{3}$/', 'CEP inválido')
-            ->allowEmptyString('cep');
-
-        $validator
-            ->scalar('codigo_tel')
-            ->maxLength('codigo_tel', 2)
-            ->regex('codigo_tel', '/^[0-9]{2}$/', 'Código de telefone inválido')
-            ->allowEmptyString('codigo_tel');
+            ->nonNegativeInteger('codigo_telefone')
+            ->allowEmptyString('codigo_telefone');
 
         $validator
             ->scalar('telefone')
             ->maxLength('telefone', 15)
-            ->regex('telefone', '/^\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}$/', 'Telefone inválido')
+            ->regex('telefone', '/^\([0-9]{2}\) [0-9]{4,5}\.[0-9]{4}$/', 'Telefone inválido')
             ->allowEmptyString('telefone');
 
         $validator
-            ->nonNegativeInteger('codigo_cel')
-            ->maxLength('codigo_cel', 2)
-            ->regex('codigo_cel', '/^[0-9]{2}$/', 'Código de celular inválido')
-            ->allowEmptyString('codigo_cel');
+            ->nonNegativeInteger('codigo_celular')
+            ->allowEmptyString('codigo_celular');
 
         $validator
             ->scalar('celular')
             ->maxLength('celular', 15)
-            ->regex('celular', '/^\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}$/', 'Celular inválido')
+            ->regex('celular', '/^\([0-9]{2}\) [0-9]{4,5}\.[0-9]{4}$/', 'Celular inválido')
             ->allowEmptyString('celular');
 
         $validator
             ->email('email')
+            ->maxLength('email', 255)
             ->allowEmptyString('email');
 
         $validator
@@ -135,33 +111,19 @@ class SupervisoresTable extends Table
             ->allowEmptyString('escola');
 
         $validator
-            ->nonNegativeInteger('ano_formatura')
-            ->regex('ano_formatura', '/^(19|20)[0-9]{2}$/', 'Insira um ano válido')
-            ->allowEmptyString('ano_formatura');
+            ->scalar('ano_formacao')
+            ->maxLength('ano_formacao', 4)
+            ->regex('ano_formacao', '/^(19|20)[0-9]{2}$/', 'Insira um ano válido')
+            ->allowEmptyString('ano_formacao');
 
         $validator
-            ->nonNegativeInteger('cress')
-            ->notEmptyString('cress', null, 'create');
+            ->scalar('cress')
+            ->maxLength('cress', 10)
+            ->allowEmptyString('cress');
 
         $validator
             ->nonNegativeInteger('regiao')
-            ->maxLength('regiao', 2)
             ->notEmptyString('regiao', null, 'create');
-
-        $validator
-            ->scalar('outros_estudos')
-            ->maxLength('outros_estudos', 100)
-            ->allowEmptyString('outros_estudos');
-
-        $validator
-            ->scalar('area_curso')
-            ->maxLength('area_curso', 40)
-            ->allowEmptyString('area_curso');
-
-        $validator
-            ->nonNegativeInteger('ano_curso')
-            ->regex('ano_curso', '/^(19|20)[0-9]{2}$/', 'Insira um ano válido')
-            ->allowEmptyString('ano_curso');
 
         $validator
             ->scalar('cargo')
@@ -169,24 +131,15 @@ class SupervisoresTable extends Table
             ->allowEmptyString('cargo');
 
         $validator
-            ->nonNegativeInteger('num_inscricao')
-            ->allowEmptyString('num_inscricao');
-
-        $validator
-            ->integer('estagiarios_count')
-            ->allowEmptyString('estagiarios_count');
-
-        $validator
-            ->scalar('curso_turma')
-            ->maxLength('curso_turma', 1)
-            ->allowEmptyString('curso_turma');
-
-        $validator
             ->scalar('observacoes')
             ->allowEmptyString('observacoes');
 
         $validator
-            ->scalar('estagiarios_count')
+            ->integer('user_id')
+            ->allowEmptyString('user_id');
+
+        $validator
+            ->integer('estagiarios_count')
             ->allowEmptyString('estagiarios_count');
 
         return $validator;

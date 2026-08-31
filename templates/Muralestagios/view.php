@@ -16,7 +16,7 @@ if ($user_session) {
 
 $hoje = Date::now();
 // Se não houver data de inscrição, assume que está aberto (amanhã) para fins de exibição
-$prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
+$prazo = $muralestagio->data_inscricao ?? $hoje->addDays(1);
 ?>
 
 <div>
@@ -74,7 +74,7 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
                     <td>
                         <?php
                         $fim_de_semana = '';
-                        switch ($muralestagio->fim_de_semana) {
+                        switch ($muralestagio->final_de_semana) {
                             case 0:
                                 $fim_de_semana = 'Não';
                                 break;
@@ -163,7 +163,7 @@ $prazo = $muralestagio->dataInscricao ?? $hoje->addDays(1);
                     </td>
                 </tr>
             <?php elseif ($user_data['aluno_id']) : ?>
-                <!-- if dataInscricao is empty them let the close day of application open //-->
+                <!-- if data_inscricao is empty them let the close day of application open //-->
                 <?php if (empty($muralestagio->data_inscricao)) {
                     $muralestagio->data_inscricao = new Date('tomorrow');
                 } ?>

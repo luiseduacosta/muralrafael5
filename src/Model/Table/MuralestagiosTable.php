@@ -91,6 +91,11 @@ class MuralestagiosTable extends Table
                 ->notEmptyString('instituicao_id');
 
         $validator
+                ->scalar('instituicao')
+                ->maxLength('instituicao', 100)
+                ->allowEmptyString('instituicao');
+
+        $validator
                 ->scalar('convenio')
                 ->maxLength('convenio', 1)
                 ->inList('convenio', ['0', '1'])
@@ -127,7 +132,8 @@ class MuralestagiosTable extends Table
 
         $validator
                 ->scalar('local_inscricao')
-                ->notEmptyString('local_inscricao');
+                ->inList('local_inscricao', ['', '0', '1'])
+                ->allowEmptyString('local_inscricao');
 
         $validator
                 ->date('data_inscricao')
@@ -139,7 +145,7 @@ class MuralestagiosTable extends Table
 
         $validator
                 ->scalar('horario_selecao')
-                ->maxLength('horario_selecao', 8)
+                ->maxLength('horario_selecao', 5)
                 ->allowEmptyString('horario_selecao');
 
         $validator
@@ -167,11 +173,8 @@ class MuralestagiosTable extends Table
                 ->allowEmptyString('periodo');
 
         $validator
-                ->date('datafax')
-                ->allowEmptyDate('datafax');
-
-        $validator
                 ->email('email')
+                ->maxLength('email', 70)
                 ->allowEmptyString('email');
 
         return $validator;

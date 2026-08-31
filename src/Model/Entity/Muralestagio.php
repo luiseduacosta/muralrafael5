@@ -26,11 +26,10 @@ use Cake\ORM\Entity;
  * @property string|null $contato
  * @property string|null $outras
  * @property string|null $periodo
- * @property \Cake\I18n\FrozenDate|null $datafax
  * @property string $local_inscricao
  * @property string|null $email
  *
- * @property \App\Model\Entity\Instituicao $instituicao_rel
+ * @property \App\Model\Entity\Instituicao $instituicao_entidade
  */
 
 class Muralestagio extends Entity
@@ -63,9 +62,8 @@ class Muralestagio extends Entity
         'contato' => true,
         'outras' => true,
         'periodo' => true,
-        'datafax' => true,
         'local_inscricao' => true,
         'email' => true,
-        'instituicao_rel' => true,
+        'instituicao_entidade' => true,
     ];
 }

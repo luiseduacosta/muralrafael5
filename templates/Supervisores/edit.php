@@ -17,7 +17,7 @@ if ($user_session) {
 <script>
     $(document).ready(function () {
         $('#cpf').mask('000.000.000-00');
-        $('#cep').mask('00000-000');
+
         if ($('#codigo-telefone').val() == null) {
             codigo = '21';
         } else {
@@ -26,13 +26,13 @@ if ($user_session) {
 
         if ($('#telefone').val().length >= 8 && $('#telefone').val().length <= 10) {
             $('#telefone').val('(' + codigo + ') ' + $('#telefone').val());
-        } 
+        }
         var telMaskBehavior = function (val) {
             return val.replace(/\D/g, '').length === 11 ? '(00) 00000.0000' : '(00) 0000.00009';
         };
         var telOptions = {
             onKeyPress: function(val, e, field, options) {
-                field.mask(mask.apply({}, arguments), options);
+                field.mask(telMaskBehavior.apply({}, arguments), options);
             },
             clearIfNotMatch: true
         };
@@ -40,7 +40,7 @@ if ($user_session) {
 
         if ($('#celular').val().length >= 8 && $('#celular').val().length <= 10) {
             $('#celular').val('(' + codigo + ') ' + $('#celular').val());
-        } 
+        }
         var celMaskBehavior = function (val) {
             return val.replace(/\D/g, '').length === 11 ? '(00) 00000.0000' : '(00) 0000.00009';
         };
@@ -73,7 +73,7 @@ if ($user_session) {
     <div class="column-responsive column-80">
         <div class="supervisores form content">
             <aside>
-                <div class="nav">   
+                <div class="nav">
                     <?= $this->Html->link(__('Listar Supervisores'), ['action' => 'index'], ['class' => 'button']) ?>
                     <?php if ($user_data['administrador_id']) : ?>
                         <?= $this->Form->postLink(
@@ -97,21 +97,12 @@ if ($user_session) {
                     echo $this->Form->control('regiao', ['required' => false]);
                     echo $this->Form->control('email', ['required' => false]);
                     echo $this->Form->control('cargo', ['label' => 'Cargo na instituição', 'required' => false, 'default' => null]);
-                    echo $this->Form->control('cep', ['label' => 'CEP', 'pattern' => '[0-9]{5}-[0-9]{3}', 'placeholder' => '00000-000',  'required' => false]);
-                    echo $this->Form->control('endereco', ['label' => 'Endereço', 'required' => false]);
-                    echo $this->Form->control('bairro', ['label' => 'Bairro', 'required' => false]);
-                    echo $this->Form->control('municipio', ['label' => 'Município', 'required' => false]);
-                    echo $this->Form->control('codigo_tel', ['label' => 'DDD', 'required' => false]);
+                    echo $this->Form->control('codigo_telefone', ['label' => 'DDD', 'default' => '21', 'required' => false]);
                     echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)\s[0-9]{4}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'required' => false]);
-                    echo $this->Form->control('codigo_cel', ['label' => 'DDD', 'required' => false]);
+                    echo $this->Form->control('codigo_celular', ['label' => 'DDD', 'default' => '21', 'required' => false]);
                     echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 00000.0000', 'required' => false]);
                     echo $this->Form->control('escola', ['label' => 'Instituição de Ensino', 'default' => null, 'required' => false]);
-                    echo $this->Form->control('ano_formatura', ['label' => 'Ano de Formatura', 'pattern' => '(19|20)[0-9]{2}', 'placeholder' => '0000', 'required' => false, 'default' => null]);
-                    echo $this->Form->control('outros_estudos', ['label' => 'Outros Estudos', 'required' => false, 'default' => null]);
-                    echo $this->Form->control('area_curso', ['label' => 'Área de Curso', 'required' => false, 'default' => null]);
-                    echo $this->Form->control('ano_curso', ['label' => 'Ano de Curso', 'pattern' => '(19|20)[0-9]{2}', 'placeholder' => '0000', 'required' => false, 'default' => null]);
-                    echo $this->Form->control('curso_turma', ['label' => 'Turma do curso de supervisores', 'required' => false, 'default' => null, 'placeholder' => 'Turma']);
-                    echo $this->Form->control('num_inscricao', ['label' => 'Número de Inscrição no curso de supervisores', 'required' => false, 'default' => null, 'placeholder' => '0000']);
+                    echo $this->Form->control('ano_formacao', ['label' => 'Ano de Formatura', 'pattern' => '(19|20)[0-9]{2}', 'placeholder' => '0000', 'required' => false, 'default' => null]);
                     echo $this->Form->control('observacoes', ['label' => 'Observações', 'required' => false, 'placeholder' => 'Observações']);
                     echo $this->Form->control('instituicoes._ids', ['label' => 'Instituição', 'options' => $instituicoes]);
                 ?>

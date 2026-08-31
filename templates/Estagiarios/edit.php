@@ -106,7 +106,7 @@ if ($user_session) { $user_data = $user_session->getOriginalData(); }
                     echo $this->Form->control('periodo', ['label' => 'Periodo', 'required' => true]);
                     echo $this->Form->control('benetransporte', ['label' => 'Beneficio de transporte', 'options' => ['1' => 'Sim', '0' => 'Nao'], 'required' => false]);
                     echo $this->Form->control('benealimentacao', ['label' => 'Beneficio de alimentacao', 'options' => ['1' => 'Sim', '0' => 'Nao'], 'required' => false]);
-                    echo $this->Form->control('benbolsa', ['label' => 'Beneficio de bolsa - valor em R$', 'required' => false, 'type' => 'text']);
+                    echo $this->Form->control('benebolsa', ['label' => 'Beneficio de bolsa - valor em R$', 'required' => false, 'type' => 'text']);
                     if ($user_data['categoria'] == "1" || $user_data['categoria'] == "3" && ($user_data['professor_id'] == $estagiario->professor_id)) {
                         echo $this->Form->control('nota', ['label' => 'Nota', 'required' => false]);
                         echo $this->Form->control('ch', ['label' => 'Carga horária', 'required' => false]);

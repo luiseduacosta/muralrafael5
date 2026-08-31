@@ -35,7 +35,7 @@ if ($user_session) {
                     echo $this->Form->control('vagas', ['class' => 'form-control']);
                     echo $this->Form->control('periodo', ['label' => 'Período', 'class' => 'form-control']);
                     echo $this->Form->control('beneficios', ['label' => 'Benefícios: bolsa, alimentação, transporte, etc.', 'class' => 'form-control']);    
-                    echo $this->Form->control('fim_de_semana', ['options' => ['1' => 'Sim', '0' => 'Não', '2' => 'Parcialmente'], 'class' => 'form-control']);
+                    echo $this->Form->control('final_de_semana', ['options' => ['1' => 'Sim', '0' => 'Não', '2' => 'Parcialmente'], 'class' => 'form-control']);
                     echo $this->Form->control('carga_horaria', ['label' => 'Carga horária', 'placeholder' => 'Ex: 15', 'class' => 'form-control']);
                     echo $this->Form->control('requisitos', ['class' => 'formCode hidden']);
                     echo $this->element('input_div', ['name' => 'requisitos', 'content' => $muralestagio->requisitos ]);

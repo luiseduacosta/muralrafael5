@@ -23,7 +23,7 @@
                     echo $this->Form->control('vagas', ['label' => 'Número de vagas', 'default' => '1', 'class' => 'form-control']);
                     echo $this->Form->control('periodo', ['value' => $periodo, 'class' => 'form-control']);
                     echo $this->Form->control('beneficios', ['placeholder' => 'Bolsa, alimentação, transporte, etc.', 'label' => 'Benefícios', 'class' => 'form-control']);
-                    echo $this->Form->control('fim_de_semana', ['label' => 'Fim de semana', 'type' => 'select', 'options' => [2 => 'Parcialmente', 1 => 'Sim', 0 => 'Não'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
+                    echo $this->Form->control('final_de_semana', ['label' => 'Fim de semana', 'type' => 'select', 'options' => [2 => 'Parcialmente', 1 => 'Sim', 0 => 'Não'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);
                     echo $this->Form->control('carga_horaria', ['placeholder' => '12', 'label' => 'Carga horária', 'class' => 'form-control']);
                     echo $this->Form->control('requisitos', ['placeholder' => 'Ética aprovada', 'label' => 'Requisitos', 'class' => 'form-control']);
                     echo $this->Form->control('local_inscricao', ['label' => 'Local de inscrição', 'type' => 'select', 'options' => [1 => 'Inscrição somente no mural da Coordenação de Estágio da ESS', 0 => 'Inscrição na Instituição e no mural da Coordenação de Estágio da ESS'], 'empty' => false, 'default' => '0', 'class' => 'form-control']);

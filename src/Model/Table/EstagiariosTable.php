@@ -124,6 +124,10 @@ class EstagiariosTable extends Table
             ->allowEmptyString('ch');
 
         $validator
+            ->integer('complemento_id')
+            ->allowEmptyString('complemento_id');
+
+        $validator
             ->scalar('observacoes')
             ->maxLength('observacoes', 255)
             ->allowEmptyString('observacoes');
