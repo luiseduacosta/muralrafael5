@@ -61,11 +61,11 @@ class MuralestagiosTable extends Table
     /**
      * Before find callback to apply default ordering.
      *
-     * @param EventInterface $event The beforeFind event.
-     * @param Query $query The query object.
-     * @param ArrayObject $options The options array.
+     * @param \Cake\Event\EventInterface $event The beforeFind event.
+     * @param \Cake\ORM\Query $query The query object.
+     * @param \ArrayObject $options The options array.
      * @param bool $primary Whether this is a primary query or not.
-     * @return Query
+     * @return \Cake\ORM\Query
      */
     public function beforeFind(EventInterface $event, Query $query, ArrayObject $options, bool $primary): Query
     {
@@ -77,8 +77,8 @@ class MuralestagiosTable extends Table
     /**
      * Default validation rules.
      *
-     * @param Validator $validator Validator instance.
-     * @return Validator
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -184,8 +184,8 @@ class MuralestagiosTable extends Table
      * Returns a rules checker object that will be used for validating
      * application integrity.
      *
-     * @param RulesChecker $rules The rules object to be modified.
-     * @return RulesChecker
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {

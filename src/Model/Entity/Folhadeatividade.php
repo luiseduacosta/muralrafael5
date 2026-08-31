@@ -10,13 +10,13 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $estagiario_id
- * @property \Cake\I18n\FrozenDate $dia
- * @property \Cake\I18n\FrozenTime $inicio
- * @property \Cake\I18n\FrozenTime $final
- * @property \Cake\I18n\FrozenTime|null $horario
+ * @property \Cake\I18n\Date $dia
+ * @property \Cake\I18n\Time $inicio
+ * @property \Cake\I18n\Time $final
+ * @property \Cake\I18n\Time|null $horario
  * @property string $atividade
  *
- * @property \App\Model\Entity\Estagiario[] $estagiarios
+ * @property \App\Model\Entity\Estagiario $estagiario
  */
 class Folhadeatividade extends Entity
 {
@@ -27,7 +27,7 @@ class Folhadeatividade extends Entity
      * be mass assigned. For security purposes, it is advised to set '*' to false
      * (or remove it), and explicitly make individual fields accessible as needed.
      *
-     * @var array
+     * @var array<string, bool>
      */
     protected array $_accessible = [
         'estagiario_id' => true,
@@ -36,6 +36,6 @@ class Folhadeatividade extends Entity
         'final' => true,
         'horario' => true,
         'atividade' => true,
-        'estagiarios' => true,
+        'estagiario' => true,
     ];
 }

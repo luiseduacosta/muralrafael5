@@ -1,12 +1,14 @@
 <?php
 /**
  * Folha de Atividades PDF
- * 
+ *
  * @var \App\Model\Entity\Estagiario $estagiario
+ * @var iterable<\App\Model\Entity\Folhadeatividade> $atividades
  */
-namespace App\View\PDF; 
-use Cake\I18n\I18n;
+namespace App\View\PDF;
+
 use Cake\I18n\Date;
+use Cake\I18n\I18n;
 
 I18n::setLocale('pt-BR');
 $hoje = Date::now('America/Sao_Paulo');
@@ -18,50 +20,20 @@ $ano = $hoje->i18nFormat('Y');
 $this->layout = 'default';
 $this->assign('title', 'Folha de Atividades');
 
-$supervisora = isset($estagiario->supervisor->nome);
-if ($supervisora) {
-    $supervisora = $estagiario->supervisor->nome;
-} else {
-    $supervisora = "____________________";
-}
-
-$regiao = isset($estagiario->supervisor->regiao);
-if ($regiao) {
-    $regiao = $estagiario->supervisor->regiao;
-} else {
-    $regiao = '__';
-}
-
-$cress = isset($estagiario->supervisor->cress);
-if ($cress) {
-    $cress = $estagiario->supervisor->cress;
-} else {
-    $cress = '_____';
-}
-
-$instituicao = isset($estagiario->instituicao->instituicao);
-if ($instituicao) {
-    $instituicao = $estagiario->instituicao->instituicao;
-} else {
-    $instituicao = '_______________';
-}
-
-$professora = isset($estagiario->professor->nome);
-if ($professora) {
-    $professora = $estagiario->professor->nome;
-} else {
-    $professora = '_______________';
-}
-
+$supervisora = isset($estagiario->supervisor->nome) ? $estagiario->supervisor->nome : '____________________';
+$regiao = isset($estagiario->supervisor->regiao) ? $estagiario->supervisor->regiao : '__';
+$cress = isset($estagiario->supervisor->cress) ? $estagiario->supervisor->cress : '_____';
+$instituicao = isset($estagiario->instituicao->instituicao) ? $estagiario->instituicao->instituicao : '_______________';
+$professora = isset($estagiario->professor->nome) ? $estagiario->professor->nome : '_______________';
 ?>
 
 <h2 style="text-align:center; line-height: 80%; margin: 0">
-    <span style="font-size: 100%">Folha de ativiades do(a) estagiário(a) <?= $estagiario->aluno->nome ?></span>
+    <span style="font-size: 100%">Folha de atividades do(a) estagiário(a) <?= h($estagiario->aluno->nome ?? '') ?></span>
 </h2>
 
-<p style="font-size: 90%">DRE: <?= $estagiario->aluno->registro ?>
-    Telefone: <?= $estagiario->aluno->celular ?>
-    E-mail: <?= $estagiario->aluno->email ?>
+<p style="font-size: 90%">DRE: <?= h($estagiario->aluno->registro ?? '') ?>
+    Telefone: <?= h($estagiario->aluno->celular ?? '') ?>
+    E-mail: <?= h($estagiario->aluno->email ?? '') ?>
 </p>
 
 <div class="container">
@@ -78,12 +50,12 @@ if ($professora) {
         </thead>
         <tbody>
             <tr>
-                <td><?= $estagiario->nivel ?></td>
-                <td><?= $estagiario->periodo ?></td>
-                <td><?= $instituicao ?></td>
-                <td><?= $cress ?></td>
-                <td><?= $supervisora ?></td>
-                <td><?= $professora ?></td>
+                <td><?= h($estagiario->nivel) ?></td>
+                <td><?= h($estagiario->periodo) ?></td>
+                <td><?= h($instituicao) ?></td>
+                <td><?= h($cress) ?></td>
+                <td><?= h($supervisora) ?></td>
+                <td><?= h($professora) ?></td>
             </tr>
         </tbody>
     </table>
@@ -93,30 +65,29 @@ if ($professora) {
     <table class='table table-bordered' style="border: 1px; width: 90%; background-color: white;">
         <thead class="thead-light">
             <tr>
-                <th><?= 'Dia'; ?></th>
-                <th><?= 'Início'; ?></th>
-                <th><?= 'Final'; ?></th>
-                <th><?= 'Horas'; ?></th>
-                <th><?= 'Atividade'; ?></th>
+                <th>Dia</th>
+                <th>Início</th>
+                <th>Final</th>
+                <th>Horas</th>
+                <th>Atividade</th>
             </tr>
         </thead>
 
         <tbody>
-            <?php $seconds = NULL; ?>
+            <?php $seconds = 0; ?>
             <?php foreach ($atividades as $atividade): ?>
                 <tr>
-                    <td><?php echo date('d-m-Y', strtotime($atividade->dia)); ?>&nbsp;</td>
-                    <td><?php echo $atividade->inicio; ?>&nbsp;</td>
-                    <td><?php echo $atividade->final; ?>&nbsp;</td>               
-                    <td><?php echo $atividade->horario; ?>&nbsp;</td>
-                    <td><?php echo $atividade->atividade; ?>&nbsp;</td>
+                    <td><?= !empty($atividade->dia) ? date('d-m-Y', strtotime((string)$atividade->dia)) : '' ?>&nbsp;</td>
+                    <td><?= h($atividade->inicio) ?>&nbsp;</td>
+                    <td><?= h($atividade->final) ?>&nbsp;</td>
+                    <td><?= h($atividade->horario) ?>&nbsp;</td>
+                    <td><?= h($atividade->atividade) ?>&nbsp;</td>
                 </tr>
                 <?php
-                list($hour, $minute, $second) = array_pad(explode(':', $atividade->horario), 3, null);
-                $seconds += (int)$hour * 3600;
-                $seconds += (int)$minute * 60;
-                $seconds += (int)$second;
-                // pr($seconds);
+                if (!empty($atividade->horario)) {
+                    [$hour, $minute, $second] = array_pad(explode(':', (string)$atividade->horario), 3, '0');
+                    $seconds += (int)$hour * 3600 + (int)$minute * 60 + (int)$second;
+                }
                 ?>
             <?php endforeach; ?>
         </tbody>
@@ -127,10 +98,10 @@ if ($professora) {
                 <th>
                     <?php
                     $hours = floor($seconds / 3600);
-                    $seconds -= $hours * 3600;
-                    $minutes = floor($seconds / 60);
-                    $seconds -= $minutes * 60;
-                    echo $hours . ":" . $minutes . ":" . $seconds;
+                    $remSeconds = $seconds % 3600;
+                    $minutes = floor($remSeconds / 60);
+                    $remSeconds = $remSeconds % 60;
+                    echo sprintf('%02d:%02d:%02d', $hours, $minutes, $remSeconds);
                     ?>
                 </th>
                 <th>&nbsp;</th>
@@ -150,14 +121,14 @@ if ($professora) {
     <table class="table" style="width: 100%; background-color: white;">
         <tr>
             <td style="width: 33%"><span style="font-size: 100%; text-decoration: overline">Coordenação de Estágio</span></td>
-            <td style="width: 33%"><span style="font-size: 100%; text-decoration: overline"><?= $estagiario->aluno->nome ?></span></td>
-            <td style="width: 33%"><span style="font-size: 100%; text-decoration: overline"><?= $supervisora ?></span></td>
+            <td style="width: 33%"><span style="font-size: 100%; text-decoration: overline"><?= h($estagiario->aluno->nome ?? '') ?></span></td>
+            <td style="width: 33%"><span style="font-size: 100%; text-decoration: overline"><?= h($supervisora) ?></span></td>
         </tr>
 
         <tr>
             <td style="width: 33%"></td>
-            <td style="width: 33%"><span style="font-size: 100%">DRE: <?= $estagiario->aluno->registro ?></span></td>
-            <td style="width: 33%"><span style="font-size: 100%">CRESS <?= $regiao ?>ª Região <?= $cress ?></span></td>
+            <td style="width: 33%"><span style="font-size: 100%">DRE: <?= h($estagiario->aluno->registro ?? '') ?></span></td>
+            <td style="width: 33%"><span style="font-size: 100%">CRESS <?= h($regiao) ?>ª Região <?= h($cress) ?></span></td>
         </tr>
     </table>
 </div>

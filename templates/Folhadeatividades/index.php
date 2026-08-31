@@ -2,6 +2,7 @@
 /**
  * @var \App\View\AppView $this
  * @var iterable<\App\Model\Entity\Folhadeatividade> $folhadeatividades
+ * @var \App\Model\Entity\Estagiario $estagiario
  */
 declare(strict_types=1);
 
@@ -11,50 +12,33 @@ if ($user_session) {
     $user_data = $user_session->getOriginalData();
 }
 
-$supervisora = isset($estagiario->supervisor->nome);
-if ($supervisora) {
-    $supervisora = $estagiario->supervisor->nome;
-} else {
-    $supervisora = '_______________';
-}
-
-$cress = isset($estagiario->supervisor->cress);
-if ($cress) {
-    $cress = $estagiario->supervisor->cress;
-} else {
-    $cress = '_______________';
-}
-
-$professora = isset($estagiario->professor->nome);
-if ($professora) {
-    $professora = $estagiario->professor->nome;
-} else {
-    $professora = '_______________';
-}
+$supervisora = isset($estagiario->supervisor->nome) ? $estagiario->supervisor->nome : '_______________';
+$cress = isset($estagiario->supervisor->cress) ? $estagiario->supervisor->cress : '_______________';
+$professora = isset($estagiario->professor->nome) ? $estagiario->professor->nome : '_______________';
 ?>
 
 <div class="folhadeatividades index content">
 
     <aside>
         <div class="nav">
-            <?php if ($user_data['administrador_id']): ?>
+            <?php if (!empty($user_data['administrador_id'])): ?>
                 <?= $this->Html->link(__('Estagiario(a)'), ['controller' => 'Estagiarios', 'action' => 'view', $estagiario->id], ['class' => 'button']) ?>
                 <?= $this->Html->link(__('Nova atividade'), ['action' => 'add', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                 <?= $this->Html->link(__('Imprime atividades'), ['action' => 'folhadeatividadespdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                 <?= $this->Html->link(__('Imprime folha de atividades'), ['action' => 'atividadesmanualpdf', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
             <?php endif; ?>
-            <?php if ($user_data['professor_id'] && $user_data['professor_id'] == $estagiario->professor_id): ?>
+            <?php if (!empty($user_data['professor_id']) && $user_data['professor_id'] == $estagiario->professor_id): ?>
                 <?= $this->Html->link(__('Atividades'), ['controller' => 'Folhadeatividades', 'action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                 <?= $this->Html->link(__('Avaliação on-line'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                 <?= $this->Html->link(__('Avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                 <?= $this->Html->link(__('CH e nota'), ['controller' => 'Estagiarios', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
             <?php endif; ?>
-            <?php if ($user_data['supervisor_id'] && $user_data['supervisor_id'] == $estagiario->supervisor_id): ?>
+            <?php if (!empty($user_data['supervisor_id']) && $user_data['supervisor_id'] == $estagiario->supervisor_id): ?>
                 <?= $this->Html->link(__('Atividades'), ['controller' => 'Folhadeatividades', 'action' => 'index', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                 <?= $this->Html->link(__('Avaliação on-line'), ['controller' => 'Avaliacoes', 'action' => 'add', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                 <?= $this->Html->link(__('Avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
             <?php endif; ?>
-            <?php if ($user_data['aluno_id'] && $user_data['aluno_id'] == $estagiario->aluno_id): ?>
+            <?php if (!empty($user_data['aluno_id']) && $user_data['aluno_id'] == $estagiario->aluno_id): ?>
                 <?= $this->Html->link(__('Nova atividade'), ['controller' => 'Folhadeatividades', 'action' => 'add', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
                 <?= $this->Html->link(__('Avaliação'), ['controller' => 'Avaliacoes', 'action' => 'view', '?' => ['estagiario_id' => $estagiario->id]], ['class' => 'button']) ?>
             <?php endif; ?>
@@ -73,11 +57,11 @@ if ($professora) {
                 <th>Professor(a)</th>
             </tr>
             <tr>
-                <td><?= $estagiario->periodo ?></td>
-                <td><?= $estagiario->nivel ?></td>
-                <td><?= $estagiario->instituicao->instituicao ?></td>
-                <td><?= $supervisora ?></td>
-                <td><?= $professora ?></td>
+                <td><?= h($estagiario->periodo) ?></td>
+                <td><?= h($estagiario->nivel) ?></td>
+                <td><?= h($estagiario->instituicao->instituicao ?? '') ?></td>
+                <td><?= h($supervisora) ?></td>
+                <td><?= h($professora) ?></td>
             </tr>
         </table>
     </div>
@@ -99,7 +83,7 @@ if ($professora) {
                 </tr>
             </thead>
             <tbody>
-                <?php $seconds = null ?>
+                <?php $seconds = 0; ?>
                 <?php foreach ($folhadeatividades as $folhadeatividade): ?>
                     <tr>
                         <td class="actions">
@@ -115,11 +99,10 @@ if ($professora) {
                         <td><?= h($folhadeatividade->atividade) ?></td>
                     </tr>
                     <?php
-                    [$hour, $minute, $second] = array_pad(explode(':', (string) $folhadeatividade->horario), 3, null);
-                    $seconds += (int) $hour * 3600;
-                    $seconds += (int) $minute * 60;
-                    $seconds += (int) $second;
-                    // pr($seconds);
+                    if (!empty($folhadeatividade->horario)) {
+                        [$hour, $minute, $second] = array_pad(explode(':', (string)$folhadeatividade->horario), 3, '0');
+                        $seconds += (int)$hour * 3600 + (int)$minute * 60 + (int)$second;
+                    }
                     ?>
                 <?php endforeach; ?>
                 <tr>
@@ -127,10 +110,10 @@ if ($professora) {
                     <td>
                         <?php
                         $hours = floor($seconds / 3600);
-                        $seconds -= $hours * 3600;
-                        $minutes = floor($seconds / 60);
-                        $seconds -= $minutes * 60;
-                        echo $hours . ':' . $minutes . ':' . $seconds;
+                        $remSeconds = $seconds % 3600;
+                        $minutes = floor($remSeconds / 60);
+                        $remSeconds = $remSeconds % 60;
+                        echo sprintf('%02d:%02d:%02d', $hours, $minutes, $remSeconds);
                         ?>
                     </td>
                     <td></td>

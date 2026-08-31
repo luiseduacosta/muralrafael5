@@ -5,7 +5,7 @@ namespace App\Model\Table;
 
 use ArrayObject;
 use Cake\Event\EventInterface;
-use Cake\ORM\Query;
+use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -47,61 +47,65 @@ class FolhadeatividadesTable extends Table
 
         $this->belongsTo('Estagiarios', [
             'foreignKey' => 'estagiario_id',
+            'joinType' => 'INNER',
         ]);
     }
 
     /**
      * Before find callback to apply default ordering.
      *
-     * @param EventInterface $event The beforeFind event.
-     * @param Query $query The query object.
-     * @param ArrayObject $options The options array.
+     * @param \Cake\Event\EventInterface $event The beforeFind event.
+     * @param \Cake\ORM\Query\SelectQuery $query The query object.
+     * @param \ArrayObject $options The options array.
      * @param bool $primary Whether this is a primary query or not.
-     * @return Query
+     * @return void
      */
-    public function beforeFind(EventInterface $event, Query $query, ArrayObject $options, bool $primary): Query
+    public function beforeFind(EventInterface $event, SelectQuery $query, ArrayObject $options, bool $primary): void
     {
-        $query->orderBy(['dia' => 'ASC']);
-
-        return $query;
+        $query->orderBy(['Folhadeatividades.dia' => 'ASC']);
     }
 
     /**
      * Default validation rules.
      *
-     * @param Validator $validator Validator instance.
-     * @return Validator
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
      */
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-                ->integer('id')
-                ->allowEmptyString('id', null, 'create');
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
 
         $validator
-                ->date('dia')
-                ->requirePresence('dia', 'create')
-                ->notEmptyDate('dia');
+            ->integer('estagiario_id')
+            ->requirePresence('estagiario_id', 'create')
+            ->notEmptyString('estagiario_id');
 
         $validator
-                ->time('inicio')
-                ->requirePresence('inicio', 'create')
-                ->notEmptyTime('inicio');
+            ->date('dia')
+            ->requirePresence('dia', 'create')
+            ->notEmptyDate('dia');
 
         $validator
-                ->time('final')
-                ->requirePresence('final', 'create')
-                ->notEmptyTime('final');
+            ->time('inicio')
+            ->requirePresence('inicio', 'create')
+            ->notEmptyTime('inicio');
 
         $validator
-                ->time('horario')
-                ->allowEmptyTime('horario');
+            ->time('final')
+            ->requirePresence('final', 'create')
+            ->notEmptyTime('final');
 
         $validator
-                ->scalar('atividade')
-                ->maxLength('atividade', 100)
-                ->requirePresence('atividade', 'create')
-                ->notEmptyString('atividade');
+            ->time('horario')
+            ->allowEmptyTime('horario');
+
+        $validator
+            ->scalar('atividade')
+            ->maxLength('atividade', 100)
+            ->requirePresence('atividade', 'create')
+            ->notEmptyString('atividade');
 
         return $validator;
     }
@@ -110,11 +114,15 @@ class FolhadeatividadesTable extends Table
      * Returns a rules checker object that will be used for validating
      * application integrity.
      *
-     * @param RulesChecker $rules The rules object to be modified.
-     * @return RulesChecker
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
+        $rules->add($rules->existsIn('estagiario_id', 'Estagiarios'), 'validEstagiario', [
+            'errorField' => 'estagiario_id',
+        ]);
+
         return $rules;
     }
 }
