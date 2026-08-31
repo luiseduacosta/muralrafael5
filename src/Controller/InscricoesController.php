@@ -75,7 +75,7 @@ class InscricoesController extends AppController
                 'periodo',
                 'timestamp',
                 'Alunos.nome',
-                'Instituicoes.instituicao',
+                'Muralestagios.Instituicoes.instituicao',
             ],
         ]);
 
@@ -171,12 +171,14 @@ class InscricoesController extends AppController
         $dados['data'] = $data->format('Y-m-d');
         $inscricao = $this->Inscricoes->newEmptyEntity();
         $inscricao = $this->Inscricoes->patchEntity($inscricao, $dados);
-        if ($this->Inscricoes->save($inscricao)) {
-            $this->Flash->success(__('Inscricao realizada com sucesso.'));
+        if ($this->request->is(['post', 'put', 'patch'])) {
+            if ($this->Inscricoes->save($inscricao)) {
+                $this->Flash->success(__('Inscricao realizada com sucesso.'));
 
-            return $this->redirect(['controller' => 'Inscricoes', 'action' => 'view', $inscricao->id]);
+                return $this->redirect(['controller' => 'Inscricoes', 'action' => 'view', $inscricao->id]);
+            }
+            $this->Flash->error(__('The inscricao could not be saved. Please, try again.'));
         }
-        $this->Flash->error(__('The inscricao could not be saved. Please, try again.'));
         $this->set(compact('inscricao', 'aluno', 'periodo', 'muralestagio', 'data', 'instituicao'));
     }
 

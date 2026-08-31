@@ -34,6 +34,10 @@ if ($user_session) {
                     <td><?= $inscricao->aluno ? $this->Html->link($inscricao->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $inscricao->aluno->id]) : '' ?></td>
                 </tr>
                 <tr>
+                    <th><?= __('Aluno Estagiario') ?></th>
+                    <td><?= $inscricao->alunoestagiario_id ? h($inscricao->alunoestagiario_id) : '' ?></td>
+                </tr>
+                <tr>
                     <th><?= __('Mural') ?></th>
                     <td><?= $inscricao->muralestagio ? $this->Html->link($inscricao->muralestagio->instituicao_entidade->instituicao ?? $inscricao->muralestagio->id, ['controller' => 'Muralestagios', 'action' => 'view', $inscricao->muralestagio->id]) : $inscricao->muralestagio_id ?></td>
                 </tr>

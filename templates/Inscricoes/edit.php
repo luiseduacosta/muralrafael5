@@ -36,6 +36,7 @@ if ($user_session) {
                     echo $this->Form->control('data');
                     echo $this->Form->control('periodo');
                     echo $this->Form->control('timestamp');
+                    echo $this->Form->control('alunoestagiario_id', ['type' => 'number', 'label' => 'Aluno Estagiario']);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Salvar'), ['class' => 'button']) ?>

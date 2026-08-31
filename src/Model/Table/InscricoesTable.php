@@ -66,16 +66,15 @@ class InscricoesTable extends Table
         $validator
                 ->integer('id')
                 ->allowEmptyString('id', null, 'create');
+
         $validator
                 ->integer('registro')
                 ->notEmptyString('registro');
-        $validator
-                ->integer('aluno_id')
-                ->allowEmptyString('aluno_id');
 
         $validator
                 ->integer('muralestagio_id')
                 ->notEmptyString('muralestagio_id');
+
         $validator
                 ->date('data')
                 ->requirePresence('data', 'create')
@@ -85,6 +84,18 @@ class InscricoesTable extends Table
                 ->scalar('periodo')
                 ->maxLength('periodo', 6)
                 ->notEmptyString('periodo');
+
+        $validator
+                ->dateTime('timestamp')
+                ->allowEmptyDateTime('timestamp');
+
+        $validator
+                ->integer('aluno_id')
+                ->notEmptyString('aluno_id');
+
+        $validator
+                ->integer('alunoestagiario_id')
+                ->allowEmptyString('alunoestagiario_id');
 
         return $validator;
     }

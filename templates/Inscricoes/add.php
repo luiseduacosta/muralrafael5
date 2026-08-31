@@ -25,8 +25,8 @@ if ($user_session) {
             echo $this->Form->hidden('registro', ['disabled' => !$user_data['administrador_id'], 'type' => 'text', 'value' => $aluno ? $aluno->registro : '']);
             echo $this->Form->hidden('aluno_id', ['disabled' => !$user_data['administrador_id'], 'type' => 'text', 'value' => $aluno ? $aluno->id : '']);
             echo $this->Form->control('instituicao', ['disabled' => !$user_data['administrador_id'], 'type' => 'text', 'value' => $instituicao ? $instituicao->instituicao : '']);
-            echo $this->Form->hidden('muralestagio_id', ['disabled' => !$user_data['administrador_id'], 'type' => 'text', 'value' => $mural_estagio ? $mural_estagio->id : '']);
-            echo $this->Form->control('data', ['disabled' => !$user_data['administrador_id'], 'type' => 'text', 'value' => $data ?: '']);
+            echo $this->Form->hidden('muralestagio_id', ['disabled' => !$user_data['administrador_id'], 'type' => 'text', 'value' => $muralestagio ? $muralestagio->id : '']);
+            echo $this->Form->control('data', ['disabled' => !$user_data['administrador_id'], 'type' => 'text', 'value' => $data ? $data->format('Y-m-d') : '']);
             echo $this->Form->control('periodo', ['disabled' => !$user_data['administrador_id'], 'type' => 'text', 'value' => $periodo ?: '']);
             echo $this->Form->hidden('timestamp', ['disabled' => !$user_data['administrador_id']]);
         ?>

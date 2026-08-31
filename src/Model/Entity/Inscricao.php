@@ -14,7 +14,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenDate $data
  * @property string $periodo
  * @property \Cake\I18n\FrozenTime $timestamp
- * @property int|null $aluno_id
+ * @property int $aluno_id
  * @property int|null $alunoestagiario_id
  *
  * @property \App\Model\Entity\Aluno $aluno
