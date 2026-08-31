@@ -28,22 +28,6 @@ class AlignProfessoresTable extends BaseMigration
             ]);
         }
 
-        if ($table->hasColumn('codigo_telefone')) {
-            $table->changeColumn('codigo_telefone', 'string', [
-                'default' => '21',
-                'limit' => 2,
-                'null' => true,
-            ]);
-        }
-
-        if ($table->hasColumn('codigo_celular')) {
-            $table->changeColumn('codigo_celular', 'string', [
-                'default' => '21',
-                'limit' => 2,
-                'null' => true,
-            ]);
-        }
-
         if (!$table->hasColumn('tipocargo')) {
             $table->addColumn('tipocargo', 'string', [
                 'default' => null,
@@ -87,6 +71,39 @@ class AlignProfessoresTable extends BaseMigration
         }
 
         $table->update();
+
+        // Exact column types present in production, applied with raw SQL so
+        // they match the live schema (char widths, unsigned integers and the
+        // column order of user_id/estagiarios_count before observacoes).
+        if ($table->hasColumn('codigo_telefone')) {
+            $this->execute("ALTER TABLE `professores` MODIFY `codigo_telefone` CHAR(2) NULL DEFAULT '21'");
+        }
+
+        if ($table->hasColumn('codigo_celular')) {
+            $this->execute("ALTER TABLE `professores` MODIFY `codigo_celular` CHAR(2) NULL DEFAULT '21'");
+        }
+
+        if ($table->hasColumn('user_id') && $table->hasColumn('estagiarios_count')) {
+            $this->execute('ALTER TABLE `professores` MODIFY `user_id` INT UNSIGNED NULL AFTER `status`');
+            $this->execute(
+                'ALTER TABLE `professores` MODIFY `estagiarios_count` INT UNSIGNED NULL DEFAULT 0 AFTER `user_id`',
+            );
+        } else {
+            if ($table->hasColumn('user_id')) {
+                $this->execute('ALTER TABLE `professores` MODIFY `user_id` INT UNSIGNED NULL');
+            }
+
+            if ($table->hasColumn('estagiarios_count')) {
+                $this->execute('ALTER TABLE `professores` MODIFY `estagiarios_count` INT UNSIGNED NULL DEFAULT 0');
+            }
+        }
+
+        if ($table->hasColumn('modified')) {
+            $this->execute(
+                'ALTER TABLE `professores` MODIFY `modified` DATETIME NOT NULL DEFAULT current_timestamp() '
+                . 'ON UPDATE current_timestamp()',
+            );
+        }
     }
 
     /**
