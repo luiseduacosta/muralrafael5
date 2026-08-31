@@ -71,7 +71,7 @@ class InscricoesTable extends Table
                 ->notEmptyString('registro');
         $validator
                 ->integer('aluno_id')
-                ->notEmptyString('aluno_id');
+                ->allowEmptyString('aluno_id');
 
         $validator
                 ->integer('muralestagio_id')

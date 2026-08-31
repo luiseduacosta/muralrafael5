@@ -57,7 +57,7 @@ class AlunosController extends AppController
     public function view(?string $id = null)
     {
         $contained = [
-            'Estagiarios' => ['Alunos', 'Instituicoes', 'Supervisores', 'Professores'],
+            'Estagiarios' => ['Alunos' => ['Turnos'], 'Instituicoes', 'Supervisores', 'Professores'],
             'Inscricoes' => ['Muralestagios' => ['Instituicoes']],
             'Users',
             'Turnos',

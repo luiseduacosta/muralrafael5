@@ -12,9 +12,9 @@ use Cake\ORM\Entity;
  * @property string $nome
  * @property string|null $nomesocial
  * @property int $registro
- * @property int|null $ingresso
+ * @property string|null $ingresso
  * @property int|null $turno_id
- * @property \App\Model\Entity\Turno|null $turno
+ * @property string|null $turno
  * @property int $codigo_telefone
  * @property string|null $telefone
  * @property int $codigo_celular
@@ -29,14 +29,14 @@ use Cake\ORM\Entity;
  * @property string|null $municipio
  * @property string|null $bairro
  * @property string|null $observacoes
- * @property int|null $estagiarios_count
+ * @property int $estagiarios_count
  * @property int|null $inscricao_count
- * @property int $user_id
+ * @property int|null $user_id
  *
  * @property \App\Model\Entity\User $user
  * @property \App\Model\Entity\Estagiario[] $estagiarios
  * @property \App\Model\Entity\Inscricao[] $inscricoes
- * @property \App\Model\Entity\Turno $turno
+ * @property \App\Model\Entity\Turno|null $Turno
  */
 class Aluno extends Entity
 {
@@ -75,6 +75,6 @@ class Aluno extends Entity
         'user' => true,
         'estagiarios' => true,
         'inscricoes' => true,
-        'turno' => true,
+        'Turno' => true,
     ];
 }

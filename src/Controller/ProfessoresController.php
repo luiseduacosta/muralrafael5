@@ -114,7 +114,7 @@ class ProfessoresController extends AppController
         ];
 
         $estagiarios = $this->paginate($this->Professores->Estagiarios->find('all', [
-            'contain' => ['Alunos', 'Instituicoes', 'Supervisores'],
+            'contain' => ['Alunos' => ['Turnos'], 'Instituicoes', 'Supervisores'],
         ])->innerJoinWith('Professores', function (Query $query) use ($professor) {
             return $query->where([
                 'professor_id' => $professor->id,

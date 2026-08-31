@@ -14,8 +14,8 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenDate $data
  * @property string $periodo
  * @property \Cake\I18n\FrozenTime $timestamp
- * @property int|null $alunonovo_id
- * @property int $aluno_id
+ * @property int|null $aluno_id
+ * @property int|null $alunoestagiario_id
  *
  * @property \App\Model\Entity\Aluno $aluno
  * @property \App\Model\Entity\Muralestagio $muralestagio
@@ -37,7 +37,7 @@ class Inscricao extends Entity
         'data' => true,
         'periodo' => true,
         'timestamp' => true,
-        'alunonovo_id' => true,
         'aluno_id' => true,
+        'alunoestagiario_id' => true,
     ];
 }

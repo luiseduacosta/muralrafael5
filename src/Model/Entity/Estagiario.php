@@ -19,12 +19,10 @@ use Cake\ORM\Entity;
  * @property int|null $supervisor_id
  * @property int|null $professor_id
  * @property string $periodo
- * @property int $turma_id
- * @property int $turno_id
  * @property string|null $nota
  * @property int|null $ch
+ * @property int|null $complemento_id
  * @property string|null $observacoes
- * @property int|null $alunoestagiario_id
  * @property bool|null $benetransporte
  * @property bool|null $benealimentacao
  * @property string|null $benebolsa

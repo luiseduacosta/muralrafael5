@@ -93,7 +93,7 @@ class InstituicoesController extends AppController
 
         $estagiarios = $this->paginate($this->Instituicoes->Estagiarios->find()
             ->where(['Estagiarios.instituicao_id' => $id])
-            ->contain(['Alunos', 'Professores', 'Supervisores']));
+            ->contain(['Alunos' => ['Turnos'], 'Professores', 'Supervisores']));
 
         $muralestagios = $this->paginate($this->Instituicoes->Muralestagios->find()
             ->where(['Muralestagios.instituicao_id' => $id]));

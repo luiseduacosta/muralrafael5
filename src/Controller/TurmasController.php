@@ -33,13 +33,7 @@ class TurmasController extends AppController
      */
     public function view(?string $id = null)
     {
-        //ini_set('memory_limit', '2048M');
-        $turma = $this->Turmas->get($id, [
-            'contain' => [
-               /* 'Estagiarios' => ['Alunos', 'Instituicoes', 'Supervisores', 'Professores'],*/
-               'Muralestagios' => ['Instituicoes', 'Professores'],
-            ],
-        ]);
+        $turma = $this->Turmas->get($id);
         $this->Authorization->authorize($turma);
 
         $this->set(compact('turma'));

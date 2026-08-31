@@ -210,7 +210,7 @@ $departamentos = [
                             <td><?= h($estagiario->id) ?></td>
                             <td><?= (!empty($estagiario->aluno) && !empty($estagiario->aluno->nome)) ? $this->Html->link($estagiario->aluno->nome, ['controller' => 'Alunos', 'action' => 'view', $estagiario->aluno->id]) : '' ?></td>
                             <td><?= h($estagiario->registro) ?></td>
-                            <td style="min-width: 80px; max-width: 120px;"><?= h($estagiario->aluno->turno->turno ?? '') ?></td>
+                            <td style="min-width: 80px; max-width: 120px;"><?= h($estagiario->aluno->Turno->turno ?? '') ?></td>
                             <td><?= h($estagiario->nivel) ?></td>
                             <td><?= $estagiario->tc = '1' ? 'Sim' : 'Não' ?></td>
                             <td><?= $estagiario->tc_solicitacao ? $estagiario->tc_solicitacao->format('d/m/Y') : '' ?></td>

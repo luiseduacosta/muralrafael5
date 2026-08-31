@@ -103,6 +103,7 @@ class AlunosTable extends Table
             ->allowEmptyString('turno_id');
 
         $validator
+            ->integer('codigo_telefone')
             ->notEmptyString('codigo_telefone');
 
         $validator
@@ -112,6 +113,7 @@ class AlunosTable extends Table
             ->allowEmptyString('telefone');
 
         $validator
+            ->integer('codigo_celular')
             ->notEmptyString('codigo_celular');
 
         $validator
@@ -126,7 +128,7 @@ class AlunosTable extends Table
 
         $validator
             ->scalar('cpf')
-            ->maxLength('cpf', 14)
+            ->maxLength('cpf', 15)
             ->regex('cpf', '/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}$/', 'CPF inválido')
             ->allowEmptyString('cpf');
 
@@ -177,6 +179,10 @@ class AlunosTable extends Table
         $validator
             ->integer('inscricao_count')
             ->allowEmptyString('inscricao_count');
+
+        $validator
+            ->integer('user_id')
+            ->allowEmptyString('user_id');
 
         return $validator;
     }
