@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use App\Model\Entity\Estagiario;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use InvalidArgumentException;
 
 /**
  * Estagiarios Model
@@ -163,5 +165,83 @@ class EstagiariosTable extends Table
         $rules->add($rules->existsIn(['professor_id'], 'Professores'), ['errorField' => 'professor_id']);
 
         return $rules;
+    }
+
+    /**
+     * Calcula o próximo nível de estágio a partir do último estágio do aluno
+     * e do período atual.
+     *
+     * Regras:
+     *  - Mesmo período: mantém o mesmo nível do último estágio
+     *  - Período novo: incrementa nível em 1 (salvo teto curricular abaixo)
+     *     - ajuste2020 == 1: máximo nível curricular == 3  (acima = nível 9 extracurricular)
+     *     - ajuste2020 == 0: máximo nível curricular == 4  (acima = nível 9 extracurricular)
+     *  - Período atual < último período: lança InvalidArgumentException (impossível retroceder)
+     *
+     * @param \App\Model\Entity\Estagiario|null $ultimoEstagio Último estágio do aluno
+     *   (null caso seja o primeiro estágio do aluno — retorna 1)
+     * @param string $periodoAtual Período corrente no formato "YYYY.N" (ex: "2026.1")
+     * @return string Próximo nível de estágio (1/2/3/4 ou 9)
+     */
+    public function proximoNivel(?Estagiario $ultimoEstagio, string $periodoAtual): string
+    {
+        if ($ultimoEstagio === null) {
+            return '1';
+        }
+
+        $cmp = self::compararPeriodo((string)$ultimoEstagio->periodo, $periodoAtual);
+
+        if ($cmp > 0) {
+            throw new InvalidArgumentException(
+                __('Período de estágio atual não pode ser menor que o último período cursado.'),
+            );
+        }
+
+        if ($cmp === 0) {
+            return (string)$ultimoEstagio->nivel;
+        }
+
+        $nivel = (int)$ultimoEstagio->nivel + 1;
+        $ultimoNivelCurricular = $ultimoEstagio->ajuste2020 === '1' || $ultimoEstagio->ajuste2020 === 1 ? 3 : 4;
+        if ($nivel > $ultimoNivelCurricular) {
+            $nivel = 9;
+        }
+
+        return (string)$nivel;
+    }
+
+    /**
+     * Compara dois períodos no formato "YYYY.N".
+     *
+     * @param string $a Primeiro período
+     * @param string $b Segundo período
+     * @return int < 0 se $a < $b, 0 se iguais, > 0 se $a > $b
+     */
+    public static function compararPeriodo(string $a, string $b): int
+    {
+        $ka = self::periodoKey($a);
+        $kb = self::periodoKey($b);
+
+        if ($ka === 0 || $kb === 0) {
+            return strcmp(trim($a), trim($b));
+        }
+
+        return $ka <=> $kb;
+    }
+
+    /**
+     * Converte um período ("YYYY.N") em chave inteira para comparação.
+     * Ex: 2026.1 => 202601, 2025.2 => 202502. Retorna 0 se formato inválido.
+     *
+     * @param string $periodo Período
+     * @return int Chave inteira
+     */
+    private static function periodoKey(string $periodo): int
+    {
+        if (preg_match('/^\s*(\d{4})\s*[\.,]\s*(\d)\s*$/', $periodo, $m)) {
+            return ((int)$m[1]) * 10 + (int)$m[2];
+        }
+
+        return 0;
     }
 }

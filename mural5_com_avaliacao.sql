@@ -17,10 +17,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `muralrafael5`
+-- Banco de dados: `ess_apps`
 --
-CREATE DATABASE IF NOT EXISTS `muralrafael5` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `muralrafael5`;
+CREATE DATABASE IF NOT EXISTS `ess_apps` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `ess_apps`;
 
 -- --------------------------------------------------------
 

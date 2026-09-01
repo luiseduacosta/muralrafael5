@@ -87,7 +87,16 @@ if ($user_session) {
                     echo $this->Form->hidden('aluno_id', ['value' => $aluno->id]);
                     echo $this->Form->control('aluno_nome', ['label' => 'Aluno', 'value' => $aluno->nome, 'readonly' => true]);
                     echo $this->Form->control('registro', ['value' => $aluno->registro, 'readonly']);
-                    echo $this->Form->control('nivel', ['value' => $estagiario->nivel, 'readonly' => true, 'required' => true]);
+                    $niveisOptions = ['1' => 1, '2' => 2, '3' => 3, '4' => 4, '9' => __('Extra curricular')];
+                if ($user_data['categoria'] == '1') {
+                    echo $this->Form->control('nivel', [
+                        'options' => $niveisOptions,
+                        'value' => $nivel,
+                        'required' => true,
+                    ]);
+                } else {
+                    echo $this->Form->control('nivel', ['value' => $nivel, 'readonly' => true, 'required' => true]);
+                }
                     echo $this->Form->control('ajuste2020', ['options' => ['1' => 'Sim (3 semestres)', '0' => 'Não (4 semestres)'], 'value' => $aluno->ajuste2020, 'readonly']);
                     echo $this->Form->control('tc', ['label' => 'Termo de compromisso assinado S/N', 'options' => ['1' => 'Sim', '0' => 'Nao'], 'default' => '0','required' => false]);
                     echo $this->Form->control('tc_solicitacao', ['label' => 'Data de Solicitação', 'value' => DateTime::now()->format('Y-m-d'), 'readonly' => true]);

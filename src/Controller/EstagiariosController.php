@@ -6,6 +6,7 @@ namespace App\Controller;
 use Authorization\Exception\ForbiddenException;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Response;
+use InvalidArgumentException;
 
 /**
  * Estagiarios Controller
@@ -275,8 +276,16 @@ class EstagiariosController extends AppController
             $ultimo_estagio = $this->Estagiarios
                 ->find()
                 ->where(['aluno_id' => $id])
-                ->order(['nivel' => 'desc'])
+                ->orderBy(['nivel' => 'desc'])
                 ->first();
+
+            try {
+                $nivel = $this->Estagiarios->proximoNivel($ultimo_estagio, (string)$periodo);
+            } catch (InvalidArgumentException $e) {
+                $this->Flash->error($e->getMessage());
+
+                return $this->redirectBack(['controller' => 'Alunos', 'action' => 'index']);
+            }
 
             if ($ultimo_estagio) {
                 $this->Flash->info(
@@ -287,22 +296,7 @@ class EstagiariosController extends AppController
                         $ultimo_estagio->periodo,
                     ),
                 );
-                // Go to next nivel
-                $nivel = $ultimo_estagio->nivel + 1;
 
-                $ajuste2020 = $ultimo_estagio->ajuste2020;
-                // Ajusta o nível de acordo com o ajuste 2020
-                if ($ajuste2020 == 1) {
-                    if ($nivel > 3) {
-                        $nivel = 9;
-                    }
-                } elseif ($ajuste2020 == 0) {
-                    if ($nivel > 4) {
-                        $nivel = 9;
-                    }
-                }
-
-                // Check period validity. Mesmo ou maior período significa edição, não um novo passo
                 $compare = $this->comparePeriodo(
                     (string)$ultimo_estagio->periodo,
                     (string)$periodo,
@@ -321,14 +315,13 @@ class EstagiariosController extends AppController
                 }
             } else {
                 $this->Flash->info(__('O aluno ainda não é estagiário'));
-                $nivel = 1;
             }
 
-            $this->set('nivel', $nivel);
+            $isAdmin = !empty($user_data['administrador_id']);
+            $estagiario->nivel = $nivel;
+            $this->set(compact('nivel', 'isAdmin'));
 
             if ($this->request->is('post')) {
-                // Verifica se o estagiario já existe no periodo atual
-
                 $estagiarioexiste = $this->Estagiarios->find()
                     ->where([
                         'periodo' => $periodo,
@@ -341,7 +334,12 @@ class EstagiariosController extends AppController
 
                     return $this->redirect(['action' => 'view', $estagiarioexiste->id]);
                 }
-                $estagiario = $this->Estagiarios->patchEntity($estagiario, $this->request->getData());
+
+                $patchData = $this->request->getData();
+                if (!$isAdmin) {
+                    $patchData['nivel'] = $nivel;
+                }
+                $estagiario = $this->Estagiarios->patchEntity($estagiario, $patchData);
                 if ($this->Estagiarios->save($estagiario)) {
                     $this->Flash->success(__('Estagiario salvo com sucesso.'));
 
@@ -357,7 +355,7 @@ class EstagiariosController extends AppController
             $professores = $this->fetchTable('Professores')
                 ->find('list')
                 ->where(['motivoegresso' => ''])
-                ->order(['nome' => 'ASC']);
+                ->orderBy(['nome' => 'ASC']);
             if (!empty($estagiario->instituicao_id)) {
                 $supervisores = $this->fetchTable('Supervisores')
                     ->find('list')
@@ -412,9 +410,15 @@ class EstagiariosController extends AppController
                 $this->request = $this->request->withData('nota', $nota);
             }
 
+            $isAdmin = !empty($user_data['administrador_id']);
+            $patchData = $this->request->getData();
+            if (!$isAdmin) {
+                unset($patchData['nivel']);
+            }
+
             $estagiario = $this->Estagiarios->patchEntity(
                 $estagiario,
-                $this->request->getData(),
+                $patchData,
             );
 
             if ($this->Estagiarios->save($estagiario)) {
@@ -438,12 +442,29 @@ class EstagiariosController extends AppController
             );
         }
 
-        $alunos = $this->fetchTable('Alunos')->find('list')->order(['nome' => 'ASC']);
-        $instituicoes = $this->fetchTable('Instituicoes')->find('list')->order(['instituicao' => 'ASC']);
+        $isAdmin = !empty($user_data['administrador_id']);
+        $niveisOptions = ['1' => 1, '2' => 2, '3' => 3, '4' => 4, '9' => __('Extra curricular')];
+
+        try {
+            $ultimoEstagio = $this->Estagiarios
+                ->find()
+                ->where(['aluno_id' => $estagiario->aluno_id])
+                ->orderBy(['nivel' => 'desc'])
+                ->first();
+            $periodoRef = !empty($estagiario->periodo)
+                ? (string)$estagiario->periodo
+                : (string)$this->configuracao->termo_compromisso_periodo;
+            $nivelCalculado = $this->Estagiarios->proximoNivel($ultimoEstagio, $periodoRef);
+        } catch (InvalidArgumentException $e) {
+            $nivelCalculado = $estagiario->nivel;
+        }
+
+        $alunos = $this->fetchTable('Alunos')->find('list')->orderBy(['nome' => 'ASC']);
+        $instituicoes = $this->fetchTable('Instituicoes')->find('list')->orderBy(['instituicao' => 'ASC']);
         $professores = $this->fetchTable('Professores')
             ->find('list')
             ->where(['motivoegresso' => ''])
-            ->order(['nome' => 'ASC']);
+            ->orderBy(['nome' => 'ASC']);
         if (!empty($estagiario->instituicao_id)) {
             $supervisores = $this->fetchTable('Supervisores')
                 ->find('list')
@@ -461,6 +482,9 @@ class EstagiariosController extends AppController
                 'instituicoes',
                 'supervisores',
                 'professores',
+                'isAdmin',
+                'niveisOptions',
+                'nivelCalculado',
             ),
         );
     }
@@ -537,7 +561,7 @@ class EstagiariosController extends AppController
         $estagiario = $this->Estagiarios
             ->find()
             ->where(['aluno_id' => $aluno_id])
-            ->order(['nivel' => 'desc'])
+            ->orderBy(['nivel' => 'desc'])
             ->first();
 
         if (empty($estagiario)) {
@@ -794,50 +818,6 @@ class EstagiariosController extends AppController
     }
 
     /**
-     * Nivelestagio method
-     *
-     * Compara o periodoautal com o periodo de estagio do estagiario para definiar o nivel de estagio
-     *
-     * @param string $periodoatual Periodo atual
-     * @param \App\Controller\Estagiario $ultimoestagio Ultimo estagio
-     * @return int Nivel de estagio
-     */
-    private function nivelestagio(string $periodoatual, Estagiario $ultimoestagio): int
-    {
-        /* Se o periodo atual é o mesmo do periodo cadastrado no estagiário deixa o nivel como está */
-        if ($periodoatual == $ultimoestagio->periodo) {
-            $nivel = $ultimoestagio->nivel;
-        /** Se o periodo atual é maior que o cadastrado então passa para o próximo nivel e insere um novo registro */
-        } elseif ($periodoatual > $ultimoestagio->periodo) {
-            $nivel = $ultimoestagio->nivel + 1;
-            /** Calculo o ultimo nível de estágio possível a partir do ajuste curricular. */
-            if ($ultimoestagio->ajuste2020 == 1) {
-                $ultimo_nivel_curricular = 3;
-            } else {
-                $ultimo_nivel_curricular = 4;
-            }
-            /** Se nivel é maior que o ultimo nivel curricular então está realizando estagio extracurricular e o nivel é 9. */
-            if ($nivel > $ultimo_nivel_curricular) {
-                // Estágio não curricular
-                $nivel = 9;
-            }
-        } else {
-            $this->Flash->error(
-                __(
-                    'Período de estágio atual não pode ser menor que o último período cursado.',
-                ),
-            );
-
-            return $this->redirect([
-                'action' => 'view',
-                $ultimoestagio->id,
-            ]);
-        }
-
-        return $nivel;
-    }
-
-    /**
      * lancanota method
      *
      * @param string|null $id Professor id.
@@ -880,7 +860,7 @@ class EstagiariosController extends AppController
 
         $periodos = $this->Estagiarios->find('list', ['keyField' => 'periodo', 'valueField' => 'periodo'])
             ->where(['Estagiarios.professor_id' => $professor_id])
-            ->order(['Estagiarios.periodo' => 'ASC'])
+            ->orderBy(['Estagiarios.periodo' => 'ASC'])
             ->toArray();
 
         $periodo = $this->request->getQuery('periodo') ?? $this->request->getData('periodo');
@@ -978,7 +958,7 @@ class EstagiariosController extends AppController
                 'Avaliacoes' => ['fields' => ['id', 'estagiario_id']],
             ])
             ->where(['Estagiarios.professor_id' => $professor_id])
-            ->order(['Alunos.nome' => 'ASC']);
+            ->orderBy(['Alunos.nome' => 'ASC']);
 
         if ($periodo) {
             $estagiariosQuery->where(['Estagiarios.periodo' => $periodo]);
@@ -1054,7 +1034,7 @@ class EstagiariosController extends AppController
                 'Estagiarios.supervisor_id !=' => 0,
                 'InstSuper.instituicao_id IS' => null,
             ])
-            ->order(['Alunos.nome' => 'ASC'])
+            ->orderBy(['Alunos.nome' => 'ASC'])
             ->enableHydration(false)
             ->toArray();
 
