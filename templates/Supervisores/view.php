@@ -49,28 +49,12 @@ if ($user_session) {
                     <td><?= $this->Number->format($supervisor->regiao) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Codigo Tel') ?></th>
-                    <td><?= h($supervisor->codigo_telefone) ?></td>
-                </tr>
-                <tr>
                     <th><?= __('Telefone') ?></th>
-                    <?php if ($supervisor->telefone && (strlen($supervisor->telefone) < 8)) : ?>
-                        <td><?= '(' . $supervisor->codigo_telefone . ') ' . $supervisor->telefone ?></td>
-                    <?php else : ?>
-                        <td><?= $supervisor->telefone ?>
-                    <?php endif ?>
-                </tr>
-                <tr>
-                    <th><?= __('Codigo Cel') ?></th>
-                    <td><?= h($supervisor->codigo_celular) ?></td>
+                    <td><?= h($supervisor->telefone) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Celular') ?></th>
-                    <?php if ($supervisor->celular && (strlen($supervisor->celular) < 8)) : ?>
-                            <td><?= '(' . $supervisor->codigo_celular . ') ' . $supervisor->celular ?></td>
-                    <?php else : ?>
-                        <td><?= h($supervisor->celular) ?>
-                    <?php endif ?>
+                    <td><?= h($supervisor->celular) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Email') ?></th>

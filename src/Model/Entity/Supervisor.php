@@ -11,9 +11,7 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property string $nome
  * @property string|null $cpf
- * @property int|null $codigo_telefone
  * @property string|null $telefone
- * @property int|null $codigo_celular
  * @property string|null $celular
  * @property string|null $email
  * @property string|null $escola
@@ -43,9 +41,7 @@ class Supervisor extends Entity
     protected array $_accessible = [
         'nome' => true,
         'cpf' => true,
-        'codigo_telefone' => true,
         'telefone' => true,
-        'codigo_celular' => true,
         'celular' => true,
         'email' => true,
         'escola' => true,

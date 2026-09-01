@@ -24,9 +24,7 @@
         echo $this->Form->control('registro', ['readonly']);
         echo $this->Form->control('ingresso', ['readonly']);
         echo $this->Form->control('turno_id', ['options' => $turnos]);
-        echo $this->Form->control('codigo_telefone', ['label' => ['text' => 'DDD']]);
         echo $this->Form->control('telefone');
-        echo $this->Form->control('codigo_celular', ['label' => ['text' => 'DDD']]);
         echo $this->Form->control('celular');
         echo $this->Form->control('email');
         echo $this->Form->control('cpf', ['label' => ['text' => 'CPF']]);

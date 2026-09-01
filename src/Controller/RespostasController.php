@@ -33,7 +33,7 @@ class RespostasController extends AppController
         }
 
         $query = $this->Respostas->find()
-            ->contain(['Estagiarios' => ['Alunos']])
+            ->contain(['Questoes', 'Estagiarios' => ['Alunos']])
             ->orderBy(['Respostas.id' => 'DESC']);
 
         $respostas = $this->paginate($query);
@@ -55,7 +55,7 @@ class RespostasController extends AppController
             $estagiario_id = $this->request->getQuery('estagiario_id');
             if ($estagiario_id) {
                 $resposta = $this->Respostas->find()
-                    ->contain(['Estagiarios' => ['Alunos', 'Supervisores']])
+                    ->contain(['Questoes', 'Estagiarios' => ['Alunos', 'Supervisores']])
                     ->where(['Respostas.estagiario_id' => $estagiario_id])
                     ->first();
                 if (!$resposta) {
@@ -72,7 +72,7 @@ class RespostasController extends AppController
 
         if (!$resposta) {
             $resposta = $this->Respostas->get($id, [
-                        'contain' => ['Estagiarios' => ['Alunos', 'Supervisores']],
+                        'contain' => ['Questoes', 'Estagiarios' => ['Alunos', 'Supervisores']],
             ]);
             if (!$resposta) {
                 $this->Flash->error(__('Nenhuma avaliação encontrada para o estagiário ID {0}.', $estagiario_id));
@@ -177,7 +177,7 @@ class RespostasController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->getData();
             $saveData = [];
-            $saveData['questionario_id'] = $data['questionario_id'] ?? 1;
+            $saveData['questao_id'] = $data['questao_id'] ?? 1;
             $saveData['estagiario_id'] = $estagiario_id;
 
             // Enrich response data with question text and values
@@ -239,7 +239,7 @@ class RespostasController extends AppController
     {
         try {
             $resposta = $this->Respostas->get($id, [
-                'contain' => ['Questionarios'],
+                'contain' => ['Questoes'],
             ]);
         } catch (RecordNotFoundException $e) {
             $this->Flash->error(__('Registro não encontrado.'));
@@ -403,8 +403,8 @@ class RespostasController extends AppController
                         'Professores',
                         'Instituicoes',
                         ],
-                    'Questionarios' => [
-                        'Questoes',
+                    'Questoes' => [
+                        'Questionarios',
                         ],
                     ])
                 ->where(['Estagiarios.id' => $estagiario_id])

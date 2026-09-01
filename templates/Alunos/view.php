@@ -79,19 +79,11 @@ if ($user_session) {
                 </tr>
                 <tr>
                     <th><?= __('Telefone') ?></th>
-                    <?php if (!empty((string)$aluno->telefone) && strlen((string)$aluno->telefone) < 10) : ?>
-                    <td><?= '(' . h($aluno->codigo_telefone) . ') ' . h($aluno->telefone) ?></td>
-                    <?php else : ?>
                     <td><?= h($aluno->telefone ?? 's/d') ?></td>
-                    <?php endif; ?>
                 </tr>
                 <tr>
                     <th><?= __('Celular') ?></th>
-                    <?php if (!empty((string)$aluno->celular) && strlen((string)$aluno->celular) < 10) : ?>
-                    <td><?= '(' . h($aluno->codigo_celular) . ') ' . h($aluno->celular) ?></td>
-                    <?php else : ?>
                     <td><?= h($aluno->celular) ?></td>
-                    <?php endif; ?>
                 </tr>
                 <tr>
                     <th><?= __('Endereço') ?></th>

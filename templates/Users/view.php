@@ -138,8 +138,8 @@ if ($user_session) {
                             <td><?= h($user->aluno->nome) ?></td>
                             <td><?= h($user->aluno->registro) ?></td>
                             <td><?= h($user->aluno->ingresso) ?></td>
-                            <td><?= '(' . h($user->aluno->codigo_telefone) . ') ' . h($user->aluno->telefone) ?></td>
-                            <td><?= '(' . h($user->aluno->codigo_celular) . ') ' . h($user->aluno->celular) ?></td>
+                            <td><?= h($user->aluno->telefone) ?></td>
+                            <td><?= h($user->aluno->celular) ?></td>
                             <td><?= h($user->aluno->cpf) ?></td>
                             <td><?= h($user->aluno->nascimento) ?></td>
                         </tr>
@@ -173,15 +173,7 @@ if ($user_session) {
                             <td><?= $this->Html->link((string)$user->professor->id, ['controller' => 'professores', 'action' => 'view', $user->professor->id]) ?></td>
                             <td><?= $this->Html->link(h($user->professor->nome ?? 'Não informado'), ['controller' => 'professores', 'action' => 'view', $user->professor->id]) ?></td>
                             <td><?= $user->professor->siape ?></td>
-                            <td>
-                                <?php
-                                if (strlen($user->professor->celular) < 9) {
-                                    echo '(' . h($user->professor->codigo_celular) . ') ' . h($user->professor->celular);
-                                } else {
-                                    echo $user->professor->celular;
-                                }
-                                ?>
-                            </td>
+                            <td><?= h($user->professor->celular) ?></td>
                             <td><?= $user->professor->curriculolattes ? $this->Html->link('http://lattes.cnpq.br/' . h($user->professor->curriculolattes)) : '' ?></td>
                             <td><?= h($user->professor->departamento ?? 'Não informado') ?></td>
                         </tr>

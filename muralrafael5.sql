@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `alunos` (
   `bairro` varchar(30) DEFAULT NULL,
   `observacoes` varchar(250) DEFAULT NULL,
   `estagiarios_count` int(11) DEFAULT NULL COMMENT 'Quantidade de estágios do aluno',
-  `inscricao_count` int(11) DEFAULT NULL,
+  `inscricao_count` int(11) DEFAULT NULL COMMENT 'Quantidade de inscrições do aluno',
   `user_id` int(11) NOT NULL COMMENT 'ID da tabela users',
   PRIMARY KEY (`id`),
   UNIQUE KEY `registro` (`registro`)
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `estagiarios` (
   `aluno_id` int(11) NOT NULL,
   `registro` int(11) NOT NULL,
   `nivel` char(1) NOT NULL,
-  `tc` smallint(6) DEFAULT NULL COMMENT 'TC foi assinado e entrege na ESS?: 0=Nao, 1=Sim',
+  `tc` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'TC foi assinado e entrege na ESS?: 0=Nao, 1=Sim',
   `tc_solicitacao` date DEFAULT NULL COMMENT 'Data de solicitação do TC',
   `instituicao_id` smallint(6) NOT NULL,
   `supervisor_id` smallint(6) DEFAULT NULL,
@@ -316,6 +316,8 @@ CREATE TABLE IF NOT EXISTS `professores` (
   `motivoegresso` varchar(100) DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'ativo' COMMENT 'Status do professor: "ativo", "inativo"',
   `user_id` int(11) DEFAULT NULL COMMENT 'ID da tabela users',
+  `estagiarios_count` int(11) DEFAULT NULL COMMENT 'Quantidade de estagiários do professor',
+  `observacoes` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Professores.';
 
@@ -431,13 +433,21 @@ CREATE TABLE IF NOT EXISTS `turnos` (
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` char(50) NOT NULL,
-  `password` char(80) NOT NULL,
+  `email` char(50) DEFAULT NULL,
+  `password` char(80) DEFAULT NULL,
+  `nome` varchar(128) DEFAULT NULL COMMENT 'Nome do usuário',
+  `role` enum('admin','supervisor','professor','aluno') DEFAULT 'aluno',
   `categoria` enum('1','2','3','4') NOT NULL DEFAULT '2' COMMENT '1=Administrador, 2=Aluno, 3=Professor, 4=Supervisor',
-  `numero` int(9) DEFAULT NULL COMMENT 'Registro do aluno, SIAPE do professor ou CRESS do supervisor',
-  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `identificacao` int(9) DEFAULT NULL COMMENT 'Registro do aluno, SIAPE do professor ou CRESS do supervisor',
+  `entidade_id` int(11) DEFAULT NULL COMMENT 'id da entidade: aluno, professor ou supervisor',
+  `ativo` tinyint(1) DEFAULT 1,
+  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
+  `atualizado_em` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `aluno_id` int(11) DEFAULT NULL,
+  `supervisor_id` int(11) DEFAULT NULL,
+  `professor_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT 'Usuários: administradores, professores, supervisores e alunos.';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Usuários: administradores, professores, supervisores e alunos.';
 
 -- --------------------------------------------------------
 
@@ -463,8 +473,8 @@ CREATE TABLE IF NOT EXISTS `visitas` (
 --
 
 -- Default admin user (password: admin123 - change after first login)
-INSERT INTO `users` (`id`, `email`, `password`, `categoria`, `numero`, `timestamp`, `aluno_id`, `supervisor_id`, `professor_id`) VALUES
-(1, 'admin@ess.ufrj.br', '$2y$10$YourHashedPasswordHere', '1', 1, CURRENT_TIMESTAMP, NULL, NULL, NULL);
+INSERT INTO `users` (`id`, `email`, `password`, `nome`, `role`, `categoria`, `identificacao`, `entidade_id`, `ativo`, `criado_em`, `atualizado_em`, `aluno_id`, `supervisor_id`, `professor_id`) VALUES
+(1, 'admin@ess.ufrj.br', '$2y$10$YourHashedPasswordHere', 'Administrador Padrão', 'admin', '1', 1, NULL, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL, NULL);
 
 -- Default system configuration
 INSERT INTO `configuracoes` (`id`, `mural_periodo_atual`, `curso_turma_atual`, `curso_abertura_inscricoes`, `curso_encerramento_inscricoes`, `termo_compromisso_periodo`, `termo_compromisso_inicio`, `termo_compromisso_final`, `periodo_calendario_academico`) VALUES

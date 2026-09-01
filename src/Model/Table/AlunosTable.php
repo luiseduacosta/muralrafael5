@@ -103,18 +103,10 @@ class AlunosTable extends Table
             ->allowEmptyString('turno_id');
 
         $validator
-            ->integer('codigo_telefone')
-            ->notEmptyString('codigo_telefone');
-
-        $validator
             ->scalar('telefone')
             ->maxLength('telefone', 15)
             ->regex('telefone', '/^\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}$/', 'Telefone inválido')
             ->allowEmptyString('telefone');
-
-        $validator
-            ->integer('codigo_celular')
-            ->notEmptyString('codigo_celular');
 
         $validator
             ->scalar('celular')

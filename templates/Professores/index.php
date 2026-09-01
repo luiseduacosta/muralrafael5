@@ -85,13 +85,7 @@ $departamentos = [
                     <td><?= h(ucfirst($professor->status ?? 'ativo')) ?></td>
                     <td><?= (string)$professor->siape ? $professor->siape : 'S/d' ?></td>
 
-                    <td>
-                        <?php if (!empty($professor->celular) && strlen($professor->celular) < 10) : ?>
-                            <?= '(' . h($professor->codigo_celular) . ') ' . h($professor->celular) ?>
-                        <?php else : ?>
-                            <?= $professor->celular ?>
-                        <?php endif; ?>
-                    </td>
+                    <td><?= h($professor->celular) ?></td>
                     <td><?= $professor->email ? $this->Text->autoLinkEmails($professor->email) : '' ?></td>
                     <td><?= $professor->curriculolattes ? $this->Html->link('http://lattes.cnpq.br/' . h($professor->curriculolattes), ['target' => '_blank']) : '' ?></td>
                     <td><?= h($departamentos[$professor->departamento] ?? $professor->departamento) ?></td>

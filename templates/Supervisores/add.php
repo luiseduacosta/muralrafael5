@@ -101,9 +101,7 @@ if ($user_session) {
                     echo $this->Form->control('email', ['placeholder' => 'email@example.com', 'required' => true]);
                 }
                     echo $this->Form->control('cargo', ['label' => 'Cargo na instituição', 'required' => false, 'default' => null]);
-                    echo $this->Form->control('codigo_telefone', ['label' => 'DDD', 'default' => '21', 'required' => false]);
                     echo $this->Form->control('telefone', ['pattern' => '\([0-9]{2}\)\s[0-9]{4}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'label' => 'Telefone', 'required' => false]);
-                    echo $this->Form->control('codigo_celular', ['label' => 'DDD', 'default' => '21', 'required' => false]);
                     echo $this->Form->control('celular', ['pattern' => '\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 00000.0000', 'label' => 'Celular', 'required' => false]);
                     echo $this->Form->control('escola', ['label' => 'Instituição de Ensino', 'default' => null, 'required' => false]);
                     echo $this->Form->control('ano_formacao', ['label' => 'Ano de Formatura', 'pattern' => '(19|20)[0-9]{2}', 'placeholder' => '0000', 'required' => false, 'default' => null]);

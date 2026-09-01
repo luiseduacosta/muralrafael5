@@ -79,20 +79,12 @@ $departamentos = [
                 </tr>
                 <tr>
                     <th><?= __('Telefone') ?></th>
-                    <?php if (strlen($professor->telefone) < 10) : ?>
-                        <td><?= $professor->telefone ? h('(' . $professor->codigo_telefone . ') ' . $professor->telefone) : '' ?></td>
-                    <?php else : ?>
-                        <td><?= empty($professor->telefone) ? '' : h($professor->telefone) ?></td>
-                    <?php endif ?>    
+                    <td><?= empty($professor->telefone) ? '' : h($professor->telefone) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Celular') ?></th>
-                    <?php if (strlen($professor->celular) < 10) : ?>
-                        <td><?= $professor->celular ? h('(' . $professor->codigo_celular . ') ' . $professor->celular) : '' ?></td>
-                    <?php else : ?>
-                        <td><?= empty($professor->celular) ? '' : h($professor->celular) ?></td>
-                    <?php endif ?>    
-                    </tr>
+                    <td><?= empty($professor->celular) ? '' : h($professor->celular) ?></td>
+                </tr>
                 <tr>
                     <th><?= __('Email') ?></th>
                     <td><?= empty($professor->email) ? '' : $this->Text->autoLinkEmails($professor->email) ?></td>

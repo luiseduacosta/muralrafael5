@@ -10,7 +10,7 @@ use Cake\Validation\Validator;
 /**
  * Respostas Model
  *
- * @property \App\Model\Table\QuestionariosTable&\Cake\ORM\Association\BelongsTo $Questionarios
+ * @property \App\Model\Table\QuestoesTable&\Cake\ORM\Association\BelongsTo $Questoes
  * @property \App\Model\Table\EstagiariosTable&\Cake\ORM\Association\BelongsTo $Estagiarios
  * @method \App\Model\Entity\Resposta newEmptyEntity()
  * @method \App\Model\Entity\Resposta newEntity(array $data, array $options = [])
@@ -45,8 +45,8 @@ class RespostasTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Questionarios', [
-            'foreignKey' => 'questionario_id',
+        $this->belongsTo('Questoes', [
+            'foreignKey' => 'questao_id',
             'joinType' => 'INNER',
         ]);
         $this->belongsTo('Estagiarios', [
@@ -64,8 +64,8 @@ class RespostasTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->integer('questionario_id')
-            ->notEmptyString('questionario_id');
+            ->integer('questao_id')
+            ->notEmptyString('questao_id');
 
         $validator
             ->integer('estagiario_id')
@@ -87,7 +87,7 @@ class RespostasTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn('questionario_id', 'Questionarios'), ['errorField' => 'questionario_id']);
+        $rules->add($rules->existsIn('questao_id', 'Questoes'), ['errorField' => 'questao_id']);
         $rules->add($rules->existsIn('estagiario_id', 'Estagiarios'), ['errorField' => 'estagiario_id']);
 
         return $rules;

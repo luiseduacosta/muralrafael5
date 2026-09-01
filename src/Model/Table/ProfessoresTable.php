@@ -114,20 +114,10 @@ class ProfessoresTable extends Table
             ->allowEmptyString('regiao');
 
         $validator
-            ->scalar('codigo_telefone')
-            ->maxLength('codigo_telefone', 2)
-            ->allowEmptyString('codigo_telefone');
-
-        $validator
             ->scalar('telefone')
             ->maxLength('telefone', 15)
             ->regex('telefone', '/^\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}$/', 'Telefone inválido')
             ->allowEmptyString('telefone');
-
-        $validator
-            ->scalar('codigo_celular')
-            ->maxLength('codigo_celular', 2)
-            ->allowEmptyString('codigo_celular');
 
         $validator
             ->scalar('celular')

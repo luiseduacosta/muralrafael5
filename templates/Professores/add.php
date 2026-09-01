@@ -109,9 +109,7 @@ $departamentos = [
                 } else {
                     echo $this->Form->control('email', ['type' => 'email', 'required' => true]);
                 }
-                    echo $this->Form->control('codigo_telefone', ['label' => 'Código Telefone', 'required' => false]);
                     echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)\s[0-9]{4}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'required' => false]);
-                    echo $this->Form->control('codigo_celular', ['label' => 'Código Celular', 'required' => false]);
                     echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 00000.0000', 'required' => false]);
                     echo $this->Form->control('curriculolattes', ['label' => 'Curriculo Lattes', 'required' => false]);
                     echo $this->Form->control('atualizacaolattes', ['type' => 'date', 'empty' => true, 'required' => false]);

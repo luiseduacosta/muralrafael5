@@ -14,9 +14,7 @@ use Cake\ORM\Entity;
  * @property string|null $siape
  * @property string|null $cress
  * @property string|null $regiao
- * @property string|null $codigo_telefone
  * @property string|null $telefone
- * @property string|null $codigo_celular
  * @property string|null $celular
  * @property string|null $email
  * @property string|null $curriculolattes
@@ -49,9 +47,7 @@ class Professor extends Entity
         'siape' => true,
         'cress' => true,
         'regiao' => true,
-        'codigo_telefone' => true,
         'telefone' => true,
-        'codigo_celular' => true,
         'celular' => true,
         'email' => true,
         'curriculolattes' => true,

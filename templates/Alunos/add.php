@@ -97,9 +97,7 @@ if ($user_session) {
                 } else {
                     echo $this->Form->control('registro', ['label' => 'Número de Registro - DRE', 'required' => true]);
                 }
-                    echo $this->Form->control('codigo_telefone', ['label' => 'Código do Telefone', 'required' => false]);
                     echo $this->Form->control('telefone', ['label' => 'Telefone', 'pattern' => '\([0-9]{2}\)[\s][0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 0000.0000', 'data-mask' => '(00) 0000.0000', 'required' => false]);
-                    echo $this->Form->control('codigo_celular', ['label' => 'Código do Celular', 'required' => false]);
                     echo $this->Form->control('celular', ['label' => 'Celular', 'pattern' => '\([0-9]{2}\)[\s][0-9]{4,5}\.[0-9]{4}', 'placeholder' => '(00) 00000.0000', 'data-mask' => '(00) 00000.0000', 'required' => false]);
                 if ($aluno->email) {
                     echo $this->Form->control('email', ['type' => 'email', 'value' => $aluno->email, 'required' => true, 'readonly' => true]);

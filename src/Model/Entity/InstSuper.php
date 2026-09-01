@@ -6,19 +6,16 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Resposta Entity
+ * InstSuper Entity
  *
  * @property int $id
- * @property int $questao_id
- * @property int $estagiario_id
- * @property string|null $response
- * @property \Cake\I18n\DateTime|null $created
- * @property \Cake\I18n\DateTime|null $modified
+ * @property int $instituicao_id
+ * @property int $supervisor_id
  *
- * @property \App\Model\Entity\Questao $questao
- * @property \App\Model\Entity\Estagiario $estagiario
+ * @property \App\Model\Entity\Instituicao $instituicao
+ * @property \App\Model\Entity\Supervisor $supervisor
  */
-class Resposta extends Entity
+class InstSuper extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -30,12 +27,9 @@ class Resposta extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
-        'questao_id' => true,
-        'estagiario_id' => true,
-        'response' => true,
-        'created' => true,
-        'modified' => true,
-        'questao' => true,
-        'estagiario' => true,
+        'instituicao_id' => true,
+        'supervisor_id' => true,
+        'instituicao' => true,
+        'supervisor' => true,
     ];
 }
