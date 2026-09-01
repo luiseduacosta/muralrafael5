@@ -17,10 +17,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `muralrafael5`
+-- Banco de dados: `ess_apps`
 --
-CREATE DATABASE IF NOT EXISTS `muralrafael5` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `muralrafael5`;
+CREATE DATABASE IF NOT EXISTS `ess_apps` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `ess_apps`;
 
 -- --------------------------------------------------------
 
@@ -64,7 +64,6 @@ CREATE TABLE IF NOT EXISTS `alunos` (
   `estagiarios_count` int(11) DEFAULT NULL COMMENT 'Quantidade de estágios do aluno',
   `inscricao_count` int(11) DEFAULT NULL,
   `user_id` int(11) NOT NULL COMMENT 'ID da tabela users',
-  `inscricao_count` int(11) DEFAULT NULL COMMENT 'Quantidade de inscrições do aluno',
   PRIMARY KEY (`id`),
   UNIQUE KEY `registro` (`registro`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Alunos.';
@@ -317,8 +316,6 @@ CREATE TABLE IF NOT EXISTS `professores` (
   `motivoegresso` varchar(100) DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'ativo' COMMENT 'Status do professor: "ativo", "inativo"',
   `user_id` int(11) DEFAULT NULL COMMENT 'ID da tabela users',
-  'estagiarios_count' int(11) DEFAULT NULL COMMENT 'Quantidade de estagiários do professor',
-  `observacoes` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Professores.';
 

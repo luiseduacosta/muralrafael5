@@ -20,10 +20,7 @@ use App\Policy\RequestPolicy;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
-use Authentication\Authenticator\FormAuthenticator;
-use Authentication\Authenticator\SessionAuthenticator;
 use Authentication\Identifier\AbstractIdentifier;
-use Authentication\Identifier\PasswordIdentifier;
 use Authentication\Middleware\AuthenticationMiddleware;
 use Authorization\AuthorizationService;
 use Authorization\AuthorizationServiceInterface;
@@ -75,8 +72,8 @@ class Application extends BaseApplication implements
     /**
      * Setup the middleware queue your application will use.
      *
-     * @param MiddlewareQueue $middlewareQueue The middleware queue to setup.
-     * @return MiddlewareQueue The updated middleware queue.
+     * @param \Cake\Http\MiddlewareQueue $middlewareQueue The middleware queue to setup.
+     * @return \Cake\Http\MiddlewareQueue The updated middleware queue.
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
@@ -140,7 +137,7 @@ class Application extends BaseApplication implements
     /**
      * Register application container services.
      *
-     * @param ContainerInterface $container The Container to update.
+     * @param \Cake\Core\ContainerInterface $container The Container to update.
      * @return void
      * @link https://book.cakephp.org/5/en/development/dependency-injection.html#dependency-injection
      */
@@ -154,8 +151,8 @@ class Application extends BaseApplication implements
     /**
      * Returns a service provider instance.
      *
-     * @param ServerRequestInterface $request Request
-     * @return AuthenticationServiceInterface
+     * @param \Psr\Http\Message\ServerRequestInterface $request Request
+     * @return \Authentication\AuthenticationServiceInterface
      */
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
     {
@@ -178,15 +175,12 @@ class Application extends BaseApplication implements
             AbstractIdentifier::CREDENTIAL_USERNAME => 'email',
             AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
         ];
-        $passwordIdentifier = new PasswordIdentifier(compact('fields'));
 
-        $service->setConfig('authenticators', [
-            SessionAuthenticator::class => ['identifier' => $passwordIdentifier],
-            FormAuthenticator::class => [
-                'fields' => $fields,
-                'loginUrl' => $loginURL,
-                'identifier' => $passwordIdentifier,
-            ],
+        $service->loadIdentifier('Authentication.Password', compact('fields'));
+        $service->loadAuthenticator('Authentication.Session');
+        $service->loadAuthenticator('Authentication.Form', [
+            'fields' => $fields,
+            'loginUrl' => $loginURL,
         ]);
 
         return $service;
@@ -195,8 +189,8 @@ class Application extends BaseApplication implements
     /**
      * Returns a service provider instance.
      *
-     * @param ServerRequestInterface $request Request
-     * @return AuthorizationServiceInterface
+     * @param \Psr\Http\Message\ServerRequestInterface $request Request
+     * @return \Authorization\AuthorizationServiceInterface
      */
     public function getAuthorizationService(ServerRequestInterface $request): AuthorizationServiceInterface
     {

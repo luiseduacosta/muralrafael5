@@ -77,8 +77,8 @@ class ProfessoresTable extends Table
     /**
      * Default validation rules.
      *
-     * @param Validator $validator Validator instance.
-     * @return Validator
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
      */
     public function validationDefault(Validator $validator): Validator
     {
@@ -121,6 +121,7 @@ class ProfessoresTable extends Table
         $validator
             ->scalar('telefone')
             ->maxLength('telefone', 15)
+            ->regex('telefone', '/^\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}$/', 'Telefone inválido')
             ->allowEmptyString('telefone');
 
         $validator
@@ -131,6 +132,7 @@ class ProfessoresTable extends Table
         $validator
             ->scalar('celular')
             ->maxLength('celular', 15)
+            ->regex('celular', '/^\([0-9]{2}\)\s[0-9]{4,5}\.[0-9]{4}$/', 'Telefone inválido')
             ->allowEmptyString('celular');
 
         $validator
