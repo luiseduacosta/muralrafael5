@@ -84,7 +84,7 @@ class InstituicoesController extends AppController
             return $this->redirect(['controller' => 'Muralestagios', 'action' => 'index']);
         }
 
-        // Paginate Estagiarios separately
+        // Paginate related records separately with ordering applied to each query.
         $this->paginate = [
             'Estagiarios' => ['limit' => 10, 'scope' => 'estagiario'],
             'Muralestagios' => ['limit' => 10, 'scope' => 'mural'],
@@ -93,6 +93,7 @@ class InstituicoesController extends AppController
 
         $estagiarios = $this->paginate($this->Instituicoes->Estagiarios->find()
             ->where(['Estagiarios.instituicao_id' => $id])
+            ->orderBy(['Estagiarios.periodo' => 'ASC'])
             ->contain(['Alunos' => ['Turnos'], 'Professores', 'Supervisores']));
 
         $muralestagios = $this->paginate($this->Instituicoes->Muralestagios->find()

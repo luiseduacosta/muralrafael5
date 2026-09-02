@@ -193,8 +193,8 @@ if ($user_session) {
                         <tr>
                             <th class="actions"><?= __('Actions') ?></th>
                             <th><?= __('Id') ?></th>
+                            <th><?= __('Período') ?></th>
                             <th><?= __('Vagas') ?></th>
-                            <th><?= __('Professor') ?></th>
                             <th><?= __('Beneficios') ?></th>
                             <th><?= __('Final De Semana') ?></th>
                             <th><?= __('Carga Horaria') ?></th>
@@ -211,8 +211,8 @@ if ($user_session) {
                                 <?php endif; ?>
                             </td>
                             <td><?= $this->Html->link($muralestagio->id, ['controller' => 'Muralestagios', 'action' => 'view', $muralestagio->id]) ?></td>
+                            <td><?= h($muralestagio->periodo) ?></td>
                             <td><?= h($muralestagio->vagas) ?></td>
-                            <td><?= $muralestagio->professor ? $this->Html->link($muralestagio->professor->nome, ['controller' => 'Professores', 'action' => 'view', $muralestagio->professor->id]) : '' ?></td>
                             <td><?= h($muralestagio->beneficios) ?></td>
                             <td>
                                 <?php

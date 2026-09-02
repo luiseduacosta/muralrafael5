@@ -123,11 +123,8 @@ if ($user_session) {
                                 <th class="actions"><?= __('Actions') ?></th>
                                 <th><?= __('Id') ?></th>
                                 <th><?= __('Instituição') ?></th>
-                                <th><?= __('Área') ?></th>
-                                <th><?= __('Natureza') ?></th>
                                 <th><?= __('CNPJ') ?></th>
                                 <th><?= __('Email') ?></th>
-                                <th><?= __('URL') ?></th>
                                 <th><?= __('Convênio') ?></th>
                             </tr>
                             <?php foreach ($supervisor->instituicoes as $instituicao) : ?>
@@ -141,12 +138,9 @@ if ($user_session) {
                                     </td>
                                     <td><?= h($instituicao->id) ?></td>
                                     <td><?= (!empty($instituicao->instituicao)) ? $this->Html->link($instituicao->instituicao, ['controller' => 'Instituicoes', 'action' => 'view', $instituicao->id]) : '' ?></td>
-                                    <td><?= (!empty($instituicao->area) && !empty($instituicao->area->area)) ? $this->Html->link(h($instituicao->area->area), ['controller' => 'Areas', 'action' => 'view', $instituicao->area->id]) : '' ?></td>
-                                    <td><?= h($instituicao->natureza) ?></td>
                                     <td><?= h($instituicao->cnpj) ?></td>
                                     <td><?= $instituicao->email ? $this->Text->autoLinkEmails($instituicao->email) : '' ?></td>
-                                    <td><?= $instituicao->url ? $this->Html->link($instituicao->url) : '' ?></td>
-                                    <td><?= h($instituicao->convenio) == '1' ? __('Sim') : __('Não') ?></td>
+                                    <td><?= !empty($instituicao->convenio) ? $instituicao->convenio . " " . $instituicao->expira->format('d/m/Y') : '' ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </table>
