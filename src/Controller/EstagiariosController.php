@@ -493,8 +493,8 @@ class EstagiariosController extends AppController
      * Delete method
      *
      * @param string|null $id Estagiario id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @return Response|null|void Redirects to index.
+     * @throws RecordNotFoundException When record not found.
      */
     public function delete(?string $id = null)
     {
@@ -533,8 +533,8 @@ class EstagiariosController extends AppController
      * Termocompromisso method
      *
      * @param string|null $id Estagiario id.
-     * @return \Cake\Http\Response|null|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @return Response|null|void
+     * @throws RecordNotFoundException When record not found.
      */
     public function termocompromisso(?string $id = null)
     {
